@@ -29,15 +29,16 @@ Change built-in assignments in Settings → Keyboard shortcuts. Commands with no
 
 ## Assistant launcher
 
-The launcher is a grouped command grid plus tabbed context chips under the commands (**Recent**, **Apps**, **Tanit**). Open it from the assistant toolbar: hover or click **Commands**, or press **Alt+Win** while that toolbar is open (the combo is swallowed so it does not open the Start menu). Empty if no enabled command has **Show in launcher**.
+The launcher is a grouped command grid plus tabbed context chips under the commands (**Recent**, **Apps**, **Tanit**). Selecting a file chip opens a right-hand pane of matching commands and Open with tiles. Open it from the assistant toolbar: hover or click **Commands**, or press **Alt+Win** while that toolbar is open (the combo is swallowed so it does not open the Start menu). Empty if no enabled command has **Show in launcher**.
 
-Hover the Commands button to open; the menu stays up while you cross the gap onto it. A click on Commands while the menu is still opening from hover is ignored (it would otherwise toggle shut). Click and **Alt+Win** still toggle once the pointer has entered the menu.
+Hover the Commands button to open; the menu stays up while you cross the gap onto it. A click on Commands while the menu is still opening from hover is ignored (it would otherwise toggle shut). Click and **Alt+Win** still toggle once the pointer has entered the menu. Pin (top-right, same control as on the toolbar) keeps the menu open after the pointer leaves; **Esc** or Commands still close it.
 
 | Command | Shortcut |
 |:---|:---|
 | Open / close launcher | Hover or click **Commands**; `Alt+Win` (assistant toolbar open) |
-| Move among tiles or chips | Arrows, `Home`, `End` |
-| Commands ↔ chips on the current tab | `Tab` / `Shift+Tab` |
+| Pin / unpin menu | Pin button (top right) |
+| Move among tiles, chips, or Open with | Arrows, `Home`, `End` |
+| Commands ↔ chips ↔ Open with | `Tab` / `Shift+Tab` |
 | Cycle Recent / Apps / Tanit | `Ctrl+Tab` / `Ctrl+Shift+Tab` |
 | Run hovered command | `Enter` / `Space` |
 | Select hovered file or Apps chip | `Enter` / `Space` |

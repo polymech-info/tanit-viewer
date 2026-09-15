@@ -263,10 +263,10 @@ The menu is more than a command palette: the tabs under the command tiles are th
 
 **Open**
 
-- Assistant toolbar → **Commands** (hover or click), or **Alt+Win** while that toolbar is open (the combo is swallowed so it does not open the Start menu). Hover stays open across the gap between the button and the menu; move away to dismiss. A click on **Commands** while hover is still opening the menu is ignored so it does not toggle shut. Click or **Alt+Win** still toggle once you have moved onto the menu.
+- Assistant toolbar → **Commands** (hover or click), or **Alt+Win** while that toolbar is open (the combo is swallowed so it does not open the Start menu). Hover stays open across the gap between the button and the menu; move away to dismiss. Pin the menu (mini pin, top right — same control as on the toolbar) to keep it open; **Esc** or **Commands** still close it. A click on **Commands** while hover is still opening the menu is ignored so it does not toggle shut. Click or **Alt+Win** still toggle once you have moved onto the menu.
 - Empty if no enabled command has **Show in launcher**.
 
-**File chips** (up to 8, **Recent** tab) — click to select one (like **Apps**); **Ctrl+click** adds or removes extra chips. Checked paths become `${CURRENT_FILE}` / `${CURRENT_SELECTION}` / `${SRC_*}` when you run a tile (click or **Enter** / **Space** on the hovered command). Dragging a file onto a tile still wins for that run.
+**File chips** (up to 30, **Recent** tab) — click to select one (like **Apps**); **Ctrl+click** adds or removes extra chips. Checked paths become `${CURRENT_FILE}` / `${CURRENT_SELECTION}` / `${SRC_*}` when you run a tile (click or **Enter** / **Space** on the hovered command). Dragging a file onto a tile still wins for that run.
 
 If at least one **Recent** chip is checked, those recents fill `${CURRENT_FILE}` instead of the live Explorer selection. Mini Chat (`--src ${CURRENT_FILE}`) uses that path.
 
@@ -277,20 +277,22 @@ If at least one **Recent** chip is checked, those recents fill `${CURRENT_FILE}`
 
 Double-click a file chip to open it. Double-click an **Apps** chip to restore that window (if it is minimized) and bring it to the front. Drag files from Explorer onto a tile that still contains `${CURRENT_FILE}` or `${CURRENT_SELECTION}` — that drop is the selection for that one run.
 
-**Apps chips** (up to 8, **Apps** tab) — taskbar windows, excluding Tanit itself. One at a time. The window you were in before opening the launcher starts selected (**last app**). Click another to retarget. A command click then binds:
+Selecting a **Recent** or **Tanit** file grows a pane on the right with the same square tiles as the command grid: matching Tanit **Commands** first, then **Open with** (Windows associations). Wheel over the pane scrolls it on its own; height stays within the same 75% work-area cap. Right-click a chip still offers the context menu.
+
+**Apps chips** (up to 30, **Apps** tab) — taskbar windows, excluding Tanit itself. One at a time. The window you were in before opening the launcher starts selected (**last app**). Click another to retarget. A command click then binds:
 
 `${CURRENT_HWND}`, `${CURRENT_PID}`, `${CURRENT_WINTITLE}`, `${CURRENT_PROCESS}`, `${CURRENT_SCREEN_SPEC}`
 
 Use `${CURRENT_SCREEN_SPEC}` as an XBlox / CLI screen input (`screen:0:hwnd=…`). Pass `--CURRENT_HWND` the same way as `--CURRENT_FILE` when you bind from extra args.
 
-**Tanit chips** (up to 16, **Tanit** tab) — outputs grouped like the status bar Recent Outputs: **Past chat**, then XBlox runs (split by run name when present). Click selects the path for `${CURRENT_FILE}` (it wins over Selection / Recent chips). Double-click opens the file. Missing local paths are skipped.
+**Tanit chips** (up to 30, **Tanit** tab) — outputs grouped like the status bar Recent Outputs: **Past chat**, then XBlox runs (split by run name when present). Click selects the path for `${CURRENT_FILE}` (it wins over Selection / Recent chips). Double-click opens the file. Missing local paths are skipped.
 
 **Keyboard** (hover is focus; the first command is hovered on open)
 
 | Key | Action |
 |:----|:-------|
-| Arrows, **Home** / **End** | Move among tiles or chips |
-| **Tab** / **Shift+Tab** | Commands ↔ chips on the current tab |
+| Arrows, **Home** / **End** | Move among tiles, chips, or the right-hand action pane |
+| **Tab** / **Shift+Tab** | Commands ↔ chips ↔ Open with / matching commands |
 | **Ctrl+Tab** / **Ctrl+Shift+Tab** | Cycle Recent / Apps / Tanit |
 | **Enter** / **Space** | Run the hovered command, or select the hovered chip (exclusive; **Ctrl+Enter** on a Recent or Tanit chip opens the file) |
 | Letters | Type-ahead: prefix match on labels (1 s buffer). Repeat the same letter to cycle matches |
