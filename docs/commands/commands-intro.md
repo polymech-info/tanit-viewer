@@ -230,7 +230,7 @@ For daily use, pin frequent commands to the on-screen assistant toolbar (**Show 
 
 #### Launcher menu
 
-The launcher menu (**Show in launcher**) is a grouped tile grid plus context chips. Open it by hovering or clicking **Commands** on the assistant toolbar, or press **Alt+Win** while that toolbar is open. Commands that use `${CURRENT_FILE}` / `${CURRENT_SELECTION}` or `${CURRENT_HWND}` pick up the chips you have checked — see [Launcher context](#launcher-context).
+The launcher menu (**Show in launcher**) is a grouped tile grid plus tabbed context chips under the commands. Open it by hovering or clicking **Commands** on the assistant toolbar, or press **Alt+Win** while that toolbar is open. Commands that use `${CURRENT_FILE}` / `${CURRENT_SELECTION}` or `${CURRENT_HWND}` pick up the chips you have checked — see [Launcher context](#launcher-context).
 
 ![](./launcher.png){pm-profile="original"}
 
@@ -259,14 +259,14 @@ A Page Builder button can target any command.
 
 ### Launcher context
 
-The menu is more than a command palette: the chips under the tiles are the launch context.
+The menu is more than a command palette: the tabs under the command tiles are the launch context (**Recent**, **Apps**, **Tanit**). The assistant toolbar warms those chips after it first appears so hover-open is ready.
 
 **Open**
 
 - Assistant toolbar → **Commands** (hover or click), or **Alt+Win** while that toolbar is open (the combo is swallowed so it does not open the Start menu). Hover stays open across the gap between the button and the menu; move away to dismiss. A click on **Commands** while hover is still opening the menu is ignored so it does not toggle shut. Click or **Alt+Win** still toggle once you have moved onto the menu.
 - Empty if no enabled command has **Show in launcher**.
 
-**File chips** (up to 8) — click to select one (like **Apps**); **Ctrl+click** adds or removes extra chips. Checked paths become `${CURRENT_FILE}` / `${CURRENT_SELECTION}` / `${SRC_*}` when you run a tile (click or **Enter** / **Space** on the hovered command). Dragging a file onto a tile still wins for that run.
+**File chips** (up to 8, **Recent** tab) — click to select one (like **Apps**); **Ctrl+click** adds or removes extra chips. Checked paths become `${CURRENT_FILE}` / `${CURRENT_SELECTION}` / `${SRC_*}` when you run a tile (click or **Enter** / **Space** on the hovered command). Dragging a file onto a tile still wins for that run.
 
 If at least one **Recent** chip is checked, those recents fill `${CURRENT_FILE}` instead of the live Explorer selection. Mini Chat (`--src ${CURRENT_FILE}`) uses that path.
 
@@ -277,19 +277,22 @@ If at least one **Recent** chip is checked, those recents fill `${CURRENT_FILE}`
 
 Double-click a file chip to open it. Double-click an **Apps** chip to restore that window (if it is minimized) and bring it to the front. Drag files from Explorer onto a tile that still contains `${CURRENT_FILE}` or `${CURRENT_SELECTION}` — that drop is the selection for that one run.
 
-**Apps chips** (up to 8) — taskbar windows, excluding Tanit itself. One at a time. The window you were in before opening the launcher starts selected (**last app**). Click another to retarget. A command click then binds:
+**Apps chips** (up to 8, **Apps** tab) — taskbar windows, excluding Tanit itself. One at a time. The window you were in before opening the launcher starts selected (**last app**). Click another to retarget. A command click then binds:
 
 `${CURRENT_HWND}`, `${CURRENT_PID}`, `${CURRENT_WINTITLE}`, `${CURRENT_PROCESS}`, `${CURRENT_SCREEN_SPEC}`
 
 Use `${CURRENT_SCREEN_SPEC}` as an XBlox / CLI screen input (`screen:0:hwnd=…`). Pass `--CURRENT_HWND` the same way as `--CURRENT_FILE` when you bind from extra args.
+
+**Tanit chips** (up to 16, **Tanit** tab) — outputs grouped like the status bar Recent Outputs: **Past chat**, then XBlox runs (split by run name when present). Click selects the path for `${CURRENT_FILE}` (it wins over Selection / Recent chips). Double-click opens the file. Missing local paths are skipped.
 
 **Keyboard** (hover is focus; the first command is hovered on open)
 
 | Key | Action |
 |:----|:-------|
 | Arrows, **Home** / **End** | Move among tiles or chips |
-| **Tab** / **Shift+Tab** | Commands → files → apps (and back) |
-| **Enter** / **Space** | Run the hovered command, or select the hovered chip (exclusive; **Ctrl+Enter** on a Recent chip opens the file) |
+| **Tab** / **Shift+Tab** | Commands ↔ chips on the current tab |
+| **Ctrl+Tab** / **Ctrl+Shift+Tab** | Cycle Recent / Apps / Tanit |
+| **Enter** / **Space** | Run the hovered command, or select the hovered chip (exclusive; **Ctrl+Enter** on a Recent or Tanit chip opens the file) |
 | Letters | Type-ahead: prefix match on labels (1 s buffer). Repeat the same letter to cycle matches |
 | **Backspace** | Edit the type-ahead buffer |
 | **Esc** | Clear type-ahead first, then close |
@@ -381,11 +384,11 @@ The variable picker in Settings lists the same names.
 
 #### Current file / selection
 
-From the file tree, Explorer, a launcher **Selection** / **Files** / **Recent** chip, or a drop onto a launcher tile.
+From the file tree, Explorer, a launcher **Selection** / **Recent** / **Tanit** chip, or a drop onto a launcher tile.
 
 | Variable | Resolves to |
 |:---------|:------------|
-| `${CURRENT_FILE}` | Selected file path (checked Recent chips if any, else first checked chip / focused item) |
+| `${CURRENT_FILE}` | Selected file path (checked Recent or Tanit chips if any, else first checked chip / focused item) |
 | `${CURRENT_FILE_NAME}` | Selected file name with extension |
 | `${CURRENT_PATH}` | Current folder, or parent folder when a file is selected |
 | `${CURRENT_SELECTION}` | All selected paths (whitespace-separated). In an `args` array a bare `${CURRENT_SELECTION}` becomes one argument per path |
@@ -965,7 +968,7 @@ Add `--timeout-ms 5000` on `app-cmd` / `app-cmds` / `send` if the UI is busy. Cu
 |:--------|:------|
 | Command missing from ribbon | **Visible** and **Enabled**; ribbon group tab assignment |
 | Context menu entry missing | **Register in Explorer**; file-type filter; refresh the shell after first install |
-| `${CURRENT_FILE}` empty | A file is selected in Explorer, or a launcher file chip is checked; check a **Recent** chip then run the tile if you want that session file instead of the live Explorer pick; use per-item mode for multi-select batch jobs |
+| `${CURRENT_FILE}` empty | A file is selected in Explorer, or a launcher file / Tanit chip is checked; check a **Recent** or **Tanit** chip then run the tile if you want that session file instead of the live Explorer pick; use per-item mode for multi-select batch jobs |
 | `${CURRENT_HWND}` empty | Open the launcher, check an **Apps** chip (the last app is selected by default), then run the command |
 | Launcher empty / will not open | At least one enabled command has **Show in launcher**; assistant toolbar is open for **Alt+Win** |
 | Scheduled run has no files | Pin a fixed source or a known folder; clock triggers have no Explorer selection |

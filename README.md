@@ -1,5 +1,8 @@
 ## Viewer
 
+[See full documentation and tool description over here](https://tanit.polymech.info/user/cgo/pages/tanit-viewer-next)
+
+
 Tanit is a multi-media talent, built to be used every day — no friction, no subscription pain. Major content types are supported natively, drawing on thirty years of working with all sorts of formats across development, science, gaming, and manufacturing.
 
 Select a file, and the best available view opens in the centre panel. No "which app opens this?" moment — the image, the brief, the model, the clip, all in one place, right next to the chat and your work.
@@ -130,18 +133,3 @@ Every viewer shares the same toolbar: switch view, open for editing, reveal in E
 * [Pandoc citation syntax](https://pandoc.org/MANUAL.html#citations) — inline references (`[@key]`, `[@key, p. N]`)
 * [Mermaid](https://mermaid.js.org/) — flowcharts and diagrams in fenced blocks
 
-### Todos
-
-All illustrations generated via the pixlwiz MCP (image\_create / image\_transform), style guide first, then each diagram referencing it:
-
-* [x] Style guide — `tanit-viewer-style-guide.png` (white/zen, flat, teal #4A90A4 accent)
-* [x] Hero — `tanit-viewer-format.jpg`
-* [x] Images — `tanit-viewer-images.png`
-* [x] Documents — `tanit-viewer-documents.png`
-* [x] Markdown & Xblox — `tanit-viewer-markdown.png`
-* [x] 3D & CAD — `tanit-viewer-3d.png`
-* [x] Video — `tanit-viewer-video.png`
-* [x] Audio — `tanit-viewer-audio.png`
-* [x] Text / HTML / Pages — `tanit-viewer-text.png`
-* [x] Tanit CMS — `tanit-viewer-cms.png`
-* [x] Review diagrams for text glitches

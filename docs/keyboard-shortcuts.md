@@ -29,7 +29,7 @@ Change built-in assignments in Settings → Keyboard shortcuts. Commands with no
 
 ## Assistant launcher
 
-The launcher is a grouped command grid plus context chips. Open it from the assistant toolbar: hover or click **Commands**, or press **Alt+Win** while that toolbar is open (the combo is swallowed so it does not open the Start menu). Empty if no enabled command has **Show in launcher**.
+The launcher is a grouped command grid plus tabbed context chips under the commands (**Recent**, **Apps**, **Tanit**). Open it from the assistant toolbar: hover or click **Commands**, or press **Alt+Win** while that toolbar is open (the combo is swallowed so it does not open the Start menu). Empty if no enabled command has **Show in launcher**.
 
 Hover the Commands button to open; the menu stays up while you cross the gap onto it. A click on Commands while the menu is still opening from hover is ignored (it would otherwise toggle shut). Click and **Alt+Win** still toggle once the pointer has entered the menu.
 
@@ -37,10 +37,11 @@ Hover the Commands button to open; the menu stays up while you cross the gap ont
 |:---|:---|
 | Open / close launcher | Hover or click **Commands**; `Alt+Win` (assistant toolbar open) |
 | Move among tiles or chips | Arrows, `Home`, `End` |
-| Commands → files → apps | `Tab` / `Shift+Tab` |
+| Commands ↔ chips on the current tab | `Tab` / `Shift+Tab` |
+| Cycle Recent / Apps / Tanit | `Ctrl+Tab` / `Ctrl+Shift+Tab` |
 | Run hovered command | `Enter` / `Space` |
 | Select hovered file or Apps chip | `Enter` / `Space` |
-| Open hovered Recent file | `Ctrl+Enter` |
+| Open hovered Recent / Tanit file | `Ctrl+Enter` |
 | Type-ahead on command labels | Letters (1 s buffer; same letter cycles matches) |
 | Edit type-ahead | `Backspace` |
 | Clear type-ahead, then close | `Esc` |
@@ -48,10 +49,10 @@ Hover the Commands button to open; the menu stays up while you cross the gap ont
 `${CURRENT_FILE}` on a launcher command (Mini Chat uses `--src ${CURRENT_FILE}`):
 
 - Drag a file onto the tile — that drop is the file for that run.
-- Or check at least one **Recent** chip, then fire the command with click or **Enter** / **Space**. Those recents replace the live Explorer selection for `${CURRENT_FILE}`.
+- Or check at least one **Recent** or **Tanit** chip, then fire the command with click or **Enter** / **Space**. Those recents / artifacts replace the live Explorer selection for `${CURRENT_FILE}`.
 - Click a file chip to select it (one at a time). **Ctrl+click** adds extra chips for `${CURRENT_SELECTION}`.
 
-Double-click a file chip to open it. Double-click an **Apps** chip to restore that window.
+Double-click a file chip to open it. Double-click an **Apps** chip to restore that window. Double-click a **Tanit** chip to open that output.
 
 See [Launcher context](commands/commands-intro.md#launcher-context) for chip rows and `${CURRENT_HWND}`.
 

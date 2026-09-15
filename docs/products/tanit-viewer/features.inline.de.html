@@ -1,0 +1,2302 @@
+<!-- tanit-viewer explore (inline) lang=de -->
+<div class="tv-explore" data-theme="light" data-lang="de">
+<style>
+/* Theme surface constants — flip here to revert (prev light #fafbfd, dark #0b0f17).
+   Also on .tv-lightbox: overlay is appended to body (outside .tv-explore embeds). */
+.tv-explore,.tv-lightbox{
+  --tv-bg-light:#F7F6F5;
+  --tv-bg-dark:#282828;
+}
+.tv-explore,.tv-explore[data-theme="light"]{
+  color-scheme:light;
+  --bg:var(--tv-bg-light); --ink:#0f172a; --muted:#64748b; --dim:#94a3b8;
+  --accent:#2563eb; --accent-hover:#1d4ed8;
+  --accent-soft:rgba(37,99,235,.08);
+  --amber:#d97706;
+  --panel:#ffffff; --panel-2:#f1f0ee;
+  --line:rgba(15,23,42,.09); --line-strong:rgba(15,23,42,.14);
+  --media:var(--tv-bg-light);
+  --shadow:0 1px 2px rgba(15,23,42,.04);
+  --shadow-lg:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.05);
+  --side-w:240px; --copy-w:212px; --radius:12px;
+  --sel-bg:rgba(37,99,235,.08);
+}
+.tv-explore[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:var(--tv-bg-dark); --ink:#e8eef8; --muted:#8b9bb3; --dim:#64748b;
+  --accent:#3b82f6; --accent-hover:#60a5fa;
+  --accent-soft:rgba(59,130,246,.14);
+  --amber:#fbbf24;
+  --panel:#1f1f1f; --panel-2:#242424;
+  --line:rgba(148,163,184,.14); --line-strong:rgba(148,163,184,.22);
+  --media:var(--tv-bg-dark);
+  --shadow:0 1px 2px rgba(0,0,0,.25);
+  --shadow-lg:0 1px 2px rgba(0,0,0,.25),0 10px 28px rgba(0,0,0,.28);
+  --side-w:240px; --copy-w:212px; --radius:12px;
+  --sel-bg:rgba(59,130,246,.12);
+}.tv-explore,.tv-explore *{box-sizing:border-box}
+.tv-explore{height:auto;min-height:480px;margin:0}
+.tv-explore{
+  color:var(--ink);background:var(--bg);
+  font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;line-height:1.45;
+  -webkit-font-smoothing:antialiased;overflow:hidden;
+  letter-spacing:-.01em;
+}
+
+/* Parent iframe-widget (?embed=1): size to content, never lock to 100dvh (mobile clip) */
+html[data-pm-embed],html[data-pm-embed] body,
+.tv-explore[data-pm-embed]{
+  height:auto!important;min-height:0!important;overflow:visible!important;
+}
+html[data-pm-embed] .shell,
+.tv-explore[data-pm-embed] .shell{
+  height:auto!important;min-height:0!important;max-height:none!important;
+  overflow:visible!important;
+}
+html[data-pm-embed] .sidebar,
+.tv-explore[data-pm-embed] .sidebar{max-height:none!important}
+html[data-pm-embed] .stage-media,
+.tv-explore[data-pm-embed] .stage-media{min-height:220px}.tv-explore button,.tv-explore input{font:inherit;color:inherit}.tv-explore button{cursor:pointer;border:none;background:none}.tv-explore img,.tv-explore video{display:block;max-width:100%}.tv-explore a{color:inherit;text-decoration:none}
+@media (prefers-reduced-motion:reduce){.tv-explore *,.tv-explore *::before,.tv-explore *::after{animation:none!important;transition:none!important}}
+
+.shell{
+  display:grid;grid-template-columns:var(--side-w) minmax(0,1fr);
+  height:100%;min-height:0;gap:12px;padding:12px;
+}
+
+/* ── sidebar ── */
+.sidebar{
+  display:flex;flex-direction:column;min-height:0;border-radius:var(--radius);
+  background:var(--panel);border:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+.side-brand{display:flex;align-items:center;gap:12px;padding:16px 14px 12px}
+.side-logo{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  background:var(--panel-2);border:1px solid var(--line);
+  color:var(--ink);display:grid;place-items:center;padding:6px;
+}
+.side-logo svg{width:100%;height:100%}
+.side-brand strong{
+  font-size:.88rem;font-weight:600;letter-spacing:-.02em;
+}
+.side-nav{flex:1;overflow:auto;padding:2px 8px 12px;scrollbar-width:thin}
+.side-sec{
+  margin:12px 0 4px;padding:0 10px;
+  font-size:.72rem;font-weight:600;letter-spacing:-.01em;color:var(--dim);
+}
+.side-sec:first-child{margin-top:4px}
+.side-item{
+  position:relative;display:flex;align-items:center;gap:10px;width:100%;
+  padding:7px 10px;border-radius:10px;text-align:left;color:var(--muted);
+  border:1px solid transparent;
+  transition:color .12s,background .12s,border-color .12s;
+}
+.side-item:hover{color:var(--ink);background:var(--panel-2)}
+.side-item[aria-current="true"]{
+  color:var(--accent);background:var(--sel-bg);border-color:color-mix(in srgb,var(--accent) 28%,var(--line));
+}
+.side-item .si{width:18px;height:18px;flex-shrink:0;color:inherit}
+.side-item .si svg{width:100%;height:100%}
+.side-item .sl{font-size:.88rem;font-weight:500;line-height:1.3;min-width:0}
+.side-item .tour-mark{
+  margin-left:auto;width:8px;height:8px;border-radius:50%;flex-shrink:0;
+  background:var(--accent);opacity:0;box-shadow:0 0 0 0 rgba(37,99,235,.45);
+  transition:opacity .15s;
+}
+.side-item[aria-current="true"][data-tour="playing"] .tour-mark{
+  opacity:1;animation:tour-pulse 1.4s ease-out infinite;
+}
+.side-item[aria-current="true"][data-tour="paused"] .tour-mark{opacity:.55;background:var(--amber)}
+.side-item .tour-bar{
+  position:absolute;left:12px;right:12px;bottom:3px;height:2px;border-radius:999px;
+  background:rgba(37,99,235,.12);overflow:hidden;opacity:0;pointer-events:none;
+}
+.side-item[aria-current="true"][data-tour="playing"] .tour-bar{opacity:1}
+.side-item .tour-bar > i{
+  display:block;height:100%;width:0;border-radius:inherit;background:var(--accent);
+}
+.side-item[aria-current="true"][data-tour="playing"][data-media="image"] .tour-bar > i{
+  animation:tour-fill var(--tour-ms,4000ms) linear forwards;
+}
+.side-item[aria-current="true"][data-tour="playing"][data-media="video"] .tour-bar > i{
+  width:40%;animation:tour-indeterminate 1.2s ease-in-out infinite;
+}
+@keyframes tour-pulse{
+  0%{box-shadow:0 0 0 0 rgba(37,99,235,.45)}
+  70%{box-shadow:0 0 0 8px rgba(37,99,235,0)}
+  100%{box-shadow:0 0 0 0 rgba(37,99,235,0)}
+}
+@keyframes tour-fill{from{width:0}to{width:100%}}
+@keyframes tour-indeterminate{
+  0%{transform:translateX(-120%)}
+  100%{transform:translateX(280%)}
+}
+.side-foot{padding:10px;border-top:1px solid var(--line);display:flex;justify-content:center}
+.theme-btn{
+  width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
+  border:1px solid var(--line);background:var(--panel-2);color:var(--muted);
+  transition:border-color .12s,color .12s;
+}
+.theme-btn:hover{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.theme-btn .sun{display:none}
+.tv-explore[data-theme="light"] .theme-btn .moon{display:none}
+.tv-explore[data-theme="light"] .theme-btn .sun{display:block}
+
+/* ── main stage ── */
+.main{min-width:0;display:flex;flex-direction:column;min-height:0;gap:10px}
+.stage{
+  flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;
+  border-radius:var(--radius);border:1px solid var(--line);
+  background:var(--panel);box-shadow:var(--shadow);
+  /* Vertical page scroll OK; horizontal reserved for feature/slide swipe */
+  touch-action:pan-y;
+}
+.stage-body{
+  position:relative;flex:1;min-height:0;display:grid;
+  grid-template-columns:var(--copy-w) minmax(0,1fr);
+  gap:0;
+  background:var(--media);
+}
+/* Copy column solid edge — no wash over media */
+.stage-body::before{
+  content:"";position:absolute;top:0;bottom:0;left:0;z-index:1;pointer-events:none;
+  width:var(--copy-w);
+  border-right:1px solid var(--line);
+  background:var(--panel);
+}
+.tv-explore[data-theme="dark"] .stage-body::before{background:var(--panel)}
+.stage-right{
+  min-width:0;min-height:0;display:flex;flex-direction:column;z-index:0;
+}
+.stage-copy{
+  position:relative;z-index:2;
+  padding:20px 16px 16px;overflow:auto;
+  display:flex;flex-direction:column;min-height:0;border:0;
+  background:transparent;
+}
+.stage-copy h1{
+  margin:0 0 8px;font-size:clamp(1.2rem,1.8vw,1.45rem);font-weight:600;
+  letter-spacing:-.03em;line-height:1.2;
+}
+.stage-copy .lead{margin:0 0 14px;color:var(--muted);font-size:.82rem;max-width:34ch;line-height:1.5}
+.highlights{display:flex;flex-direction:column;gap:2px;padding-bottom:8px}
+.hl{
+  position:relative;display:flex;align-items:flex-start;gap:10px;width:100%;
+  padding:7px 8px;border-radius:8px;text-align:left;color:var(--ink);
+  border:1px solid transparent;background:transparent;
+  cursor:pointer;
+  transition:color .12s,background .12s,border-color .12s;
+}
+.hl:hover{background:var(--panel-2)}
+.hl[aria-current="true"]{
+  color:var(--accent);background:var(--sel-bg);
+  border-color:color-mix(in srgb,var(--accent) 28%,var(--line));
+}
+.hl-ico{
+  width:28px;height:28px;border-radius:8px;flex-shrink:0;margin-top:1px;
+  border:1px solid var(--line);background:var(--panel-2);
+  display:grid;place-items:center;padding:5px;color:var(--muted);
+}
+.hl[aria-current="true"] .hl-ico{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 30%,var(--line))}
+.hl-ico svg{width:100%;height:100%}
+.hl > span{min-width:0;flex:1 1 auto}
+.hl strong{display:block;font-size:.78rem;font-weight:600;margin-bottom:1px;letter-spacing:-.015em;color:inherit}
+.hl > span > span{display:block;font-size:.68rem;line-height:1.4;color:var(--muted);overflow:visible}
+.slide-note{margin:4px 0 12px;padding-top:12px;border-top:1px solid var(--line)}
+.slide-note strong{display:block;font-size:.84rem;font-weight:600;margin-bottom:4px;letter-spacing:-.015em}
+.slide-note p{margin:0;color:var(--muted);font-size:.78rem;line-height:1.5;max-width:34ch}
+.stage-copy .copy-tail{margin-top:auto;padding-top:10px}
+.media-ctas{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;
+  padding:4px 14px 14px;flex-shrink:0;
+}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:8px 14px;border-radius:8px;font-size:.78rem;font-weight:600;
+  border:1px solid transparent;letter-spacing:-.01em;
+  transition:background .12s,border-color .12s;
+}
+.btn-primary{
+  background:var(--accent);
+  color:#fff;
+}
+.btn-primary:hover{background:var(--accent-hover)}
+.btn-ghost{border-color:var(--line-strong);color:var(--ink);background:var(--panel)}
+.btn-ghost:hover{border-color:color-mix(in srgb,var(--accent) 40%,var(--line));color:var(--accent)}
+
+.stage-media{
+  position:relative;flex:1;min-height:0;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  /* Allow host-page scroll/pan; only lock gestures when zoomed */
+  padding:16px;touch-action:pan-y pinch-zoom;user-select:none;background:transparent;
+}
+.stage-media[data-zoomed]{cursor:grab;touch-action:none}
+.stage-media[data-panning]{cursor:grabbing}
+.media-surface{
+  position:relative;flex:1;width:100%;height:100%;min-width:0;min-height:0;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  margin:0;box-sizing:border-box;
+}
+/* Zoom pans via translate3d only — never CSS scale (bilinear softens UI text) */
+.media-xform{
+  box-sizing:border-box;
+  flex:1 1 auto;
+  width:100%;height:100%;
+  min-width:0;min-height:0;
+  max-width:100%;max-height:100%;
+  display:flex;align-items:center;justify-content:center;
+  transform-origin:0 0;
+  will-change:auto;
+}
+.stage-media img.media-el,.stage-media video.media-el{
+  display:block;box-sizing:border-box;flex:none;
+  /* Fit (1×): one contain shrink. Zoomed: JS sets exact px from naturalWidth. */
+  width:auto;height:auto;
+  max-width:100%;max-height:100%;
+  object-fit:contain;object-position:center;
+  border-radius:4px;
+  image-rendering:auto;
+  -webkit-user-drag:none;user-drag:none;
+  pointer-events:auto;
+}
+.stage-media[data-zoomed] img.media-el,
+.stage-media[data-zoomed] video.media-el{
+  max-width:none;max-height:none;
+}
+.stage-media .empty-media{color:var(--dim);font-size:.9rem;padding:24px;text-align:center}
+.zoom-badge{
+  position:absolute;right:14px;bottom:14px;z-index:2;
+  padding:4px 8px;border-radius:8px;font-size:.68rem;font-weight:600;
+  letter-spacing:-.01em;color:var(--ink);background:var(--panel);
+  border:1px solid var(--line);opacity:0;pointer-events:none;
+  transition:opacity .15s;
+}
+.stage-media[data-zoomed] .zoom-badge{opacity:1}
+
+.metrics{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+  padding:10px 14px;border-top:1px solid var(--line);background:var(--panel-2);
+}
+.metric{
+  padding:8px 10px;border-radius:8px;border:1px solid var(--line);
+  background:var(--panel);
+}
+.metric b{display:block;font-size:.76rem;font-weight:600;letter-spacing:-.015em;margin-bottom:2px;color:var(--ink)}
+.metric span{font-size:.66rem;color:var(--muted)}
+
+.stage-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:8px 14px;border-top:1px solid var(--line);background:var(--panel);
+}
+.tour-controls{
+  display:flex;flex-direction:row;align-items:center;gap:10px;
+  padding:5px 10px 5px 6px;border-radius:10px;border:1px solid var(--line);
+  background:var(--panel-2);flex-shrink:0;
+}
+.tour-controls[data-mode="playing"]{border-color:color-mix(in srgb,var(--accent) 35%,var(--line))}
+.tour-controls[data-mode="paused"]{border-color:color-mix(in srgb,var(--amber) 40%,var(--line))}
+.tour-controls[data-mode="stopped"]{opacity:.92}
+.tour-btns{display:flex;gap:4px;flex-shrink:0}
+.tour-btn{
+  width:30px;height:30px;border-radius:8px;display:grid;place-items:center;
+  border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  transition:color .12s,border-color .12s,background .12s;
+}
+.tour-btn:hover{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.tour-btn[aria-pressed="true"]{
+  color:#fff;background:var(--accent);border-color:transparent;
+}
+.tour-btn[data-act="stop"][aria-pressed="true"]{background:var(--ink)}
+.tour-btn svg{width:14px;height:14px}
+.tour-meta{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;min-width:0}
+.tour-meta b{
+  font-size:.68rem;font-weight:600;letter-spacing:-.01em;color:var(--ink);
+}
+.tour-controls[data-mode="playing"] .tour-meta b{color:var(--accent)}
+.tour-controls[data-mode="paused"] .tour-meta b{color:var(--amber)}
+.tour-meta span{font-size:.65rem;color:var(--muted);line-height:1.25;white-space:nowrap;max-width:22ch;overflow:hidden;text-overflow:ellipsis}
+.slide-nav{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto}
+.slide-nav button{
+  height:32px;padding:0 11px;border-radius:8px;border:1px solid var(--line);
+  background:var(--panel-2);color:var(--ink);font-size:.76rem;font-weight:600;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.slide-nav button:hover:not(:disabled){border-color:color-mix(in srgb,var(--accent) 40%,var(--line));color:var(--accent)}
+.slide-nav button:disabled{opacity:.35;cursor:default}
+.slide-dots{display:flex;gap:6px;align-items:center;margin:0 4px}
+.slide-dots button{
+  width:6px;height:6px;border-radius:50%;background:var(--dim);padding:0;opacity:.4;
+  transition:background .12s,opacity .12s;
+}
+.slide-dots button[aria-current="true"]{
+  background:var(--accent);opacity:1;
+}
+
+@media(max-width:1100px){
+  .shell{grid-template-columns:200px minmax(0,1fr)}
+  .tv-explore,.tv-explore[data-theme="light"],.tv-explore[data-theme="dark"]{--copy-w:196px}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+}
+/* Stack: all features scroll; slides via buttons + horizontal swipe only */
+@media(max-width:900px){
+  html,.tv-explore{height:auto;overflow:auto}
+  .tv-explore,.tv-explore.tv-stack{
+    height:auto!important;min-height:0!important;overflow:visible!important;
+  }
+
+  .shell{
+    display:flex;flex-direction:column;
+    height:auto;min-height:0;overflow:visible;
+    gap:8px;
+    padding:8px;
+    padding-left:max(8px,env(safe-area-inset-left));
+    padding-right:max(8px,env(safe-area-inset-right));
+    padding-bottom:max(12px,env(safe-area-inset-bottom));
+  }
+
+  /* Compact brand bar */
+  .sidebar{
+    width:100%;max-height:none;
+    display:grid;
+    grid-template-columns:1fr auto;
+    grid-template-areas:"brand foot";
+    align-items:center;
+    border-radius:10px;
+  }
+  .side-brand{grid-area:brand;padding:10px 6px 10px 12px;gap:10px}
+  .side-brand strong{font-size:.82rem;font-weight:600;letter-spacing:-.02em}
+  .side-logo{width:28px;height:28px;padding:5px;border-radius:7px}
+  .side-foot{
+    grid-area:foot;border-top:0;padding:8px 10px;
+    justify-content:flex-end;
+  }
+  .theme-btn{width:36px;height:36px;border-radius:9px}
+  .side-nav{display:none!important}
+
+  .main,.stage{overflow:visible;min-height:0;flex:none;height:auto}
+  .stage.is-stack{
+    background:transparent;border:0;box-shadow:none;
+    overflow:visible;touch-action:pan-y;
+  }
+
+  /* Solid sticky tour chrome — no gradient wash */
+  .stack-tour{
+    position:sticky;top:0;z-index:5;
+    margin:0 0 8px;
+    padding:0;
+    background:var(--bg);
+    padding-top:env(safe-area-inset-top,0);
+  }
+  .stack-tour .tour-controls{
+    width:100%;
+    padding:8px 10px;gap:10px;
+    border-radius:10px;
+    background:var(--panel);
+    box-shadow:var(--shadow);
+  }
+  .stack-tour .tour-btn{width:40px;height:40px;border-radius:9px}
+  .stack-tour .tour-btn svg{width:16px;height:16px}
+  .stack-tour .tour-meta b{font-size:.72rem}
+  .stack-tour .tour-meta span{white-space:normal;max-width:none;font-size:.68rem}
+
+  .feature-stack{display:flex;flex-direction:column;gap:10px}
+  .feature-card{
+    border-radius:10px;border:1px solid var(--line);
+    background:var(--panel);box-shadow:none;
+    overflow:hidden;touch-action:pan-y;
+  }
+  .feature-card[aria-current="true"]{
+    border-color:color-mix(in srgb,var(--accent) 40%,var(--line));
+  }
+  .feature-cat{
+    padding:8px 14px 0;
+    font-size:.7rem;font-weight:600;letter-spacing:-.01em;color:var(--dim);
+  }
+
+  .feature-card .stage-body{
+    display:flex;flex-direction:column;
+    grid-template-columns:1fr;
+    min-height:0;
+    background:var(--media);
+  }
+  .feature-card .stage-body::before{display:none}
+  .feature-card .stage-right{order:-1;flex:none}
+  .feature-card .stage-media{
+    min-height:min(52vw,280px);
+    max-height:min(62vh,420px);
+    padding:8px;
+    touch-action:pan-y pinch-zoom;
+    background:var(--media);
+  }
+  .feature-card .media-ctas{padding:0 12px 10px}
+  .feature-card .metrics{
+    grid-template-columns:repeat(2,1fr);
+    gap:6px;padding:8px 12px 10px;
+    border-top:1px solid var(--line);
+  }
+  .feature-card .metric{padding:7px 8px;border-radius:8px}
+
+  /* Annotation under media — quiet, dense */
+  .feature-card .stage-copy{
+    order:1;overflow:visible;
+    padding:12px 14px 10px;
+    flex:none;min-height:0;
+    border-top:1px solid var(--line);
+    background:var(--panel);
+  }
+  .feature-card .stage-copy h1{
+    font-size:1.1rem;margin:0 0 4px;letter-spacing:-.025em;
+  }
+  .feature-card .stage-copy .lead{
+    margin:0 0 10px;font-size:.78rem;max-width:none;line-height:1.45;
+  }
+  .feature-card .highlights{gap:1px;padding-bottom:4px}
+  .feature-card .hl{padding:6px 6px;border-radius:8px;gap:8px}
+  .feature-card .hl-ico{width:26px;height:26px;padding:4px;border-radius:7px}
+  .feature-card .hl strong{font-size:.76rem}
+  .feature-card .hl > span > span{font-size:.66rem}
+  .feature-card .slide-note{margin:2px 0 8px;padding-top:10px}
+  .feature-card .slide-note strong{font-size:.8rem}
+  .feature-card .slide-note p{font-size:.74rem;max-width:none}
+
+  .feature-card .stage-foot{
+    flex-direction:row;flex-wrap:nowrap;align-items:center;justify-content:stretch;
+    gap:8px;padding:8px 10px 10px;
+    background:var(--panel);
+  }
+  .feature-card .slide-nav{
+    margin-left:0;width:100%;
+    justify-content:space-between;gap:8px;
+  }
+  .feature-card .slide-nav button{
+    height:40px;min-width:0;flex:1 1 0;padding:0 12px;
+    font-size:.8rem;border-radius:9px;font-weight:600;
+  }
+  .feature-card .slide-dots{margin:0;gap:7px;flex:0 0 auto}
+  .feature-card .slide-dots button{width:8px;height:8px}
+}
+
+/* Desktop stage media: wheel-zoom affordance */
+@media(min-width:901px){
+  .stage-media img.media-el{cursor:zoom-in}
+  .stage-media[data-zoomed]{cursor:grab}
+  .stage-media[data-zoomed][data-panning]{cursor:grabbing}
+}
+
+/* Lightbox — full-bleed overlay (themed light/dark; cards = 30% transparent) */
+html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
+.tv-lightbox{
+  --lb-scrim:color-mix(in srgb,var(--tv-bg-dark) 92%,transparent);
+  --lb-card:rgba(17,24,39,.7);          /* 30% transparent */
+  --lb-line:rgba(148,163,184,.22);
+  --lb-ink:#e8eef8;
+  --lb-muted:#8b9bb3;
+  --lb-dim:rgba(232,238,248,.55);
+  --lb-btn:rgba(17,24,39,.7);
+  --lb-btn-hover:rgba(17,24,39,.88);
+  --lb-shadow:0 10px 32px rgba(0,0,0,.35);
+  --accent:#3b82f6; --accent-soft:rgba(59,130,246,.22); --amber:#fbbf24;
+  position:fixed;inset:0;z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--lb-scrim);color:var(--lb-ink);
+  touch-action:none;
+}
+.tv-lightbox.tv-explore[data-theme="light"]{
+  --lb-scrim:color-mix(in srgb,var(--tv-bg-light) 92%,transparent);
+  --lb-card:rgba(255,255,255,.7);
+  --lb-line:rgba(15,23,42,.12);
+  --lb-ink:#0f172a;
+  --lb-muted:#64748b;
+  --lb-dim:rgba(15,23,42,.5);
+  --lb-btn:rgba(255,255,255,.7);
+  --lb-btn-hover:rgba(255,255,255,.9);
+  --lb-shadow:0 10px 32px rgba(15,23,42,.12);
+  --accent:#2563eb; --accent-soft:rgba(37,99,235,.14); --amber:#d97706;
+}
+.tv-lightbox[hidden]{display:none!important}
+.tv-lb-stage{
+  position:relative;width:100%;height:100%;
+  display:flex;flex-direction:column;
+  min-width:0;min-height:0;overflow:hidden;
+}
+.tv-lb-media{
+  position:relative;flex:1 1 auto;min-height:0;width:100%;
+  display:flex;align-items:center;justify-content:center;
+  padding:48px 48px 24px;
+  overflow:hidden;touch-action:none;user-select:none;
+}
+.tv-lb-xform{
+  box-sizing:border-box;
+  flex:1 1 auto;
+  width:100%;height:100%;
+  min-width:0;min-height:0;
+  max-width:100%;max-height:100%;
+  display:flex;align-items:center;justify-content:center;
+  transform-origin:0 0;
+  will-change:auto;
+}
+.tv-lb-media[data-zoomed]{cursor:grab}
+.tv-lightbox img.tv-lb-el,
+.tv-lightbox video.tv-lb-el{
+  display:block;box-sizing:border-box;flex:none;
+  width:auto;height:auto;
+  max-width:100%;max-height:100%;
+  object-fit:contain;object-position:center;
+  border-radius:4px;pointer-events:auto;
+  image-rendering:auto;
+  -webkit-user-drag:none;user-drag:none;
+}
+.tv-lb-media[data-zoomed] img.tv-lb-el,
+.tv-lb-media[data-zoomed] video.tv-lb-el{
+  max-width:none;max-height:none;
+}
+.tv-lb-badge{
+  position:absolute;right:24px;bottom:20px;z-index:2;
+  padding:4px 10px;border-radius:999px;font-size:.72rem;font-weight:700;
+  color:var(--lb-ink);background:var(--lb-card);border:1px solid var(--lb-line);
+  opacity:0;pointer-events:none;transition:opacity .15s;
+}
+.tv-lb-footer{
+  position:relative;z-index:4;flex:0 0 auto;
+  display:flex;align-items:stretch;justify-content:center;gap:12px;
+  padding:8px 24px 28px;
+  pointer-events:none;
+}
+.tv-lb-caption-row{
+  display:flex;align-items:stretch;gap:8px;
+  flex:1 1 auto;min-width:0;max-width:640px;
+  pointer-events:auto;
+}
+.tv-lb-card{
+  height:56px;
+  border-radius:12px;
+  border:1px solid var(--lb-line);
+  background:var(--lb-card);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  box-shadow:var(--lb-shadow);
+  color:var(--lb-ink);
+  box-sizing:border-box;
+}
+.tv-lb-caption{
+  flex:1 1 auto;min-width:0;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;
+  align-content:center;column-gap:12px;row-gap:1px;
+  padding:8px 16px;text-align:left;pointer-events:none;
+  overflow:hidden;
+}
+.tv-lb-title{
+  grid-column:1;grid-row:1;
+  font-size:.98rem;font-weight:700;letter-spacing:-.02em;line-height:1.2;
+  color:var(--lb-ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.tv-lb-count{
+  grid-column:2;grid-row:1;align-self:center;
+  font-size:.68rem;font-weight:600;letter-spacing:.06em;line-height:1.2;
+  text-transform:uppercase;color:var(--lb-dim);
+  white-space:nowrap;
+}
+.tv-lb-desc{
+  grid-column:1/-1;grid-row:2;
+  margin:0;font-size:.82rem;line-height:1.25;color:var(--lb-muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.tv-lb-close{
+  position:absolute;z-index:5;top:16px;right:16px;
+  width:48px;height:48px;font-size:1.75rem;line-height:1;
+  display:grid;place-items:center;
+  border:1px solid var(--lb-line);border-radius:12px;cursor:pointer;
+  color:var(--lb-ink);background:var(--lb-btn);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:background .15s;
+}
+.tv-lb-close:hover{background:var(--lb-btn-hover)}
+.tv-lb-prev,.tv-lb-next{
+  flex:0 0 56px;width:56px;padding:0;
+  display:grid;place-items:center;
+  font-size:1.85rem;line-height:1;cursor:pointer;
+  color:var(--lb-ink);background:var(--lb-card);
+  transition:background .15s,opacity .15s;
+  pointer-events:auto;
+}
+.tv-lb-prev:hover,.tv-lb-next:hover{background:var(--lb-btn-hover)}
+.tv-lb-prev[hidden],.tv-lb-next[hidden]{display:none!important}
+.tv-lb-tour{
+  flex:0 0 auto;pointer-events:auto;
+  display:flex;align-items:stretch;
+}
+.tv-lightbox .tour-controls{
+  --ink:var(--lb-ink);--muted:var(--lb-muted);--dim:var(--lb-dim);
+  --line:transparent;--panel:transparent;--bg:color-mix(in srgb,var(--lb-ink) 8%,transparent);
+  --shadow:none;
+  border:0;box-shadow:none;background:transparent;
+  height:100%;padding:10px 14px;
+}
+.tv-lightbox .tour-meta span{max-width:22ch;color:var(--lb-muted)}
+@media(max-width:900px){
+  .tv-lb-media{
+    padding:max(52px,calc(12px + env(safe-area-inset-top))) 12px 12px;
+  }
+  .tv-lb-footer{
+    flex-direction:column-reverse;align-items:stretch;gap:8px;
+    padding:6px 12px max(14px,env(safe-area-inset-bottom));
+  }
+  .tv-lb-caption-row{max-width:none;width:100%}
+  .tv-lb-card{height:52px;border-radius:10px}
+  .tv-lb-caption{padding:7px 12px}
+  .tv-lb-title{font-size:.9rem;font-weight:600}
+  .tv-lb-desc{font-size:.76rem}
+  .tv-lb-count{font-size:.64rem;letter-spacing:.02em;text-transform:none}
+  .tv-lb-prev,.tv-lb-next{flex-basis:48px;width:48px;font-size:1.6rem}
+  .tv-lb-close{
+    top:max(10px,env(safe-area-inset-top));
+    right:max(10px,env(safe-area-inset-right));
+    width:44px;height:44px;border-radius:10px;font-size:1.5rem;
+  }
+  .tv-lb-badge{right:14px;bottom:14px;border-radius:8px}
+  .tv-lb-tour{width:100%}
+  .tv-lightbox .tour-controls{width:100%;padding:6px 10px}
+  .tv-lightbox .tour-meta span{max-width:none;white-space:normal}
+}
+
+</style>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="side-brand">
+      <div class="side-logo" id="brandLogo"></div>
+      <strong id="brandTitle"></strong>
+    </div>
+    <nav class="side-nav" id="sideNav" aria-label="Features"></nav>
+    <div class="side-foot">
+      <button type="button" class="theme-btn" id="themeBtn" aria-label="Toggle theme" title="Theme">
+        <span class="moon" aria-hidden="true">◐</span>
+        <span class="sun" aria-hidden="true">☀</span>
+      </button>
+    </div>
+  </aside>
+  <div class="main">
+    <section class="stage" id="stage" aria-live="polite"></section>
+  </div>
+</div>
+<script type="application/json" id="data">{"product":{"title":"Tanit Viewer","subtitle":"Formate, Netzwerk und Automatisierung — eine Oberfläche.","tip":"Dateien per Drag & Drop direkt im Viewer öffnen.","features":[{"id":"images-raw","label":"Bilder & RAW","icon":"images-raw","description":"JPEG, PNG, WebP, TIFF, HEIC und Kamera-RAW. Schnelles Zoomen, Zuschneiden und Aussortieren.","slides":[{"id":"overview","title":"Bilder & RAW","description":"Shootings sortieren ohne Extra-App — browsen, zoomen und zuschneiden in Ordnergeschwindigkeit.","media":{"type":"image","src":"./screenshot-images-0.png"},"highlights":[{"icon":"images-raw","title":"Kamera-RAW","text":"Sony, Canon, Nikon, DNG, OM System"},{"icon":"images-raw","title":"Schnelles Culling","text":"Pfeiltasten und Maus durch große Ordner"},{"title":"Zoom & Crop","text":"Präzise prüfen ohne den Viewer zu verlassen"}],"actions_":[{"label":"Open File","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}],"actions":[{"label":"Datei öffnen","primary":true,"href":"#"},{"label":"Demo ansehen","href":"#"}]}]},{"id":"markdown","label":"Markdown / Text / Code","icon":"markdown","description":"Rich Markdown with KaTeX, Mermaid, live Xblox, and a full text/code editor with version history.","slides":[{"id":"overview","title":"Markdown","description":"All batteries included — rich support for KaTeX, Mermaid, and code.","media":{"type":"image","src":"./screenshot-markdown-0.png"},"highlights_":[{"icon":"markdown","title":"KaTeX","text":"Rich support for Katex, Mermaid & code "}]},{"id":"mermaid","title":"Mermaid","description":"Support for flow, sequence, and state diagrams","media":{"type":"image","src":"./screenshot-markdown-1.png"},"highlights_":[{"icon":"markdown","title":"KaTeX","text":"Rich support for Katex, Mermaid & code "}]},{"id":"xblox","title":"XBlox","description":"Support for Xblox — turn documentation into interactive, file- and context-aware playgrounds.","media":{"type":"image","src":"./screenshot-markdown-2.png"},"highlights_":[{"icon":"xblox","title":"Live Xblox","text":"Working blocks inside the page"},{"icon":"xblox","title":"File-aware","text":"Blocks that know their context"},{"icon":"command","title":"Playgrounds","text":"Docs you can run, not just read"}]},{"id":"text-code","title":"Text / Code","description":"Wide language support for viewing and editing, with version history so no change is lost — AI edits shown visually.","media":{"type":"image","src":"./screenshot-code-0.png"},"highlights_":[{"icon":"markdown","title":"Many languages","text":"View and edit across a wide set"},{"icon":"command","title":"Version history","text":"No change is lost"},{"icon":"command","title":"AI edits","text":"Shown visually in the editor"}]}]},{"id":"3d-cad","label":"3D & CAD","icon":"cad","description":"Models, prints, scans, and engineering handoff files in a built-in 3D viewer.","_metrics":[{"title":"20+ Formats","text":"STEP, STL, OBJ, FBX…"},{"title":"GPU Accelerated","text":"Smooth large assemblies"},{"title":"Large Scene Ready","text":"Built for dense models"},{"title":"Secure Local","text":"Processing stays on device"}],"slides":[{"id":"overview","title":"3D & CAD","description":"Support for STEP, STL, OBJ, FBX, DXF and many more formats, easy to combine with custom commands enabling conversions and analysis. We support Solidworks and Fusion360 natively with additional CLI tookkits.","media":{"type":"image","src":"./screenshot-3d-0.png"},"_highlights":[{"icon":"cad","title":"Multiple formats","text":"STEP, STL, OBJ, FBX and more","slide":"overview"},{"icon":"cad","title":"Advanced viewer","text":"Section, measure, explode views","slide":"overview"},{"icon":"cad","title":"Fast & accurate","text":"Optimized for large assemblies","slide":"inspect"},{"icon":"command","title":"Export & share","text":"Reports, screenshots, handoff","slide":"inspect"}],"_actions":[{"label":"Open File","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"},{"label":"Learn More","href":"#"}]},{"id":"inspect","title":"Inspect & approve","description":"Check a mesh or CAD export in place — then hand it to chat, CMS, or an Xblox pipeline.","media":{"type":"image","src":"./tanit-viewer-3d.png"},"actions":[{"label":"Try Sample","primary":true,"href":"#"},{"label":"Open Docs","href":"#"}]}]},{"id":"video","label":"Video","icon":"video","description":"Playback, screen and webcam capture, and batch convert — via CLI, XBlox, and ribbon commands (FFmpeg, HandBrake, and more).","slides":[{"id":"overview","title":"Video","description":"Common formats, built-in recorders, and batch conversion through external tools — same commands over ribbons, CLI, and Xblox.","media":{"src":"./screenshot-video-0.png","title":"Playback","description":"Support for MP4, MOV, WebM, MKV and the usual suspects — scrub and review in place."},"highlights":[{"icon":"video","title":"Formats & playback","text":"Support for MP4, MOV, WebM, MKV — in-place review","slide":0},{"icon":"video","title":"Screen recorder","text":"High-quality capture with follow & zoom; desktop and/or mic — ideal for screen recordings","slide":1}],"actions_":[{"label":"Open File","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]},{"id":"video-record","title":"Video","description":"Advanced and complete screen and webcam recording capabilities","media":{"src":"./screenshot-video-1.png","title":"Screen recorder","description":"High-quality capture with follow & zoom; desktop and/or mic"},"highlights":[{"icon":"rt-video","title":"Webcam recorder","text":"Built-in webcam capture — CLI, Xblox, and ribbon commands","slide":1},{"icon":"command","title":"Batch convert","text":"Convert videos in batch by combining external tools such as FFmpeg or HandBrake","slide":0}],"actions_":[{"label":"Open File","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]}]},{"id":"audio","label":"Audio","icon":"audio","description":"Play recordings and voice memos; pair with STT/TTS when needed.","slides":[{"id":"overview","title":"Audio","description":"Listen in place; hand the clip to transcription or AI when ready.","media":{"type":"image","src":"./tanit-viewer-audio.png"},"highlights":[{"icon":"audio","title":"Playback","text":"Voice memos, interviews, journals"},{"icon":"rt-audio","title":"STT / TTS","text":"Real-time when you need it"}],"actions":[{"label":"Open File","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]}]},{"id":"html-pages","label":"HTML / Pages","icon":"html","description":"HTML renders as a page. Tanit pages open ready to read or edit.","slides":[{"id":"overview","title":"HTML / Pages","description":"Generated reports and campaign previews without leaving the viewer.","media":{"type":"image","src":"./tanit-viewer-text.png"},"highlights":[{"icon":"html","title":"Page render","text":"HTML as a page, not source"},{"icon":"html","title":"Inline edit","text":"Tanit pages ready to change"}],"actions":[{"label":"Open File","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]}]},{"id":"tanit-cms","label":"Tanit CMS","icon":"cms","description":"Push files, pictures, posts, and pages from the workbench.","slides":[{"id":"overview","title":"Tanit CMS","description":"Local file → published content without a separate upload tab.","media":{"type":"image","src":"./tanit-viewer-cms.png"},"highlights":[{"icon":"cms","title":"Direct publish","text":"Files, pictures, posts, pages"},{"icon":"cms","title":"Same tools","text":"Search, AI, and Xblox on CMS content"}],"actions":[{"label":"Open CMS","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]},{"id":"flow","title":"Local → Web","description":"How content moves from the desktop through Tanit Drive & CMS.","media":{"type":"image","src":"./tanit-viewer-overview.png"},"highlights":[{"icon":"network","title":"Connected","text":"Drive, CMS, and the wider web"}],"actions":[{"label":"Learn More","primary":true,"href":"#"}]}]},{"id":"network","label":"Network","icon":"network","description":"Stream and sync across local and remote endpoints.","slides":[{"id":"overview","title":"Network","description":"Connected nodes for live sessions, sync, and remote work.","media":{"type":"image","src":"./tanit-viewer-overview.png"},"highlights":[{"icon":"network","title":"Sessions","text":"Agents, devices, shared work"},{"icon":"network","title":"Sync","text":"Local and remote endpoints"}],"actions":[{"label":"Connect","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]}]},{"id":"xblox","label":"XBlox","icon":"xblox","description":"Native visual automation for files, media, devices, and networks — reusable as commands, pages, and MCP tools.","slides":[{"id":"overview","title":"Native visual automation","description":"Build deterministic tools from blocks. The native C++ executor starts quickly, stays small, and connects local inputs to media, devices, and networks.","media":{"type":"image","src":"./tanit-xblox-capabilities.png"},"highlights":[{"icon":"xblox","title":"Native & light","text":"C++ core, quick startup, only a few MB"},{"icon":"network","title":"Real-world I/O","text":"Files, pickers, media, HTTP, SSH, MQTT, Modbus, Bluetooth"},{"icon":"xblox","title":"Deterministic first","text":"AI and MCP are optional steps, not requirements"}],"actions":[{"label":"Open Editor","primary":true,"href":"#"},{"label":"Explore Blocks","href":"#"}]},{"id":"reuse","title":"One flow, every surface","description":"Create one .xblox file, then run it from the editor, interactive docs, commands, custom pages, CLI, assistants, or any MCP-compatible client.","media":{"type":"image","src":"./tanit-xblox-surfaces.png"},"highlights":[{"icon":"command","title":"Launch anywhere","text":"Docs, ribbon, Explorer, Page Builder, and CLI"},{"icon":"xblox","title":"Agent-ready","text":"Expose reviewed flows as assistant or MCP tools"},{"icon":"xblox","title":"Reuse safely","text":"One editable workflow without duplicated logic"}],"actions":[{"label":"Try Sample","primary":true,"href":"#"},{"label":"Learn More","href":"#"}]}]},{"id":"command-center","label":"Command Center","icon":"command","description":"One control surface for tools, toggles, and batch actions.","slides":[{"id":"overview","title":"Command Center","description":"Sliders, actions, and workflow controls next to whatever you are viewing.","media":{"type":"image","src":"./tanit-viewer-overview.png"},"highlights":[{"icon":"command","title":"One surface","text":"View, edit, reveal, hand to chat"},{"icon":"command","title":"Batch actions","text":"Run jobs across a selection"}],"actions":[{"label":"Open Center","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]}]}],"lang":"de"},"features":[{"id":"images-raw","label":"Bilder & RAW","icon":"images-raw","description":"JPEG, PNG, WebP, TIFF, HEIC und Kamera-RAW. Schnelles Zoomen, Zuschneiden und Aussortieren.","slides":[{"id":"overview","title":"Bilder & RAW","description":"Shootings sortieren ohne Extra-App — browsen, zoomen und zuschneiden in Ordnergeschwindigkeit.","media":{"type":"image","src":"./screenshot-images-0.png"},"highlights":[{"icon":"images-raw","title":"Kamera-RAW","text":"Sony, Canon, Nikon, DNG, OM System"},{"icon":"images-raw","title":"Schnelles Culling","text":"Pfeiltasten und Maus durch große Ordner"},{"title":"Zoom & Crop","text":"Präzise prüfen ohne den Viewer zu verlassen"}],"actions_":[{"label":"Open File","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}],"actions":[{"label":"Datei öffnen","primary":true,"href":"#"},{"label":"Demo ansehen","href":"#"}]}]},{"id":"markdown","label":"Markdown / Text / Code","icon":"markdown","description":"Rich Markdown with KaTeX, Mermaid, live Xblox, and a full text/code editor with version history.","slides":[{"id":"overview","title":"Markdown","description":"All batteries included — rich support for KaTeX, Mermaid, and code.","media":{"type":"image","src":"./screenshot-markdown-0.png"},"highlights_":[{"icon":"markdown","title":"KaTeX","text":"Rich support for Katex, Mermaid & code "}]},{"id":"mermaid","title":"Mermaid","description":"Support for flow, sequence, and state diagrams","media":{"type":"image","src":"./screenshot-markdown-1.png"},"highlights_":[{"icon":"markdown","title":"KaTeX","text":"Rich support for Katex, Mermaid & code "}]},{"id":"xblox","title":"XBlox","description":"Support for Xblox — turn documentation into interactive, file- and context-aware playgrounds.","media":{"type":"image","src":"./screenshot-markdown-2.png"},"highlights_":[{"icon":"xblox","title":"Live Xblox","text":"Working blocks inside the page"},{"icon":"xblox","title":"File-aware","text":"Blocks that know their context"},{"icon":"command","title":"Playgrounds","text":"Docs you can run, not just read"}]},{"id":"text-code","title":"Text / Code","description":"Wide language support for viewing and editing, with version history so no change is lost — AI edits shown visually.","media":{"type":"image","src":"./screenshot-code-0.png"},"highlights_":[{"icon":"markdown","title":"Many languages","text":"View and edit across a wide set"},{"icon":"command","title":"Version history","text":"No change is lost"},{"icon":"command","title":"AI edits","text":"Shown visually in the editor"}]}]},{"id":"3d-cad","label":"3D & CAD","icon":"cad","description":"Models, prints, scans, and engineering handoff files in a built-in 3D viewer.","_metrics":[{"title":"20+ Formats","text":"STEP, STL, OBJ, FBX…"},{"title":"GPU Accelerated","text":"Smooth large assemblies"},{"title":"Large Scene Ready","text":"Built for dense models"},{"title":"Secure Local","text":"Processing stays on device"}],"slides":[{"id":"overview","title":"3D & CAD","description":"Support for STEP, STL, OBJ, FBX, DXF and many more formats, easy to combine with custom commands enabling conversions and analysis. We support Solidworks and Fusion360 natively with additional CLI tookkits.","media":{"type":"image","src":"./screenshot-3d-0.png"},"_highlights":[{"icon":"cad","title":"Multiple formats","text":"STEP, STL, OBJ, FBX and more","slide":"overview"},{"icon":"cad","title":"Advanced viewer","text":"Section, measure, explode views","slide":"overview"},{"icon":"cad","title":"Fast & accurate","text":"Optimized for large assemblies","slide":"inspect"},{"icon":"command","title":"Export & share","text":"Reports, screenshots, handoff","slide":"inspect"}],"_actions":[{"label":"Open File","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"},{"label":"Learn More","href":"#"}]},{"id":"inspect","title":"Inspect & approve","description":"Check a mesh or CAD export in place — then hand it to chat, CMS, or an Xblox pipeline.","media":{"type":"image","src":"./tanit-viewer-3d.png"},"actions":[{"label":"Try Sample","primary":true,"href":"#"},{"label":"Open Docs","href":"#"}]}]},{"id":"video","label":"Video","icon":"video","description":"Playback, screen and webcam capture, and batch convert — via CLI, XBlox, and ribbon commands (FFmpeg, HandBrake, and more).","slides":[{"id":"overview","title":"Playback","description":"Support for MP4, MOV, WebM, MKV and the usual suspects — scrub and review in place.","media":{"type":"image","src":"./screenshot-video-0.png"},"highlights":[{"icon":"video","title":"Formats & playback","text":"Support for MP4, MOV, WebM, MKV — in-place review","slide":0},{"icon":"video","title":"Screen recorder","text":"High-quality capture with follow & zoom; desktop and/or mic — ideal for screen recordings","slide":1}],"actions_":[{"label":"Open File","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]},{"id":"video-record","title":"Screen recorder","description":"High-quality capture with follow & zoom; desktop and/or mic","media":{"type":"image","src":"./screenshot-video-1.png"},"highlights":[{"icon":"rt-video","title":"Webcam recorder","text":"Built-in webcam capture — CLI, Xblox, and ribbon commands","slide":1},{"icon":"command","title":"Batch convert","text":"Convert videos in batch by combining external tools such as FFmpeg or HandBrake","slide":0}],"actions_":[{"label":"Open File","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]}]},{"id":"audio","label":"Audio","icon":"audio","description":"Play recordings and voice memos; pair with STT/TTS when needed.","slides":[{"id":"overview","title":"Audio","description":"Listen in place; hand the clip to transcription or AI when ready.","media":{"type":"image","src":"./tanit-viewer-audio.png"},"highlights":[{"icon":"audio","title":"Playback","text":"Voice memos, interviews, journals"},{"icon":"rt-audio","title":"STT / TTS","text":"Real-time when you need it"}],"actions":[{"label":"Open File","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]}]},{"id":"html-pages","label":"HTML / Pages","icon":"html","description":"HTML renders as a page. Tanit pages open ready to read or edit.","slides":[{"id":"overview","title":"HTML / Pages","description":"Generated reports and campaign previews without leaving the viewer.","media":{"type":"image","src":"./tanit-viewer-text.png"},"highlights":[{"icon":"html","title":"Page render","text":"HTML as a page, not source"},{"icon":"html","title":"Inline edit","text":"Tanit pages ready to change"}],"actions":[{"label":"Open File","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]}]},{"id":"tanit-cms","label":"Tanit CMS","icon":"cms","description":"Push files, pictures, posts, and pages from the workbench.","slides":[{"id":"overview","title":"Tanit CMS","description":"Local file → published content without a separate upload tab.","media":{"type":"image","src":"./tanit-viewer-cms.png"},"highlights":[{"icon":"cms","title":"Direct publish","text":"Files, pictures, posts, pages"},{"icon":"cms","title":"Same tools","text":"Search, AI, and Xblox on CMS content"}],"actions":[{"label":"Open CMS","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]},{"id":"flow","title":"Local → Web","description":"How content moves from the desktop through Tanit Drive & CMS.","media":{"type":"image","src":"./tanit-viewer-overview.png"},"highlights":[{"icon":"network","title":"Connected","text":"Drive, CMS, and the wider web"}],"actions":[{"label":"Learn More","primary":true,"href":"#"}]}]},{"id":"network","label":"Network","icon":"network","description":"Stream and sync across local and remote endpoints.","slides":[{"id":"overview","title":"Network","description":"Connected nodes for live sessions, sync, and remote work.","media":{"type":"image","src":"./tanit-viewer-overview.png"},"highlights":[{"icon":"network","title":"Sessions","text":"Agents, devices, shared work"},{"icon":"network","title":"Sync","text":"Local and remote endpoints"}],"actions":[{"label":"Connect","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]}]},{"id":"xblox","label":"XBlox","icon":"xblox","description":"Native visual automation for files, media, devices, and networks — reusable as commands, pages, and MCP tools.","slides":[{"id":"overview","title":"Native visual automation","description":"Build deterministic tools from blocks. The native C++ executor starts quickly, stays small, and connects local inputs to media, devices, and networks.","media":{"type":"image","src":"./tanit-xblox-capabilities.png"},"highlights":[{"icon":"xblox","title":"Native & light","text":"C++ core, quick startup, only a few MB"},{"icon":"network","title":"Real-world I/O","text":"Files, pickers, media, HTTP, SSH, MQTT, Modbus, Bluetooth"},{"icon":"xblox","title":"Deterministic first","text":"AI and MCP are optional steps, not requirements"}],"actions":[{"label":"Open Editor","primary":true,"href":"#"},{"label":"Explore Blocks","href":"#"}]},{"id":"reuse","title":"One flow, every surface","description":"Create one .xblox file, then run it from the editor, interactive docs, commands, custom pages, CLI, assistants, or any MCP-compatible client.","media":{"type":"image","src":"./tanit-xblox-surfaces.png"},"highlights":[{"icon":"command","title":"Launch anywhere","text":"Docs, ribbon, Explorer, Page Builder, and CLI"},{"icon":"xblox","title":"Agent-ready","text":"Expose reviewed flows as assistant or MCP tools"},{"icon":"xblox","title":"Reuse safely","text":"One editable workflow without duplicated logic"}],"actions":[{"label":"Try Sample","primary":true,"href":"#"},{"label":"Learn More","href":"#"}]}]},{"id":"command-center","label":"Command Center","icon":"command","description":"One control surface for tools, toggles, and batch actions.","slides":[{"id":"overview","title":"Command Center","description":"Sliders, actions, and workflow controls next to whatever you are viewing.","media":{"type":"image","src":"./tanit-viewer-overview.png"},"highlights":[{"icon":"command","title":"One surface","text":"View, edit, reveal, hand to chat"},{"icon":"command","title":"Batch actions","text":"Run jobs across a selection"}],"actions":[{"label":"Open Center","primary":true,"href":"#"},{"label":"Watch Demo","href":"#"}]}]}]}</script>
+<script type="application/json" id="icons">{"audio":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" aria-hidden=\"true\">\u003cpath d=\"M14 32v0M20 24v16M26 18v28M32 22v20M38 16v32M44 24v16M50 30v4\"/>\u003c/svg>","avatar":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" aria-hidden=\"true\">\n  \u003ccircle cx=\"32\" cy=\"14\" r=\"5.8\" stroke=\"currentColor\" stroke-width=\"2.8\"/>\n  \u003cpath d=\"M32 21.5c-5.2 5.8-9.8 13.2-11.2 21.2 4.6-1.4 7.8-1.8 11.2-1.8s6.6.4 11.2 1.8C41.8 34.7 37.2 27.3 32 21.5z\" fill=\"currentColor\"/>\n  \u003cpath d=\"M24.5 29c-4.2-2.8-7.6-7.2-8.4-12.8\" stroke=\"currentColor\" stroke-width=\"2.8\" stroke-linecap=\"round\"/>\n  \u003cpath d=\"M39.5 29c4.2-2.8 7.6-7.2 8.4-12.8\" stroke=\"currentColor\" stroke-width=\"2.8\" stroke-linecap=\"round\"/>\n  \u003cpath d=\"M18 48c6-2.2 22-2.2 28 0\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n\u003c/svg>","cad":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003cpath d=\"M32 10l18 10v20L32 50 14 40V20z\"/>\u003cpath d=\"M32 30l18-10M32 30v20M32 30L14 20\"/>\u003cpath d=\"M22 24l10 6 10-6\" opacity=\".5\"/>\u003c/svg>","cms":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"8\" y=\"12\" width=\"48\" height=\"40\" rx=\"4\"/>\u003cpath d=\"M8 22h48\"/>\u003crect x=\"14\" y=\"28\" width=\"14\" height=\"18\" rx=\"1\"/>\u003cpath d=\"M34 28h16v4H34zM34 36h16v4H34zM34 44h10v2H34z\"/>\u003ctext x=\"16\" y=\"19.5\" fill=\"currentColor\" stroke=\"none\" font-size=\"6\" font-family=\"system-ui,sans-serif\" font-weight=\"700\">CMS\u003c/text>\u003c/svg>","command":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"8\" y=\"10\" width=\"48\" height=\"44\" rx=\"4\"/>\u003cpath d=\"M8 20h48\"/>\u003cpath d=\"M16 28h20\"/>\u003ccircle cx=\"42\" cy=\"28\" r=\"3\"/>\u003cpath d=\"M16 38h12\"/>\u003crect x=\"34\" y=\"34\" width=\"14\" height=\"8\" rx=\"2\"/>\u003cpath d=\"M16 48h8M28 48h8\"/>\u003c/svg>","documents":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003cpath d=\"M14 12h16l8 8v32H14z\"/>\u003cpath d=\"M30 12v8h8\"/>\u003ctext x=\"18\" y=\"40\" fill=\"currentColor\" stroke=\"none\" font-size=\"8\" font-family=\"system-ui,sans-serif\" font-weight=\"700\">PDF\u003c/text>\u003cpath d=\"M26 8h16l8 8v32H26z\" opacity=\".55\"/>\u003cpath d=\"M38 20h14l6 6v28H38z\" opacity=\".35\"/>\u003c/svg>","html":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"8\" y=\"12\" width=\"48\" height=\"40\" rx=\"4\"/>\u003cpath d=\"M8 22h48\"/>\u003ccircle cx=\"16\" cy=\"17\" r=\"1.5\" fill=\"currentColor\" stroke=\"none\"/>\u003ccircle cx=\"22\" cy=\"17\" r=\"1.5\" fill=\"currentColor\" stroke=\"none\"/>\u003ccircle cx=\"28\" cy=\"17\" r=\"1.5\" fill=\"currentColor\" stroke=\"none\"/>\u003crect x=\"14\" y=\"28\" width=\"18\" height=\"16\" rx=\"1\"/>\u003cpath d=\"M38 30h12M38 36h10M38 42h8\"/>\u003c/svg>","images-raw":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"28\" y=\"22\" width=\"28\" height=\"22\" rx=\"3\"/>\u003ccircle cx=\"42\" cy=\"33\" r=\"5\"/>\u003cpath d=\"M32 28h4\"/>\u003crect x=\"8\" y=\"18\" width=\"22\" height=\"16\" rx=\"2\"/>\u003ccircle cx=\"16\" cy=\"24\" r=\"2.5\"/>\u003cpath d=\"M8 30l5-5 4 3 5-6 8 8\"/>\u003c/svg>","markdown":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003cpath d=\"M16 10h24l8 8v36H16z\"/>\u003cpath d=\"M40 10v8h8\"/>\u003cpath d=\"M26 28l-4 8-4-8\"/>\u003cpath d=\"M36 28v8\"/>\u003cpath d=\"M34 32h4\"/>\u003cpath d=\"M42 28l6 4-6 4\"/>\u003c/svg>","network":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003ccircle cx=\"32\" cy=\"14\" r=\"5\"/>\u003ccircle cx=\"14\" cy=\"40\" r=\"5\"/>\u003ccircle cx=\"50\" cy=\"40\" r=\"5\"/>\u003ccircle cx=\"32\" cy=\"50\" r=\"5\"/>\u003cpath d=\"M32 19v10M28 28L18 36M36 28l10 8M32 39v6M18 42h10M36 42h10\"/>\u003c/svg>","rt-audio":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" aria-hidden=\"true\">\u003cpath d=\"M18 32v0M26 22v20M34 14v36M42 22v20M50 30v4\"/>\u003ccircle cx=\"34\" cy=\"32\" r=\"22\" stroke-dasharray=\"4 6\" opacity=\".35\"/>\u003c/svg>","rt-video":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"8\" y=\"18\" width=\"36\" height=\"28\" rx=\"4\"/>\u003cpath d=\"M44 28l12-6v20l-12-6z\"/>\u003ccircle cx=\"20\" cy=\"28\" r=\"3\"/>\u003cpath d=\"M14 38h16\"/>\u003c/svg>","video":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"10\" y=\"16\" width=\"44\" height=\"32\" rx=\"8\"/>\u003cpath d=\"M28 26l14 6-14 6z\" fill=\"currentColor\" stroke=\"none\"/>\u003c/svg>","xblox":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003ccircle cx=\"12\" cy=\"20\" r=\"4\"/>\u003ccircle cx=\"12\" cy=\"44\" r=\"4\"/>\u003ccircle cx=\"32\" cy=\"32\" r=\"5\"/>\u003ccircle cx=\"52\" cy=\"18\" r=\"4\"/>\u003ccircle cx=\"52\" cy=\"46\" r=\"4\"/>\u003cpath d=\"M16 22l11 8M16 42l11-6M37 30l11-9M37 34l11 9\"/>\u003c/svg>"}</script>
+<script>
+(function(){var k='tv-explore-theme';var q=null;try{q=new URLSearchParams(location.search).get('theme')}catch(e){}var t=(q==='light'||q==='dark')?q:(localStorage.getItem(k)||'light');var r=document.currentScript&&document.currentScript.closest('.tv-explore');if(r)r.setAttribute('data-theme',t)})();
+</script>
+<script>
+(function () {
+  var DATA = JSON.parse(document.getElementById('data').textContent);
+  var ICONS = JSON.parse(document.getElementById('icons').textContent);
+  var product = DATA.product;
+  var features = DATA.features;
+  var selected = 0;
+  /** Per-feature slide index (stack mode keeps each card independent). */
+  var slideByFeat = {};
+  var IMAGE_MS = 4000;
+  var IDLE_MS = 2000;
+  var TOUR_KEY = 'tv-explore-tour';
+  /**
+   * Zoom by CSS pixel width on the <img> (not CSS scale, not % ladders).
+   * zoomW === 0 → fit (max-width/height contain). Wheel step = ZOOM_STEP_PX.
+   */
+  var ZOOM_STEP_PX = 30;
+  var ZOOM_MAX_FACTOR = 8;
+  function zoomMediaEl(root) {
+    return root ? root.querySelector('img.media-el, video.media-el, img.tv-lb-el, video.tv-lb-el') : null;
+  }
+  function mediaNaturalSize(el) {
+    if (!el) return { w: 0, h: 0 };
+    if (el.tagName === 'VIDEO') return { w: el.videoWidth || 0, h: el.videoHeight || 0 };
+    return { w: el.naturalWidth || 0, h: el.naturalHeight || 0 };
+  }
+  function zoomMaxW(natW) {
+    return Math.round(Math.max(0, natW) * ZOOM_MAX_FACTOR);
+  }
+  /** Display width → badge percent vs natural (fit shows actual scale). */
+  function zoomBadgeText(el, zoomW) {
+    var nat = mediaNaturalSize(el);
+    if (!nat.w) return '100%';
+    var w = zoomW > 0 ? zoomW : (el && el.offsetWidth) || 0;
+    if (!w) return '100%';
+    return Math.round((w * 100) / nat.w) + '%';
+  }
+  /**
+   * Step display width by ±ZOOM_STEP_PX.
+   * @returns {{ zoomW: number, fitW: number }}
+   */
+  function stepZoomW(el, zoomW, fitW, direction) {
+    var nat = mediaNaturalSize(el);
+    var cur = zoomW > 0 ? zoomW : (el && el.offsetWidth) || 0;
+    var fit = fitW > 0 ? fitW : cur;
+    if (!(cur > 0)) return { zoomW: zoomW, fitW: fit };
+    var next = cur + direction * ZOOM_STEP_PX;
+    var maxW = zoomMaxW(nat.w);
+    if (next <= fit) return { zoomW: 0, fitW: fit };
+    return { zoomW: Math.min(maxW, next), fitW: fit };
+  }
+  /** Snap width onto fitW + n×ZOOM_STEP_PX grid (pinch end). */
+  function snapZoomW(w, fitW, maxW) {
+    var fit = fitW > 0 ? fitW : 0;
+    if (!(w > fit)) return 0;
+    var n = Math.round((w - fit) / ZOOM_STEP_PX);
+    var snapped = fit + n * ZOOM_STEP_PX;
+    if (snapped <= fit) return 0;
+    return Math.min(maxW > 0 ? maxW : snapped, snapped);
+  }
+  function panAfterZoomW(p, prevW, nextW, fitW) {
+    if (!(nextW > 0)) return { x: 0, y: 0 };
+    if (!(prevW > 0) || nextW >= prevW) return p;
+    var base = fitW > 0 ? fitW : 0;
+    var denom = prevW - base;
+    if (!(denom > 0)) return { x: 0, y: 0 };
+    var t = (nextW - base) / denom;
+    return { x: p.x * t, y: p.y * t };
+  }
+  /**
+   * Zoom by resizing the media element (not CSS scale).
+   * Fit (zoomW≤0): clear inline size → CSS contain.
+   * Zoomed: exact CSS px width; height:auto; pan via translate3d only.
+   */
+  function applyMediaZoom(xform, zoomW, pan, onNeedsLoad) {
+    var el = zoomMediaEl(xform);
+    if (!(zoomW > 0)) {
+      xform.style.transform = '';
+      if (el) {
+        el.style.width = '';
+        el.style.height = '';
+        el.style.maxWidth = '';
+        el.style.maxHeight = '';
+      }
+      return;
+    }
+    if (el) {
+      var size = mediaNaturalSize(el);
+      if (size.w > 0 && size.h > 0) {
+        el.style.maxWidth = 'none';
+        el.style.maxHeight = 'none';
+        el.style.width = Math.round(zoomW) + 'px';
+        el.style.height = 'auto';
+      } else if (typeof onNeedsLoad === 'function') {
+        onNeedsLoad(el);
+      }
+    }
+    xform.style.transform =
+      'translate3d(' + Math.round(pan.x) + 'px,' + Math.round(pan.y) + 'px,0)';
+  }
+  /** Hard stop only is persisted; soft pause does not survive reload. */
+  function readTourMode() {
+    try {
+      if (localStorage.getItem(TOUR_KEY) === 'stopped') return 'stopped';
+    } catch (_) {}
+    return 'playing';
+  }
+  function persistTourMode(mode) {
+    try {
+      if (mode === 'stopped') localStorage.setItem(TOUR_KEY, 'stopped');
+      else if (mode === 'playing') localStorage.removeItem(TOUR_KEY);
+    } catch (_) {}
+  }
+  var tourMode = readTourMode(); // playing | paused | stopped
+  var tourGen = 0;
+  var tourTimer = null;
+  var idleTimer = null;
+  var suppressIdle = false;
+
+  var elBrandLogo = document.getElementById('brandLogo');
+  var elBrandTitle = document.getElementById('brandTitle');
+  var elNav = document.getElementById('sideNav');
+  var elStage = document.getElementById('stage');
+  var themeBtn = document.getElementById('themeBtn');
+  elBrandTitle.textContent = product.title || 'Tanit Viewer';
+  elBrandLogo.innerHTML = ICONS.avatar || '';
+
+  function setTourHints(text) {
+    document.querySelectorAll('.tour-hint').forEach(function (el) { el.textContent = text; });
+  }
+
+  /** Optional CDN/base from build: window.TV_ASSET_URL (e.g. https://cdn.example.com/tanit/) */
+  function assetUrl(path) {
+    if (!path) return path;
+    if (/^(https?:|data:|blob:|\/\/)/i.test(path)) return path;
+    var base = typeof TV_ASSET_URL === 'string' ? TV_ASSET_URL : '';
+    if (!base) return path;
+    return base.replace(/\/?$/, '/') + String(path).replace(/^\.\//, '').replace(/^\//, '');
+  }
+
+  var clickSfxPool = [];
+  var clickSfxIdx = 0;
+  function playClick() {
+    try {
+      if (!clickSfxPool.length) {
+        for (var i = 0; i < 4; i++) {
+          var a = new Audio(assetUrl('sfx/selected.mp3'));
+          a.preload = 'auto';
+          a.volume = 0.55;
+          clickSfxPool.push(a);
+        }
+      }
+      var snd = clickSfxPool[clickSfxIdx % clickSfxPool.length];
+      clickSfxIdx += 1;
+      snd.currentTime = 0;
+      var p = snd.play();
+      if (p && p.catch) p.catch(function () {});
+    } catch (_) {}
+  }
+
+  function tourControlsHtml(extraClass) {
+    return '<div class="tour-controls' + (extraClass ? ' ' + extraClass : '') + '" data-mode="' + tourMode + '">' +
+      '<div class="tour-btns">' +
+        '<button type="button" class="tour-btn" data-act="play" aria-label="Play tour" title="Play" aria-pressed="' + (tourMode === 'playing' ? 'true' : 'false') + '">' +
+          '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>' +
+        '<button type="button" class="tour-btn" data-act="pause" aria-label="Pause tour" title="Pause" aria-pressed="' + (tourMode === 'paused' ? 'true' : 'false') + '">' +
+          '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg></button>' +
+        '<button type="button" class="tour-btn" data-act="stop" aria-label="Stop tour" title="Stop" aria-pressed="' + (tourMode === 'stopped' ? 'true' : 'false') + '">' +
+          '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h12v12H6z"/></svg></button>' +
+      '</div>' +
+      '<div class="tour-meta"><b class="tour-label">Auto</b><span class="tour-hint">Images 4s · videos to end</span></div>' +
+    '</div>';
+  }
+
+  function esc(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function icon(name) {
+    return ICONS[name] || ICONS.command || '';
+  }
+  function feat() { return features[selected]; }
+  function slidesOf(fi) { return (features[fi] && features[fi].slides) || []; }
+  function slideIndex(fi) {
+    if (fi == null) fi = selected;
+    var n = slidesOf(fi).length;
+    if (!n) return 0;
+    var v = slideByFeat[fi];
+    if (v == null || v < 0 || isNaN(v)) return 0;
+    return Math.min(Math.floor(v), n - 1);
+  }
+  function setSlideIndex(fi, i) {
+    if (fi == null) fi = selected;
+    slideByFeat[fi] = i;
+  }
+  function slides() { return slidesOf(selected); }
+  function slide() { return slidesOf(selected)[slideIndex(selected)] || null; }
+  function slideOf(fi) { return slidesOf(fi)[slideIndex(fi)] || null; }
+  function visibleFeatures() { return features.slice(); }
+  /** Mobile / narrow: all features stacked for page scroll; slides stay in-card. */
+  function isStackMode() {
+    try { return window.matchMedia('(max-width:900px)').matches; } catch (e) { return false; }
+  }
+
+  function slideMediaKind(s) {
+    var m = s && s.media;
+    var src = m && (m.src || (typeof m === 'string' ? m : ''));
+    if (!src && m && Array.isArray(m) && m[0]) src = m[0].src || m[0];
+    if (!src) return 'image';
+    return isVideoSrc(src) || (m && m.type === 'video') ? 'video' : 'image';
+  }
+
+  function clearTourTimer() {
+    if (tourTimer) { clearTimeout(tourTimer); tourTimer = null; }
+  }
+  function clearIdleTimer() {
+    if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
+  }
+
+  function syncTourUi() {
+    var f = feat();
+    var label = f ? f.label : '';
+    var modeLabel = tourMode === 'playing' ? 'Auto' : (tourMode === 'paused' ? 'Paused' : 'Stopped');
+    var hint;
+    if (tourMode === 'playing') hint = (label ? label + ' · ' : '') + 'rotating';
+    else if (tourMode === 'paused') hint = idleTimer ? 'Resumes in 2s if idle' : 'Paused · press play';
+    else hint = 'Tour off · press play';
+
+    document.querySelectorAll('.tour-controls').forEach(function (elTour) {
+      elTour.setAttribute('data-mode', tourMode);
+      elTour.querySelectorAll('[data-act]').forEach(function (btn) {
+        var act = btn.getAttribute('data-act');
+        var on = (act === 'play' && tourMode === 'playing') ||
+          (act === 'pause' && tourMode === 'paused') ||
+          (act === 'stop' && tourMode === 'stopped');
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      var elTourLabel = elTour.querySelector('.tour-label');
+      var elTourHint = elTour.querySelector('.tour-hint');
+      if (elTourLabel) elTourLabel.textContent = modeLabel;
+      if (elTourHint) elTourHint.textContent = hint;
+    });
+  }
+
+  function navItemHtml(f, i, mediaKind) {
+    var on = i === selected;
+    var tourAttr = on && tourMode !== 'stopped'
+      ? ' data-tour="' + tourMode + '" data-media="' + mediaKind + '" style="--tour-ms:' + IMAGE_MS + 'ms"'
+      : '';
+    return '<button type="button" class="side-item" data-i="' + i + '" aria-current="' + (on ? 'true' : 'false') + '"' + tourAttr + '>' +
+      '<span class="si">' + icon(f.icon) + '</span><span class="sl">' + esc(f.label) + '</span>' +
+      '<span class="tour-mark" aria-hidden="true"></span>' +
+      '<span class="tour-bar" aria-hidden="true"><i></i></span></button>';
+  }
+
+  function renderNav() {
+    var mediaKind = slideMediaKind(slide());
+    var html = '';
+    var cats = product.categories || [];
+    if (cats.length) {
+      cats.forEach(function (cat) {
+        var items = features.filter(function (f) { return f.categoryId === cat.id; });
+        if (!items.length) return;
+        html += '<div class="side-sec">' + esc(cat.label) + '</div>';
+        items.forEach(function (f) {
+          html += navItemHtml(f, features.indexOf(f), mediaKind);
+        });
+      });
+    } else {
+      features.forEach(function (f, i) {
+        html += navItemHtml(f, i, mediaKind);
+      });
+    }
+    elNav.innerHTML = html || '<div class="side-sec">No matches</div>';
+    syncTourUi();
+  }
+
+  function themeRoot() {
+    return document.querySelector('.tv-explore[data-theme]') || document.documentElement;
+  }
+  function themeName() {
+    return themeRoot().getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  }
+  function applyTheme(next, persist) {
+    var n = next === 'light' ? 'light' : 'dark';
+    var root = themeRoot();
+    root.setAttribute('data-theme', n);
+    if (lb && lb.el) lb.el.setAttribute('data-theme', n);
+    if (persist !== false) localStorage.setItem('tv-explore-theme', n);
+    // Rebuild media so _light / _dark assets swap with the theme
+    if (typeof paint === 'function') paint();
+    if (lb && lb.open && typeof renderLightboxContent === 'function') renderLightboxContent();
+  }
+  /** True when hosted in pm iframe-widget (?embed=1 or nested). */
+  function isEmbed() {
+    try {
+      if (window.parent !== window) return true;
+      return new URLSearchParams(location.search).get('embed') === '1';
+    } catch (e) { return window.parent !== window; }
+  }
+  function enableEmbedLayout() {
+    if (!isEmbed()) return;
+    document.documentElement.setAttribute('data-pm-embed', '1');
+    var explore = document.querySelector('.tv-explore');
+    if (explore) explore.setAttribute('data-pm-embed', '1');
+  }
+  /**
+   * Measure CONTENT height, not the clipped iframe viewport.
+   * getBoundingClientRect is wrong when parent height < content (classic mobile clip).
+   */
+  function measureHeight() {
+    enableEmbedLayout();
+    var doc = document.documentElement;
+    var body = document.body;
+    var root = document.querySelector('.tv-explore') || body;
+    var shell = document.querySelector('.shell');
+    var h = Math.max(
+      root.scrollHeight || 0,
+      root.offsetHeight || 0,
+      shell ? shell.scrollHeight : 0,
+      shell ? shell.offsetHeight : 0,
+      body ? body.scrollHeight : 0,
+      body ? body.offsetHeight : 0,
+      doc ? doc.scrollHeight : 0,
+      doc ? doc.offsetHeight : 0
+    );
+    // Sum in-flow children if shell collapsed under a previous clip
+    if (shell && h < 200) {
+      var sum = 0;
+      for (var i = 0; i < shell.children.length; i++) {
+        sum += shell.children[i].getBoundingClientRect().height;
+      }
+      h = Math.max(h, Math.ceil(sum + 24));
+    }
+    return Math.ceil(h);
+  }
+  var _heightReportTimer = null;
+  function reportHeight() {
+    if (window.parent === window) return;
+    try {
+      var h = measureHeight();
+      if (h > 0) window.parent.postMessage({ type: 'pm-iframe-height', height: h }, '*');
+    } catch (e) { /* ignore */ }
+  }
+  function reportHeightSoon() {
+    if (_heightReportTimer) clearTimeout(_heightReportTimer);
+    _heightReportTimer = setTimeout(function () {
+      _heightReportTimer = null;
+      reportHeight();
+      // second pass after layout/fonts
+      requestAnimationFrame(function () { reportHeight(); });
+    }, 16);
+  }
+
+  function isVideoSrc(src) {
+    var s = String(src || '').split('?')[0].toLowerCase();
+    return s.endsWith('.mp4') || s.endsWith('.webm') || s.endsWith('.ogg') || s.endsWith('.mov');
+  }
+
+  /**
+   * Theme + format fallbacks for media src.
+   * `./screenshot-images-0.png` → prefer `…_light.png` / `…_dark.png`, then bare, then other theme;
+   * also tries image↔video extensions (e.g. `video_0_dark.png` ↔ `video_0_light.mp4`).
+   */
+  function mediaCandidates(src) {
+    if (!src) return [];
+    var theme = themeName();
+    var other = theme === 'dark' ? 'light' : 'dark';
+    var ordered = [];
+    function add(s) {
+      if (!s || ordered.indexOf(s) !== -1) return;
+      ordered.push(s);
+    }
+    /** Insert or swap `_light` / `_dark` before the extension. */
+    function withTheme(path, t) {
+      var q = path.indexOf('?');
+      var base = q === -1 ? path : path.slice(0, q);
+      var query = q === -1 ? '' : path.slice(q);
+      var dot = base.lastIndexOf('.');
+      if (dot === -1) return path;
+      var name = base.slice(0, dot);
+      var ext = base.slice(dot);
+      if (name.endsWith('_dark')) name = name.slice(0, -5);
+      else if (name.endsWith('_light')) name = name.slice(0, -6);
+      return name + '_' + t + ext + query;
+    }
+    function stem(path) {
+      var q = path.indexOf('?');
+      var base = q === -1 ? path : path.slice(0, q);
+      var dot = base.lastIndexOf('.');
+      return dot === -1 ? base : base.slice(0, dot);
+    }
+    // Seed: themed variants + bare catalog src
+    add(withTheme(src, theme));
+    add(src);
+    add(withTheme(src, other));
+    var stems = [stem(withTheme(src, theme)), stem(src), stem(withTheme(src, other))];
+    var seen = {};
+    stems.forEach(function (st) {
+      if (!st || seen[st]) return;
+      seen[st] = true;
+      ;['.mp4', '.webm', '.png', '.jpg', '.jpeg', '.webp'].forEach(function (ext) {
+        add(st + ext);
+      });
+    });
+    // Prefer current theme, then unthemed, then other; keep catalog type (image vs video)
+    ordered.sort(function (a, b) {
+      function rank(p) {
+        if (p.indexOf('_' + theme) !== -1) return 0;
+        if (p.indexOf('_' + other) !== -1) return 2;
+        return 1;
+      }
+      var rd = rank(a) - rank(b);
+      if (rd) return rd;
+      var av = isVideoSrc(a) ? 1 : 0;
+      var bv = isVideoSrc(b) ? 1 : 0;
+      var preferVideo = isVideoSrc(src);
+      if (preferVideo) return bv - av;
+      return av - bv;
+    });
+    return ordered.map(assetUrl);
+  }
+
+  function mediaHtml(m) {
+    if (!m || !m.src) return '<div class="empty-media">No media</div>';
+    var cands = mediaCandidates(m.src);
+    var first = cands[0];
+    var type = m.type || (isVideoSrc(first) ? 'video' : 'image');
+    var data = esc(JSON.stringify(cands));
+    var el;
+    if (type === 'video' || isVideoSrc(first)) {
+      var auto = tourMode === 'playing' ? ' autoplay muted' : '';
+      // data-src + preload=none — hydrate when near viewport / selected / playing
+      el = '<video class="media-el" data-fallback="' + data + '" data-i="0" data-src="' + esc(first) + '" controls playsinline preload="none"' + auto + '></video>';
+    } else {
+      el = '<img class="media-el" data-fallback="' + data + '" data-i="0" src="' + esc(first) + '" alt="" draggable="false" loading="lazy" decoding="async"/>';
+    }
+    return '<div class="media-surface"><div class="media-xform">' + el + '</div></div><div class="zoom-badge">100%</div>';
+  }
+
+  function hydrateMedia(el) {
+    if (!el) return;
+    var pending = el.getAttribute('data-src');
+    if (pending) {
+      el.src = pending;
+      el.removeAttribute('data-src');
+    }
+  }
+
+  var lazyIo = null;
+  function ensureLazyIo() {
+    if (lazyIo || typeof IntersectionObserver === 'undefined') return lazyIo;
+    lazyIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        hydrateMedia(entry.target);
+        if (lazyIo) lazyIo.unobserve(entry.target);
+      });
+    }, { root: null, rootMargin: '280px 0px', threshold: 0.01 });
+    return lazyIo;
+  }
+
+  /** Lazy-load videos (images use native loading=lazy). Eager for selected / desktop stage. */
+  function bindLazyMedia(scope) {
+    var root = scope || elStage;
+    var vids = root.querySelectorAll('video.media-el[data-src]');
+    if (!vids.length) return;
+    var io = ensureLazyIo();
+    vids.forEach(function (el) {
+      var card = el.closest('.feature-card');
+      var fi = card ? Number(card.getAttribute('data-feat')) : selected;
+      var eager = !isStackMode() || fi === selected;
+      if (eager || !io) {
+        hydrateMedia(el);
+        if (io) io.unobserve(el);
+        return;
+      }
+      io.observe(el);
+    });
+  }
+
+  function bindMediaFallback(scope) {
+    (scope || elStage).querySelectorAll('.media-el').forEach(function (el) {
+      var cands;
+      try { cands = JSON.parse(el.getAttribute('data-fallback') || '[]'); } catch (e) { return; }
+      function tryNext() {
+        var i = Number(el.getAttribute('data-i') || 0) + 1;
+        if (i >= cands.length) {
+          var wrap = el.closest('.media-surface') || el.parentNode;
+          if (wrap) wrap.innerHTML = '<div class="empty-media">Media unavailable</div>';
+          return;
+        }
+        var next = cands[i];
+        var wantVideo = isVideoSrc(next);
+        var curVideo = el.tagName === 'VIDEO';
+        if (wantVideo !== curVideo) {
+          var neu = document.createElement(wantVideo ? 'video' : 'img');
+          neu.className = 'media-el';
+          neu.setAttribute('data-fallback', el.getAttribute('data-fallback'));
+          neu.setAttribute('data-i', String(i));
+          if (wantVideo) {
+            neu.controls = true;
+            neu.playsInline = true;
+            neu.preload = 'none';
+          } else {
+            neu.alt = '';
+            neu.draggable = false;
+            neu.loading = 'lazy';
+            neu.decoding = 'async';
+          }
+          neu.src = next; // actively recovering — load now
+          neu.addEventListener('error', tryNext);
+          el.replaceWith(neu);
+          el = neu;
+          return;
+        }
+        el.setAttribute('data-i', String(i));
+        el.removeAttribute('data-src');
+        el.src = next;
+      }
+      el.addEventListener('error', tryNext);
+    });
+  }
+
+  /** Wheel zoom (±ZOOM_STEP_PX) + pinch + pan. Zoom resizes <img>, never CSS scale. */
+  function bindMediaZoom(scope) {
+    var root = (scope || elStage).querySelector('.stage-media');
+    var xform = root ? root.querySelector('.media-xform') : null;
+    var badge = root ? root.querySelector('.zoom-badge') : null;
+    if (!root || !xform) return;
+
+    var zoomW = 0; // 0 = fit; else CSS px width
+    var fitW = 0;
+    var pan = { x: 0, y: 0 };
+    var pointers = new Map();
+    var pinch = null;
+    var drag = null;
+    var panning = false;
+
+    function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+    function isChrome(t) {
+      if (!(t instanceof Element)) return false;
+      return Boolean(t.closest('button, a, input, select, textarea, video::-webkit-media-controls'));
+    }
+    function apply() {
+      applyMediaZoom(xform, zoomW, pan, function (el) {
+        if (el._tvZoomWait) return;
+        el._tvZoomWait = true;
+        var retry = function () { el._tvZoomWait = false; apply(); };
+        el.addEventListener('load', retry, { once: true });
+        el.addEventListener('loadeddata', retry, { once: true });
+      });
+      if (!(zoomW > 0)) root.removeAttribute('data-zoomed');
+      else root.setAttribute('data-zoomed', '');
+      if (panning) root.setAttribute('data-panning', '');
+      else root.removeAttribute('data-panning');
+      if (badge) badge.textContent = zoomBadgeText(zoomMediaEl(xform), zoomW);
+    }
+    function zoomBy(direction) {
+      var el = zoomMediaEl(xform);
+      var prev = zoomW > 0 ? zoomW : (el && el.offsetWidth) || 0;
+      var stepped = stepZoomW(el, zoomW, fitW, direction);
+      if (stepped.zoomW === zoomW && zoomW > 0) return;
+      if (!(stepped.zoomW > 0) && !(zoomW > 0)) return;
+      fitW = stepped.fitW;
+      zoomW = stepped.zoomW;
+      pan = panAfterZoomW(pan, prev, zoomW, fitW);
+      apply();
+    }
+    function resetView() {
+      zoomW = 0;
+      pan = { x: 0, y: 0 };
+      apply();
+    }
+
+    root.addEventListener('wheel', function (e) {
+      if (isChrome(e.target)) return;
+      var isImg = Boolean(root.querySelector('img.media-el'));
+      // Desktop images: plain wheel zooms. Stack/mobile: ctrl/pinch or already zoomed (keep page scroll).
+      var desktopZoom = !isStackMode() && isImg;
+      var intentionalZoom = desktopZoom || e.ctrlKey || e.metaKey || zoomW > 0;
+      if (!intentionalZoom) return;
+      e.preventDefault();
+      e.stopPropagation();
+      zoomBy(e.deltaY < 0 ? 1 : -1);
+    }, { passive: false });
+
+    // Native <img> drag-and-drop steals the gesture — kill it.
+    root.addEventListener('dragstart', function (e) { e.preventDefault(); });
+
+    root.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (isChrome(e.target)) return;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pointers.size >= 2) {
+        drag = null;
+        var pts = Array.from(pointers.values());
+        var el = zoomMediaEl(xform);
+        var startW = zoomW > 0 ? zoomW : (el && el.offsetWidth) || 0;
+        if (!(fitW > 0) && startW > 0) fitW = startW;
+        pinch = { distance: Math.max(1, dist(pts[0], pts[1])), zoomW: startW, fitW: fitW };
+        e.preventDefault();
+        try { root.setPointerCapture(e.pointerId); } catch (_) {}
+        return;
+      }
+      // Desktop: allow drag-pan once zoomed; track click for lightbox open
+      if (zoomW > 0) {
+        e.preventDefault();
+        try { root.setPointerCapture(e.pointerId); } catch (_) {}
+        drag = { pointerId: e.pointerId, x: e.clientX, y: e.clientY, panX: pan.x, panY: pan.y, moved: false };
+      } else {
+        drag = { pointerId: e.pointerId, x: e.clientX, y: e.clientY, panX: pan.x, panY: pan.y, moved: false, clickCandidate: true };
+      }
+    });
+
+    root.addEventListener('pointermove', function (e) {
+      if (!pointers.has(e.pointerId)) return;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pointers.size >= 2 && pinch) {
+        e.preventDefault();
+        panning = true;
+        var pts = Array.from(pointers.values());
+        var distance = Math.max(1, dist(pts[0], pts[1]));
+        var prev = zoomW > 0 ? zoomW : pinch.zoomW;
+        var el = zoomMediaEl(xform);
+        var nat = mediaNaturalSize(el);
+        zoomW = Math.min(zoomMaxW(nat.w), Math.max(0, pinch.zoomW * (distance / pinch.distance)));
+        if (zoomW <= (pinch.fitW || 0)) zoomW = 0;
+        pan = panAfterZoomW(pan, prev, zoomW, pinch.fitW || fitW);
+        apply();
+        return;
+      }
+      if (!drag || drag.pointerId !== e.pointerId) return;
+      var dx = e.clientX - drag.x;
+      var dy = e.clientY - drag.y;
+      if (!drag.moved && Math.hypot(dx, dy) < 3) return;
+      drag.moved = true;
+      if (drag.clickCandidate && !(zoomW > 0)) {
+        // not zoomed — don't pan, just mark as moved so click won't open lightbox after a drag
+        return;
+      }
+      panning = true;
+      e.preventDefault();
+      pan = { x: drag.panX + dx, y: drag.panY + dy };
+      apply();
+    });
+
+    function endPointer(e) {
+      if (!pointers.has(e.pointerId)) return;
+      pointers.delete(e.pointerId);
+      var wasClick = drag && drag.pointerId === e.pointerId && drag.clickCandidate && !drag.moved;
+      if (drag && drag.pointerId === e.pointerId) drag = null;
+      if (pointers.size < 2 && pinch) {
+        var prev = zoomW;
+        var el = zoomMediaEl(xform);
+        var nat = mediaNaturalSize(el);
+        var baseFit = pinch.fitW || fitW;
+        zoomW = snapZoomW(zoomW > 0 ? zoomW : 0, baseFit, zoomMaxW(nat.w));
+        if (zoomW > 0) fitW = baseFit;
+        pan = panAfterZoomW(pan, prev, zoomW, fitW);
+        pinch = null;
+      }
+      if (pointers.size === 0) panning = false;
+      if (pointers.size === 1 && zoomW > 0) {
+        var entry = pointers.entries().next().value;
+        if (entry) {
+          drag = { pointerId: entry[0], x: entry[1].x, y: entry[1].y, panX: pan.x, panY: pan.y, moved: false };
+        }
+      }
+      apply();
+      // Click image (not zoomed) → lightbox
+      if (wasClick && root.querySelector('img.media-el')) {
+        var card = root.closest('.feature-card');
+        var fi = card ? Number(card.getAttribute('data-feat')) : selected;
+        openLightbox(fi);
+      }
+    }
+    root.addEventListener('pointerup', endPointer);
+    root.addEventListener('pointercancel', endPointer);
+
+    root.addEventListener('dblclick', function (e) {
+      if (isChrome(e.target)) return;
+      if (zoomW > 0) {
+        e.preventDefault();
+        resetView();
+      } else if (root.querySelector('img.media-el')) {
+        e.preventDefault();
+        var card = root.closest('.feature-card');
+        openLightbox(card ? Number(card.getAttribute('data-feat')) : selected);
+      }
+    });
+
+    apply();
+  }
+
+  // ── Lightbox (desktop-first; title/desc overlay + slide nav / swipe / wheel zoom) ──
+  var lb = { el: null, open: false, fi: 0, zoomW: 0, fitW: 0, pan: { x: 0, y: 0 }, pointers: null, drag: null, pinch: null };
+
+  function ensureLightbox() {
+    if (lb.el) return lb.el;
+    var el = document.createElement('div');
+    el.className = 'tv-lightbox';
+    el.hidden = true;
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.setAttribute('data-theme', themeName());
+    el.innerHTML =
+      '<button type="button" class="tv-lb-close" aria-label="Close">×</button>' +
+      '<div class="tv-lb-stage">' +
+        '<div class="tv-lb-media">' +
+          '<div class="tv-lb-xform"></div>' +
+          '<div class="tv-lb-badge">100%</div>' +
+        '</div>' +
+        '<div class="tv-lb-footer">' +
+          '<div class="tv-lb-caption-row">' +
+            '<button type="button" class="tv-lb-prev tv-lb-card" aria-label="Previous">‹</button>' +
+            '<div class="tv-lb-caption tv-lb-card">' +
+              '<b class="tv-lb-title"></b>' +
+              '<p class="tv-lb-desc"></p>' +
+              '<span class="tv-lb-count"></span>' +
+            '</div>' +
+            '<button type="button" class="tv-lb-next tv-lb-card" aria-label="Next">›</button>' +
+          '</div>' +
+          '<div class="tv-lb-tour tv-lb-card">' + tourControlsHtml('tv-lb-tour-controls') + '</div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(el);
+    lb.el = el;
+    lb.pointers = new Map();
+
+    el.querySelector('.tv-lb-close').addEventListener('click', function (e) { e.stopPropagation(); closeLightbox(); });
+    el.querySelector('.tv-lb-prev').addEventListener('click', function (e) {
+      e.stopPropagation();
+      noteInteraction();
+      lightboxNav(-1);
+    });
+    el.querySelector('.tv-lb-next').addEventListener('click', function (e) {
+      e.stopPropagation();
+      noteInteraction();
+      lightboxNav(1);
+    });
+    el.querySelector('.tv-lb-tour').addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-act]');
+      if (!btn) return;
+      e.stopPropagation();
+      playClick();
+      var act = btn.getAttribute('data-act');
+      suppressIdle = true;
+      if (act === 'play') setTourMode('playing');
+      else if (act === 'pause') setTourMode('paused');
+      else if (act === 'stop') setTourMode('stopped');
+      suppressIdle = false;
+    });
+    el.addEventListener('click', function (e) {
+      if (e.target === el) closeLightbox();
+    });
+
+    var media = el.querySelector('.tv-lb-media');
+    media.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      lightboxZoomBy(e.deltaY < 0 ? 1 : -1);
+    }, { passive: false });
+    media.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    media.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (e.target.closest('button, a, video')) return;
+      lb.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (lb.pointers.size >= 2) {
+        lb.drag = null;
+        var pts = Array.from(lb.pointers.values());
+        var xform = el.querySelector('.tv-lb-xform');
+        var mediaEl = zoomMediaEl(xform);
+        var startW = lb.zoomW > 0 ? lb.zoomW : (mediaEl && mediaEl.offsetWidth) || 0;
+        if (!(lb.fitW > 0) && startW > 0) lb.fitW = startW;
+        lb.pinch = {
+          distance: Math.max(1, Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y)),
+          zoomW: startW,
+          fitW: lb.fitW,
+        };
+        try { media.setPointerCapture(e.pointerId); } catch (_) {}
+        return;
+      }
+      lb.drag = {
+        id: e.pointerId, x: e.clientX, y: e.clientY,
+        panX: lb.pan.x, panY: lb.pan.y, moved: false, t: Date.now(),
+      };
+      if (lb.zoomW > 0) {
+        try { media.setPointerCapture(e.pointerId); } catch (_) {}
+      }
+    });
+    media.addEventListener('pointermove', function (e) {
+      if (!lb.pointers.has(e.pointerId)) return;
+      lb.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (lb.pointers.size >= 2 && lb.pinch) {
+        var pts = Array.from(lb.pointers.values());
+        var distance = Math.max(1, Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y));
+        lightboxSetZoomW(lb.pinch.zoomW * (distance / lb.pinch.distance), true);
+        return;
+      }
+      if (!lb.drag || lb.drag.id !== e.pointerId) return;
+      var dx = e.clientX - lb.drag.x;
+      var dy = e.clientY - lb.drag.y;
+      if (!lb.drag.moved && Math.hypot(dx, dy) < 4) return;
+      lb.drag.moved = true;
+      if (lb.zoomW > 0) {
+        lb.pan = { x: lb.drag.panX + dx, y: lb.drag.panY + dy };
+        lightboxApplyTransform();
+      }
+    });
+    function lbEnd(e) {
+      if (!lb.pointers.has(e.pointerId)) return;
+      var drag = lb.drag && lb.drag.id === e.pointerId ? lb.drag : null;
+      lb.pointers.delete(e.pointerId);
+      if (lb.pointers.size < 2 && lb.pinch) {
+        lightboxSetZoomW(lb.zoomW, false); // snap to ±30px grid
+        lb.pinch = null;
+      }
+      if (drag && !(lb.zoomW > 0)) {
+        var sdx = e.clientX - drag.x;
+        var sdy = e.clientY - drag.y;
+        if (drag.moved && Math.abs(sdx) > 50 && Math.abs(sdy) < 100) {
+          lightboxNav(sdx < 0 ? 1 : -1);
+        } else if (!drag.moved && Date.now() - drag.t < 400) {
+          lightboxNav(1); // click → next (ImageLightbox-style)
+        }
+      }
+      if (lb.drag && lb.drag.id === e.pointerId) lb.drag = null;
+    }
+    media.addEventListener('pointerup', lbEnd);
+    media.addEventListener('pointercancel', function (e) {
+      lb.pointers.delete(e.pointerId);
+      lb.drag = null;
+      lb.pinch = null;
+    });
+    media.addEventListener('dblclick', function () {
+      if (lb.zoomW > 0) {
+        lb.zoomW = 0;
+        lb.pan = { x: 0, y: 0 };
+        lightboxApplyTransform();
+      } else {
+        // Jump toward ~2× natural width
+        var xform = el.querySelector('.tv-lb-xform');
+        var mediaEl = zoomMediaEl(xform);
+        var nat = mediaNaturalSize(mediaEl);
+        if (!(lb.fitW > 0) && mediaEl) lb.fitW = mediaEl.offsetWidth || 0;
+        lightboxSetZoomW(nat.w * 2, false);
+      }
+    });
+
+    return el;
+  }
+
+  /** @param {number} w CSS px width  @param {boolean} [live] continuous pinch — skip 30px snap */
+  function lightboxSetZoomW(w, live) {
+    var xform = lb.el && lb.el.querySelector('.tv-lb-xform');
+    var el = zoomMediaEl(xform);
+    var nat = mediaNaturalSize(el);
+    var prev = lb.zoomW > 0 ? lb.zoomW : (el && el.offsetWidth) || 0;
+    var maxW = zoomMaxW(nat.w);
+    var fit = lb.fitW > 0 ? lb.fitW : (el && el.offsetWidth) || 0;
+    if (!(lb.fitW > 0) && fit > 0) lb.fitW = fit;
+    var next = Math.round(Number(w) || 0);
+    if (!live) next = snapZoomW(next, lb.fitW, maxW);
+    else {
+      next = Math.min(maxW, Math.max(0, next));
+      if (next <= lb.fitW) next = 0;
+    }
+    lb.zoomW = next;
+    if (!(lb.zoomW > 0)) { lb.zoomW = 0; lb.pan = { x: 0, y: 0 }; }
+    else lb.pan = panAfterZoomW(lb.pan, prev, lb.zoomW, lb.fitW);
+    lightboxApplyTransform();
+  }
+  function lightboxZoomBy(direction) {
+    var xform = lb.el && lb.el.querySelector('.tv-lb-xform');
+    var el = zoomMediaEl(xform);
+    var prev = lb.zoomW > 0 ? lb.zoomW : (el && el.offsetWidth) || 0;
+    var stepped = stepZoomW(el, lb.zoomW, lb.fitW, direction);
+    if (stepped.zoomW === lb.zoomW && lb.zoomW > 0) return;
+    if (!(stepped.zoomW > 0) && !(lb.zoomW > 0)) return;
+    lb.fitW = stepped.fitW;
+    lb.zoomW = stepped.zoomW;
+    lb.pan = panAfterZoomW(lb.pan, prev, lb.zoomW, lb.fitW);
+    lightboxApplyTransform();
+  }
+  function lightboxApplyTransform() {
+    if (!lb.el) return;
+    var xform = lb.el.querySelector('.tv-lb-xform');
+    var badge = lb.el.querySelector('.tv-lb-badge');
+    var media = lb.el.querySelector('.tv-lb-media');
+    if (xform) {
+      applyMediaZoom(xform, lb.zoomW, lb.pan, function (el) {
+        if (el._tvZoomWait) return;
+        el._tvZoomWait = true;
+        var retry = function () { el._tvZoomWait = false; lightboxApplyTransform(); };
+        el.addEventListener('load', retry, { once: true });
+        el.addEventListener('loadeddata', retry, { once: true });
+      });
+    }
+    if (badge) {
+      badge.textContent = zoomBadgeText(zoomMediaEl(xform), lb.zoomW);
+      badge.style.opacity = lb.zoomW > 0 ? '1' : '0';
+    }
+    if (media) {
+      if (lb.zoomW > 0) media.setAttribute('data-zoomed', '');
+      else media.removeAttribute('data-zoomed');
+    }
+  }
+
+  function lightboxNav(dir) {
+    if (!lb.open) return;
+    // Same wrapping as desktop stepSlide
+    var fi = lb.fi;
+    var list = slidesOf(fi);
+    var next = slideIndex(fi) + dir;
+    if (next >= 0 && next < list.length) {
+      setSlideIndex(fi, next);
+      selected = fi;
+      renderLightboxContent();
+      syncTourUi();
+      if (isStackMode()) refreshFeatureCard(fi);
+      else { renderNav(); renderStage(); }
+      if (tourMode === 'playing') scheduleAdvance();
+      return;
+    }
+    var visible = visibleFeatures();
+    if (!visible.length) return;
+    var vi = visible.indexOf(features[fi] || feat());
+    if (vi < 0) vi = 0;
+    var ni = (vi + dir + visible.length) % visible.length;
+    var nfi = features.indexOf(visible[ni]);
+    var nSlides = slidesOf(nfi).length;
+    setSlideIndex(nfi, dir < 0 ? Math.max(0, nSlides - 1) : 0);
+    selected = nfi;
+    lb.fi = nfi;
+    renderLightboxContent();
+    syncTourUi();
+    if (isStackMode()) { refreshFeatureCard(nfi); scrollSelectedCard(true); }
+    else paint();
+    if (tourMode === 'playing') scheduleAdvance();
+  }
+
+  function renderLightboxContent() {
+    ensureLightbox();
+    var fi = lb.fi;
+    var f = features[fi];
+    var s = slideOf(fi);
+    var list = slidesOf(fi);
+    var si = slideIndex(fi);
+    var xform = lb.el.querySelector('.tv-lb-xform');
+    var title = lb.el.querySelector('.tv-lb-title');
+    var desc = lb.el.querySelector('.tv-lb-desc');
+    var count = lb.el.querySelector('.tv-lb-count');
+    var prev = lb.el.querySelector('.tv-lb-prev');
+    var next = lb.el.querySelector('.tv-lb-next');
+    if (!f || !s || !xform) return;
+
+    var m = s.media || {};
+    var src = m.src ? mediaCandidates(m.src)[0] : '';
+    var isVid = src && (isVideoSrc(src) || m.type === 'video');
+    if (isVid) {
+      xform.innerHTML = '<video class="tv-lb-el" src="' + esc(src) + '" controls playsinline autoplay preload="auto"></video>';
+    } else if (src) {
+      xform.innerHTML = '<img class="tv-lb-el" src="' + esc(src) + '" alt="" draggable="false" decoding="async"/>';
+    } else {
+      xform.innerHTML = '<div class="empty-media">No media</div>';
+    }
+
+    var t = s.title || f.label || '';
+    var d = s.description || f.description || '';
+    title.textContent = t;
+    desc.textContent = d;
+    desc.hidden = !d;
+    count.textContent = (si + 1) + ' / ' + Math.max(1, list.length) + (f.label ? ' · ' + f.label : '');
+
+    var vis = visibleFeatures();
+    var canNav = list.length > 1 || vis.length > 1;
+    prev.hidden = !canNav;
+    next.hidden = !canNav;
+
+    lb.zoomW = 0;
+    lb.fitW = 0;
+    lb.pan = { x: 0, y: 0 };
+    lightboxApplyTransform();
+    syncTourUi();
+    syncLightboxPlayback();
+  }
+
+  function syncLightboxPlayback() {
+    if (!lb.open || !lb.el) return;
+    var vid = lb.el.querySelector('video.tv-lb-el');
+    if (!vid) return;
+    if (tourMode === 'playing') {
+      vid.muted = true;
+      var p = vid.play();
+      if (p && p.catch) p.catch(function () {});
+    } else {
+      try { vid.pause(); } catch (_) {}
+    }
+  }
+
+  function openLightbox(fi) {
+    if (fi == null || isNaN(fi)) fi = selected;
+    lb.fi = fi;
+    selected = fi;
+    ensureLightbox();
+    lb.el.setAttribute('data-theme', themeName());
+    lb.open = true;
+    lb.el.hidden = false;
+    document.documentElement.classList.add('tv-lb-open');
+    renderLightboxContent();
+    syncTourUi();
+    if (tourMode === 'playing') scheduleAdvance();
+    playClick();
+  }
+
+  function closeLightbox() {
+    if (!lb.open) return;
+    lb.open = false;
+    if (lb.el) lb.el.hidden = true;
+    document.documentElement.classList.remove('tv-lb-open');
+    lb.pointers && lb.pointers.clear();
+    lb.drag = null;
+    lb.pinch = null;
+    syncTourUi();
+    if (tourMode === 'playing') scheduleAdvance();
+    else syncMediaPlayback();
+  }
+
+  function resolveThumbSlide(list, h, i) {
+    if (typeof h.slide === 'number' && !isNaN(h.slide)) {
+      return Math.max(0, Math.min(list.length - 1, h.slide));
+    }
+    if (h.slide != null && h.slide !== '') {
+      var byId = list.findIndex(function (sl) { return sl.id === h.slide; });
+      if (byId >= 0) return byId;
+    }
+    if (list.length <= 1) return 0;
+    return Math.min(i, list.length - 1);
+  }
+
+  function featureBodyHtml(f, fi, opts) {
+    opts = opts || {};
+    var stack = !!opts.stack;
+    var list = slidesOf(fi);
+    var si = slideIndex(fi);
+    var s = list[si] || list[0];
+    if (!s) {
+      return '<div class="stage-copy"><p class="lead">No slides</p></div>';
+    }
+    var acts = s.actions || [];
+    var thumbSource = (list[0] && list[0].highlights && list[0].highlights.length)
+      ? list[0].highlights
+      : list.map(function (sl) {
+          return { title: sl.title || f.label, text: sl.description || '', icon: f.icon, slide: sl.id };
+        });
+    var hl = thumbSource.map(function (h, i) {
+      var target = resolveThumbSlide(list, h, i);
+      var on = target === si;
+      return '<button type="button" class="hl" data-feat="' + fi + '" data-slide="' + target + '" aria-current="' + (on ? 'true' : 'false') + '">' +
+        '<span class="hl-ico">' + icon(h.icon || f.icon) + '</span><span>' +
+        '<strong>' + esc(h.title || '') + '</strong>' +
+        (h.text ? '<span>' + esc(h.text) + '</span>' : '') +
+        '</span></button>';
+    }).join('');
+    var btns = acts.map(function (a) {
+      var cls = a.primary ? 'btn btn-primary' : 'btn btn-ghost';
+      var href = a.href || '#';
+      return '<a class="' + cls + '" href="' + esc(href) + '">' + esc(a.label || 'Action') + '</a>';
+    }).join('');
+    var slideTitle = s.title || '';
+    var slideDesc = s.description || '';
+    var note = (slideTitle || slideDesc)
+      ? '<div class="slide-note">' +
+          (slideTitle ? '<strong>' + esc(slideTitle) + '</strong>' : '') +
+          (slideDesc ? '<p>' + esc(slideDesc) + '</p>' : '') +
+        '</div>'
+      : '';
+    var metrics = s.metrics || f.metrics || [];
+    var metricsHtml = metrics.length
+      ? '<div class="metrics">' + metrics.map(function (m) {
+          return '<div class="metric"><b>' + esc(m.title || m.label || '') + '</b><span>' + esc(m.text || m.description || '') + '</span></div>';
+        }).join('') + '</div>'
+      : '';
+    var prevLabel = stack ? '← Prev' : '← Previous';
+    var nextLabel = 'Next →';
+    var dots = list.length > 1
+      ? '<div class="slide-dots">' + list.map(function (_, i) {
+          return '<button type="button" data-feat="' + fi + '" data-slide="' + i + '" aria-current="' + (i === si ? 'true' : 'false') + '" aria-label="Slide ' + (i + 1) + '"></button>';
+        }).join('') + '</div>'
+      : '';
+    var nav =
+      '<div class="slide-nav">' +
+        '<button type="button" data-feat-step="-1" data-feat="' + fi + '"' + (si <= 0 ? ' disabled' : '') + '>' + prevLabel + '</button>' +
+        dots +
+        '<button type="button" data-feat-step="1" data-feat="' + fi + '"' + (si >= list.length - 1 ? ' disabled' : '') + '>' + nextLabel + '</button>' +
+      '</div>';
+    var foot =
+      '<div class="stage-foot">' +
+        (stack ? '' : tourControlsHtml()) +
+        nav +
+      '</div>';
+    return (
+      '<div class="stage-body">' +
+        '<div class="stage-copy">' +
+          '<h1>' + esc(f.label) + '</h1>' +
+          '<p class="lead">' + esc(f.description || '') + '</p>' +
+          (hl ? '<div class="highlights">' + hl + '</div>' : '') +
+          note +
+        '</div>' +
+        '<div class="stage-right">' +
+          '<div class="stage-media">' + mediaHtml(s.media) + '</div>' +
+          (btns ? '<div class="media-ctas"><div class="actions">' + btns + '</div></div>' : '') +
+          metricsHtml +
+        '</div>' +
+      '</div>' +
+      foot
+    );
+  }
+
+  function renderStage() {
+    var f = feat();
+    if (!f) {
+      elStage.innerHTML = '<div class="stage-copy"><p class="lead">Select a feature</p></div>';
+      return;
+    }
+    elStage.classList.remove('is-stack');
+    elStage.innerHTML = featureBodyHtml(f, selected, { stack: false });
+    syncTourUi();
+    bindMediaFallback(elStage);
+    bindLazyMedia(elStage);
+    bindMediaZoom(elStage);
+    if (tourMode === 'playing') scheduleAdvance();
+    else syncMediaPlayback();
+  }
+
+  /** All visible features as scrollable cards; slides via buttons/swipe only. */
+  function renderStack() {
+    var visible = visibleFeatures();
+    elStage.classList.add('is-stack');
+    if (!visible.length) {
+      elStage.innerHTML = '<div class="stack-empty"><p class="lead">No matches</p></div>';
+      return;
+    }
+    var cards = visible.map(function (f) {
+      var fi = features.indexOf(f);
+      var cat = f.categoryLabel ? '<div class="feature-cat">' + esc(f.categoryLabel) + '</div>' : '';
+      return (
+        '<article class="feature-card" data-feat="' + fi + '" id="feature-' + fi + '">' +
+          cat +
+          featureBodyHtml(f, fi, { stack: true }) +
+        '</article>'
+      );
+    }).join('');
+    elStage.innerHTML =
+      '<div class="stack-tour">' + tourControlsHtml() + '</div>' +
+      '<div class="feature-stack">' + cards + '</div>';
+    syncTourUi();
+    elStage.querySelectorAll('.feature-card').forEach(function (card) {
+      bindMediaFallback(card);
+      bindLazyMedia(card);
+      bindMediaZoom(card);
+    });
+    syncStackSelection();
+    syncMediaPlayback();
+    if (tourMode === 'playing') scheduleAdvance();
+    scrollSelectedCard(false);
+  }
+
+  function syncStackSelection() {
+    if (!isStackMode()) return;
+    elStage.querySelectorAll('.feature-card').forEach(function (card) {
+      var fi = Number(card.getAttribute('data-feat'));
+      card.setAttribute('aria-current', fi === selected ? 'true' : 'false');
+    });
+  }
+
+  function scrollSelectedCard(smooth) {
+    if (!isStackMode()) return;
+    syncStackSelection();
+    var card = elStage.querySelector('.feature-card[data-feat="' + selected + '"]');
+    if (!card) return;
+    try {
+      card.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'nearest' });
+    } catch (e) {
+      card.scrollIntoView(true);
+    }
+  }
+
+  /** Patch one stack card after a slide change (keeps scroll position). */
+  function refreshFeatureCard(fi) {
+    var card = elStage.querySelector('.feature-card[data-feat="' + fi + '"]');
+    var f = features[fi];
+    if (!card || !f) return;
+    var cat = f.categoryLabel ? '<div class="feature-cat">' + esc(f.categoryLabel) + '</div>' : '';
+    card.innerHTML = cat + featureBodyHtml(f, fi, { stack: true });
+    bindMediaFallback(card);
+    bindLazyMedia(card);
+    bindMediaZoom(card);
+    if (fi === selected) syncMediaPlayback();
+    reportHeightSoon();
+  }
+
+  function syncMediaPlayback() {
+    // Pause all videos; play selected feature's video when touring
+    elStage.querySelectorAll('video.media-el').forEach(function (vid) {
+      var card = vid.closest('.feature-card');
+      var fi = card ? Number(card.getAttribute('data-feat')) : selected;
+      var active = fi === selected;
+      if (tourMode === 'playing' && active) {
+        hydrateMedia(vid);
+        vid.muted = true;
+        var p = vid.play();
+        if (p && p.catch) p.catch(function () {});
+      } else if (active) {
+        hydrateMedia(vid);
+      } else {
+        try { vid.pause(); } catch (_) {}
+      }
+    });
+  }
+
+  function advanceTour() {
+    if (tourMode !== 'playing') return;
+    var list = slides();
+    var si = slideIndex(selected);
+    if (si < list.length - 1) {
+      setSlideIndex(selected, si + 1);
+      if (lb.open) {
+        lb.fi = selected;
+        renderLightboxContent();
+      }
+      if (isStackMode()) refreshFeatureCard(selected);
+      else if (!lb.open) paint();
+      else { renderNav(); renderStage(); }
+      if (tourMode === 'playing') scheduleAdvance();
+      return;
+    }
+    var visible = visibleFeatures();
+    if (!visible.length) return;
+    var cur = feat();
+    var vi = visible.indexOf(cur);
+    var nextF = visible[(vi < 0 ? 0 : vi + 1) % visible.length];
+    selected = features.indexOf(nextF);
+    setSlideIndex(selected, 0);
+    if (lb.open) {
+      lb.fi = selected;
+      renderLightboxContent();
+    }
+    if (isStackMode()) {
+      refreshFeatureCard(selected);
+      scrollSelectedCard(true);
+      syncTourUi();
+      if (tourMode === 'playing') scheduleAdvance();
+    } else if (!lb.open) {
+      paint();
+    } else {
+      renderNav();
+      renderStage();
+      syncTourUi();
+      if (tourMode === 'playing') scheduleAdvance();
+    }
+  }
+
+  function scheduleAdvance() {
+    clearTourTimer();
+    if (tourMode !== 'playing') return;
+    var gen = ++tourGen;
+    var s = slide();
+    if (!s) return;
+    var kind = slideMediaKind(s);
+    syncMediaPlayback();
+    syncLightboxPlayback();
+
+    if (kind === 'video') {
+      var vid = null;
+      if (lb.open && lb.el) vid = lb.el.querySelector('video.tv-lb-el');
+      if (!vid) {
+        var scope = elStage.querySelector('.feature-card[data-feat="' + selected + '"]') || elStage;
+        vid = scope.querySelector('video.media-el');
+      }
+      if (!vid) {
+        tourTimer = setTimeout(function () {
+          if (gen !== tourGen || tourMode !== 'playing') return;
+          advanceTour();
+        }, IMAGE_MS);
+        return;
+      }
+      hydrateMedia(vid);
+      var onEnded = function () {
+        vid.removeEventListener('ended', onEnded);
+        if (gen !== tourGen || tourMode !== 'playing') return;
+        advanceTour();
+      };
+      vid.addEventListener('ended', onEnded);
+      if (vid.ended) {
+        tourTimer = setTimeout(function () {
+          if (gen !== tourGen || tourMode !== 'playing') return;
+          advanceTour();
+        }, 250);
+      }
+      return;
+    }
+
+    tourTimer = setTimeout(function () {
+      if (gen !== tourGen || tourMode !== 'playing') return;
+      advanceTour();
+    }, IMAGE_MS);
+  }
+
+  function setTourMode(mode, opts) {
+    if (mode !== 'playing' && mode !== 'paused' && mode !== 'stopped') return;
+    clearIdleTimer();
+    clearTourTimer();
+    tourGen += 1;
+    tourMode = mode;
+    // Remember hard stop across reloads; play clears it. Pause is session-only.
+    if (mode === 'stopped' || mode === 'playing') persistTourMode(mode);
+    syncTourUi();
+    if (!isStackMode()) renderNav();
+    syncMediaPlayback();
+    syncLightboxPlayback();
+    if (mode === 'playing') scheduleAdvance();
+    if (mode === 'paused' && opts && opts.idleResume) {
+      setTourHints('Resumes in 2s if idle');
+      idleTimer = setTimeout(function () {
+        idleTimer = null;
+        if (tourMode === 'paused') setTourMode('playing');
+      }, IDLE_MS);
+    } else if (mode === 'paused') {
+      setTourHints('Paused · press play');
+    }
+  }
+
+  function noteInteraction() {
+    if (suppressIdle) return;
+    if (tourMode === 'stopped') return;
+    // Soft-pause on interaction; resume after idle. Stop stays off.
+    setTourMode('paused', { idleResume: true });
+  }
+
+  function selectFeature(i, fromTour) {
+    if (i < 0 || i >= features.length) return;
+    selected = i;
+    setSlideIndex(i, 0);
+    if (!fromTour) noteInteraction();
+    if (isStackMode()) {
+      syncStackSelection();
+      scrollSelectedCard(true);
+      syncTourUi();
+      syncMediaPlayback();
+      if (tourMode === 'playing') scheduleAdvance();
+    } else {
+      paint();
+    }
+  }
+
+  function setSlide(i, fromTour, fi) {
+    if (fi == null) fi = selected;
+    var n = slidesOf(fi).length;
+    if (i < 0 || i >= n) return;
+    setSlideIndex(fi, i);
+    if (!fromTour) {
+      selected = fi;
+      noteInteraction();
+    }
+    if (isStackMode()) {
+      refreshFeatureCard(fi);
+      syncTourUi();
+      if (tourMode === 'playing' && fi === selected) scheduleAdvance();
+    } else {
+      renderNav();
+      renderStage();
+    }
+  }
+
+  function paint() {
+    document.documentElement.classList.toggle('tv-stack', isStackMode());
+    var explore = document.querySelector('.tv-explore');
+    if (explore) explore.classList.toggle('tv-stack', isStackMode());
+    if (isStackMode()) {
+      if (elNav) elNav.innerHTML = '';
+      renderStack();
+    } else {
+      renderNav();
+      renderStage();
+    }
+    reportHeightSoon();
+  }
+
+  elNav.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-i]');
+    if (!btn) return;
+    playClick();
+    selectFeature(Number(btn.getAttribute('data-i')));
+  });
+
+  /** Step slides; in stack mode stay inside the feature. Desktop wraps to next/prev feature. */
+  function stepSlide(dir, fi) {
+    if (fi == null) fi = selected;
+    var list = slidesOf(fi);
+    if (!list.length) return;
+    var next = slideIndex(fi) + dir;
+    if (next >= 0 && next < list.length) {
+      setSlide(next, false, fi);
+      return;
+    }
+    if (isStackMode()) return; // clamp — scroll the page for other features
+    var visible = visibleFeatures();
+    if (!visible.length) return;
+    var vi = visible.indexOf(features[fi] || feat());
+    if (vi < 0) vi = 0;
+    var ni = (vi + dir + visible.length) % visible.length;
+    var nfi = features.indexOf(visible[ni]);
+    var nSlides = slidesOf(nfi).length;
+    setSlideIndex(nfi, dir < 0 ? Math.max(0, nSlides - 1) : 0);
+    selected = nfi;
+    noteInteraction();
+    paint();
+  }
+
+  /**
+   * Horizontal swipe → prev/next slide on that feature card only.
+   * Vertical = page scroll. Skip when media zoomed.
+   */
+  function bindStageSwipe() {
+    var THRESH = 56;
+    var swipe = null;
+    var axis = null;
+
+    function ignoreTarget(t) {
+      if (!(t instanceof Element)) return true;
+      return Boolean(t.closest('button, a, input, select, textarea, .tour-controls, .slide-nav, .media-ctas, video'));
+    }
+
+    elStage.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (ignoreTarget(e.target)) return;
+      if (e.target.closest('.stage-media[data-zoomed]')) return;
+      var card = e.target.closest('.feature-card') || elStage;
+      var fiAttr = card.getAttribute && card.getAttribute('data-feat');
+      var fi = fiAttr != null ? Number(fiAttr) : selected;
+      swipe = { id: e.pointerId, x: e.clientX, y: e.clientY, fi: fi, target: card };
+      axis = null;
+    });
+
+    elStage.addEventListener('pointermove', function (e) {
+      if (!swipe || e.pointerId !== swipe.id) return;
+      var dx = e.clientX - swipe.x;
+      var dy = e.clientY - swipe.y;
+      if (!axis) {
+        if (Math.hypot(dx, dy) < 12) return;
+        axis = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
+      }
+      if (axis === 'x' && Math.abs(dx) > 8) {
+        try { elStage.setPointerCapture(e.pointerId); } catch (_) {}
+      }
+    });
+
+    function endSwipe(e) {
+      if (!swipe || e.pointerId !== swipe.id) return;
+      var dx = e.clientX - swipe.x;
+      var dy = e.clientY - swipe.y;
+      var fi = swipe.fi;
+      var locked = axis;
+      swipe = null;
+      axis = null;
+      try { elStage.releasePointerCapture(e.pointerId); } catch (_) {}
+      if (locked === 'y') return;
+      if (Math.abs(dx) < THRESH || Math.abs(dx) < Math.abs(dy) * 1.15) return;
+      playClick();
+      stepSlide(dx < 0 ? 1 : -1, fi);
+    }
+
+    elStage.addEventListener('pointerup', endSwipe);
+    elStage.addEventListener('pointercancel', function (e) {
+      if (swipe && e.pointerId === swipe.id) { swipe = null; axis = null; }
+    });
+  }
+  bindStageSwipe();
+
+  elStage.addEventListener('click', function (e) {
+    var tourBtn = e.target.closest('.tour-controls [data-act]');
+    if (tourBtn) {
+      playClick();
+      var act = tourBtn.getAttribute('data-act');
+      suppressIdle = true;
+      if (act === 'play') setTourMode('playing');
+      else if (act === 'pause') setTourMode('paused');
+      else if (act === 'stop') setTourMode('stopped');
+      suppressIdle = false;
+      return;
+    }
+    var stepBtn = e.target.closest('[data-feat-step]');
+    if (stepBtn) {
+      playClick();
+      stepSlide(Number(stepBtn.getAttribute('data-feat-step')), Number(stepBtn.getAttribute('data-feat')));
+      return;
+    }
+    var slideBtn = e.target.closest('[data-slide]');
+    if (slideBtn) {
+      playClick();
+      var fi = slideBtn.getAttribute('data-feat');
+      setSlide(Number(slideBtn.getAttribute('data-slide')), false, fi != null ? Number(fi) : selected);
+      return;
+    }
+    if (e.target.closest('.stage-media')) noteInteraction();
+  });
+
+  elStage.addEventListener('wheel', function (e) {
+    if (e.target.closest('.stage-media')) noteInteraction();
+  }, { passive: true });
+
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function () {
+      playClick();
+      applyTheme(themeName() === 'dark' ? 'light' : 'dark', true);
+    });
+  }
+
+  // Host iframe (pm-pics iframe-widget): embed layout + theme + height pump
+  enableEmbedLayout();
+  try {
+    var qTheme = new URLSearchParams(location.search).get('theme');
+    if (qTheme === 'light' || qTheme === 'dark') applyTheme(qTheme, false);
+  } catch (e) { /* ignore */ }
+  window.addEventListener('message', function (ev) {
+    var d = ev && ev.data;
+    if (!d || typeof d !== 'object') return;
+    if (d.type === 'pm-theme' && (d.theme === 'light' || d.theme === 'dark')) {
+      applyTheme(d.theme, false);
+      reportHeightSoon();
+    }
+    if (d.type === 'pm-iframe-height-request') {
+      reportHeightSoon();
+    }
+  });
+  if (typeof ResizeObserver !== 'undefined') {
+    var roRoot = document.querySelector('.shell') || document.querySelector('.tv-explore') || document.body;
+    if (roRoot) {
+      var ro = new ResizeObserver(function () { reportHeightSoon(); });
+      ro.observe(roRoot);
+    }
+  }
+  window.addEventListener('load', reportHeightSoon);
+  window.addEventListener('orientationchange', reportHeightSoon);
+  try {
+    var mqStack = window.matchMedia('(max-width:900px)');
+    var onStackMq = function () { paint(); };
+    if (mqStack.addEventListener) mqStack.addEventListener('change', onStackMq);
+    else if (mqStack.addListener) mqStack.addListener(onStackMq);
+  } catch (e) { /* ignore */ }
+  // Images/videos settling after first paint
+  document.querySelectorAll('img,video').forEach(function (el) {
+    el.addEventListener('load', reportHeightSoon);
+    el.addEventListener('loadeddata', reportHeightSoon);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target.matches('input,textarea,select')) return;
+    if (lb.open) {
+      if (e.key === 'Escape') { e.preventDefault(); closeLightbox(); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); noteInteraction(); lightboxNav(-1); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); noteInteraction(); lightboxNav(1); }
+      else if (e.key === ' ') {
+        e.preventDefault();
+        playClick();
+        suppressIdle = true;
+        if (tourMode === 'playing') setTourMode('paused');
+        else setTourMode('playing');
+        suppressIdle = false;
+      }
+      return;
+    }
+    // Don't steal page scroll/keys when embed is not focused
+    var root = document.querySelector('.tv-explore');
+    if (root && !root.contains(e.target) && !(document.activeElement && root.contains(document.activeElement))) {
+      return;
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault(); playClick();
+      if (isStackMode()) {
+        var vis = visibleFeatures();
+        var vi = vis.indexOf(feat());
+        if (vi >= 0 && vi < vis.length - 1) selectFeature(features.indexOf(vis[vi + 1]));
+      } else {
+        selectFeature(Math.min(features.length - 1, selected + 1));
+      }
+    }
+    else if (e.key === 'ArrowUp') {
+      e.preventDefault(); playClick();
+      if (isStackMode()) {
+        var visU = visibleFeatures();
+        var viU = visU.indexOf(feat());
+        if (viU > 0) selectFeature(features.indexOf(visU[viU - 1]));
+      } else {
+        selectFeature(Math.max(0, selected - 1));
+      }
+    }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); playClick(); stepSlide(1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); playClick(); stepSlide(-1); }
+    else if (e.key === ' ') {
+      e.preventDefault();
+      playClick();
+      if (tourMode === 'playing') setTourMode('paused');
+      else setTourMode('playing');
+    }
+  });
+
+  // default: 3D & CAD if present
+  var prefer = features.findIndex(function (f) { return f.id === '3d-cad'; });
+  selected = prefer >= 0 ? prefer : 0;
+  paint();
+})();
+
+</script>
+</div>
