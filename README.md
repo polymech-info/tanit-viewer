@@ -6,11 +6,11 @@ Select a file, and the best available view opens in the centre panel. No "which 
 
 The viewer alone is already a keeper: it handles a remarkable range of formats, opens fast, and is rich in features. And because it sits right beside Tanit's AI and chat, working on your content — asking about it, transforming it, sharing it — becomes a genuine pleasure.
 
-![tanit-viewer-format](./tanit-viewer-format.jpg)
+![tanit-viewer-format](./docs/viewer/tanit-viewer-1-relevance-contrast_hd.jpg)
 
 *One surface for images, documents, videos, 3D files, and interactive documentation.*
 
-![tanit-viewer-overview](./tanit-viewer-overview.png)
+![tanit-viewer-overview](./docs/viewer/tanit-viewer-overview.png)
 
 *Local files → Tanit Viewer → Tanit AI → Tanit Drive & CMS → Social Media / World Wide Web, with private and custom sharing.*
 
@@ -24,19 +24,19 @@ Images are first-class citizens here. Fast loading, smooth zooming, cropping, an
 
 All the usual formats open directly (JPEG, PNG, WebP, TIFF, GIF, AVIF, HEIC and more), and so do camera RAW files from Sony, Canon, Nikon, Adobe DNG, and Olympus / OM System. Culling a shoot? Arrow keys and mouse buttons walk you through the folder without ever touching a menu.
 
-![tanit-viewer-images](./tanit-viewer-images.png)
+![tanit-viewer-images](./docs/viewer/tanit-viewer-images.png)
 
 ### Documents
 
 PDFs open instantly — still the common language of briefs, approvals, and invoices. Word and Excel files preview without Office installed at all, and spreadsheets get a clean grid view. Tanit parses document content directly, so full-text search covers Word, Excel, and PDF files — and the same parsed content is available to AI and scripted workflows.
 
-![tanit-viewer-documents](./tanit-viewer-documents.png)
+![tanit-viewer-documents](./docs/viewer/tanit-viewer-documents.png)
 
 ### Markdown
 
 Markdown opens as a readable page — tables, checklists, images, Mermaid diagrams, live Xblox blocks, and LaTeX math with chemistry notation — not a wall of asterisks. YAML frontmatter becomes a document header with an auto table of contents; callouts, citations, and footnotes suit lab notes, specs, and course material. Command blocks have real buttons: copy, send to chat, or run directly in the internal console.
 
-![tanit-viewer-markdown](./tanit-viewer-markdown.png)
+![tanit-viewer-markdown](./docs/viewer/tanit-viewer-markdown.png)
 
 ### Xblox
 
@@ -57,25 +57,25 @@ Supported formats:
 
 STEP and IGES previews preserve available part and per-face colours, including appearances exported by CAD tools through STEP AP214 or AP242.
 
-![tanit-viewer-3d](./tanit-viewer-3d.png)
+![tanit-viewer-3d](./docs/viewer/tanit-viewer-3d.png)
 
 ### Video
 
 Clips, exports, and references play in place. MP4, MOV, WebM, MKV and the rest of the usual suspects.
 
-![tanit-viewer-video](./tanit-viewer-video.png)
+![tanit-viewer-video](./docs/viewer/tanit-viewer-video.png)
 
 ### Audio
 
 Speech works in both directions, in real time. Speech-to-text turns recordings — voice memos, interviews, audio journals — into text you can search, edit, and hand to AI. Text-to-speech reads content back to you or exports it as an audio file. Both run on local or external models, your choice.
 
-![tanit-viewer-audio](./tanit-viewer-audio.png)
+![tanit-viewer-audio](./docs/viewer/tanit-viewer-audio.png)
 
 ### Text, HTML & Pages
 
 Notes, logs, and scripts open instantly. HTML renders as a page, not source code — handy for generated reports and campaign previews. And Tanit 's own pages open ready to read or edit inline.
 
-![tanit-viewer-text](./tanit-viewer-text.png)
+![tanit-viewer-text](./docs/viewer/tanit-viewer-text.png)
 
 ### Tanit CMS — sharing beyond the local machine
 
@@ -85,7 +85,7 @@ Files, images, RAW photos, and videos upload as **files** or **pictures**, immed
 
 This means a photoshoot, a client document, a campaign page, or a processed export can go from local file to published content without switching context.
 
-![tanit-viewer-cms](./tanit-viewer-cms.png)
+![tanit-viewer-cms](./docs/viewer/tanit-viewer-cms.png)
 
 ***
 
