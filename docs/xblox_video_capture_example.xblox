@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "context": {},
+  "roots": [
+    {
+      "kind": "stdout",
+      "message": "Start HQ screen capture, zoom in while recording, then finalize."
+    },
+    {
+      "kind": "videoCapture",
+      "action": "Start",
+      "instance": "demo",
+      "input": "screen:0",
+      "outputPath": "${KNOWNFOLDER:Videos}/xblox_demo.mp4",
+      "width": 1080,
+      "height": 1080,
+      "sizeMode": "fill",
+      "fps": 30,
+      "bitrateKbps": 18000,
+      "captureEngine": "auto",
+      "audioSource": "desktop",
+      "follow": "cursor",
+      "interactiveZoom": true,
+      "storeAs": "capturePath"
+    },
+    {
+      "kind": "delay",
+      "ms": 3000
+    },
+    {
+      "kind": "videoCapture",
+      "action": "Update",
+      "instance": "demo",
+      "zoom": 1.5,
+      "follow": "cursor",
+      "transitionMs": 400
+    },
+    {
+      "kind": "delay",
+      "ms": 5000
+    },
+    {
+      "kind": "videoCapture",
+      "action": "Stop",
+      "instance": "demo",
+      "storeAs": "capturePath"
+    },
+    {
+      "kind": "stdout",
+      "message": "Saved: ${capturePath}"
+    }
+  ]
+}

@@ -1,0 +1,490 @@
+# Changelog
+
+End-user release notes for Tanit / Tanit Viewer.
+Generated from git diffs via `npm run build:post:changelog`.
+Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
+
+## 1.0.53 - 14-09
+
+_Each change is dated DD-MM from the commit day. Newest first._
+
+### New
+
+- 14-09 Added options to the pages create and update, posts list, and categories list commands.
+- 13-09 OpenDesign can save a screenshot of the whole editor from the top toolbar to docs/assets/screenshot_n.png.
+- 13-09 OpenDesign can drop a file on a photo to replace it (clip and zoom stay; the new aspect fits the old frame), or on the canvas to add a new image.
+- 13-09 OpenDesign can reset a selected image's clip, origin, and size from the property panel or right-click menu.
+- 13-09 OpenDesign can hide or show a selected element from the property panel or layers list.
+- 13-09 OpenDesign snaps objects and multi-selects to canvas edges using the last drag direction.
+- 13-09 OpenDesign has a right-click canvas menu with icons and grouped edit, arrange, align, and object actions.
+- 13-09 OpenDesign can match selected objects to the first object's width or height from the property panel, keeping each object's aspect ratio.
+- 13-09 OpenDesign can maximize a selected shape or image to the canvas from the property panel, keeping a photo's aspect ratio.
+- 12-09 OpenDesign can crop a placed image without stretching it: Shift-drag to pan, Shift-drag a corner to zoom inside the frame, Shift-drag a side handle to clip.
+- 12-09 OpenDesign can copy the current design as a PNG from the top toolbar.
+- 12-09 OpenDesign chat can edit the open canvas through Tanit design tools.
+- 12-09 Added support for configuring the serving API key through the LLM agent CLI.
+- 12-09 Added a --serve-api-key option to the LLM agent image command.
+- 12-09 Added the `--serve-api-key` option to the LLM agent command.
+- 11-09 Added --host, --port, --concurrency, and --http-workers options to the LLM agent command.
+- 11-09 The llm-agent CLI now supports configuring the server host, port, concurrency, and HTTP worker count.
+- 11-09 New command-line options configure LLM agent server networking and worker concurrency.
+- 10-09 Added new command-line options to the service file-upload and video image commands.
+- 10-09 Added a scripted TTS audio command with provider, API key, voice, model, overflow, speed, stretch, gap, seed, and cache configuration options.
+- 10-09 Added configuration options for provider, API key, voice ID, model ID, overflow handling, speed, stretch limits, minimum gap, seed, and cache directory.
+- 10-09 Added a new option for configuring service file uploads.
+- 10-09 Added a new option to the video command.
+- 10-09 Added configuration options for the scripted TTS audio command, including provider, API key, voice and model IDs, overflow handling, speed, stretch limits, minimum gaps, seed, and cache directory.
+- 10-09 Added a new option to the service file-upload command.
+- 10-09 Added a scripted TTS subcommand with provider, API key, voice, model, overflow, speed, stretch, gap, seed, and cache directory options.
+- 09-09 The Ask User chat panel now logs when its global cancel listener is installed.
+- 09-09 Added trace logging when the global cancel listener is installed.
+- 09-09 ChatWebPanel_AskUser now logs when the global cancel listener is installed.
+- 06-09 Adds localized labels using wbLblSoundNotifications and opt.label.
+- 06-09 Adds aria-label values using titleWorkbench and wbSetDefault.
+- 30-08 Settings → Custom Commands can play a finish sound, show a Windows toast with clickable output files, and speak with TTS when a command ends — including from a global shortcut or the daemon.
+- 30-08 The home page Recent Outputs widget lists files written by CLI and xblox commands.
+- 29-08 Chat, xblox, and the CLI can create a video from a prompt (Tanit or Replicate), with optional start and end frames.
+- 29-08 Chat can ask you a question and collect consent in the chat panel.
+- 28-08 File panels have a native search bar and result list.
+- 28-08 Chat can load as a plugin.
+- 27-08 Rasterize PDF files with the PDF plugin or CLI command.
+- 27-08 Load the native SciTE editor plugin.
+- 27-08 Added browser-use to agent workflows.
+- 27-08 Run Tanit as a Microsoft Store app.
+- 26-08 Use the VFS interface and copy images from the command line.
+- 26-08 Run schema-defined app commands from the CLI.
+- 24-08 View shortcut tips in the ribbon.
+- 24-08 Find duplicate and low-quality images.
+- 24-08 Browse MTP, SSH, and portable devices and preview CAD files in file panels.
+- 22-08 Schedule Custom Commands by date and time zone, with configurable run options.
+- 21-08 Settings → Custom Commands groups can use large buttons or two rows of small icons.
+- 21-08 The xblox builder can export and preview flow and sequence diagrams as SVG or PNG.
+- 20-08 PDF to Markdown keeps invoice and form tables as tables, not a wall of text.
+- 20-08 xblox and markdown can show flow and sequence diagrams as SVG or PNG.
+- 19-08 Added MOSS-TTS-Nano local text-to-speech engine with loading, streaming, and audio output support in audio TTS settings.
+- 19-08 PDF tools convert a document to Markdown with extracted page figures, and render pages to PNG, JPEG, or WebP.
+- 19-08 Added new glob selection dialog for file panels to filter and select files using glob patterns.
+- 19-08 Added new backup and restore feature with UI for managing encrypted portable profiles in Settings.
+- 19-08 Added new understand command for semantic analysis and comprehension tasks accessible via commands.
+- 18-08 Added new path helper variables for commands to extract directory, filename stem, extension, and absolute path of the current file.
+- 17-08 Added new file system blocks for Windows to enhance file panel operations and remote directory browsing.
+- 16-08 Added new video filters including beauty effects, background effects, face landmarking, and skin smoothing.
+- 13-08 Added a native text editor option using SciTE with dark and light themes, font settings, and basic editor features.
+- 12-08 Added a new performance panel to monitor app performance counters and tasks.
+- 12-08 Added a new task manager for background app tasks with catalog and management UI.
+- 09-08 Added a new LLM agent each command to iterate over JSON fields with jq selectors and transform them using prompts or dry-run transformers.
+- 06-08 Added new video recording overlay options including key overlay, cursor highlight, camera overlay, and audio normalization.
+- 06-08 Added new video camera overlay settings for input device, position, size, shape, border, and shadow.
+- 04-08 Added UI launch flags documentation accessible via the app info commands.
+- 03-08 Added browser-use features allowing the assistant to read, find, click, type, select, batch actions, and navigate web pages inside the app.
+- 03-08 Added a new browser web panel with DOM inspection support.
+- 03-08 Added a new app command tool for executing UI commands via the assistant.
+- 01-08 In-app browser panel with an address bar and back/forward.
+- 31-07 Added a new window capture selection logic preferring exact or prefix title matches in assistant inspect.
+- 31-07 Added a new window handle (HWND) option for assistant inspect and screenshot commands.
+- 30-07 Added a new breadcrumb bar in file panels for easier path navigation.
+- 30-07 Added a new file tree view panel with improved debugging and selection features.
+- 30-07 Added a new path picker popup for file panels to quickly select paths.
+- 30-07 Added a new file view columns feature to customize visible columns in file panels.
+- 29-07 Added a new virtual file system (VFS) listing support for browsing remote directories in file panels.
+- 29-07 Added a new custom file view implementation for file panels with enhanced rendering and interaction.
+- 29-07 Added a new file panel address bar with location menu and backend routing.
+- 29-07 Added a new sunburst visualization panel for file panels to explore folder structures visually.
+- 29-07 Added a new file panel popup placement and session management for better panel positioning.
+- 27-07 Added a new Windows Jump List feature for quick access to recent files and commands.
+- 27-07 Added a new window picker HUD for selecting windows to inspect or capture.
+- 26-07 Added a new command palette popup window for easier command searching and execution.
+- 26-07 Added a new artifact ledger feature to track file artifacts and IPC notifications.
+- 26-07 Added a new viewer bundle registry for managing viewer plugins.
+- 25-07 Added a new file panels system with enhanced file tree and file viewer capabilities.
+- 25-07 Added a new native search panel with search result rendering.
+- 25-07 Introduced ElevenLabs and VibeVoice TTS options in audio settings.
+- 25-07 Added a new video recording UI with NVENC hardware encoding support.
+- 25-07 Added a new assistant bar panel with filmstrip and inspection tools.
+- 25-07 Added a new chat panel with integrated chat web panels and media support.
+- 25-07 Added a new duplicate files panel for managing duplicate content.
+- 25-07 Added a new settings panel with compress, duplicates, find, meta, resize, and transform tabs.
+- 25-07 Added a new video panel with video detection and streaming features.
+- 25-07 Added a new xblox panel for block-based workflows and artifact ledger.
+
+### Improved
+
+- 13-09 OpenDesign Maximize leaves a margin so resize handles stay inside the canvas.
+- 13-09 OpenDesign property sliders keep the knob on the track.
+- 13-09 Uses the localized pastSessionsDeleteTip translation for the delete action's aria-label.
+- 13-09 Added a localized accessible label to the past session delete control.
+- 10-09 Autoplay and play-next labels now reflect their enabled state, and the playback-speed label includes the current rate.
+- 10-09 Add descriptive ARIA labels for autoplay, play next, and playback speed controls.
+- 10-09 Introduced option handling for service file uploads and video image operations.
+- 10-09 Uses the search placeholder as the input's aria-label.
+- 10-09 The Select search input now uses the search placeholder as its ARIA label, improving accessibility for screen reader users.
+- 10-09 Added descriptive accessibility labels for autoplay, play next, and playback speed controls.
+- 10-09 Improved accessibility for searchable select controls.
+- 10-09 Added descriptive aria-labels for autoplay, play-next, and playback-speed controls.
+- 10-09 The search input now uses the searchPlaceholder value as its aria-label.
+- 10-09 Added descriptive aria-labels for toggling autoplay, toggling play next, and selecting playback speed.
+- 10-09 Search inputs in Select components now expose the search placeholder as an accessible label.
+- 09-09 Added trace logging when the ask-user global cancel listener is installed.
+- 09-09 [ask_user] global cancel listener installed
+- 06-09 Added an accessible label to the search field.
+- 06-09 Added localized labels for sound notification options, the custom tree toolbar, and the default-setting control.
+- 06-09 aria-label={labels.searchAria}
+- 06-09 The search control now uses the localized searchAria label for improved accessibility.
+- 06-09 Added aria-label={labels.searchAria} to improve screen reader accessibility.
+- 05-09 Added a descriptive tooltip to the Voice Phrase field.
+- 05-09 Added accessible labels to model hub links, the models toolbar, refresh, and download-all controls.
+- 05-09 Added a helpful tooltip to the Voice Phrase field.
+- 04-09 Added clearer section descriptions and a dedicated Surfaces area for Explorer, Start menu, Launcher, Assistant Bar, and chat command visibility.
+- 04-09 Expanded search coverage across general settings, surfaces, I/O extensions, run options, triggers, shortcuts, voice commands, and extension maps.
+- 04-09 Added an arguments field for available chat commands.
+- 04-09 Added a Selection Mode field and made more run-option and notification settings discoverable through search.
+- 04-09 Grouped custom endpoint presets into localized Local and Cloud sections.
+- 04-09 Added accessible labels for the skills toolbar, refresh and save actions, and workspace or roaming root selection.
+- 04-09 Added localization fields for command surfaces, triggers, voice commands and phrases, Explorer file types, extension maps, and selection modes.
+- 03-09 Added screen-reader labels for locking, unlocking, showing, and adding to the filmstrip.
+- 03-09 Added screen-reader labels for toolbar actions and PixlWiz authentication refresh.
+- 03-09 Added a localized label for the auto-grow setting.
+- 03-09 Added a localized tooltip and accessible label to the Edit Script button.
+- 03-09 Property panel fields now display their provided labels.
+- 01-09 Added descriptive labels for resetting zoom and copying Mermaid source, including current zoom and copy status.
+- 01-09 Added an accessible label to the working status indicator.
+- 01-09 Added accessible labels to the edit and reload viewer buttons.
+- 01-09 Added an accessible label to the autoplay toggle that reflects its current action.
+- 27-08 Use chat and real-time chat plugins through the reorganized library.
+- 26-08 Use file tree panels in name and transfer destination dialogs.
+- 25-08 Browse FTP, SSH, and MTP locations and run file commands.
+- 25-08 Transfer files over FTP and MTP with conflict handling in file panels.
+- 23-08 Browse image thumbnails with the improved picker in file panels.
+- 21-08 The xblox wiring view can insert blocks from the canvas, bind scope variables, and navigate connections from the keyboard.
+- 20-08 Settings backup and restore say why an export, import, or cloud sync failed (passphrase, key file, or timeout).
+- 20-08 Settings → Custom Commands has a clearer command tree and icon/color pickers.
+- 19-08 Improved launcher commands and hotkeys integration.
+- 18-08 Improved command variable palette with new path helper variables for current file path components.
+- 18-08 Improved command variable lookup to support new path helper variables and user variables consistently.
+- 17-08 Improved audio echo cancellation to optionally use GTCRN neural noise suppression replacing WebRTC NS for better microphone audio quality.
+- 16-08 Improved LLM agent consent UI selection to support preset and auto modes.
+- 15-08 Improved performance panel UI with translucent backdrop and consistent dialog styling.
+- 15-08 Improved web view manager with better resource loading and environment options.
+- 11-08 Improved command documentation with author attribution for info commands and xblox.
+- 09-08 Improved file panel location menu and file viewer navigation for better usability.
+- 09-08 Improved LLM agent CLI commands with new JSON iterator and async processing support.
+- 09-08 Improved explorer integration and search presets for faster file operations.
+- 09-08 Improved UI launch flags documentation with detailed flag groups and examples.
+- 06-08 Improved video recording UI with new overlay features and better camera overlay controls.
+- 04-08 Improved ribbon UI with SVG icon fallback to a stable player-play icon to avoid blank tabs.
+- 04-08 Improved webview bootstrap to include product branding information for web UIs.
+- 01-08 Improved command runner to wait for graceful process exit before hard termination, improving video recording finalization.
+- 01-08 Improved video recording and audio capture with better timing and buffering.
+- 01-08 Improved file panel columns with new customizable column layouts.
+- 01-08 Improved file panel address bar and source catalog with bug fixes and performance tweaks.
+- 31-07 Improved assistant app inspect command to prefer exact window title matches and largest window fallback.
+- 31-07 Improved assistant app screenshot command with new options for window handle and title filtering.
+- 31-07 Improved file panel custom view rendering and selection for better performance and usability.
+- 31-07 Improved path breadcrumb bar with better rendering and click handling.
+- 31-07 Improved path picker popup with better filtering and selection.
+- 30-07 Improved file viewer breadcrumb bar with clickable path segments.
+- 30-07 Improved agent memory feature handling with environment and CLI integration.
+- 30-07 Improved agent skills loading with policy overrides and workspace awareness.
+- 30-07 Improved assistant bar and picker enrich UI with better window and element selection.
+- 30-07 Improved file panel source catalog and shell integration for faster folder enumeration.
+- 30-07 Improved filmstrip gallery with smoother scrolling and image loading.
+- 29-07 Improved file panel performance and responsiveness with new custom file view backend.
+- 29-07 Improved file panel sunburst visualization with smoother rendering and interaction.
+- 29-07 Improved file panel session and popup placement for consistent user experience.
+- 27-07 Improved Windows Hello user verification to avoid unnecessary prompts when saving OAuth credentials.
+- 27-07 Improved secure storage error handling for user cancellation scenarios.
+- 26-07 Improved file viewer navigation and image tool interfaces.
+- 26-07 Improved service tools and scheduler tools for better background task handling.
+- 26-07 Improved chat session store for better session persistence.
+- 26-07 Improved settings store and runtime for better configuration handling.
+- 26-07 Improved video recording status and xblox video recorder host.
+- 26-07 Improved layout store and app commands for better UI state management.
+- 26-07 Improved chat web panel agent and consent UI.
+- 26-07 Improved status bar with better feedback and layout.
+- 26-07 Improved theme and UI constants for better appearance.
+- 26-07 Improved viewer web contract and web view manager integration.
+- 26-07 Improved xblox blocks and runtime for better block execution and markdown rendering.
+- 26-07 Improved artifact ledger with better file artifact harvesting and IPC fan-out.
+- 26-07 Improved security consent dialogs with better UI and localization.
+- 26-07 Improved audio device selection and realtime voice session handling.
+- 26-07 Improved chat provider dialog with better model selection and UI.
+- 26-07 Improved launcher popup with better command execution.
+- 26-07 Improved explorer job UI with better file operations.
+- 26-07 Improved screenshot UI and session replay panels.
+- 26-07 Improved settings panel core and read tabs with better controls.
+- 26-07 Improved own ribbon tab and commands with better tool buttons.
+- 26-07 Improved markdown preview base and engine for better rendering.
+- 26-07 Improved search facade and text index for faster search.
+- 26-07 Improved local TTS text input and preparser for better TTS input handling.
+- 26-07 Improved video detect and filter blocks for better video analysis.
+- 26-07 Improved memory tools and picture tools in xblox for better resource management.
+- 26-07 Improved run tool and validators for better command execution.
+- 26-07 Improved audio realtime capture and record session for better audio quality.
+- 26-07 Improved chat ribbon bridge for better chat integration.
+- 26-07 Improved UI font and language helpers for better localization.
+- 26-07 Improved splash window and initial show helpers for better startup experience.
+- 26-07 Improved video win interactive zoom controller for better video zooming.
+- 26-07 Improved secure storage with better encryption and platform support.
+- 26-07 Improved policy engine and permission store for better security.
+- 26-07 Improved clipboard and drag-drop helpers for better file handling.
+- 26-07 Improved audio TTS with ElevenLabs voice change and proxy support.
+- 26-07 Improved HTTP client and server for better network communication.
+- 26-07 Improved licensing features and trial protection UI.
+- 26-07 Improved onnx session and detection for better AI model support.
+- 26-07 Improved local vector store and metadata index for better data retrieval.
+- 26-07 Improved LLM agent factory and features for better AI assistant capabilities.
+- 26-07 Improved UI log file and log sink for better logging.
+- 26-07 Improved chat web panel typeahead presets for faster input.
+- 26-07 Improved command runner and control for better command execution.
+- 26-07 Improved file watcher and batch queue for better file system monitoring.
+- 26-07 Improved string sanitizers and template for better text processing.
+- 26-07 Improved video encoder and streaming session for better video output.
+- 26-07 Improved UI next main frame and layout for better window management.
+- 26-07 Improved chat provider dialog replicate integration.
+- 26-07 Improved replicate selector controller for better model selection.
+- 26-07 Improved pixlwiz share post dialog for better sharing.
+- 26-07 Improved LED meter for audio level visualization.
+- 26-07 Improved duplicate panel for better duplicate file management.
+- 26-07 Improved search native popup and result renderer for better search UI.
+- 26-07 Improved chat web panel sessions management.
+- 26-07 Improved chat web resource for better chat content rendering.
+- 26-07 Improved chat image fullscreen host for better image viewing.
+- 26-07 Improved file queue for better file operation management.
+- 26-07 Improved own ribbon tab commands for better command access.
+- 26-07 Improved settings panel helpers and view models for better settings UI.
+- 26-07 Improved settings widgets for better control rendering.
+- 26-07 Improved search vector backend for faster vector search.
+- 26-07 Improved chat settings schema for better chat configuration.
+- 26-07 Improved local model catalog for better local model management.
+- 26-07 Improved openai and openrouter provider models CLI integration.
+- 26-07 Improved HTTP Drogon server for better web serving.
+- 26-07 Improved installer engine and manifest for better installation.
+- 26-07 Improved policy catalog and app policy for better security policies.
+- 26-07 Improved security gateway and persistence for better security management.
+- 26-07 Improved security backends sandbox for better app sandboxing.
+- 26-07 Improved security anti-hack measures.
+- 26-07 Improved UI next helpers for better UI theming and language support.
+- 26-07 Improved UI next widgets searchable combo for better dropdowns.
+- 26-07 Improved workbench default main and chat simple for better user workflows.
+- 26-07 Improved video detect overlay for better video detection visualization.
+- 26-07 Improved win assistant app batch, inspect, and use for better assistant features.
+- 26-07 Improved win assistant filmstrip and filmstrip thumb for better media browsing.
+- 26-07 Improved win assistant uia spy for better UI automation inspection.
+- 26-07 Improved win bluetooth audio endpoints and bluetooth support.
+- 26-07 Improved win chrome inspect bridge and picker enrich for better Chrome integration.
+- 26-07 Improved win explorer11 for better file explorer integration.
+- 26-07 Improved win pixlwiz auth payload and login spawn for better authentication.
+- 26-07 Improved win register chrome, explorer, and startmenu for better system integration.
+- 26-07 Improved win shell pm_iexecute map and registry for better shell command execution.
+- 26-07 Improved win trial protection for better trial management.
+- 26-07 Improved win viewers viewer web resource and text viewer web panel for better web content viewing.
+- 26-07 Improved win web CWebConsole, CWebView, and CWebViewManager for better web UI.
+- 26-07 Improved win web web bundle host and web hg download for better web resource management.
+- 26-07 Improved win web web vfs download and webview bootstrap for better virtual file system support.
+- 26-07 Improved win web webview drive hosts for better drive integration.
+- 26-07 Improved win window bounds for better window sizing.
+- 26-07 Improved xblox session management for better block session handling.
+- 26-07 Improved xblox artifact ledger for better artifact tracking.
+- 25-07 Settings can import and export encrypted portable profiles.
+- 25-07 Improved audio playback timing and buffering for smoother TTS experience.
+- 25-07 Enhanced microphone processing with WebRTC Audio Processing Module for echo cancellation and noise suppression.
+- 25-07 Enhanced chat panel with better session management and media handling.
+- 25-07 Improved settings panel with better layout and i18n support.
+- 25-07 Enhanced video recording with better hardware acceleration and status reporting.
+- 25-07 Improved assistant bar with better layout and spy tools.
+- 25-07 Enhanced file panels with better queue and selection routing.
+- 25-07 Improved ribbon UI with new icons and better command integration.
+- 25-07 Improved search panel with better markdown and code search adapters.
+- 25-07 Improved local model catalog and provider model selection in Settings.
+
+### Fixed
+
+- 10-09 Remove the stray quote from the playback speed aria-label.
+- 10-09 aria-label={`Playback speed ${formatPlaybackRate(playbackRate)}`}
+- 18-08 Fixed command variable palette descriptions for path helper variables to correctly describe filename stem and extension.
+- 01-08 Fixed browser web panel resource loading and DOM inspection bugs.
+- 01-08 Fixed command runner to avoid premature process termination that caused incomplete MP4 files in video recordings.
+- 31-07 Fixed assistant app inspect command to correctly report window handle, title, and process ID in JSON output.
+- 31-07 Fixed file tree debug and breadcrumb debug panels removed to reduce clutter.
+- 26-07 Fixed native search popup result rendering bugs.
+- 26-07 Fixed chat web panel media playback issues.
+- 26-07 Fixed settings panel control layout glitches.
+- 26-07 Fixed file queue operation race conditions.
+- 26-07 Fixed chat session persistence bugs.
+- 26-07 Fixed security consent dialog localization errors.
+- 26-07 Fixed audio playback clipping on last syllable.
+- 26-07 Fixed file tree panel selection routing issues.
+- 26-07 Fixed ribbon UI command activation bugs.
+- 26-07 Fixed video detect overlay rendering artifacts.
+- 26-07 Fixed assistant bar spy tool event handling.
+- 26-07 Fixed explorer job UI file operation errors.
+- 26-07 Fixed screenshot capture timing issues.
+- 26-07 Fixed shell command execution registry errors.
+- 26-07 Fixed trial protection UI update bugs.
+- 26-07 Fixed web view manager resource loading errors.
+
+## Archive ΓÇö pixlwiz-last (25-05 to 23-07)
+
+_Regenerated from `pixlwiz-last` git (391 commits, 9 weeks). Dated DD-MM. This repo starts 24-07._
+
+### New
+
+- 23-07 Added support for AAC audio recording with a new AAC writer backend integrated into the audio recording UI.
+- 21-07 Added new interactive zoom controls in the video panel for better video follow and zoom adjustments.
+- 21-07 Introduced SVG rasterization improvements for sharper image rendering in the file viewer.
+- 19-07 Added new ribbon UI commands and layout improvements for better command grouping and access in the main window.
+- 18-07 Added new agent prompt editing UI with detailed tool documentation and parameter display in the agent tools panel.
+- 17-07 Added external LLM agent runners (claude, codex, cursor) with new commands and UI for managing external agent sessions.
+- 15-07 Introduced markdown rendering support for TTS text input with new markdown parser and preparser panels.
+- 14-07 Added new HuggingFace GGUF model header support and metadata UI in the local model catalog.
+- 13-07 Added HuggingFace model catalog and download support with new UI elements for browsing and fetching models.
+- 13-07 Introduced new service commands and panels for file pulling with pattern filters and progress display in the service panel.
+- 12-07 Added support for ElevenLabs voice change synthesis with new settings and controls in the audio TTS panel.
+- 12-07 Introduced a new video recording backend using NVENC with improved performance and UI integration.
+- 11-07 Added new service commands and panels for viewing service info, spending logs, balance, and AI gateway health in the UI.
+- 09-07 Added MCP client commands for managing and interacting with MCP tools and servers via the UI.
+- 07-07 Introduced a new installer feature allowing execution of JSON bundle manifests with variable overrides and resume support.
+- 06-07 Added a developer mode option to navigate the file viewer's embedded web view directly to a local development server.
+- 01-07 Introduced advisory SecurityAgent consent review options in the LLM agent settings for enhanced security prompts.
+- 29-06 Added offline license activation commands and UI elements for managing license files and features.
+- 28-06 Added Windows Group Policy support to enable or disable CLI command groups like audio, video, and xblox via enterprise policies.
+- 28-06 Introduced secure storage backend for settings and commands, improving data protection and encryption.
+- 28-06 Added a new policy provider and registry-based app policy enforcement for Windows environments.
+- 26-06 Added sandboxing support for running commands with user-configured path allowlists accessible via Settings → Security → Sandbox paths.
+- 26-06 Introduced a new CACHE_DIR variable for command variables, resolving to the OS temporary directory for ephemeral tool artifacts.
+- 25-06 Introduced a new security consent dialog in the chat panel for managing permissions and sandboxing approvals.
+- 24-06 Added MQTT blocks to the xblox panel for enhanced IoT and messaging automation.
+- 23-06 Introduced Office document preview support in the file viewer, enabling users to view Office files directly within the app.
+- 23-06 Added Bluetooth audio playback device listing in the audio info panel, showing active and disconnected Bluetooth endpoints.
+- 22-06 Added a new search panel with advanced image and text search capabilities, including multi-mode, multi-content, and multi-backend search options.
+- 21-06 Introduced a new text search vector store with local indexing and search capabilities accessible via the search panel.
+- 19-06 Added new service blocks and vector blocks in the xblox panel for enhanced data processing and vector store support.
+- 13-06 Added a file watcher feature to monitor directory changes and update file panels accordingly.
+- 11-06 Introduced global custom-command hotkeys in the assistant toolbar for easier command access.
+- 09-06 Added a new LED meter panel to visualize audio levels in real time.
+- 06-06 Added Vibevoice TTS engine integration with new settings and controls for voice synthesis in the audio recording and playback UI.
+- 02-06 Introduced Bluetooth audio device support with new Bluetooth blocks and audio endpoint management in the file panels.
+- 01-06 Added a new workbench slot switch command accessible via the app command, allowing users to switch between main, chat, or viewer slots in the UI.
+- 31-05 Added YOLO detection smoothing in the detection overlay to reduce flicker and jitter in object detection visualization.
+- 30-05 Added ONNX model support with new commands and UI for running ONNX models.
+- 29-05 Introduced Llama inference support with new commands and UI elements for local model interaction.
+- 28-05 Added session recording and replay features accessible via the session replay panel.
+- 26-05 Added structured memory feature mask controls for the LLM agent in Settings, allowing advanced memory tuning.
+- 25-05 Initial release of Tanit Viewer with core features including file panels, chat, browser panels, video/audio recording UI, and PDF viewer.
+
+### Improved
+
+- 23-07 Enhanced audio recording settings with new sample rate and channel controls accessible in the audio recording UI.
+- 23-07 Improved file viewer navigation and preview coordination for Office documents and other file types.
+- 23-07 Refined audio blocks in the xblox panel with improved network and MCP tool integration visible in the xblox UI.
+- 22-07 Refined Windows Explorer registration UI to use updated default group names for better menu organization.
+- 21-07 Improved chat panel and file viewer session handling for smoother user experience during realtime voice interactions.
+- 21-07 Updated file viewer image pill toolbar with improved controls and better image preview handling.
+- 19-07 Optimized file viewer navigation and chat panel rendering for smoother UI responsiveness and reduced lag.
+- 18-07 Enhanced chat web panel with SPA folder fallback support and theme synchronization for consistent UI appearance.
+- 16-07 Refined settings store with better defaults and secure storage integration visible in the Settings panel.
+- 15-07 Refined ElevenLabs TTS streaming with buffered audio trace logs and chunked sentence stitching for smoother playback.
+- 14-07 Enhanced Whisper local transcription with detailed model probing and error messages in the transcription panel.
+- 12-07 Enhanced file viewer navigation with new `.page` file support and improved preview coordination.
+- 12-07 Improved video follow and zoom controls with new interactive zoom UI elements in the video panel.
+- 11-07 Updated login UI to better handle OAuth tokens and identity fetching with clearer status messages.
+- 11-07 Improved ribbon UI with new tool buttons and better command grouping for easier access.
+- 10-07 Enhanced video recording settings with new audio source and gain controls visible in the video recording panel.
+- 09-07 Refined LLM and MCP blocks in the xblox panel with better schema support and UI parameter controls.
+- 08-07 Improved audio recording UI to use a unified mixed audio capture system supporting mic and desktop audio with gain controls.
+- 08-07 Updated chat panel with new typeahead presets for faster message composition and command access.
+- 07-07 Enhanced main window with new outer frame size override option accessible via the `app setframesize` command.
+- 06-07 Improved file viewer to better handle authentication payloads and web view navigation with updated UI responsiveness.
+- 05-07 Updated CLI command documentation generation with new markdown output and improved option grouping in the info panel.
+- 05-07 Added new ribbon tool buttons and status bar enhancements for better user feedback and layout.
+- 05-07 Improved chat panel and file viewer with updated UI elements and better session handling.
+- 05-07 Enhanced memory and prompt tools with UI improvements in the LLM tools panel.
+- 03-07 Refined audio echo cancellation in realtime voice sessions to better cancel model TTS from desktop loopback audio.
+- 02-07 Improved consent dialogs with AI advisory review and added new consent UI options for security-gated tools.
+- 01-07 Updated chat presets display in the LLM info panel to include security router and model columns.
+- 01-07 Assistant toolbar now shows commands-only buttons based on `showInAssistantBar` metadata, improving command access and control.
+- 29-06 Enhanced Group Policy support to disable or enable features like Whisper transcription and XBlox blocks, with UI reflecting these policies.
+- 28-06 Improved settings store and web command host to support secure storage and policy-driven configuration loading.
+- 28-06 Enhanced chat panel and settings web view with better UI responsiveness and policy integration.
+- 28-06 Improved file viewer web panel with updated rendering and navigation features.
+- 26-06 Improved command variable expansion with new built-in variables for cache and temp directories.
+- 26-06 Refined sandboxing backend with Windows AppContainer support and enhanced policy enforcement.
+- 25-06 Enhanced security gateway to pre-fill command execution scopes for easier consent granting in the UI.
+- 24-06 Improved xblox blocks with MQTT and Modbus enhancements for better network and device communication.
+- 23-06 Improved file viewer to support Office CLI integration, enabling better document rendering and navigation.
+- 23-06 Refined Bluetooth audio device management with connection timeouts and delays to improve playback and recording reliability.
+- 22-06 Enhanced search UI with a dedicated search dock panel, improved search result rendering, and better integration with file panels.
+- 21-06 Search panel now supports advanced source adapters for office documents and code, improving search accuracy and scope.
+- 20-06 Embedding model loading now supports GPU acceleration options and improved path resolution in Settings.
+- 19-06 File panels and xblox blocks have improved JSON query and shell block handling for better scripting and automation.
+- 18-06 Settings UI updated with Windows 11 style dialogs and improved workbench defaults for a more modern experience.
+- 17-06 The assistant toolbar and command system have been refined with improved command control and IPC integration for smoother UI interaction.
+- 16-06 File viewer supports new `.page` file extension with appropriate preview limits and recognition in file panels.
+- 15-06 The xblox panel now supports loops and user variables for more flexible block execution and scripting.
+- 13-06 Enhanced file panels with better file monitoring and preview coordination for smoother file browsing.
+- 12-06 Refined chat session management with realtime voice agent integration and improved chat panel session handling.
+- 12-06 Added markdown rendering support for xblox blocks with Mermaid diagrams and flowchart options in the file viewer.
+- 12-06 Improved hotkey registration and dispatch in the assistant for more reliable global shortcut handling.
+- 11-06 Improved assistant toolbar to allow attaching to existing UI chat sessions and better IPC command handling.
+- 11-06 Enhanced xblox UI schema commands to display provider and model options with JSON output in the info panel.
+- 10-06 Updated Whisper local transcription options with GPU support and flash attention toggles in Settings.
+- 10-06 Updated xblox blocks with new OCR and vision blocks, improving document and image processing in the UI.
+- 09-06 Enhanced the status bar with new metrics and improved layout for better user feedback.
+- 08-06 Improved media command IPC integration for assistant and UI commands, enhancing responsiveness.
+- 07-06 Added a new video streaming panel with WebRTC window streaming prototype, including settings for server mode, input source, FPS, bitrate, and MJPEG quality.
+- 07-06 Improved service commands UI with new panels for managing images, settings, files, pages, pictures, and posts, including upload, list, get, and remove actions.
+- 07-06 Updated file panels with new video streaming blocks and video detection blocks supporting streaming and remote sources.
+- 06-06 Enhanced local model catalog and chat settings with new schema support and improved model selection UI.
+- 05-06 Added per-command keyboard shortcut assignment and hotkey dispatch in the commands panel for more customizable user workflows.
+- 04-06 Refined image AI settings to automatically select default image provider and model from presets or global chat settings in Settings.
+- 03-06 Updated chat panel with new chat log toggles and ribbon UI improvements for easier conversation management.
+- 02-06 Improved video detection with new ONNX execution provider options including auto, CPU, and CUDA, plus GPU VRAM stats display in video detection settings.
+- 01-06 Enhanced assistant toolbar with a new live speech-to-speech voice session toggle, allowing users to start and stop realtime voice interactions directly from the UI.
+- 31-05 Improved video and audio blocks in the file panels for better media handling and playback.
+- 31-05 Enhanced assistant batch commands with new speed and delay settings for smoother batch processing.
+- 31-05 Improved detection overlay with temporal smoothing options configurable in the detection overlay settings.
+- 30-05 Added realtime speech-to-speech support with new audio settings and chat panel integration for realtime mode.
+- 29-05 Improved chat presets display in the LLM info panel to show planner router/model and realtime router/model details.
+- 28-05 Enhanced TTS playback with optimized streaming latency and improved ring buffer handling for smoother audio.
+- 27-05 Assistant toolbar UI now launches by default when running the assistant without subcommands, with improved toolbar positioning and controls.
+- 26-05 Improved audio recording settings with a new duration alias in seconds for easier configuration.
+
+### Fixed
+
+- 22-07 Fixed file viewer markdown rendering bugs causing incorrect display of some shell extension content.
+- 18-07 Fixed agent runner session bugs related to external agent prompt handling and tool parameter parsing.
+- 17-07 Fixed agent prompt file reading and embed file decoding bugs to improve prompt loading reliability.
+- 12-07 Fixed video recorder plugin loading and session management bugs for more stable recording sessions.
+- 11-07 Fixed service command UI bugs related to spending logs and balance display.
+- 10-07 Fixed video recording status JSON output and corrected video encoder parameter handling.
+- 07-07 Fixed replay panel size parsing bugs and improved error messages for invalid size inputs.
+- 05-07 Corrected chat presets table formatting and fixed UI inconsistencies in the chat and file panels.
+- 03-07 Removed obsolete local text search vector store files to reduce clutter and improve performance.
+- 02-07 Fixed consent dialog UI glitches and improved consent prompt reliability in security panels.
+- 01-07 Resolved assistant toolbar bugs related to command running state and IPC communication.
+- 29-06 Fixed license and sandboxing UI bugs related to policy enforcement and secure storage.
+- 26-06 Fixed command control logic to avoid redundant logging and improve command running state detection.
+- 25-06 Fixed various security and permission bugs affecting sandboxing and consent dialogs.
+- 23-06 Fixed Bluetooth audio endpoint listing to correctly show disconnected devices when requested.
+- 22-06 Fixed search panel bugs related to multi-mode search and result filtering.
+- 21-06 Fixed search panel indexing and query bugs, improving stability and accuracy for large document sets.
+- 20-06 Corrected embedding model loading errors and fixed local vector store indexing bugs affecting search results.
+- 19-06 Fixed xblox runtime and command bugs related to vector block execution and service block integration.
+- 16-06 Corrected file viewer text rendering glitches and improved file panel navigation responsiveness.
+- 15-06 Fixed xblox session and command handling bugs to improve stability during long-running block executions.
+- 13-06 Fixed file viewer image preview bugs and file tree panel navigation issues for a smoother browsing experience.
+- 12-06 Corrected chat panel media handling glitches and session state inconsistencies during realtime voice interactions.
+- 10-06 Resolved Whisper transcription path resolution and model loading issues to prevent failures in the transcription panel.
+- 09-06 Fixed audio echo cancellation backend initialization and processing bugs affecting audio recording quality.
+- 07-06 Fixed video source selection and streaming session stability issues in the video streaming panel.
+- 06-06 Fixed audio recording and playback device selection bugs in the audio settings panel.
+- 05-06 Fixed keyboard shortcut input UI to use a full-width row and improved label alignment in the commands panel.
+- 04-06 Corrected chat web panel agent and provider display issues in the chat panel.
+- 03-06 Fixed UI glitches in file tree panel navigation and chat panel media handling.
+- 02-06 Resolved video detection bugs related to frame processing and video output in the video detection panel.
+- 01-06 Fixed assistant toolbar stop command to properly signal and close detached toolbar sessions from the UI.
+- 31-05 Fixed various UI glitches in assistant app use commands and improved stability in detection overlay updates.
+- 30-05 Fixed chat panel bugs related to realtime mode and improved UI responsiveness.
+- 29-05 Fixed logging verbosity in LLM agent commands to reduce noise in info logs.
+- 28-05 Fixed audio recording cancellation and improved CLI cancel handling for audio commands.
+- 27-05 Fixed assistant toolbar UI bugs related to ribbon commands and launcher popup behavior.

@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "context": {},
+  "roots": [
+    {
+      "kind": "stdout",
+      "message": "Recording 5 s of desktop audio to M4A (Windows) or use .wav on other platforms."
+    },
+    {
+      "kind": "audioRecord",
+      "inputSource": "desktop",
+      "durationMs": 5000,
+      "outputPath": "${KNOWNFOLDER:Desktop}/xblox_desktop_clip.m4a",
+      "storeAs": "audioPath"
+    },
+    {
+      "kind": "stdout",
+      "message": "Saved: ${audioPath}"
+    }
+  ]
+}
