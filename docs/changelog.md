@@ -4,12 +4,22 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
-## 1.0.53 - 14-09
+## 1.0.55 - 16-09
 
 _Each change is dated DD-MM from the commit day. Newest first._
 
 ### New
 
+- 16-09 Added a --scenario option to the core file handlers test command.
+- 16-09 Added the Privacy.EnableClipboardContext policy under PM_Security, mapped to privacy.clipboardContext and enabled by default.
+- 15-09 Added a context dump command with --capabilities, --app-id, --max-age-ms, and --mru-max-age-ms options.
+- 15-09 Added a core context test command with a --scenario option.
+- 15-09 Added the Privacy.EnableClipboardContext security policy, mapped to privacy.clipboardContext and disabled by default.
+- 15-09 Add launcher command and argument fields, including variable-aware multiline argument editing.
+- 15-09 Added a localization type for the launcher command label.
+- 15-09 Added --capabilities, --app-id, --max-age-ms, and --mru-max-age-ms options to the assistant context dump command.
+- 15-09 Added a --scenario option to the test core context command.
+- 15-09 Added the Privacy.EnableClipboardContext policy under PM_Security, mapped to privacy.clipboardContext and disabled by default.
 - 14-09 Added options to the pages create and update, posts list, and categories list commands.
 - 13-09 OpenDesign can save a screenshot of the whole editor from the top toolbar to docs/assets/screenshot_n.png.
 - 13-09 OpenDesign can drop a file on a photo to replace it (clip and zoom stay; the new aspect fits the old frame), or on the canvas to add a new image.
@@ -25,6 +35,7 @@ _Each change is dated DD-MM from the commit day. Newest first._
 - 12-09 Added support for configuring the serving API key through the LLM agent CLI.
 - 12-09 Added a --serve-api-key option to the LLM agent image command.
 - 12-09 Added the `--serve-api-key` option to the LLM agent command.
+- 12-09 The LLM agent command now accepts a serve API key.
 - 11-09 Added --host, --port, --concurrency, and --http-workers options to the LLM agent command.
 - 11-09 The llm-agent CLI now supports configuring the server host, port, concurrency, and HTTP worker count.
 - 11-09 New command-line options configure LLM agent server networking and worker concurrency.
@@ -109,10 +120,18 @@ _Each change is dated DD-MM from the commit day. Newest first._
 
 ### Improved
 
+- 15-09 Added launcher command and argument fields, with contextual placeholders and help for repeat-path options.
+- 15-09 Command picker labels now distinguish custom, app, and launcher commands.
+- 15-09 Display repeat-path-specific placeholders and help text when configuring repeated command options.
+- 15-09 Label custom, app, and launcher commands according to the selected command kind.
+- 14-09 Added command-line options for creating and updating pages and listing posts and categories.
+- 14-09 Added options for service page creation and updates, post listing, and category listing commands.
 - 13-09 OpenDesign Maximize leaves a margin so resize handles stay inside the canvas.
 - 13-09 OpenDesign property sliders keep the knob on the track.
 - 13-09 Uses the localized pastSessionsDeleteTip translation for the delete action's aria-label.
 - 13-09 Added a localized accessible label to the past session delete control.
+- 13-09 Added a localized accessible label for the delete button.
+- 13-09 Added a localized accessible label to the delete control.
 - 10-09 Autoplay and play-next labels now reflect their enabled state, and the playback-speed label includes the current rate.
 - 10-09 Add descriptive ARIA labels for autoplay, play next, and playback speed controls.
 - 10-09 Introduced option handling for service file uploads and video image operations.

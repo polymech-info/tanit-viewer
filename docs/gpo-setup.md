@@ -285,6 +285,7 @@ Computer-scope (`HKLM`) wins over user-scope (`HKCU`). Policies marked HKLM-only
 | Force Session Storage Protection | `SessionStorage\Protection` | REG_SZ | not configured (compiled default) | HKLM-only |
 | Require Encryption for Sessions | `SessionStorage\RequireEncryption` | DWORD | `1` (enabled) | HKLM-only |
 | Require Signing for Sessions | `SessionStorage\RequireSigning` | DWORD | `1` (enabled) | HKLM-only |
+| Allow Clipboard as a Context Source | `Privacy\EnableClipboardContext` | DWORD | `1` (enabled) | HKCU/HKLM |
 | Force Verification Protector | `Security\ForceVerificationProtector` | REG_SZ | not configured (compiled default) | HKLM-only |
 | Verification Level: Import Settings | `Security\Verification\SettingsImportPlain` | REG_SZ | not configured (compiled default) | HKLM-only |
 | Verification Level: Export Settings | `Security\Verification\SettingsExportPlain` | REG_SZ | not configured (compiled default) | HKLM-only |
@@ -948,6 +949,22 @@ When enabled this overrides user settings that request signed-only or plain sess
 Require local document signatures for chat transcripts, session memory, agent logs, and session sidecars.
 
 When enabled every session document is signed and unsigned/tampered documents are rejected.
+
+---
+
+### Allow Clipboard as a Context Source
+
+| Field | Value |
+| --- | --- |
+| Policy key | `Privacy.EnableClipboardContext` |
+| Registry value | `Privacy\EnableClipboardContext` |
+| Type | DWORD |
+| Default | `1` (enabled) |
+| Scope | HKCU or HKLM; HKLM wins |
+
+Allow the OS context service to treat clipboard files, text, images, and other Win32 clipboard formats as eligible sources for launcher commands, processors, and agents.
+
+On by default. Clipboard is never equivalent to Explorer or Desktop selection. Group Policy can still disable this for managed desktops.
 
 ---
 

@@ -39,7 +39,7 @@ Print XBlox block/command metadata for builders and LLM composition.
 
 Options:
 
-- `--commands` (TEXT) - Optional commands.json override for custom command metadata.
+- `--commands` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional commands.json override for custom command metadata.
 
 **Example**
 
@@ -59,9 +59,9 @@ Resolve a provider options schema via the block_params_ui resolver. Exits 0 when
 
 Options:
 
-- `--schema-path` (TEXT) - Resolver routing key, e.g. providers.whisper or providers.replicate.image.
-- `-p,--provider` (TEXT) - Provider name shorthand; used as providers.<name> when --schema-path is omitted.
-- `-m,--model` (TEXT) - Model slug forwarded to the resolver (e.g. base.en or stability-ai/sdxl).
+- `--schema-path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Resolver routing key, e.g. providers.whisper or providers.replicate.image.
+- `-p,--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Provider name shorthand; used as providers.<name> when --schema-path is omitted.
+- `-m,--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model slug forwarded to the resolver (e.g. base.en or stability-ai/sdxl).
 
 **Example**
 
@@ -83,7 +83,7 @@ Resolve a block-param options list (array of {value,label}) via block_params_ui 
 
 Options:
 
-- `-p,--path` (TEXT, required) - Options path, e.g. providers.replicate.collections or providers.replicate.models.official.
+- `-p,--path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Options path, e.g. providers.replicate.collections or providers.replicate.models.official.
 
 **Example**
 
@@ -117,52 +117,52 @@ Run a blocks-file JSON document emitted by the XBlox web app.
 
 Options:
 
-- `--src` (TEXT, required) - Path to a blocks-file JSON document: { version: 1, context?: {}, roots: [...] }.
-- `--commands` (TEXT) - Optional commands.json override for resolving host.runCustomCommand({ id }).
-- `--event-mode` (TEXT:{full,errors,count}, default `errors`) - Event retention: full stores every event, errors stores only failures, count stores no events. Default: errors (full with --json).
-- `--dry-run` - Stage CLI/external commands but do not spawn child processes.
-- `--simulate` - Simulate execution: resolve inputs and run pure dataflow/control blocks, but suppress side-effecting blocks (fs writes, shell, network, capture, external commands), emitting predicted 'simulated' events instead.
-- `--md` - Print the document as brief pseudo-code markdown (context bullets + script tree) and exit without running it.
-- `--md-numbered` - Use numeric bullets (1. / 2.) instead of dashes in --md output.
-- `--md-filter` (TEXT, default `{}`) - Block kinds excluded from --md output, with their subtrees (repeatable or comma-separated). Default: stdout. Pass 'none' to include everything.
-- `--mermaid` - Render the script section as a fenced mermaid flowchart instead of the bullet tree. Context variables stay as markdown bullets above the diagram. Requires --md.
-- `--mermaid-type` (TEXT:{flow,sequence}, default `flow`) - Diagram type: flow (default; flowchart with decision diamonds) or sequence (registry groups as participants, control flow as alt/loop fragments).
-- `--mermaid-direction` (TEXT:{TD,LR,BT,RL}, default `TD`) - Flowchart direction: TD (default, vertical), LR, BT, or RL. Applies to --mermaid and --diagram.
-- `--mermaid-color` (TEXT:{edges,groups,both,none}, default `both`) - Colouring: edges (yes/no/loop/case link tints), groups (node strokes per registry group + flow diamonds), both (default), or none.
-- `--expand-parameters` - Include set block parameters in diagram node labels (default: compact labels — group/kind, set <name>, conditions on diamonds).
-- `--diagram` - Render the script as a Tanit-style SVG flowchart and exit without running it. Default: raw SVG on stdout. Use --diagram-dst / --diagram-png for files. Combine with --md to embed the diagram in markdown output instead.
-- `--styles` (TEXT) - Diagram styling constants JSON. Default: ${TANIT_SHARED}/xblox-diagram-constants.json. Supports command_variables in the path. Palettes live under JSON "themes".
-- `--theme` (TEXT:{light,dark}, default `light`) - Diagram color palette: light (default) or dark. Selects themes.<name> in the styles JSON (defaultTheme when omitted).
-- `--diagram-type` (TEXT:{flow,sequence}, default `flow`) - Diagram layout: flow (default; flowchart with decision diamonds and param cards) or sequence (participants, lifelines, Script messages).
-- `--diagram-png` (TEXT) - Rasterize the diagram to this PNG path (libvips svgload). Supports command_variables in the path.
-- `--diagram-dst` (TEXT) - Write a standalone .svg file (raw SVG, not markdown). Supports command_variables in the path.
-- `--show-arrows` (BOOLEAN, default `1`) - Draw arrowheads on flow edges when --show-links is true (default: true; styles JSON render.showArrows).
-- `--show-links` (BOOLEAN, default `1`) - Draw connector lines between blocks. When false, nodes are laid out compactly in script order without edges (default: true; styles JSON render.showLinks).
-- `--show-disabled` (BOOLEAN, default `0`) - Include disabled blocks in the diagram (default: false; styles JSON render.showDisabled).
-- `--show-variables` (BOOLEAN, default `1`) - Show storeAs targets and referenced variables on node labels (default: true; styles JSON render.showVariables).
-- `--show-groups` (BOOLEAN, default `1`) - Prefix registry block labels with their group, e.g. audio/audioRecord (default: true; styles JSON render.showGroups).
-- `--humanize-node-names` (BOOLEAN, default `0`) - Humanize registry block labels, e.g. shell/openPath -> Shell / Open Path (default: false; styles JSON render.humanizeNodeNames).
-- `--show-variable-delimiters` (BOOLEAN, default `0`) - Wrap referenced variables as ${name}; when false show plain names (default: false; styles JSON render.showVariableDelimiters).
-- `--variable-link-style` (TEXT, default `unicode`) - Separator before storeAs targets: arrow, unicode (→), colon, dot, equals, none (default: unicode; styles JSON render.variableLinkStyle).
-- `--variable-input-style` (TEXT, default `at`) - Format for referenced inputs: at (@name), parens, bracket, none (default: at; styles JSON render.variableInputStyle).
-- `--link-style` (TEXT:{straight,bezier,waypoints}, default `straight`) - Edge routing style: straight (orthogonal), bezier (smooth curves), waypoints (obstacle-aware routing ported from nodehub pathfinding; default: straight; styles JSON render.linkStyle).
-- `--show-parameters` (TEXT:{none,set,all}, default `none`) - Block parameter visibility on node labels: none (compact), set (wired/set params only, like wiring 'Wired params'), all (full param list, like wiring 'All params'). Styles JSON render.showParameters. --expand-parameters is equivalent to --show-parameters all.
-- `--show-parameters-grouped` (BOOLEAN, default `0`) - Prefix each parameter with its ParamDef group (input/, options/, …). Matches wiring toolbar 'Show group'.
-- `--show-parameter-values` (BOOLEAN, default `0`) - Include parameter values in node labels when --show-parameters is set or all (matches wiring toolbar 'Show set values').
-- `--no-wait` - Skip sleeping for wait blocks.
-- `--max-loop-iterations` (INT:INT in [0 - 1000000], default `10000`) - Maximum iterations per for/while loop block.
-- `--loop` - Re-run the whole document until cancelled (Ctrl+C). Overrides the document's stored loop setting.
-- `--no-loop` - Force a single pass even if the document enables looping.
-- `--loop-interval-ms` (INT:INT in [0 - 86400000], default `100`) - Gap in milliseconds between loop passes (0 = as fast as possible, yielding each pass). Clamped to [0, 86400000] (1 day).
-- `--loop-reset` - Reset scope/state each loop pass (clean restart). Default persists state across passes (variables carry over).
-- `--loop-limit` (INT:INT in [0 - 9223372036854775807], default `0`) - Stop after exactly N document-level loop passes (0 = unlimited). Counted at the runtime level before each inter-pass yield.
-- `--quiet` - Suppress stdout block output (message is still resolved and the event is still emitted). Useful for benchmarking and CI runs.
-- `--profile` - Print a per-category timing breakdown to stderr after the run (jq VM, converters, emit, set-ctx).
-- `--arg` (TEXT, default `{}`) - Extra argument appended to cliCommand/external argv command invocations; repeatable.
+- `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to a blocks-file JSON document: { version: 1, context?: {}, roots: [...] }.
+- `--commands` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional commands.json override for resolving host.runCustomCommand({ id }).
+- `--event-mode` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">full</span> <span data-cli="choice">errors</span> <span data-cli="choice">count</span></span></span>) - Event retention: full stores every event, errors stores only failures, count stores no events. Default: errors (full with --json).
+- `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Stage CLI/external commands but do not spawn child processes.
+- `--simulate` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Simulate execution: resolve inputs and run pure dataflow/control blocks, but suppress side-effecting blocks (fs writes, shell, network, capture, external commands), emitting predicted 'simulated' events instead.
+- `--md` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print the document as brief pseudo-code markdown (context bullets + script tree) and exit without running it.
+- `--md-numbered` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Use numeric bullets (1. / 2.) instead of dashes in --md output.
+- `--md-filter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Block kinds excluded from --md output, with their subtrees (repeatable or comma-separated). Default: stdout. Pass 'none' to include everything.
+- `--mermaid` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Render the script section as a fenced mermaid flowchart instead of the bullet tree. Context variables stay as markdown bullets above the diagram. Requires --md.
+- `--mermaid-type` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">flow</span> <span data-cli="choice">sequence</span></span></span>) - Diagram type: flow (default; flowchart with decision diamonds) or sequence (registry groups as participants, control flow as alt/loop fragments).
+- `--mermaid-direction` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">TD</span> <span data-cli="choice">LR</span> <span data-cli="choice">BT</span> <span data-cli="choice">RL</span></span></span>) - Flowchart direction: TD (default, vertical), LR, BT, or RL. Applies to --mermaid and --diagram.
+- `--mermaid-color` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">edges</span> <span data-cli="choice">groups</span> <span data-cli="choice">both</span> <span data-cli="choice">none</span></span></span>) - Colouring: edges (yes/no/loop/case link tints), groups (node strokes per registry group + flow diamonds), both (default), or none.
+- `--expand-parameters` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include set block parameters in diagram node labels (default: compact labels — group/kind, set <name>, conditions on diamonds).
+- `--diagram` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Render the script as a Tanit-style SVG flowchart and exit without running it. Default: raw SVG on stdout. Use --diagram-dst / --diagram-png for files. Combine with --md to embed the diagram in markdown output instead.
+- `--styles` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Diagram styling constants JSON. Default: ${TANIT_SHARED}/xblox-diagram-constants.json. Supports command_variables in the path. Palettes live under JSON "themes".
+- `--theme` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">light</span> <span data-cli="choice">dark</span></span></span>) - Diagram color palette: light (default) or dark. Selects themes.<name> in the styles JSON (defaultTheme when omitted).
+- `--diagram-type` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">flow</span> <span data-cli="choice">sequence</span></span></span>) - Diagram layout: flow (default; flowchart with decision diamonds and param cards) or sequence (participants, lifelines, Script messages).
+- `--diagram-png` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Rasterize the diagram to this PNG path (libvips svgload). Supports command_variables in the path.
+- `--diagram-dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write a standalone .svg file (raw SVG, not markdown). Supports command_variables in the path.
+- `--show-arrows` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Draw arrowheads on flow edges when --show-links is true (default: true; styles JSON render.showArrows).
+- `--show-links` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Draw connector lines between blocks. When false, nodes are laid out compactly in script order without edges (default: true; styles JSON render.showLinks).
+- `--show-disabled` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Include disabled blocks in the diagram (default: false; styles JSON render.showDisabled).
+- `--show-variables` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Show storeAs targets and referenced variables on node labels (default: true; styles JSON render.showVariables).
+- `--show-groups` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Prefix registry block labels with their group, e.g. audio/audioRecord (default: true; styles JSON render.showGroups).
+- `--humanize-node-names` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Humanize registry block labels, e.g. shell/openPath -> Shell / Open Path (default: false; styles JSON render.humanizeNodeNames).
+- `--show-variable-delimiters` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Wrap referenced variables as ${name}; when false show plain names (default: false; styles JSON render.showVariableDelimiters).
+- `--variable-link-style` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Separator before storeAs targets: arrow, unicode (→), colon, dot, equals, none (default: unicode; styles JSON render.variableLinkStyle).
+- `--variable-input-style` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Format for referenced inputs: at (@name), parens, bracket, none (default: at; styles JSON render.variableInputStyle).
+- `--link-style` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">straight</span> <span data-cli="choice">bezier</span> <span data-cli="choice">waypoints</span></span></span>) - Edge routing style: straight (orthogonal), bezier (smooth curves), waypoints (obstacle-aware routing ported from nodehub pathfinding; default: straight; styles JSON render.linkStyle).
+- `--show-parameters` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">none</span> <span data-cli="choice">set</span> <span data-cli="choice">all</span></span></span>) - Block parameter visibility on node labels: none (compact), set (wired/set params only, like wiring 'Wired params'), all (full param list, like wiring 'All params'). Styles JSON render.showParameters. --expand-parameters is equivalent to --show-parameters all.
+- `--show-parameters-grouped` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Prefix each parameter with its ParamDef group (input/, options/, …). Matches wiring toolbar 'Show group'.
+- `--show-parameter-values` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Include parameter values in node labels when --show-parameters is set or all (matches wiring toolbar 'Show set values').
+- `--no-wait` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip sleeping for wait blocks.
+- `--max-loop-iterations` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 1000000]</span>, <span data-cli="default">default <span data-cli="value">10000</span></span></span>) - Maximum iterations per for/while loop block.
+- `--loop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Re-run the whole document until cancelled (Ctrl+C). Overrides the document's stored loop setting.
+- `--no-loop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Force a single pass even if the document enables looping.
+- `--loop-interval-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 86400000]</span></span>) - Gap in milliseconds between loop passes (0 = as fast as possible, yielding each pass). Clamped to [0, 86400000] (1 day).
+- `--loop-reset` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Reset scope/state each loop pass (clean restart). Default persists state across passes (variables carry over).
+- `--loop-limit` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 9223372036854775807]</span></span>) - Stop after exactly N document-level loop passes (0 = unlimited). Counted at the runtime level before each inter-pass yield.
+- `--quiet` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Suppress stdout block output (message is still resolved and the event is still emitted). Useful for benchmarking and CI runs.
+- `--profile` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print a per-category timing breakdown to stderr after the run (jq VM, converters, emit, set-ctx).
+- `--arg` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Extra argument appended to cliCommand/external argv command invocations; repeatable.
 
 **Security**
-- `--consent-ui` (TEXT) - Consent surface for security-gated tools in this run: win32 (default, native dialog) | auto | cli | auto-deny | auto-allow | preset. An llmAgent block's consentUi param overrides this per turn.
-- `--consent-owner` (TEXT) - Target descriptor (ipc id) for --consent-ui owner routing. Reserved.
+- `--consent-ui` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Consent surface for security-gated tools in this run: win32 (default, native dialog) | auto | cli | auto-deny | auto-allow | preset. An llmAgent block's consentUi param overrides this per turn.
+- `--consent-owner` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target descriptor (ipc id) for --consent-ui owner routing. Reserved.
 
 **Example**
 
@@ -206,8 +206,8 @@ Host a bare session and block until stopped (Ctrl+C or `session stop`).
 
 Options:
 
-- `--key` (TEXT) - Session name/key (default: auto host-<ms>).
-- `--label` (TEXT) - Human-friendly label.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Session name/key (default: auto host-<ms>).
+- `--label` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Human-friendly label.
 
 **Example**
 
@@ -229,8 +229,8 @@ Signal a session (or --all) to stop.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--all` - Target every live session.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--all` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Target every live session.
 
 **Example**
 
@@ -252,8 +252,8 @@ Send a ping to a session (or --all); prints the pong reply.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--all` - Target every live session.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--all` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Target every live session.
 
 **Example**
 
@@ -275,8 +275,8 @@ Send a pong to a session (or --all); prints the ping reply.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--all` - Target every live session.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--all` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Target every live session.
 
 **Example**
 
@@ -298,7 +298,7 @@ Show a session's details (xblox file, cwd, pid, uptime) and live vars.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
 
 **Example**
 
@@ -320,8 +320,8 @@ Read a variable from a session's published scope.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--name` (TEXT, required) - Variable name.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Variable name.
 
 **Example**
 
@@ -343,9 +343,9 @@ Set a variable on a session (applied at the next loop pass).
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--name` (TEXT, required) - Variable name.
-- `--value` (TEXT) - Value (parsed as JSON when possible, else a string).
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Variable name.
+- `--value` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Value (parsed as JSON when possible, else a string).
 
 **Example**
 
@@ -367,7 +367,7 @@ List a session's published variables.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
 
 **Example**
 
@@ -389,9 +389,9 @@ Send a directed message to a session's inbox.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--message` (TEXT) - Message text.
-- `--from` (TEXT) - Sender identity (default: cli).
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--message` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Message text.
+- `--from` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sender identity (default: cli).
 
 **Example**
 
@@ -413,8 +413,8 @@ Send a message to every live session's inbox.
 
 Options:
 
-- `--message` (TEXT) - Message text.
-- `--from` (TEXT) - Sender identity (default: cli).
+- `--message` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Message text.
+- `--from` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sender identity (default: cli).
 
 **Example**
 
@@ -436,8 +436,8 @@ Drain (or --peek) a session's message inbox.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--peek` - Read without consuming.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--peek` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Read without consuming.
 
 **Example**
 
@@ -463,72 +463,72 @@ Run an LLM agent turn in-process (tool loop included) and store the answer in PR
 Params:
 
 **input**
-- `prompt` (prompt, required, from PREVIOUS, resolve: variables+deep) - Instruction / question for the agent. Uses PREVIOUS when unset.
-- `include` (args_list, default `[]`, resolve: variables+deep) - Files or folders in the agent selection context (CLI --include).
-- `embed` (args_list, default `[]`, resolve: variables+deep) - Text files inlined into the prompt (CLI --embed).
-- `cwd` (dir_path, default `""`, resolve: variables) - Working folder the agent treats as context. Empty = the run cwd.
+- `prompt` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Instruction / question for the agent. Uses PREVIOUS when unset.
+- `include` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="default">default <span data-cli="value">[]</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Files or folders in the agent selection context (CLI --include).
+- `embed` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="default">default <span data-cli="value">[]</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Text files inlined into the prompt (CLI --embed).
+- `cwd` (<span data-cli="meta"><span data-cli="type">dir_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span></span></span>) - Working folder the agent treats as context. Empty = the run cwd.
 
 **advanced**
-- `systemPrompt` (prompt, default `""`, resolve: variables+deep) - Full system-prompt override (CLI --system-prompt). Supports literal text, null/none, @path, or file:path.
-- `system` (string, default `""`, resolve: variables+deep) - Optional extra system text appended after the resolved system prompt.
-- `plannerPrompt` (prompt, default `""`, resolve: variables+deep) - Planner system-prompt override (CLI --planner-prompt). Same grammar as systemPrompt.
-- `runner` (enum, default `""`, enum: |native|claude-code|codex|cursor) - Agent backend (CLI --runner). Empty = chat preset, then native. Also reads PM_LLM_AGENT_RUNNER when unset.
-- `model` (string, default `""`, resolve: variables+deep) - Model override. Empty = from App Settings.
-- `router` (string, default `""`) - Provider router override. Empty = from App Settings.
-- `type` (enum, default `"completion"`, enum: completion|responses|realtime) - LLM API type.
-- `streaming` (enum, default `"auto"`, enum: auto|on|off) - Streaming mode for Responses API turns.
-- `mcp` (boolean, default `true`) - Allow MCP-backed tools. Off forces MCP off for this turn.
-- `skills` (boolean, default `true`) - Allow agent skill discovery/injection.
-- `planner` (boolean, default `true`) - Allow the planner pre-pass. Off forces planner off.
-- `plannerBudget` (integer, 0-64, default `0`) - Max tool schemas the planner may pre-expand. 0 = default (8).
-- `disableTools` (args_list, default `[]`) - Path/MCP tool ids to omit for this turn (CLI --disable-tools).
-- `enableTools` (args_list, default `[]`) - Allowlist of path tools for this turn (CLI --enable-tools).
-- `parallelTools` (boolean, default `true`) - Dispatch multiple tool calls concurrently. Off = serial execution.
-- `maxSteps` (integer, 0-100, default `0`) - Tool-loop iteration cap. 0 = resolved default.
-- `timeoutMs` (duration_ms, 0-3.6e+06, default `0`) - Per-LLM-call timeout in ms. 0 = resolved default.
-- `sessionId` (string, default `""`) - Optional session id for multi-turn memory across runs (CLI --session-id).
-- `streamLog` (boolean, default `false`) - Mirror streaming assistant text deltas to the trace log.
-- `json` (boolean, default `false`) - Also emit the full agent transcript as a `transcript` output.
+- `systemPrompt` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Full system-prompt override (CLI --system-prompt). Supports literal text, null/none, @path, or file:path.
+- `system` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Optional extra system text appended after the resolved system prompt.
+- `plannerPrompt` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Planner system-prompt override (CLI --planner-prompt). Same grammar as systemPrompt.
+- `runner` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice"></span> <span data-cli="choice">native</span> <span data-cli="choice">claude-code</span> <span data-cli="choice">codex</span> <span data-cli="choice">cursor</span></span></span>) - Agent backend (CLI --runner). Empty = chat preset, then native. Also reads PM_LLM_AGENT_RUNNER when unset.
+- `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Model override. Empty = from App Settings.
+- `router` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Provider router override. Empty = from App Settings.
+- `type` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;completion&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">completion</span> <span data-cli="choice">responses</span> <span data-cli="choice">realtime</span></span></span>) - LLM API type.
+- `streaming` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">on</span> <span data-cli="choice">off</span></span></span>) - Streaming mode for Responses API turns.
+- `mcp` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Allow MCP-backed tools. Off forces MCP off for this turn.
+- `skills` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Allow agent skill discovery/injection.
+- `planner` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Allow the planner pre-pass. Off forces planner off.
+- `plannerBudget` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-64</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Max tool schemas the planner may pre-expand. 0 = default (8).
+- `disableTools` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - Path/MCP tool ids to omit for this turn (CLI --disable-tools).
+- `enableTools` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - Allowlist of path tools for this turn (CLI --enable-tools).
+- `parallelTools` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Dispatch multiple tool calls concurrently. Off = serial execution.
+- `maxSteps` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Tool-loop iteration cap. 0 = resolved default.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Per-LLM-call timeout in ms. 0 = resolved default.
+- `sessionId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional session id for multi-turn memory across runs (CLI --session-id).
+- `streamLog` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Mirror streaming assistant text deltas to the trace log.
+- `json` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Also emit the full agent transcript as a `transcript` output.
 
 **options**
-- `preset` (string, default `""`) - Chat provider preset name. Empty = default preset from App Settings.
-- `tools` (boolean, default `true`) - Allow tool calls. Off = plain completion (CLI --no-tools).
+- `preset` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Chat provider preset name. Empty = default preset from App Settings.
+- `tools` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Allow tool calls. Off = plain completion (CLI --no-tools).
 
 **auth**
-- `apiKey` (api_key, default `""`) - API key override. Empty = from App Settings.
-- `baseUrl` (string, default `""`) - Router base URL override. Empty = from App Settings.
+- `apiKey` (<span data-cli="meta"><span data-cli="type">api_key</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - API key override. Empty = from App Settings.
+- `baseUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Router base URL override. Empty = from App Settings.
 
 **security**
-- `consentUi` (enum, default `"win32"`, enum: win32|auto|preset|cli|auto-deny|auto-allow) - Consent surface for security-gated tools (CLI --consent-ui). win32 = native permission dialog (default, including headless runs). auto = cli when stdin is attached, else win32 on a desktop, else deny. preset = chat preset consent_ui (Yolo / auto-deny). cli = stdio prompt; auto-deny / auto-allow skip the dialog.
-- `consentOwner` (string, default `""`) - Target descriptor (ipc id) for consent-ui owner routing. Reserved.
-- `aiConsentReview` (boolean, default `false`) - Run the advisory SecurityAgent reviewer before consent prompts.
-- `aiConsentRouter` (string, default `""`) - Router for the advisory SecurityAgent reviewer.
-- `aiConsentModel` (string, default `""`) - Model for the advisory SecurityAgent reviewer.
+- `consentUi` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;win32&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">win32</span> <span data-cli="choice">auto</span> <span data-cli="choice">preset</span> <span data-cli="choice">cli</span> <span data-cli="choice">auto-deny</span> <span data-cli="choice">auto-allow</span></span></span>) - Consent surface for security-gated tools (CLI --consent-ui). win32 = native permission dialog (default, including headless runs). auto = cli when stdin is attached, else win32 on a desktop, else deny. preset = chat preset consent_ui (Yolo / auto-deny). cli = stdio prompt; auto-deny / auto-allow skip the dialog.
+- `consentOwner` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Target descriptor (ipc id) for consent-ui owner routing. Reserved.
+- `aiConsentReview` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Run the advisory SecurityAgent reviewer before consent prompts.
+- `aiConsentRouter` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Router for the advisory SecurityAgent reviewer.
+- `aiConsentModel` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Model for the advisory SecurityAgent reviewer.
 
 **tool_overrides**
-- `ocrProvider` (string, default `""`) - OCR tool provider override for this turn.
-- `ocrModel` (string, default `""`) - OCR tool model override for this turn.
-- `recognitionProvider` (string, default `""`) - image_understand provider override.
-- `recognitionModel` (string, default `""`) - image_understand model override.
-- `imageProvider` (string, default `""`) - image_create provider override.
-- `imageModel` (string, default `""`) - image_create model override.
-- `videoProvider` (string, default `""`) - create_video provider override.
-- `videoModel` (string, default `""`) - create_video model override.
-- `sttProvider` (string, default `""`) - STT provider override (audio_transcribe / mic flows).
-- `sttModel` (string, default `""`) - STT model override.
-- `ttsProvider` (string, default `""`) - TTS provider override.
-- `ttsModel` (string, default `""`) - TTS model override.
-- `ttsVoiceId` (string, default `""`) - TTS voice id override.
+- `ocrProvider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - OCR tool provider override for this turn.
+- `ocrModel` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - OCR tool model override for this turn.
+- `recognitionProvider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - image_understand provider override.
+- `recognitionModel` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - image_understand model override.
+- `imageProvider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - image_create provider override.
+- `imageModel` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - image_create model override.
+- `videoProvider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - create_video provider override.
+- `videoModel` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - create_video model override.
+- `sttProvider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - STT provider override (audio_transcribe / mic flows).
+- `sttModel` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - STT model override.
+- `ttsProvider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - TTS provider override.
+- `ttsModel` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - TTS model override.
+- `ttsVoiceId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - TTS voice id override.
 
 **hud**
-- `hudMode` (enum, default `"both"`, enum: off|taskbar|overlay|both) - Status HUD. taskbar = app taskbar button. overlay = movable pill over the clock. both = combine. off = none.
-- `hud` (boolean, default `true`) - Master switch for hudMode. Default: on.
+- `hudMode` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;both&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">taskbar</span> <span data-cli="choice">overlay</span> <span data-cli="choice">both</span></span></span>) - Status HUD. taskbar = app taskbar button. overlay = movable pill over the clock. both = combine. off = none.
+- `hud` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Master switch for hudMode. Default: on.
 
 **output**
-- `dst` (output_path, default `""`, constraints: writable+createParents) - Write the agent response to this file (CLI --dst). Without json: raw answer text. With json: full result JSON. Parent directories are created automatically.
-- `usage` (json_value) - Aggregated token usage / cost for the turn.
-- `transcript` (json_value) - Full turn transcript. Populated when `json` is on.
-- `storeAs` (string, default `"answer"`) - Variable to also store the result in (always sets PREVIOUS).
+- `dst` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Write the agent response to this file (CLI --dst). Without json: raw answer text. With json: full result JSON. Parent directories are created automatically.
+- `usage` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Aggregated token usage / cost for the turn.
+- `transcript` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Full turn transcript. Populated when `json` is on.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;answer&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: background cancellable
 
@@ -557,11 +557,11 @@ List or unload loaded local model instances for this xBlox process.
 Params:
 
 **lifecycle**
-- `action` (enum, default `"List"`, enum: List|Unload) - List loaded models in this xBlox process, or unload one by key.
-- `key` (string, default `""`) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
+- `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;List&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">List</span> <span data-cli="choice">Unload</span></span></span>) - List loaded models in this xBlox process, or unload one by key.
+- `key` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
 
 **output**
-- `storeAs` (string, default `"models"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;models&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -583,14 +583,14 @@ Add a file or folder to chat context, and/or seed the composer with text (same a
 Params:
 
 **input**
-- `path` (file_path, from PREVIOUS, resolve: variables+deep) - File or folder to add to chat context. Uses PREVIOUS when unset.
-- `text` (string, default `""`, resolve: variables+deep) - Composer seed text (same as `--prompt`). Alias: prompt.
+- `path` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - File or folder to add to chat context. Uses PREVIOUS when unset.
+- `text` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Composer seed text (same as `--prompt`). Alias: prompt.
 
 **options**
-- `send` (boolean, default `false`) - Auto-send the seeded text when the composer is ready (same as `--send`).
+- `send` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Auto-send the seeded text when the composer is ready (same as `--send`).
 
 **output**
-- `storeAs` (string, default `"referencedPath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;referencedPath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -613,14 +613,14 @@ Bring a target window to the foreground.
 Params:
 
 **input**
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `pid` (integer) - Exact process id.
-- `hwnd` (integer) - Exact window handle.
-- `foreground` (boolean, default `false`) - Target the current foreground window.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `pid` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Exact process id.
+- `hwnd` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Exact window handle.
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Target the current foreground window.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -640,18 +640,18 @@ Run a sequence of app_batch actions in one block.
 Params:
 
 **input**
-- `steps` (json_value, required) - Array of {action, ...} steps.
+- `steps` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Array of {action, ...} steps.
 
 **options**
-- `defaultDelayMs` (integer, 0-60000, default `50`) - Delay between steps.
-- `continueOnError` (boolean, default `false`) - Keep running steps after a failure.
+- `defaultDelayMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">50</span></span></span>) - Delay between steps.
+- `continueOnError` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Keep running steps after a failure.
 
 **advanced**
-- `defaultWaitTimeoutMs` (integer, 0-600000, default `5000`) - Default wait timeout.
-- `defaultWaitIntervalMs` (integer, 1-60000, default `100`) - Default wait poll interval.
+- `defaultWaitTimeoutMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-600000</span>, <span data-cli="default">default <span data-cli="value">5000</span></span></span>) - Default wait timeout.
+- `defaultWaitIntervalMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-60000</span>, <span data-cli="default">default <span data-cli="value">100</span></span></span>) - Default wait poll interval.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -681,22 +681,22 @@ Click at (x,y) or (xw,yw) on a target window.
 Params:
 
 **input**
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `x` (integer) - Absolute screen X.
-- `y` (integer) - Absolute screen Y.
-- `xw` (integer) - Window-relative X (preferred).
-- `yw` (integer) - Window-relative Y.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `x` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Absolute screen X.
+- `y` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Absolute screen Y.
+- `xw` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Window-relative X (preferred).
+- `yw` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Window-relative Y.
 
 **options**
-- `button` (string, default `"left"`) - left | right | middle.
-- `count` (integer, 1-10, default `1`) - Click count (2 = double).
+- `button` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;left&quot;</span></span></span>) - left | right | middle.
+- `count` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-10</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Click count (2 = double).
 
 **advanced**
-- `virtual` (boolean, default `false`) - PostMessage click; for background apps.
+- `virtual` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - PostMessage click; for background apps.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -720,17 +720,17 @@ Send WM_CLOSE (or TerminateProcess with force=true).
 Params:
 
 **input**
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `pid` (integer) - Exact process id.
-- `hwnd` (integer) - Exact window handle.
-- `foreground` (boolean, default `false`) - Target the current foreground window.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `pid` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Exact process id.
+- `hwnd` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Exact window handle.
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Target the current foreground window.
 
 **options**
-- `force` (boolean, default `false`) - TerminateProcess instead of WM_CLOSE.
+- `force` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - TerminateProcess instead of WM_CLOSE.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -751,27 +751,27 @@ Drag linear / polyline / arc with smooth pacing.
 Params:
 
 **input**
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `x` (integer) - Start X (screen).
-- `y` (integer) - Start Y (screen).
-- `xw` (integer) - Start X (window-relative).
-- `yw` (integer) - Start Y (window-relative).
-- `toX` (integer) - End X (screen).
-- `toY` (integer) - End Y (screen).
-- `toXw` (integer) - End X (window-relative).
-- `toYw` (integer) - End Y (window-relative).
-- `dx` (integer) - Relative end X delta.
-- `dy` (integer) - Relative end Y delta.
-- `path` (json_value) - Polyline: [{x,y}|{xw,yw}, ...].
-- `arc` (json_value) - {cx,cy,radius,startDeg,endDeg,segments}.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `x` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Start X (screen).
+- `y` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Start Y (screen).
+- `xw` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Start X (window-relative).
+- `yw` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Start Y (window-relative).
+- `toX` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - End X (screen).
+- `toY` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - End Y (screen).
+- `toXw` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - End X (window-relative).
+- `toYw` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - End Y (window-relative).
+- `dx` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Relative end X delta.
+- `dy` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Relative end Y delta.
+- `path` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Polyline: [{x,y}|{xw,yw}, ...].
+- `arc` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - {cx,cy,radius,startDeg,endDeg,segments}.
 
 **options**
-- `button` (string, default `"left"`) - left | right | middle.
-- `durationMs` (integer, 0-30000, default `250`) - Drag duration.
+- `button` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;left&quot;</span></span></span>) - left | right | middle.
+- `durationMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-30000</span>, <span data-cli="default">default <span data-cli="value">250</span></span></span>) - Drag duration.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -796,13 +796,13 @@ Send a key combination (e.g. ctrl+shift+t).
 Params:
 
 **input**
-- `keys` (string, required, default `"ctrl+s"`) - Combo, e.g. ctrl+shift+t.
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `foreground` (boolean, default `false`) - Send to the foreground window.
+- `keys` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;ctrl+s&quot;</span></span></span>) - Combo, e.g. ctrl+shift+t.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Send to the foreground window.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -823,23 +823,23 @@ Dump UI Automation tree of matching windows.
 Params:
 
 **input**
-- `input` (screen_input, from PREVIOUS, default `""`) - Picker / screen spec (e.g. from a Picker block). Extracts hwnd and title; overrides the title/process fields when set.
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `foreground` (boolean, default `false`) - Dump the foreground window.
+- `input` (<span data-cli="meta"><span data-cli="type">screen_input</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Picker / screen spec (e.g. from a Picker block). Extracts hwnd and title; overrides the title/process fields when set.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Dump the foreground window.
 
 **options**
-- `format` (enum, default `"md"`, enum: md|json) - Output format.
-- `limit` (integer, 0-500000, default `0`) - Max elements per window. 0 = no limit.
-- `filterToSelection` (boolean, default `false`) - When the input spec contains rrect= (sub-element pick), filter the output to elements whose center falls inside that rect. Off by default — rrect is used only to identify the window.
+- `format` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;md&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">md</span> <span data-cli="choice">json</span></span></span>) - Output format.
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-500000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Max elements per window. 0 = no limit.
+- `filterToSelection` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - When the input spec contains rrect= (sub-element pick), filter the output to elements whose center falls inside that rect. Off by default — rrect is used only to identify the window.
 
 **advanced**
-- `controls` (string, default `"all"`) - Control-type filter for markdown output. "all" = every element (full tree). Empty = smart default (invokable + menus + inputs). CSV of types to include, e.g. buttons,menus,editable.
-- `textMaxChars` (integer, 0-1e+06, default `1200`) - Truncate element text in markdown output.
-- `probeCells` (boolean, default `false`) - Probe grid / table cells (DataGrid, Table). Needed for spreadsheets like LibreOffice Calc or Excel to enumerate individual cells.
+- `controls` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;all&quot;</span></span></span>) - Control-type filter for markdown output. "all" = every element (full tree). Empty = smart default (invokable + menus + inputs). CSV of types to include, e.g. buttons,menus,editable.
+- `textMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-1e+06</span>, <span data-cli="default">default <span data-cli="value">1200</span></span></span>) - Truncate element text in markdown output.
+- `probeCells` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Probe grid / table cells (DataGrid, Table). Needed for spreadsheets like LibreOffice Calc or Excel to enumerate individual cells.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -861,19 +861,19 @@ Filter UIA elements by name/value/automationId/className.
 Params:
 
 **input**
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `foreground` (boolean, default `false`) - Search the foreground window.
-- `name` (string, default `""`) - Element name substring.
-- `value` (string, default `""`) - Element value substring.
-- `automationId` (string, default `""`) - AutomationId substring.
-- `className` (string, default `""`) - ClassName substring.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Search the foreground window.
+- `name` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Element name substring.
+- `value` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Element value substring.
+- `automationId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - AutomationId substring.
+- `className` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - ClassName substring.
 
 **options**
-- `nth` (integer, default `-1`) - Select the nth match (-1 = all).
+- `nth` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="default">default <span data-cli="value">-1</span></span></span>) - Select the nth match (-1 = all).
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -894,17 +894,17 @@ Press one key with optional modifiers and hold duration.
 Params:
 
 **input**
-- `key` (string, required, default `"a"`) - Single key to press.
-- `modifiers` (json_value) - Modifier list: ctrl/shift/alt/win.
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `foreground` (boolean, default `false`) - Send to the foreground window.
+- `key` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;a&quot;</span></span></span>) - Single key to press.
+- `modifiers` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Modifier list: ctrl/shift/alt/win.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Send to the foreground window.
 
 **options**
-- `holdMs` (integer, 0-60000, default `0`) - Note-sustain for piano-style apps.
+- `holdMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Note-sustain for piano-style apps.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -925,19 +925,19 @@ Smoothly move the cursor (auto-paced) or teleport.
 Params:
 
 **input**
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `x` (integer) - Absolute screen X.
-- `y` (integer) - Absolute screen Y.
-- `xw` (integer) - Window-relative X.
-- `yw` (integer) - Window-relative Y.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `x` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Absolute screen X.
+- `y` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Absolute screen Y.
+- `xw` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Window-relative X.
+- `yw` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Window-relative Y.
 
 **options**
-- `smooth` (boolean, default `true`) - Smooth (auto-paced) move.
-- `durationMs` (integer, default `-1`) - -1 = auto from distance, 0 = teleport.
+- `smooth` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Smooth (auto-paced) move.
+- `durationMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="default">default <span data-cli="value">-1</span></span></span>) - -1 = auto from distance, 0 = teleport.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -960,21 +960,21 @@ Launch an executable and (optionally) wait for its window.
 Params:
 
 **input**
-- `exe` (string, required, default `"notepad.exe"`) - Executable to launch.
-- `args` (string, default `""`) - Command-line arguments.
-- `cwd` (string, default `""`) - Working directory.
+- `exe` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;notepad.exe&quot;</span></span></span>) - Executable to launch.
+- `args` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Command-line arguments.
+- `cwd` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Working directory.
 
 **options**
-- `x` (integer) - Initial window X.
-- `y` (integer) - Initial window Y.
-- `width` (integer) - Initial window width.
-- `height` (integer) - Initial window height.
+- `x` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Initial window X.
+- `y` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Initial window Y.
+- `width` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Initial window width.
+- `height` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Initial window height.
 
 **advanced**
-- `waitMs` (integer, 0-120000, default `3000`) - Wait this long for the main window.
+- `waitMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-120000</span>, <span data-cli="default">default <span data-cli="value">3000</span></span></span>) - Wait this long for the main window.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -995,19 +995,19 @@ Capture a window / element / explicit rect to a JPEG file.
 Params:
 
 **input**
-- `outputPath` (output_path, required, default `"out/shot.jpg"`, constraints: writable+createParents) - JPEG output path.
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `foreground` (boolean, default `false`) - Capture the foreground window.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;out/shot.jpg&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - JPEG output path.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Capture the foreground window.
 
 **options**
-- `rect` (string, default `""`) - Optional 'x,y,w,h' screen rect.
-- `elementIndex` (integer) - Capture a specific UIA element rect.
-- `quality` (integer, 1-100, default `85`) - JPEG quality.
-- `activate` (boolean, default `true`) - Activate the window before capture.
+- `rect` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional 'x,y,w,h' screen rect.
+- `elementIndex` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Capture a specific UIA element rect.
+- `quality` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-100</span>, <span data-cli="default">default <span data-cli="value">85</span></span></span>) - JPEG quality.
+- `activate` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Activate the window before capture.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -1029,19 +1029,19 @@ Wheel scroll (vertical or horizontal) at an optional point.
 Params:
 
 **input**
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `clicks` (integer, required, default `-3`) - Wheel clicks; positive = up/right.
-- `x` (integer) - Pre-target cursor X (optional).
-- `y` (integer) - Pre-target cursor Y (optional).
-- `xw` (integer) - Pre-target cursor X (window-relative).
-- `yw` (integer) - Pre-target cursor Y (window-relative).
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `clicks` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">-3</span></span></span>) - Wheel clicks; positive = up/right.
+- `x` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Pre-target cursor X (optional).
+- `y` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Pre-target cursor Y (optional).
+- `xw` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Pre-target cursor X (window-relative).
+- `yw` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Pre-target cursor Y (window-relative).
 
 **options**
-- `axis` (string, default `"vertical"`) - vertical | horizontal.
+- `axis` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;vertical&quot;</span></span></span>) - vertical | horizontal.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -1062,13 +1062,13 @@ Type a string into the activated window.
 Params:
 
 **input**
-- `text` (string, required, default `"Hello"`) - Text to type.
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `foreground` (boolean, default `false`) - Type into the foreground window.
+- `text` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;Hello&quot;</span></span></span>) - Text to type.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Type into the foreground window.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -1089,19 +1089,19 @@ Send Ctrl+C to the focused or targeted element, then return the clipboard conten
 Params:
 
 **input**
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `pid` (integer) - Exact process id.
-- `hwnd` (integer) - Exact window handle.
-- `foreground` (boolean, default `false`) - Target the current foreground window.
-- `type` (enum, default `"text"`, enum: text|files) - Clipboard format to read back: text (CF_UNICODETEXT) or files (CF_HDROP).
-- `trigger` (boolean, default `true`) - Send Ctrl+C to the target (or focused element) before reading. Set false to read clipboard without triggering a copy.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `pid` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Exact process id.
+- `hwnd` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Exact window handle.
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Target the current foreground window.
+- `type` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;text&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">text</span> <span data-cli="choice">files</span></span></span>) - Clipboard format to read back: text (CF_UNICODETEXT) or files (CF_HDROP).
+- `trigger` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Send Ctrl+C to the target (or focused element) before reading. Set false to read clipboard without triggering a copy.
 
 **options**
-- `delayMs` (integer, 0-10000, default `80`) - Wait this long (ms) after Ctrl+C before reading the clipboard. Increase for slow apps.
+- `delayMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-10000</span>, <span data-cli="default">default <span data-cli="value">80</span></span></span>) - Wait this long (ms) after Ctrl+C before reading the clipboard. Increase for slow apps.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -1123,18 +1123,18 @@ Write text or file paths to the clipboard, then send Ctrl+V to the focused or ta
 Params:
 
 **input**
-- `title` (string, default `""`) - Window-title substring.
-- `process` (string, default `""`) - Process-name substring.
-- `pid` (integer) - Exact process id.
-- `hwnd` (integer) - Exact window handle.
-- `foreground` (boolean, default `false`) - Target the current foreground window.
-- `type` (enum, default `"text"`, enum: text|files) - Clipboard format to write: text (CF_UNICODETEXT) or files (CF_HDROP).
-- `text` (string, from PREVIOUS, default `""`) - Text to put on the clipboard before pasting (type=text). Uses PREVIOUS when blank. Leave empty to paste whatever is already on clipboard.
-- `files` (json_value, default `[]`) - File paths to put on the clipboard before pasting (type=files). Leave empty to paste whatever is already on clipboard.
-- `trigger` (boolean, default `true`) - Send Ctrl+V to the target (or focused element) after writing. Set false to only write to clipboard without triggering a paste.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Window-title substring.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Process-name substring.
+- `pid` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Exact process id.
+- `hwnd` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Exact window handle.
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Target the current foreground window.
+- `type` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;text&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">text</span> <span data-cli="choice">files</span></span></span>) - Clipboard format to write: text (CF_UNICODETEXT) or files (CF_HDROP).
+- `text` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Text to put on the clipboard before pasting (type=text). Uses PREVIOUS when blank. Leave empty to paste whatever is already on clipboard.
+- `files` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - File paths to put on the clipboard before pasting (type=files). Leave empty to paste whatever is already on clipboard.
+- `trigger` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Send Ctrl+V to the target (or focused element) after writing. Set false to only write to clipboard without triggering a paste.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -1152,37 +1152,40 @@ Default block:
 
 #### Picker
 
-Interactive window / element picker with live highlight + stack HUD. Click to pick the highlighted region; Alt+wheel or [ ] cycles leaf → siblings → ∪siblings → parent; Shift+drag (or Ctrl+drag) selects a free rectangle; Z opens an 8× magnifier, C copies the sampled colour; ESC cancels. Default output is a screen spec for video/screenshot blocks; set format=md or format=html for Chrome DOM via the Tanit extension. format=selection captures the current focused selection (UIA first, Chrome extension fallback) without an interactive click. format=foreground returns JSON for the last focused window (title, hwnd, cursor parent HWND) — remembers the previous app when Tanit is in front. Sampled colour and Chrome DOM selectors always ride along in the payload.
+Interactive window / element picker with live highlight + stack HUD. Click to pick the highlighted region; Alt+wheel or [ ] cycles leaf → siblings → ∪siblings → parent; drag (or Shift/Ctrl+drag) selects a free rectangle; Z opens an 8× magnifier, C copies the sampled colour; ESC cancels. Default output is a screen spec for video/screenshot blocks; set format=md or format=html for Chrome DOM via the Tanit extension. format=selection captures the current focused selection (UIA first, Chrome extension fallback) without an interactive click. format=foreground returns JSON for the last focused window (title, hwnd, cursor parent HWND) — remembers the previous app when Tanit is in front. format=context returns Explorer/Desktop/drag sources from the process-local context store (no click). Sampled colour and Chrome DOM selectors always ride along in the payload.
 
 Params:
 
 **options**
-- `format` (enum, default `"screen"`, enum: screen|md|html|text|color|selector|measure|selection|foreground) - Result format. screen = capture spec; md/html = in-app or Chrome DOM; text = plain speakable string (DOM innerText / UIA); selection = current focused selection (UIA TextPattern, then Chrome extension); foreground = last focused window JSON (title, hwnd, cursor parent, Chrome css/xpath when chromeDom); color = eyedropper; selector = CSS; measure = boundary-snapped point-to-point line.
-- `chromeDom` (boolean, default `true`) - Chrome / in-app browser: resolve DOM/selectors in the committed payload, and for format=selection fall back to the extension after UIA. Off = UIA/HWND only.
-- `scope` (enum, default `"auto"`, enum: auto|element|document) - DOM extract target. element = only the leaf (fail on miss). document = always dump documentSelector. auto = leaf, then document on miss / page-edge / ancestor pick.
-- `documentSelector` (enum, default `"html"`, enum: html|body|main) - Root used for scope=document and auto fallback. body/main omit leftover <head> in format=html.
-- `highlight` (boolean, default `true`) - Show the translucent highlight overlay while picking.
-- `hud` (boolean, default `true`) - Show the informational picker HUD. Off keeps rectangle highlighting.
-- `resolveUia` (boolean, default `true`) - Resolve UIA after the cursor settles and on commit (gives sub-window precision for web content, media players, etc.).
-- `showHidden` (boolean, default `true`) - Consider non-visible child windows (needed to reach Chrome_RenderWidgetHostHWND etc.).
-- `siblings` (boolean, default `true`) - Include sibling panes and ∪siblings union in the Alt+wheel / [ ] stack (leaf → siblings → parent). Off = ancestors only.
-- `sampleColor` (boolean, default `false`) - Region picks only: add colorHex/rgb to the payload (sampled once at click). For eyedropper use format=color instead.
-- `magnifier` (boolean, default `false`) - Region/measure picks: open the 8× loupe (Z toggles).
+- `format` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;screen&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">screen</span> <span data-cli="choice">md</span> <span data-cli="choice">html</span> <span data-cli="choice">text</span> <span data-cli="choice">color</span> <span data-cli="choice">selector</span> <span data-cli="choice">measure</span> <span data-cli="choice">selection</span> <span data-cli="choice">foreground</span> <span data-cli="choice">context</span></span></span>) - Result format. screen = capture spec; md/html = in-app or Chrome DOM; text = plain speakable string (DOM innerText / UIA); selection = current focused selection (UIA TextPattern, then Chrome extension); foreground = last focused window JSON (title, hwnd, cursor parent, Chrome css/xpath when chromeDom); context = OS context sources (Explorer/Desktop/drag/invocation) as JSON+markdown; color = eyedropper; selector = CSS; measure = boundary-snapped point-to-point line.
+- `chromeDom` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Chrome / in-app browser: resolve DOM/selectors in the committed payload, and for format=selection fall back to the extension after UIA. Off = UIA/HWND only.
+- `scope` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">element</span> <span data-cli="choice">document</span></span></span>) - DOM extract target. element = only the leaf (fail on miss). document = always dump documentSelector. auto = leaf, then document on miss / page-edge / ancestor pick.
+- `documentSelector` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;html&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">html</span> <span data-cli="choice">body</span> <span data-cli="choice">main</span></span></span>) - Root used for scope=document and auto fallback. body/main omit leftover <head> in format=html.
+- `highlight` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Show the translucent highlight overlay while picking.
+- `hud` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Show the informational picker HUD. Off keeps rectangle highlighting.
+- `resolveUia` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Resolve UIA after the cursor settles and on commit (gives sub-window precision for web content, media players, etc.).
+- `showHidden` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Consider non-visible child windows (needed to reach Chrome_RenderWidgetHostHWND etc.).
+- `siblings` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Include sibling panes and ∪siblings union in the Alt+wheel / [ ] stack (leaf → siblings → parent). Off = ancestors only.
+- `sampleColor` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Region picks only: add colorHex/rgb to the payload (sampled once at click). For eyedropper use format=color instead.
+- `magnifier` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Region/measure picks: open the 8× loupe (Z toggles).
 
 **capture_options**
-- `includeOpenWindows` (boolean, default `true`) - When the pick is a monitor/desktop: capture open apps on that display (screen:N:layer=monitor). Off = wallpaper only (hwnd=Progman/WorkerW PrintWindow).
-- `timeoutMs` (integer, 1000-600000, default `60000`) - Abort the pick and return an error after this many milliseconds of inactivity. Default 60 s.
+- `includeOpenWindows` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - When the pick is a monitor/desktop: capture open apps on that display (screen:N:layer=monitor). Off = wallpaper only (hwnd=Progman/WorkerW PrintWindow).
+- `allowMru` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - format=context: include session MRU as eligible candidates. Never auto-resolves file operations.
+- `allowOpenApps` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - format=context: include the bounded open-app / taskbar-candidate snapshot.
+- `allowAppRecent` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - format=context: lazy per-app Shell Recent/Frequent (IApplicationDocumentLists). Never auto-resolves file operations.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1000-600000</span>, <span data-cli="default">default <span data-cli="value">60000</span></span></span>) - Abort the pick and return an error after this many milliseconds of inactivity. Default 60 s.
 
 **advanced**
-- `onDomFail` (enum, default `"error"`, enum: error|text|screen) - When format is md/html/selector and DOM inspect fails: error = exit 1 (default); text = UIA spoken text; screen = capture spec.
-- `chromePreview` (boolean, default `false`) - Show live Chrome CSS details in the HUD after the cursor settles. Uses blocking extension IPC and may feel slow on some machines.
-- `colorMagnifier` (boolean, default `true`) - Color picks: show the live 8× loupe. Disable on slow software GDI/DWM machines; pixel sampling still works.
-- `textMaxChars` (integer, 0-262144, default `0`) - Chrome DOM plain-text cap (innerText/speakText). 0 = unlimited (default). Set e.g. 8192 to truncate long articles.
-- `htmlMaxChars` (integer, 0-3.35544e+07, default `8388608`) - Cap cleaned HTML (format=html and the html field used for md). 0 = unlimited. Default 8 MiB (probe default).
-- `markdownMaxChars` (integer, 0-3.35544e+07, default `2097152`) - Cap markdown after conversion (format=md). 0 = unlimited. Default 2 MiB (probe default).
+- `onDomFail` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;error&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">error</span> <span data-cli="choice">text</span> <span data-cli="choice">screen</span></span></span>) - When format is md/html/selector and DOM inspect fails: error = exit 1 (default); text = UIA spoken text; screen = capture spec.
+- `chromePreview` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Show live Chrome CSS details in the HUD after the cursor settles. Uses blocking extension IPC and may feel slow on some machines.
+- `colorMagnifier` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Color picks: show the live 8× loupe. Disable on slow software GDI/DWM machines; pixel sampling still works.
+- `textMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-262144</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Chrome DOM plain-text cap (innerText/speakText). 0 = unlimited (default). Set e.g. 8192 to truncate long articles.
+- `htmlMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-3.35544e+07</span>, <span data-cli="default">default <span data-cli="value">8388608</span></span></span>) - Cap cleaned HTML (format=html and the html field used for md). 0 = unlimited. Default 8 MiB (probe default).
+- `markdownMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-3.35544e+07</span>, <span data-cli="default">default <span data-cli="value">2097152</span></span></span>) - Cap markdown after conversion (format=md). 0 = unlimited. Default 2 MiB (probe default).
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -1220,20 +1223,20 @@ Enhance a recorded audio file. Default filter is DeepFilterNet (48 kHz). GTCRN i
 Params:
 
 **input**
-- `input` (audio_path, from PREVIOUS, default `""`) - Source audio (wav, mp3, …). Default: empty → PREVIOUS chain value.
+- `input` (<span data-cli="meta"><span data-cli="type">audio_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Source audio (wav, mp3, …). Default: empty → PREVIOUS chain value.
 
 **output_file**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Destination WAV. Default: empty → <stem>-filtered.wav next to the source.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Destination WAV. Default: empty → <stem>-filtered.wav next to the source.
 
 **filter**
-- `filter` (enum, default `"deepfilter"`, enum: deepfilter|gtcrn) - Enhancer. deepfilter = DeepFilterNet @ 48 kHz. gtcrn = reserved (16 kHz).
-- `model` (string, default `""`) - Optional DeepFilterNet tar.gz. Default: empty → ${MODELS_DIR}/deepfilter then exe/../models.
-- `attenLim` (float, 0-100, default `100.0`) - Attenuation limit in dB (in-process libDF only). Default: 100.
-- `postFilter` (boolean, default `false`) - Over-attenuate very noisy sections. Default: false.
-- `compensateDelay` (boolean, default `true`) - Compensate STFT / model lookahead. Default: true.
+- `filter` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;deepfilter&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">deepfilter</span> <span data-cli="choice">gtcrn</span></span></span>) - Enhancer. deepfilter = DeepFilterNet @ 48 kHz. gtcrn = reserved (16 kHz).
+- `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional DeepFilterNet tar.gz. Default: empty → ${MODELS_DIR}/deepfilter then exe/../models.
+- `attenLim` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-100</span>, <span data-cli="default">default <span data-cli="value">100.0</span></span></span>) - Attenuation limit in dB (in-process libDF only). Default: 100.
+- `postFilter` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Over-attenuate very noisy sections. Default: false.
+- `compensateDelay` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Compensate STFT / model lookahead. Default: true.
 
 **output**
-- `storeAs` (string, default `"audioPath"`) - Variable for PREVIOUS / downstream blocks. Default: audioPath.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;audioPath&quot;</span></span></span>) - Variable for PREVIOUS / downstream blocks. Default: audioPath.
 
 Features: cancellable
 
@@ -1261,7 +1264,7 @@ List microphone and desktop/loopback capture devices.
 
 Params:
 
-- `storeAs` (string, default `"audioDevices"`) - Variable for PREVIOUS / downstream blocks. Default: audioDevices.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;audioDevices&quot;</span></span></span>) - Variable for PREVIOUS / downstream blocks. Default: audioDevices.
 
 Features: non-blocking
 
@@ -1283,18 +1286,18 @@ List or unload loaded local model instances for this xBlox process.
 Params:
 
 **lifecycle**
-- `action` (enum, default `"List"`, enum: List|Unload) - List loaded models in this xBlox process, or unload one by key.
-- `key` (string, default `"vibevoice:tts"`) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
+- `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;List&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">List</span> <span data-cli="choice">Unload</span></span></span>) - List loaded models in this xBlox process, or unload one by key.
+- `key` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;moss:tts&quot;</span></span></span>) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
 
 **output**
-- `storeAs` (string, default `"modelKey"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;modelKey&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
 ```json
 {
   "action": "Unload",
-  "key": "vibevoice:tts",
+  "key": "moss:tts",
   "kind": "audioModelControl",
   "storeAs": "modelKey"
 }
@@ -1309,13 +1312,13 @@ Play an audio file (MP3, WAV, or FLAC). Uses PREVIOUS as the file path when path
 Params:
 
 **input**
-- `path` (audio_path, from PREVIOUS, default `""`) - Audio file to play. Default: empty → PREVIOUS chain value.
+- `path` (<span data-cli="meta"><span data-cli="type">audio_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Audio file to play. Default: empty → PREVIOUS chain value.
 
 **device**
-- `outputDevice` (device_name, default `""`) - Playback device. Default: empty → App Settings audio_output_device, then system default.
+- `outputDevice` (<span data-cli="meta"><span data-cli="type">device_name</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Playback device. Default: empty → App Settings audio_output_device, then system default.
 
 **output**
-- `storeAs` (string, default `""`) - Optional variable for PREVIOUS. Default: empty (PREVIOUS only).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional variable for PREVIOUS. Default: empty (PREVIOUS only).
 
 Features: cancellable
 
@@ -1334,37 +1337,38 @@ Default block:
 
 #### Record Audio
 
-Record mic, desktop, or mixed audio to a file. outputPath extension selects format: .wav = PCM (48 kHz stereo default; long takes spill PCM to disk after ~30 s in RAM); .m4a or .aac = AAC-LC (Windows only). Optional filter runs after capture (DeepFilterNet → 48 kHz mono WAV; not on the callback). Stores the output path in PREVIOUS / storeAs.
+Record mic, desktop, or mixed audio to a file. outputPath extension selects format: .wav = PCM (48 kHz stereo default; long takes spill PCM to disk after ~30 s in RAM); .m4a or .aac = AAC-LC (Windows only). Optional filter runs after capture (DeepFilterNet → 48 kHz mono WAV; not on the callback). Stores the output path in PREVIOUS / storeAs. Optional hud / hudMode shows the Record overlay pill and/or the app taskbar button (Stop ends the take early).
 
 Params:
 
 **source**
-- `inputSource` (enum, default `"mic"`, enum: mic|desktop|mix) - Capture source. Default: mic (microphone). desktop = system loopback; mix = mic + desktop.
-- `device` (device_name, default `""`) - Mic device for mic/mix. Default: empty → App Settings audio_input_device, then system default.
-- `desktopDevice` (string, default `""`) - Loopback device substring for desktop/mix. Default: empty → default render device.
-- `micGain` (float, 0-4, default `1.0`) - Mic level multiplier (linear) for mix. Default: 1.0.
-- `desktopGain` (float, 0-4, default `1.0`) - Desktop level multiplier for desktop/mix. Default: 1.0.
-- `sampleRate` (integer, 0-192000, default `0`) - Sample rate Hz (0 = default 48000). AAC (.m4a) on Windows is encoded at 48000 Hz (resampled if needed).
-- `channels` (integer, 0-2, default `0`) - Channels: 0 = default stereo, 1 = mono, 2 = stereo. Applies to .wav and .m4a/.aac.
+- `inputSource` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;mic&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - Capture source. Default: mic (microphone). desktop = system loopback; mix = mic + desktop.
+- `device` (<span data-cli="meta"><span data-cli="type">device_name</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Mic device for mic/mix. Default: empty → App Settings audio_input_device, then system default.
+- `desktopDevice` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Loopback device substring for desktop/mix. Default: empty → default render device.
+- `micGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-4</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Mic level multiplier (linear) for mix. Default: 1.0.
+- `desktopGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-4</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Desktop level multiplier for desktop/mix. Default: 1.0.
+- `sampleRate` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-192000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Sample rate Hz (0 = default 48000). AAC (.m4a) on Windows is encoded at 48000 Hz (resampled if needed).
+- `channels` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-2</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Channels: 0 = default stereo, 1 = mono, 2 = stereo. Applies to .wav and .m4a/.aac.
 
 **input**
-- `durationMs` (duration_ms, required, 100-3.6e+06, default `3000`) - Recording duration in milliseconds. Default: 3000.
+- `durationMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="type">100-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">3000</span></span></span>) - Recording duration in milliseconds. Default: 3000.
 
 **output_file**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output path; extension selects format. .wav = PCM WAV; .m4a or .aac = AAC-LC (Windows only). Default: empty → temporary .wav in the system temp directory. filter requires .wav.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output path; extension selects format. .wav = PCM WAV; .m4a or .aac = AAC-LC (Windows only). Default: empty → temporary .wav in the system temp directory. filter requires .wav.
 
 **filter**
-- `filter` (enum, default `"off"`, enum: off|deepfilter|gtcrn) - Enhance after capture. off = dry file. deepfilter = DeepFilterNet @ 48 kHz mono. gtcrn = reserved.
-- `filterModel` (string, default `""`) - Optional DeepFilterNet tar.gz. Default: empty → ${MODELS_DIR}/deepfilter.
-- `attenLim` (float, 0-100, default `100.0`) - Attenuation limit in dB (in-process libDF only). Default: 100.
-- `postFilter` (boolean, default `false`) - Over-attenuate very noisy sections. Implies deepfilter when filter is off.
-- `compensateDelay` (boolean, default `true`) - Compensate STFT / model lookahead. Default: true.
+- `filter` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;off&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">deepfilter</span> <span data-cli="choice">gtcrn</span></span></span>) - Enhance after capture. off = dry file. deepfilter = DeepFilterNet @ 48 kHz mono. gtcrn = reserved.
+- `filterModel` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional DeepFilterNet tar.gz. Default: empty → ${MODELS_DIR}/deepfilter.
+- `attenLim` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-100</span>, <span data-cli="default">default <span data-cli="value">100.0</span></span></span>) - Attenuation limit in dB (in-process libDF only). Default: 100.
+- `postFilter` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Over-attenuate very noisy sections. Implies deepfilter when filter is off.
+- `compensateDelay` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Compensate STFT / model lookahead. Default: true.
 
 **hud**
-- `hud` (boolean, default `false`) - Show the movable overlay HUD while recording. Stop ends the take early. Default off.
+- `hudMode` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;overlay&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">taskbar</span> <span data-cli="choice">overlay</span> <span data-cli="choice">both</span></span></span>) - Status HUD. taskbar = app taskbar button. overlay = standalone pill over the clock. both = combine. off = none.
+- `hud` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Master switch for hudMode. Overlay Stop / taskbar Stop cancels the block.
 
 **output**
-- `storeAs` (string, default `"audioPath"`) - Variable for PREVIOUS / downstream blocks. Default: audioPath.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;audioPath&quot;</span></span></span>) - Variable for PREVIOUS / downstream blocks. Default: audioPath.
 
 Features: cancellable
 
@@ -1382,6 +1386,7 @@ Default block:
   "filter": "off",
   "filterModel": "",
   "hud": false,
+  "hudMode": "overlay",
   "inputSource": "mic",
   "kind": "audioRecord",
   "micGain": 1.0,
@@ -1494,22 +1499,22 @@ Start a mic/desktop/mix recording session and store its session id. Optional out
 Params:
 
 **source**
-- `inputSource` (enum, default `"mic"`, enum: mic|desktop|mix) - Capture source. Default: mic (microphone). desktop = system loopback; mix = mic + desktop.
-- `device` (device_name, default `""`) - Mic device for mic/mix. Default: empty → App Settings audio_input_device, then system default.
-- `desktopDevice` (string, default `""`) - Loopback device substring for desktop/mix. Default: empty → default render device.
-- `micGain` (float, 0-4, default `1.0`) - Mic level multiplier (linear) for mix. Default: 1.0.
-- `desktopGain` (float, 0-4, default `1.0`) - Desktop level multiplier for desktop/mix. Default: 1.0.
-- `sampleRate` (integer, 0-192000, default `0`) - Sample rate Hz (0 = default 48000). AAC (.m4a) on Windows is encoded at 48000 Hz (resampled if needed).
-- `channels` (integer, 0-2, default `0`) - Channels: 0 = default stereo, 1 = mono, 2 = stereo. Applies to .wav and .m4a/.aac.
+- `inputSource` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;mic&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - Capture source. Default: mic (microphone). desktop = system loopback; mix = mic + desktop.
+- `device` (<span data-cli="meta"><span data-cli="type">device_name</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Mic device for mic/mix. Default: empty → App Settings audio_input_device, then system default.
+- `desktopDevice` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Loopback device substring for desktop/mix. Default: empty → default render device.
+- `micGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-4</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Mic level multiplier (linear) for mix. Default: 1.0.
+- `desktopGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-4</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Desktop level multiplier for desktop/mix. Default: 1.0.
+- `sampleRate` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-192000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Sample rate Hz (0 = default 48000). AAC (.m4a) on Windows is encoded at 48000 Hz (resampled if needed).
+- `channels` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-2</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Channels: 0 = default stereo, 1 = mono, 2 = stereo. Applies to .wav and .m4a/.aac.
 
 **input**
-- `session` (string, default `""`) - Recording session id. Default: empty → auto-generated unique id.
+- `session` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Recording session id. Default: empty → auto-generated unique id.
 
 **output_file**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output path; extension selects .wav vs .m4a/.aac (see audioRecord). Default: empty → temporary .wav at start; audioRecordStop outputPath overrides.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output path; extension selects .wav vs .m4a/.aac (see audioRecord). Default: empty → temporary .wav at start; audioRecordStop outputPath overrides.
 
 **output**
-- `storeAs` (string, default `"recordSession"`) - Variable for PREVIOUS / downstream blocks. Default: recordSession.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;recordSession&quot;</span></span></span>) - Variable for PREVIOUS / downstream blocks. Default: recordSession.
 
 Features: cancellable non-blocking
 
@@ -1553,13 +1558,13 @@ Stop a recording session and finalize the output file (.wav or .m4a/.aac by exte
 Params:
 
 **input**
-- `session` (string, required, default `""`) - Session id from audioRecordStart. Default: empty (required at runtime).
+- `session` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Session id from audioRecordStart. Default: empty (required at runtime).
 
 **output_file**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output path; extension selects .wav vs .m4a/.aac (see audioRecord). Default: empty → path from audioRecordStart, or temporary .wav.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output path; extension selects .wav vs .m4a/.aac (see audioRecord). Default: empty → path from audioRecordStart, or temporary .wav.
 
 **output**
-- `storeAs` (string, default `"audioPath"`) - Variable for PREVIOUS / downstream blocks. Default: audioPath.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;audioPath&quot;</span></span></span>) - Variable for PREVIOUS / downstream blocks. Default: audioPath.
 
 Features: cancellable
 
@@ -1596,39 +1601,39 @@ Convert text to speech via the configured TTS provider and play it through the s
 Params:
 
 **input**
-- `text` (prompt, from PREVIOUS, default `""`) - Text to speak, or path to a text file (.txt, .md, …). Files are loaded (binary rejected); inline/PREVIOUS markdown is preparsed when detected. Chain fsRead → audioSpeak with empty text to speak file contents. Default: empty → PREVIOUS string (required at runtime).
+- `text` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Text to speak, or path to a text file (.txt, .md, …). Files are loaded (binary rejected); inline/PREVIOUS markdown is preparsed when detected. Chain fsRead → audioSpeak with empty text to speak file contents. Default: empty → PREVIOUS string (required at runtime).
 
 **voice_model**
-- `provider` (string, default `""`) - TTS provider override. Default: empty → App Settings tts_provider (required).
-- `model` (string, default `""`, resolve: variables+deep) - TTS model override. Default: empty → App Settings tts_model; pixlwiz → pixlwiz-speech when unset. moss → moss-tts-nano GGUF bundle.
-- `voice` (string, default `""`) - Voice id / UUID / GGUF path. Default: empty → App Settings tts_voice_id.
+- `provider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - TTS provider override. Default: empty → App Settings tts_provider (required).
+- `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - TTS model override. Default: empty → App Settings tts_model; pixlwiz → pixlwiz-speech when unset. moss → moss-tts-nano GGUF bundle.
+- `voice` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Voice id / UUID / GGUF path. Default: empty → App Settings tts_voice_id.
 
 **local_tts**
-- `tokenizer` (string, default `""`) - Tokenizer GGUF path. Required for VibeVoice; MOSS defaults to models/moss-tts-nano/moss-nano-tokenizer.gguf.
-- `codec` (string, default `""`) - MOSS Audio Tokenizer Nano GGUF. Default: empty → models/moss-tts-nano/moss-audio-tokenizer-nano.gguf.
-- `refAudio` (string, default `""`) - Reference WAV for VibeVoice 1.5B or MOSS Nano cloning. Default: empty.
-- `instance` (string, default `""`) - Named cached local TTS engine instance. Default: empty → auto-key by model args.
+- `tokenizer` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Tokenizer GGUF path. Required for VibeVoice; MOSS defaults to models/moss-tts-nano/moss-nano-tokenizer.gguf.
+- `codec` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - MOSS Audio Tokenizer Nano GGUF. Default: empty → models/moss-tts-nano/moss-audio-tokenizer-nano.gguf.
+- `refAudio` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Reference WAV for VibeVoice 1.5B or MOSS Nano cloning. Default: empty.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Named cached local TTS engine instance. Default: empty → auto-key by model args.
 
 **device**
-- `outputDevice` (device_name, default `""`) - Playback device. Default: empty → App Settings audio_output_device, then system default.
+- `outputDevice` (<span data-cli="meta"><span data-cli="type">device_name</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Playback device. Default: empty → App Settings audio_output_device, then system default.
 
 **output_file**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Optional synthesized audio path (.wav). Default: empty → play only, no file saved.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Optional synthesized audio path (.wav). Default: empty → play only, no file saved.
 
 **hud**
-- `hud` (boolean, default `false`) - Show the overlay HUD while synthesizing and playing. Default off.
+- `hud` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Show the overlay HUD while synthesizing and playing. Default off.
 
 **elevenlabs**
-- `sendVoiceSettings` (boolean, default `true`) - ElevenLabs direct only: send voice_settings (stability/similarity/style). Default: true.
-- `chunkSentences` (boolean, default `true`) - ElevenLabs direct only: split long text with request stitching. Default: true.
-- `chunkTargetChars` (integer, 100-800, default `400`) - ElevenLabs direct only: greedy-merge sentences up to this many chars. Default: 400.
-- `chunkMaxChars` (integer, 200-2000, default `800`) - ElevenLabs direct only: hard-split a single long sentence. Default: 800.
-- `stability` (float, 0-1, default `0.9`) - ElevenLabs direct only: stability (0–1). Default: 0.9.
-- `similarityBoost` (float, 0-1, default `0.75`) - ElevenLabs direct only: similarity_boost (0–1). Default: 0.75.
-- `style` (float, 0-1, default `0.0`) - ElevenLabs direct only: style (0–1). Default: 0 (non-zero can add drift/noise).
+- `sendVoiceSettings` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - ElevenLabs direct only: send voice_settings (stability/similarity/style). Default: true.
+- `chunkSentences` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - ElevenLabs direct only: split long text with request stitching. Default: true.
+- `chunkTargetChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">100-800</span>, <span data-cli="default">default <span data-cli="value">400</span></span></span>) - ElevenLabs direct only: greedy-merge sentences up to this many chars. Default: 400.
+- `chunkMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">200-2000</span>, <span data-cli="default">default <span data-cli="value">800</span></span></span>) - ElevenLabs direct only: hard-split a single long sentence. Default: 800.
+- `stability` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.9</span></span></span>) - ElevenLabs direct only: stability (0–1). Default: 0.9.
+- `similarityBoost` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.75</span></span></span>) - ElevenLabs direct only: similarity_boost (0–1). Default: 0.75.
+- `style` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.0</span></span></span>) - ElevenLabs direct only: style (0–1). Default: 0 (non-zero can add drift/noise).
 
 **output**
-- `storeAs` (string, default `""`) - Optional variable for PREVIOUS. Default: empty (PREVIOUS only).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional variable for PREVIOUS. Default: empty (PREVIOUS only).
 
 Features: cancellable
 
@@ -1668,43 +1673,43 @@ Transcribe an audio file, or record mic / desktop / mix and transcribe speech to
 Params:
 
 **input**
-- `input` (audio_path, from PREVIOUS, default `""`) - Input audio file (wav, mp3, …). Default: empty → PREVIOUS when it is an existing file, otherwise live capture.
+- `input` (<span data-cli="meta"><span data-cli="type">audio_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Input audio file (wav, mp3, …). Default: empty → PREVIOUS when it is an existing file, otherwise live capture.
 
 **hud**
-- `mode` (enum, default `"off"`, enum: off|transcribe) - HUD preset. transcribe = level pill + overlay. off = no HUD unless hud is on.
-- `hud` (boolean, default `false`) - Show the recording HUD (levels + stop) and the overlay pill. Implied when mode=transcribe. Default off.
+- `mode` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;off&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">transcribe</span></span></span>) - HUD preset. transcribe = level pill + overlay. off = no HUD unless hud is on.
+- `hud` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Show the recording HUD (levels + stop) and the overlay pill. Implied when mode=transcribe. Default off.
 
 **source**
-- `inputSource` (enum, default `"mic"`, enum: mic|desktop|mix) - Live capture source when input is not a file. mic = microphone; desktop = system loopback; mix = mic + desktop. Same as audioRecord / video audioSource.
-- `device` (device_name, default `""`) - Mic device for mic/mix. Default: empty → App Settings audio_input_device, then system default. Ignored when input is an existing file.
-- `desktopDevice` (string, default `""`) - Loopback device substring for desktop/mix. Default: empty → default render device. Ignored when input is an existing file.
-- `micGain` (float, 0-4, default `1.0`) - Mic level multiplier (linear) for mic/mix. Default: 1.0.
-- `desktopGain` (float, 0-4, default `1.0`) - Desktop/loopback level multiplier for desktop/mix. Default: 1.0.
+- `inputSource` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;mic&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - Live capture source when input is not a file. mic = microphone; desktop = system loopback; mix = mic + desktop. Same as audioRecord / video audioSource.
+- `device` (<span data-cli="meta"><span data-cli="type">device_name</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Mic device for mic/mix. Default: empty → App Settings audio_input_device, then system default. Ignored when input is an existing file.
+- `desktopDevice` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Loopback device substring for desktop/mix. Default: empty → default render device. Ignored when input is an existing file.
+- `micGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-4</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Mic level multiplier (linear) for mic/mix. Default: 1.0.
+- `desktopGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-4</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Desktop/loopback level multiplier for desktop/mix. Default: 1.0.
 
 **recording**
-- `maxDurationMs` (duration_ms, 500-120000, default `30000`) - Max live capture duration (ms). Default: 30000. Ignored when input is an existing file.
-- `silenceMs` (duration_ms, 0-60000, default `1500`) - VAD silence stop (ms) after speech. Default: 1500. 0 = disabled. Ignored when input is an existing file.
+- `maxDurationMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">500-120000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - Max live capture duration (ms). Default: 30000. Ignored when input is an existing file.
+- `silenceMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">1500</span></span></span>) - VAD silence stop (ms) after speech. Default: 1500. 0 = disabled. Ignored when input is an existing file.
 
 **speech_model**
-- `stt` (stt_route, default `{}`) - Dictation STT route {preset,provider,model,options}. Empty {} inherits App Settings. Flat provider/model remain aliases.
-- `provider` (string, default `""`) - STT provider override (alias of stt.provider). Default: empty → App Settings stt_provider (required).
-- `model` (string, default `""`, resolve: variables+deep) - STT model override (alias of stt.model). Default: empty → App Settings stt_model when provider matches; whisper → base.en (fallback; prefer large-v3-turbo when installed); pixlwiz → pixlwiz-speech-to-text.
-- `providerOptions` (json_value, default `{}`) - Whisper-only options object (alias of stt.options). Defaults: backend=cpu, language=auto, threads=0 (auto), flashAttn=auto. Whisper models resolve under ${MODELS_DIR} then exe/../models.
+- `stt` (<span data-cli="meta"><span data-cli="type">stt_route</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Dictation STT route {preset,provider,model,options}. Empty {} inherits App Settings. Flat provider/model remain aliases.
+- `provider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - STT provider override (alias of stt.provider). Default: empty → App Settings stt_provider (required).
+- `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - STT model override (alias of stt.model). Default: empty → App Settings stt_model when provider matches; whisper → base.en (fallback; prefer large-v3-turbo when installed); pixlwiz → pixlwiz-speech-to-text.
+- `providerOptions` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Whisper-only options object (alias of stt.options). Defaults: backend=cpu, language=auto, threads=0 (auto), flashAttn=auto. Whisper models resolve under ${MODELS_DIR} then exe/../models.
 
 **advanced**
-- `apiKey` (api_key, default `""`) - API key override. Default: empty → App Settings providers map (not used for whisper).
+- `apiKey` (<span data-cli="meta"><span data-cli="type">api_key</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - API key override. Default: empty → App Settings providers map (not used for whisper).
 
 **output**
-- `json` (boolean, default `false`) - Return structured STT JSON vs transcript string. Includes segments when available. Default: false.
-- `subtitleFormat` (enum, default `"none"`, enum: none|srt|vtt|sbv|all) - Write YouTube-accepted sidecar(s) next to the audio (or subtitlePath).
-- `subtitlePath` (output_path, default `""`, constraints: writable+createParents) - Sidecar stem. Default: empty → next to the source/WAV.
-- `subtitleMaxChars` (integer, 8-120, default `42`) - Cue wrap width.
-- `subtitleMaxLines` (integer, 1-4, default `2`) - Cue wrap line count.
-- `result` (json_value) - Structured STT payload when json=true: provider, model, transcript, segments, duration, samples, optional wav/subtitlePath.
-- `storeAs` (string, default `"transcript"`) - Variable for PREVIOUS / downstream blocks. Default: transcript.
+- `json` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Return structured STT JSON vs transcript string. Includes segments when available. Default: false.
+- `subtitleFormat` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;none&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">none</span> <span data-cli="choice">srt</span> <span data-cli="choice">vtt</span> <span data-cli="choice">sbv</span> <span data-cli="choice">all</span></span></span>) - Write YouTube-accepted sidecar(s) next to the audio (or subtitlePath).
+- `subtitlePath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Sidecar stem. Default: empty → next to the source/WAV.
+- `subtitleMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">8-120</span>, <span data-cli="default">default <span data-cli="value">42</span></span></span>) - Cue wrap width.
+- `subtitleMaxLines` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-4</span>, <span data-cli="default">default <span data-cli="value">2</span></span></span>) - Cue wrap line count.
+- `result` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Structured STT payload when json=true: provider, model, transcript, segments, duration, samples, optional wav/subtitlePath.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;transcript&quot;</span></span></span>) - Variable for PREVIOUS / downstream blocks. Default: transcript.
 
 **debug_output**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Save captured WAV. Default: empty → temp file deleted after transcription.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Save captured WAV. Default: empty → temp file deleted after transcription.
 
 Features: cancellable
 
@@ -1746,40 +1751,40 @@ Place scripted TTS from an SRT/VTT file or transcribe JSON onto a 48 kHz PCM tim
 Params:
 
 **input**
-- `input` (file_path, from PREVIOUS, default `""`) - SRT/VTT/JSON path, or PREVIOUS transcribe JSON. Default: empty → PREVIOUS.
+- `input` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - SRT/VTT/JSON path, or PREVIOUS transcribe JSON. Default: empty → PREVIOUS.
 
 **output_file**
-- `outputPath` (output_path, required, default `""`, constraints: writable+createParents) - Canonical 48 kHz mono PCM WAV. Required.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Canonical 48 kHz mono PCM WAV. Required.
 
 **voice_model**
-- `provider` (string, default `""`) - TTS provider. Default: empty → App Settings tts_provider.
-- `model` (string, default `""`, resolve: variables+deep) - TTS model. Default: empty → App Settings.
-- `voice` (string, default `""`) - Voice id. Default: empty → App Settings tts_voice_id.
+- `provider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - TTS provider. Default: empty → App Settings tts_provider.
+- `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - TTS model. Default: empty → App Settings.
+- `voice` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Voice id. Default: empty → App Settings tts_voice_id.
 
 **timeline**
-- `overflow` (enum, default `"resolve"`, enum: resolve|truncate) - resolve = gap → stretch ≲12% → speed regen ≤1.2 → overlap+warn. truncate = hard-cut (power user).
-- `maxStretchPercent` (float, 0-25, default `12.0`) - Max DSP time-compress percent before regeneration. Default: 12.
-- `minGapMs` (duration_ms, 0-500, default `80`) - Minimum inter-utterance silence. Default: 80.
-- `maxUtteranceMs` (duration_ms, 500-25000, default `8000`) - Do not merge cues past this estimated duration. Default: 8000.
+- `overflow` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;resolve&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">resolve</span> <span data-cli="choice">truncate</span></span></span>) - resolve = gap → stretch ≲12% → speed regen ≤1.2 → overlap+warn. truncate = hard-cut (power user).
+- `maxStretchPercent` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-25</span>, <span data-cli="default">default <span data-cli="value">12.0</span></span></span>) - Max DSP time-compress percent before regeneration. Default: 12.
+- `minGapMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-500</span>, <span data-cli="default">default <span data-cli="value">80</span></span></span>) - Minimum inter-utterance silence. Default: 80.
+- `maxUtteranceMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">500-25000</span>, <span data-cli="default">default <span data-cli="value">8000</span></span></span>) - Do not merge cues past this estimated duration. Default: 8000.
 
 **elevenlabs**
-- `speed` (float, 0.7-1.2, default `1.0`) - Initial ElevenLabs speed (0.7–1.2). Default: 1.0.
-- `seed` (integer, default `-1`) - Best-effort seed. Default: -1 → derived from text+voice.
-- `alignment` (boolean, default `false`) - Reserved: character alignment. V1 places from PCM duration only.
-- `sendVoiceSettings` (boolean, default `true`) - Send voice_settings. Default: true.
-- `stability` (float, 0-1, default `0.45`) - Lower is more expressive (chat TTS uses 0.9, which sounds flat on short cues). Default: 0.45.
-- `similarityBoost` (float, 0-1, default `0.8`) - Stay on-voice. Default: 0.80.
-- `style` (float, 0-1, default `0.2`) - Light style exaggeration for narration. Default: 0.20. High values can add artifacts.
-- `speakerBoost` (boolean, default `true`) - ElevenLabs use_speaker_boost. Default: true.
-- `textNormalization` (enum, default `"auto"`, enum: auto|on|off) - apply_text_normalization. Default: auto.
+- `speed` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0.7-1.2</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Initial ElevenLabs speed (0.7–1.2). Default: 1.0.
+- `seed` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="default">default <span data-cli="value">-1</span></span></span>) - Best-effort seed. Default: -1 → derived from text+voice.
+- `alignment` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Reserved: character alignment. V1 places from PCM duration only.
+- `sendVoiceSettings` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Send voice_settings. Default: true.
+- `stability` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.45</span></span></span>) - Lower is more expressive (chat TTS uses 0.9, which sounds flat on short cues). Default: 0.45.
+- `similarityBoost` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.8</span></span></span>) - Stay on-voice. Default: 0.80.
+- `style` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.2</span></span></span>) - Light style exaggeration for narration. Default: 0.20. High values can add artifacts.
+- `speakerBoost` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - ElevenLabs use_speaker_boost. Default: true.
+- `textNormalization` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">on</span> <span data-cli="choice">off</span></span></span>) - apply_text_normalization. Default: auto.
 
 **output**
-- `cacheDir` (string, default `""`) - Take cache directory. Default: empty → <output>/.voiceover-cache.
-- `json` (boolean, default `false`) - Return overflow-report JSON instead of the WAV path.
-- `storeAs` (string, default `"voiceoverPath"`) - Variable for PREVIOUS. Default: voiceoverPath.
+- `cacheDir` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Take cache directory. Default: empty → <output>/.voiceover-cache.
+- `json` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Return overflow-report JSON instead of the WAV path.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;voiceoverPath&quot;</span></span></span>) - Variable for PREVIOUS. Default: voiceoverPath.
 
 **hud**
-- `hud` (boolean, default `false`) - Show overlay HUD while generating. Default off.
+- `hud` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Show overlay HUD while generating. Default off.
 
 Features: cancellable
 
@@ -1855,39 +1860,39 @@ Voice Command Center: named Still / Start / Stop listen loop. On a wake+phrase m
 Params:
 
 **mode**
-- `action` (enum, default `"Start"`, enum: Still|Start|Stop|Status|Replay) - Still = one match then stop (or wait on a running instance). Start keeps a named instance; with child items it runs them on each match until Stop. Stop / Status address the same instance. Replay injects text (no mic).
-- `instance` (string, default `"default"`) - Named listen instance. Use the same name for Stop / Status / a later Still.
-- `durationMs` (duration_ms, 0-8.64e+07, default `0`) - Still / Start-with-children: stop waiting after this many ms. 0 = until Stop or cancel.
+- `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;Start&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">Still</span> <span data-cli="choice">Start</span> <span data-cli="choice">Stop</span> <span data-cli="choice">Status</span> <span data-cli="choice">Replay</span></span></span>) - Still = one match then stop (or wait on a running instance). Start keeps a named instance; with child items it runs them on each match until Stop. Stop / Status address the same instance. Replay injects text (no mic).
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;default&quot;</span></span></span>) - Named listen instance. Use the same name for Stop / Status / a later Still.
+- `durationMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-8.64e+07</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Still / Start-with-children: stop waiting after this many ms. 0 = until Stop or cancel.
 
 **matcher**
-- `phrase` (string, default `""`) - Optional spoken phrase or catalog id to accept. Empty = any wake+command. On match, child items run with PREVIOUS = the trigger envelope.
-- `wakePhrase` (string, default `"Tanit"`) - Wake prefix. Default: Tanit (or Audio & Video voice_commands).
-- `route` (enum, default `"trigger"`, enum: trigger) - XBlox mapping uses trigger. Children replace catalog dispatch unless dispatch is on.
-- `dispatch` (boolean, default `false`) - Also run the catalog command (hotkey / app_cmd) on a match. Default off — children are the mapping.
+- `phrase` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional spoken phrase or catalog id to accept. Empty = any wake+command. On match, child items run with PREVIOUS = the trigger envelope.
+- `wakePhrase` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;Tanit&quot;</span></span></span>) - Wake prefix. Default: Tanit (or Audio & Video voice_commands).
+- `route` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;trigger&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trigger</span></span></span>) - XBlox mapping uses trigger. Children replace catalog dispatch unless dispatch is on.
+- `dispatch` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Also run the catalog command (hotkey / app_cmd) on a match. Default off — children are the mapping.
 
 **replay**
-- `text` (string, default `""`) - Replay only: full utterance including the wake word, e.g. "Tanit screenshot".
+- `text` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Replay only: full utterance including the wake word, e.g. "Tanit screenshot".
 
 **source**
-- `inputSource` (enum, default `"mic"`, enum: mic|desktop|mix) - Capture source. Default: mic (microphone). desktop = system loopback; mix = mic + desktop.
-- `device` (device_name, default `""`) - Mic device for mic/mix. Default: empty → voice_commands.audio_input_device, then App Settings audio_input_device.
-- `desktopDevice` (device_name, default `""`) - Loopback device for desktop/mix. Default: empty → default render device.
-- `micGain` (float, 0-4, default `1.0`) - Mic level multiplier (linear) for mic/mix. Default: 1.0.
-- `desktopGain` (float, 0-4, default `1.0`) - Desktop level multiplier for desktop/mix. Default: 1.0.
+- `inputSource` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;mic&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - Capture source. Default: mic (microphone). desktop = system loopback; mix = mic + desktop.
+- `device` (<span data-cli="meta"><span data-cli="type">device_name</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Mic device for mic/mix. Default: empty → voice_commands.audio_input_device, then App Settings audio_input_device.
+- `desktopDevice` (<span data-cli="meta"><span data-cli="type">device_name</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Loopback device for desktop/mix. Default: empty → default render device.
+- `micGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-4</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Mic level multiplier (linear) for mic/mix. Default: 1.0.
+- `desktopGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-4</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Desktop level multiplier for desktop/mix. Default: 1.0.
 
 **filter**
-- `filter` (enum, default `"auto"`, enum: auto|off|deepfilter|gtcrn) - Enhance after VAD. auto = DeepFilter when available. off = dry/APM. deepfilter / gtcrn are strict.
-- `filterModel` (string, default `""`) - Optional DeepFilterNet tar.gz. Default: empty → ${MODELS_DIR}/deepfilter.
-- `postFilter` (boolean, default `false`) - Over-attenuate very noisy sections (DeepFilter). Default: false.
-- `filterBlend` (float, 0-1, default `1.0`) - Wet/dry mix after enhancement. 0 = original, 1 = full filter (default).
+- `filter` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">off</span> <span data-cli="choice">deepfilter</span> <span data-cli="choice">gtcrn</span></span></span>) - Enhance after VAD. auto = DeepFilter when available. off = dry/APM. deepfilter / gtcrn are strict.
+- `filterModel` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional DeepFilterNet tar.gz. Default: empty → ${MODELS_DIR}/deepfilter.
+- `postFilter` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Over-attenuate very noisy sections (DeepFilter). Default: false.
+- `filterBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Wet/dry mix after enhancement. 0 = original, 1 = full filter (default).
 
 **speech_model**
-- `provider` (string, default `""`) - STT provider override. Default: empty → App Settings stt_provider.
-- `model` (string, default `""`, resolve: variables+deep) - STT model override. Default: empty → App Settings stt_model when provider matches.
-- `language` (string, default `"auto"`) - Whisper language (auto, en, de, …). Default: auto.
+- `provider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - STT provider override. Default: empty → App Settings stt_provider.
+- `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - STT model override. Default: empty → App Settings stt_model when provider matches.
+- `language` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span></span>) - Whisper language (auto, en, de, …). Default: auto.
 
 **output**
-- `storeAs` (string, default `"voice"`) - Variable for PREVIOUS / downstream blocks. Default: voice.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;voice&quot;</span></span></span>) - Variable for PREVIOUS / downstream blocks. Default: voice.
 
 Features: container cancellable
 
@@ -1933,15 +1938,15 @@ Connect a Bluetooth audio device (pairs if needed) and implicitly route audio to
 Params:
 
 **input**
-- `id` (string, from PREVIOUS, default `""`) - Device address (AA:BB:CC:DD:EE:FF) or name substring. Empty = use PREVIOUS.
+- `id` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Device address (AA:BB:CC:DD:EE:FF) or name substring. Empty = use PREVIOUS.
 
 **advanced**
-- `autoRoute` (boolean, default `true`) - After connecting, set the device's audio endpoint as the default playback device.
-- `timeoutMs` (duration_ms, 0-60000, default `6000`) - How long to wait (ms) for the audio endpoint to go ACTIVE.
-- `delayMs` (duration_ms, 0-30000, default `0`) - Extra delay (ms) after connecting before the block returns. Use for AV receivers that need time to switch inputs or unmute (0 = none).
+- `autoRoute` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - After connecting, set the device's audio endpoint as the default playback device.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">6000</span></span></span>) - How long to wait (ms) for the audio endpoint to go ACTIVE.
+- `delayMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-30000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Extra delay (ms) after connecting before the block returns. Use for AV receivers that need time to switch inputs or unmute (0 = none).
 
 **output**
-- `storeAs` (string, default `"bluetooth"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;bluetooth&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -1967,10 +1972,10 @@ Disconnect a Bluetooth audio device (best-effort). Uses PREVIOUS when 'id' is em
 Params:
 
 **input**
-- `id` (string, from PREVIOUS, default `""`) - Device address or name substring. Empty = use PREVIOUS.
+- `id` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Device address or name substring. Empty = use PREVIOUS.
 
 **output**
-- `storeAs` (string, default `"bluetooth"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;bluetooth&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -1993,11 +1998,11 @@ List MMDevice audio endpoints (playback by default). Stores an array of {id,name
 Params:
 
 **advanced**
-- `capture` (boolean, default `false`) - List recording (capture) endpoints instead of playback.
-- `includeDisconnected` (boolean, default `false`) - Also include UNPLUGGED endpoints (paired Bluetooth devices not yet connected).
+- `capture` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - List recording (capture) endpoints instead of playback.
+- `includeDisconnected` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Also include UNPLUGGED endpoints (paired Bluetooth devices not yet connected).
 
 **output**
-- `storeAs` (string, default `"audioEndpoints"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;audioEndpoints&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: iterable pure non-blocking
 
@@ -2024,11 +2029,11 @@ List paired / connected Bluetooth devices. Stores an array of {id,name,address,p
 Params:
 
 **advanced**
-- `nearby` (boolean, default `false`) - Also issue an inquiry for nearby discoverable devices (slow).
-- `autoRoute` (boolean, default `false`) - Implicitly route audio output to a connected Bluetooth audio device.
+- `nearby` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Also issue an inquiry for nearby discoverable devices (slow).
+- `autoRoute` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Implicitly route audio output to a connected Bluetooth audio device.
 
 **output**
-- `storeAs` (string, default `"bluetoothDevices"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;bluetoothDevices&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: iterable non-blocking
 
@@ -2162,10 +2167,10 @@ Pair a Bluetooth device (just-works / SSP). Uses PREVIOUS when 'id' is empty.
 Params:
 
 **input**
-- `id` (string, from PREVIOUS, default `""`) - Device address or name substring. Empty = use PREVIOUS.
+- `id` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Device address or name substring. Empty = use PREVIOUS.
 
 **output**
-- `storeAs` (string, default `"bluetooth"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;bluetooth&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -2188,10 +2193,10 @@ Set an MMDevice audio endpoint as the default device for all roles. Pass the end
 Params:
 
 **input**
-- `id` (string, from PREVIOUS, default `""`) - MMDevice endpoint id (e.g. "{0.0.0.00000000}.{guid}"). Empty = use PREVIOUS.
+- `id` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - MMDevice endpoint id (e.g. "{0.0.0.00000000}.{guid}"). Empty = use PREVIOUS.
 
 **output**
-- `storeAs` (string, default `"bluetooth"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;bluetooth&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -2214,10 +2219,10 @@ Remove (unpair) a Bluetooth device. Uses PREVIOUS when 'id' is empty.
 Params:
 
 **input**
-- `id` (string, from PREVIOUS, default `""`) - Device address or name substring. Empty = use PREVIOUS.
+- `id` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Device address or name substring. Empty = use PREVIOUS.
 
 **output**
-- `storeAs` (string, default `"bluetooth"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;bluetooth&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -2240,15 +2245,15 @@ Run multiple WebView actions in one call.
 Params:
 
 **input**
-- `epoch` (string, default `""`) - Optional page epoch from Browser Read.
-- `steps` (json_value, default `[]`) - Ordered step objects with action/type plus step fields.
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional page epoch from Browser Read.
+- `steps` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - Ordered step objects with action/type plus step fields.
 
 **options**
-- `defaultDelayMs` (integer, 0-5000, default `50`)
-- `continueOnError` (boolean, default `false`)
+- `defaultDelayMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-5000</span>, <span data-cli="default">default <span data-cli="value">50</span></span></span>)
+- `continueOnError` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>)
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -2272,13 +2277,13 @@ Click a WebView element by ref or selector.
 Params:
 
 **input**
-- `target` (json_value, from PREVIOUS) - Previous Browser Read/Find result; extracts epoch and the first ref.
-- `ref` (string, default `""`) - Opaque ref returned by Browser Read/Find.
-- `epoch` (string, default `""`) - Page epoch returned with the ref.
-- `selector` (string, default `""`) - CSS selector alternative to ref.
+- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -2301,18 +2306,18 @@ Find WebView elements by selector, role, or name.
 Params:
 
 **input**
-- `target` (json_value, from PREVIOUS) - Previous Browser Read/Find result; extracts epoch and the first ref.
-- `ref` (string, default `""`) - Opaque ref returned by Browser Read/Find.
-- `epoch` (string, default `""`) - Page epoch returned with the ref.
-- `selector` (string, default `""`) - CSS selector alternative to ref.
-- `role` (string, default `""`)
-- `name` (string, default `""`)
+- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
+- `role` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>)
+- `name` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>)
 
 **options**
-- `limit` (integer, 1-100, default `20`)
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-100</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>)
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -2338,20 +2343,20 @@ Read a compact index or focused DOM snapshot.
 Params:
 
 **input**
-- `target` (json_value, from PREVIOUS) - Previous Browser Read/Find result; extracts epoch and the first ref.
-- `ref` (string, default `""`) - Opaque ref returned by Browser Read/Find.
-- `epoch` (string, default `""`) - Page epoch returned with the ref.
-- `selector` (string, default `""`) - CSS selector alternative to ref.
+- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
 
 **options**
-- `limit` (integer, 1-500, default `120`)
-- `viewportOnly` (boolean, default `false`)
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-500</span>, <span data-cli="default">default <span data-cli="value">120</span></span></span>)
+- `viewportOnly` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>)
 
 **advanced**
-- `textMaxChars` (integer, 0-100000, default `12000`)
+- `textMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100000</span>, <span data-cli="default">default <span data-cli="value">12000</span></span></span>)
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -2376,16 +2381,16 @@ Choose a WebView select option.
 Params:
 
 **input**
-- `target` (json_value, from PREVIOUS) - Previous Browser Read/Find result; extracts epoch and the first ref.
-- `ref` (string, default `""`) - Opaque ref returned by Browser Read/Find.
-- `epoch` (string, default `""`) - Page epoch returned with the ref.
-- `selector` (string, default `""`) - CSS selector alternative to ref.
-- `value` (string, default `""`)
-- `label` (string, default `""`)
-- `index` (integer) - Zero-based option index alternative.
+- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
+- `value` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>)
+- `label` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>)
+- `index` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Zero-based option index alternative.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -2410,18 +2415,18 @@ Enter text into a WebView form control.
 Params:
 
 **input**
-- `target` (json_value, from PREVIOUS) - Previous Browser Read/Find result; extracts epoch and the first ref.
-- `ref` (string, default `""`) - Opaque ref returned by Browser Read/Find.
-- `epoch` (string, default `""`) - Page epoch returned with the ref.
-- `selector` (string, default `""`) - CSS selector alternative to ref.
-- `text` (string, default `""`) - Text to enter.
+- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
+- `text` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Text to enter.
 
 **options**
-- `clear` (boolean, default `true`)
-- `submit` (boolean, default `false`)
+- `clear` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>)
+- `submit` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>)
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -2447,17 +2452,17 @@ Run a saved custom command or an inline CLI/app/external/url/path payload.
 Params:
 
 **input**
-- `commandId` (string) - Optional: look up a commands.json entry by id. Leave empty to call an inline app/CLI/external action below.
-- `command` (json_value) - Inline call: app/CLI/external/url/path plus args. Args support ${var} from the xblox context (deep-resolved).
+- `commandId` (<span data-cli="meta"><span data-cli="type">string</span></span>) - Optional: look up a commands.json entry by id. Leave empty to call an inline app/CLI/external action below.
+- `command` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Inline call: app/CLI/external/url/path plus args. Args support ${var} from the xblox context (deep-resolved).
 
 **advanced**
-- `args` (args_list, default `[]`) - Extra argv tokens appended after the saved/inline command. Use two tokens for xblox scope, e.g. --CURRENT_FILE and ${output}.
-- `log` (boolean, default `false`) - Echo captured stdout/stderr to the host logger and xBlox run log, prefixed with this block's id.
-- `stdout` (enum, default `"info"`, enum: trace|debug|info|warn|error|off) - Log level for captured stdout lines.
-- `stderr` (enum, default `"error"`, enum: trace|debug|info|warn|error|off) - Log level for captured stderr lines.
+- `args` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - Extra argv tokens appended after the saved/inline command. Use two tokens for xblox scope, e.g. --CURRENT_FILE and ${output}.
+- `log` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Echo captured stdout/stderr to the host logger and xBlox run log, prefixed with this block's id.
+- `stdout` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;info&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">error</span> <span data-cli="choice">off</span></span></span>) - Log level for captured stdout lines.
+- `stderr` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;error&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">error</span> <span data-cli="choice">off</span></span></span>) - Log level for captured stderr lines.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: background cancellable
 
@@ -2486,8 +2491,8 @@ Read a value from root scope.
 
 Params:
 
-- `name` (variable_ref, required) - Variable name to read.
-- `target` (string, default `"PREVIOUS"`) - Variable to copy the value into. PREVIOUS updates the pipeline value only.
+- `name` (<span data-cli="meta"><span data-cli="type">variable_ref</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Variable name to read.
+- `target` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;PREVIOUS&quot;</span></span></span>) - Variable to copy the value into. PREVIOUS updates the pipeline value only.
 
 Features: pure
 
@@ -2510,13 +2515,13 @@ Log a message, expression, variable, or the whole scope.
 Params:
 
 **input**
-- `level` (enum, default `"info"`, enum: trace|debug|info|warn|error) - Log level.
-- `message` (string, from PREVIOUS, default `"PREVIOUS"`) - Message or variable expression. Leave empty to log the whole scope.
+- `level` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;info&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">error</span></span></span>) - Log level.
+- `message` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;PREVIOUS&quot;</span></span></span>) - Message or variable expression. Leave empty to log the whole scope.
 
 **query**
-- `input` (string, default `"PREVIOUS"`) - Optional context variable to query with jq. When set with filter/query, it replaces message output.
-- `filter` (string, default `"."`) - jq filter applied to input, e.g. .items[0].name.
-- `format` (enum, default `"auto"`, enum: auto|json) - auto prints scalars naturally and objects/arrays as JSON; json always emits compact JSON.
+- `input` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;PREVIOUS&quot;</span></span></span>) - Optional context variable to query with jq. When set with filter/query, it replaces message output.
+- `filter` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;.&quot;</span></span></span>) - jq filter applied to input, e.g. .items[0].name.
+- `format` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">json</span></span></span>) - auto prints scalars naturally and objects/arrays as JSON; json always emits compact JSON.
 
 Features: pure
 
@@ -2538,9 +2543,9 @@ Persist current scope values back into this XBlox document's context.
 
 Params:
 
-- `scope` (enum, default `"context"`, enum: context) - State area to persist. Currently only document context.
-- `mode` (enum, default `"existing"`, enum: existing|all) - existing = update keys already present in the file context. all = write the full current scope.
-- `keys` (args_list, default `[]`) - Optional context keys to persist. Empty uses mode.
+- `scope` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;context&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">context</span></span></span>) - State area to persist. Currently only document context.
+- `mode` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;existing&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">existing</span> <span data-cli="choice">all</span></span></span>) - existing = update keys already present in the file context. all = write the full current scope.
+- `keys` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - Optional context keys to persist. Empty uses mode.
 
 Features: cancellable
 
@@ -2563,11 +2568,11 @@ Write a value into root scope.
 
 Params:
 
-- `name` (string, required) - Variable name to write.
-- `value` (json_value) - Literal value (JSON). String values interpolate ${var}.
-- `valueFrom` (string) - Copy this context variable. Wins over value when set.
-- `fallbackFrom` (string) - If the chosen value is empty, copy this context variable instead.
-- `expression` (expression) - Expression evaluated to the stored value. Overrides value when set.
+- `name` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Variable name to write.
+- `value` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Literal value (JSON). String values interpolate ${var}.
+- `valueFrom` (<span data-cli="meta"><span data-cli="type">string</span></span>) - Copy this context variable. Wins over value when set.
+- `fallbackFrom` (<span data-cli="meta"><span data-cli="type">string</span></span>) - If the chosen value is empty, copy this context variable instead.
+- `expression` (<span data-cli="meta"><span data-cli="type">expression</span></span>) - Expression evaluated to the stored value. Overrides value when set.
 
 Features: pure
 
@@ -2590,12 +2595,12 @@ Read piped input from stdin (whole stream or one line) into PREVIOUS/storeAs.
 Params:
 
 **input**
-- `mode` (enum, default `"all"`, enum: all|line) - all = read the entire stream to EOF; line = read the next line (streamable inside loops).
-- `parse` (enum, default `"text"`, enum: text|json|number|boolean|auto) - Result type for PREVIOUS/storeAs: text (string), json (object/array/scalar), number (int/float � usable in expressions), boolean, or auto (JSON-scalar detection with text fallback). Binary input (NUL bytes) is rejected.
-- `trim` (boolean, default `true`) - Trim trailing whitespace/newlines before parsing.
+- `mode` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;all&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">all</span> <span data-cli="choice">line</span></span></span>) - all = read the entire stream to EOF; line = read the next line (streamable inside loops).
+- `parse` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;text&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">text</span> <span data-cli="choice">json</span> <span data-cli="choice">number</span> <span data-cli="choice">boolean</span> <span data-cli="choice">auto</span></span></span>) - Result type for PREVIOUS/storeAs: text (string), json (object/array/scalar), number (int/float � usable in expressions), boolean, or auto (JSON-scalar detection with text fallback). Binary input (NUL bytes) is rejected.
+- `trim` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Trim trailing whitespace/newlines before parsing.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -2617,13 +2622,13 @@ Write a message directly to stdout (pipe-friendly).
 Params:
 
 **input**
-- `message` (string, from PREVIOUS, default `"PREVIOUS"`, resolve: variables+deep) - Message or variable expression. Leave empty to output the whole scope.
-- `newline` (boolean, default `true`) - Append a newline.
+- `message` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;PREVIOUS&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Message or variable expression. Leave empty to output the whole scope.
+- `newline` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Append a newline.
 
 **query**
-- `input` (string, default `"PREVIOUS"`) - Optional context variable to query with jq. When set with filter/query, it replaces message output.
-- `filter` (string, default `"."`) - jq filter applied to input, e.g. .items[0].name.
-- `format` (enum, default `"auto"`, enum: auto|json) - auto prints scalars naturally and objects/arrays as JSON; json always emits compact JSON.
+- `input` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;PREVIOUS&quot;</span></span></span>) - Optional context variable to query with jq. When set with filter/query, it replaces message output.
+- `filter` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;.&quot;</span></span></span>) - jq filter applied to input, e.g. .items[0].name.
+- `format` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">json</span></span></span>) - auto prints scalars naturally and objects/arrays as JSON; json always emits compact JSON.
 
 Features: pure
 
@@ -2646,14 +2651,14 @@ Parse PREVIOUS or named input with a jq filter expression.
 Params:
 
 **options**
-- `parser` (enum, default `"jq"`, enum: jq|jsonpath) - Parser engine.
+- `parser` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;jq&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">jq</span> <span data-cli="choice">jsonpath</span></span></span>) - Parser engine.
 
 **input**
-- `filter` (string, required, default `"."`) - jq filter expression (e.g. .items[] | select(.active)).
-- `input` (string, default `"PREVIOUS"`) - Input to parse. Leave as PREVIOUS to use the previous block's result.
+- `filter` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;.&quot;</span></span></span>) - jq filter expression (e.g. .items[] | select(.active)).
+- `input` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;PREVIOUS&quot;</span></span></span>) - Input to parse. Leave as PREVIOUS to use the previous block's result.
 
 **output**
-- `storeAs` (string, default `"parsed"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;parsed&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: pure
 
@@ -2680,17 +2685,17 @@ Iterate over PREVIOUS or any named scope/context variable. Arrays fan out direct
 Params:
 
 **options**
-- `parser` (enum, default `"jq"`, enum: jq|jsonpath) - Parser engine.
+- `parser` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;jq&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">jq</span> <span data-cli="choice">jsonpath</span></span></span>) - Parser engine.
 
 **input**
-- `filter` (string, required, default `"."`) - jq filter expression to select the value to iterate.
-- `input` (string, default `"PREVIOUS"`) - Scope/context variable to iterate. Leave as PREVIOUS to use the previous block's result.
+- `filter` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;.&quot;</span></span></span>) - jq filter expression to select the value to iterate.
+- `input` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;PREVIOUS&quot;</span></span></span>) - Scope/context variable to iterate. Leave as PREVIOUS to use the previous block's result.
 
 **iteration**
-- `mode` (enum, default `"auto"`, enum: auto|array|objectEntries|objectValues|once) - How to normalize the selected value before fan-out.
+- `mode` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">array</span> <span data-cli="choice">objectEntries</span> <span data-cli="choice">objectValues</span> <span data-cli="choice">once</span></span></span>) - How to normalize the selected value before fan-out.
 
 **output**
-- `storeAs` (string, default `"items"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;items&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: iterable pure
 
@@ -2720,17 +2725,17 @@ Copy files or folders through the VFS queue (local, ssh://, ftp://, vfs://). src
 Params:
 
 **input**
-- `src` (file_path, from PREVIOUS) - File, folder, glob, or URI. Leave empty to use PREVIOUS (path, list, or fsList entries). ${…} expand in the transfer lib.
-- `dst` (dir_path, required) - Destination folder (path or URI). Keep ${KNOWNFOLDER:Desktop} / ${CWD} as stored templates.
+- `src` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - File, folder, glob, or URI. Leave empty to use PREVIOUS (path, list, or fsList entries). ${…} expand in the transfer lib.
+- `dst` (<span data-cli="meta"><span data-cli="type">dir_path</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Destination folder (path or URI). Keep ${KNOWNFOLDER:Desktop} / ${CWD} as stored templates.
 
 **options**
-- `conflict` (enum, default `"error"`, enum: error|overwrite|skip|rename|if-newer) - When a dest file already exists.
-- `include` (string, default `""`) - Keep sources matching this glob. Separate multiple with ;
-- `exclude` (string, default `""`) - Drop sources matching this glob. Separate multiple with ;
-- `dryRun` (boolean, default `false`) - Expand variables and sources only; do not copy.
+- `conflict` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;error&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">error</span> <span data-cli="choice">overwrite</span> <span data-cli="choice">skip</span> <span data-cli="choice">rename</span> <span data-cli="choice">if-newer</span></span></span>) - When a dest file already exists.
+- `include` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Keep sources matching this glob. Separate multiple with ;
+- `exclude` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Drop sources matching this glob. Separate multiple with ;
+- `dryRun` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Expand variables and sources only; do not copy.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Children:
 - **items** (Then, role: body)
@@ -2757,13 +2762,13 @@ Delete a file or directory. Returns true if something was deleted.
 Params:
 
 **input**
-- `path` (file_path, required, from PREVIOUS, resolve: custom) - File or folder to delete. Leave empty to use PREVIOUS.
+- `path` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">custom</span></span></span>) - File or folder to delete. Leave empty to use PREVIOUS.
 
 **delete_options**
-- `recursive` (boolean, default `false`) - Delete a directory and all of its contents.
+- `recursive` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Delete a directory and all of its contents.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -2785,10 +2790,10 @@ Check whether a path exists. Stores a boolean in PREVIOUS / storeAs.
 Params:
 
 **input**
-- `path` (file_path, required, from PREVIOUS, resolve: custom) - File or folder to check. Leave empty to use PREVIOUS.
+- `path` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">custom</span></span></span>) - File or folder to check. Leave empty to use PREVIOUS.
 
 **output**
-- `storeAs` (string, default `"exists"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;exists&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -2809,14 +2814,14 @@ Compute a file content hash. Stores the hex digest in PREVIOUS / storeAs.
 Params:
 
 **input**
-- `path` (file_path, required, from PREVIOUS, constraints: mustExist+readable, resolve: custom) - File to hash. Leave empty to use PREVIOUS as the path.
+- `path` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mustExist</span> <span data-cli="choice">readable</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">custom</span></span></span>) - File to hash. Leave empty to use PREVIOUS as the path.
 
 **hash_options**
-- `algorithm` (enum, default `"sha256"`, enum: sha256) - Hash algorithm.
-- `prefixLength` (integer, 0-64, default `0`) - Return only the first N hex characters. 0 returns the full digest.
+- `algorithm` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;sha256&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">sha256</span></span></span>) - Hash algorithm.
+- `prefixLength` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-64</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Return only the first N hex characters. 0 returns the full digest.
 
 **output**
-- `storeAs` (string, default `"hash"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;hash&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -2839,13 +2844,13 @@ List a directory or glob. Stores an array of {name, path, type, size} in PREVIOU
 Params:
 
 **input**
-- `path` (dir_path, required, from PREVIOUS, resolve: variables+globs+custom) - Directory to list, or a glob pattern such as ${ENV:HOME}/*.png. Leave empty to use PREVIOUS.
+- `path` (<span data-cli="meta"><span data-cli="type">dir_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">globs</span> <span data-cli="choice">custom</span></span></span>) - Directory to list, or a glob pattern such as ${ENV:HOME}/*.png. Leave empty to use PREVIOUS.
 
 **list_options**
-- `only` (enum, default `"all"`, enum: all|dir|file) - Show all entries, only folders, or only files.
+- `only` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;all&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">all</span> <span data-cli="choice">dir</span> <span data-cli="choice">file</span></span></span>) - Show all entries, only folders, or only files.
 
 **output**
-- `storeAs` (string, default `"entries"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;entries&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: iterable
 
@@ -2872,13 +2877,13 @@ Create a folder through the VFS queue (local, ssh://, ftp://, vfs://). Existing 
 Params:
 
 **input**
-- `path` (dir_path, required, from PREVIOUS, resolve: custom) - Folder path or URI to create (and parents). Leave empty to use PREVIOUS. ${…} expand in the transfer lib.
+- `path` (<span data-cli="meta"><span data-cli="type">dir_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">custom</span></span></span>) - Folder path or URI to create (and parents). Leave empty to use PREVIOUS. ${…} expand in the transfer lib.
 
 **options**
-- `dryRun` (boolean, default `false`) - Expand variables only; do not create.
+- `dryRun` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Expand variables only; do not create.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Children:
 - **items** (Then, role: body)
@@ -2903,17 +2908,17 @@ Move files or folders through the VFS queue. Same src/dst ${…} variables as fs
 Params:
 
 **input**
-- `src` (file_path, from PREVIOUS) - File, folder, glob, or URI. Leave empty to use PREVIOUS.
-- `dst` (dir_path, required) - Destination folder (path or URI). Same ${…} templates as fsCopy.
+- `src` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - File, folder, glob, or URI. Leave empty to use PREVIOUS.
+- `dst` (<span data-cli="meta"><span data-cli="type">dir_path</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Destination folder (path or URI). Same ${…} templates as fsCopy.
 
 **options**
-- `conflict` (enum, default `"error"`, enum: error|overwrite|skip|rename|if-newer) - When a dest file already exists.
-- `include` (string, default `""`) - Keep sources matching this glob. Separate multiple with ;
-- `exclude` (string, default `""`) - Drop sources matching this glob. Separate multiple with ;
-- `dryRun` (boolean, default `false`) - Expand variables and sources only; do not move.
+- `conflict` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;error&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">error</span> <span data-cli="choice">overwrite</span> <span data-cli="choice">skip</span> <span data-cli="choice">rename</span> <span data-cli="choice">if-newer</span></span></span>) - When a dest file already exists.
+- `include` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Keep sources matching this glob. Separate multiple with ;
+- `exclude` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Drop sources matching this glob. Separate multiple with ;
+- `dryRun` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Expand variables and sources only; do not move.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Children:
 - **items** (Then, role: body)
@@ -2940,14 +2945,14 @@ Create a new file with the Explorer New name for an extension (localized). Store
 Params:
 
 **input**
-- `ext` (string, required, default `"txt"`) - File type to create, e.g. txt or .txt. Uses the localized Explorer New name for that type. Alias: extension.
-- `path` (dir_path, from PREVIOUS) - Folder to create the file in. Leave empty to use PREVIOUS (folder, or parent of a file) or the current directory.
+- `ext` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;txt&quot;</span></span></span>) - File type to create, e.g. txt or .txt. Uses the localized Explorer New name for that type. Alias: extension.
+- `path` (<span data-cli="meta"><span data-cli="type">dir_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Folder to create the file in. Leave empty to use PREVIOUS (folder, or parent of a file) or the current directory.
 
 **options**
-- `name` (string, default `""`) - Optional file name override. Empty = localized Explorer New name.
+- `name` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional file name override. Empty = localized Explorer New name.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Children:
 - **items** (Then, role: body)
@@ -2973,13 +2978,13 @@ Read a text or JSON file. Stores file content in PREVIOUS / storeAs.
 Params:
 
 **input**
-- `path` (file_path, required, from PREVIOUS, constraints: mustExist+readable, resolve: custom) - File to read. Leave empty to use PREVIOUS as the path.
+- `path` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mustExist</span> <span data-cli="choice">readable</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">custom</span></span></span>) - File to read. Leave empty to use PREVIOUS as the path.
 
 **read_options**
-- `encoding` (enum, default `"text"`, enum: text|json) - Read as plain text, or parse the file as JSON.
+- `encoding` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;text&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">text</span> <span data-cli="choice">json</span></span></span>) - Read as plain text, or parse the file as JSON.
 
 **output**
-- `storeAs` (string, default `"fileContent"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;fileContent&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Children:
 - **items** (Then, role: body)
@@ -3004,14 +3009,14 @@ Write text from the content field or PREVIOUS to a file. Creates parent folders 
 Params:
 
 **input**
-- `path` (output_path, required, constraints: writable+createParents, resolve: custom) - File to write.
-- `content` (string, from PREVIOUS, default `""`) - Content to write. Leave empty to use PREVIOUS.
+- `path` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">custom</span></span></span>) - File to write.
+- `content` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Content to write. Leave empty to use PREVIOUS.
 
 **write_options**
-- `append` (boolean, default `false`) - Append to the existing file instead of overwriting it.
+- `append` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Append to the existing file instead of overwriting it.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Children:
 - **items** (Then, role: body)
@@ -3052,8 +3057,8 @@ One switch branch: runs when the switch value matches its expression.
 
 Params:
 
-- `comparator` (string, default `"==="`) - Comparison operator (===, !=, <, >, ...).
-- `expression` (expression) - Value the switch variable is compared against.
+- `comparator` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;===&quot;</span></span></span>) - Comparison operator (===, !=, <, >, ...).
+- `expression` (<span data-cli="meta"><span data-cli="type">expression</span></span>) - Value the switch variable is compared against.
 
 Features: container
 
@@ -3099,7 +3104,7 @@ Runs when the preceding if/elseIf chain has not matched and its own condition is
 
 Params:
 
-- `condition` (expression, required, default `"true"`) - Condition expression.
+- `condition` (<span data-cli="meta"><span data-cli="type">expression</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;true&quot;</span></span></span>) - Condition expression.
 
 Features: container
 
@@ -3124,8 +3129,8 @@ Stop the run immediately and set the process exit code.
 
 Params:
 
-- `code` (integer, 0-255, default `0`) - Process exit code (0-255). Standard meanings: 0 = success, 1 = general error, 2 = misuse/invalid input, 126 = not executable, 127 = not found, 130 = interrupted (Ctrl+C). Any other value is allowed for app-specific signalling to pipelines.
-- `message` (string, default `""`) - Optional message recorded on the exit event.
+- `code` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Process exit code (0-255). Standard meanings: 0 = success, 1 = general error, 2 = misuse/invalid input, 126 = not executable, 127 = not found, 130 = interrupted (Ctrl+C). Any other value is allowed for app-specific signalling to pipelines.
+- `message` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional message recorded on the exit event.
 
 Features: pure
 
@@ -3146,10 +3151,10 @@ Run child blocks over a numeric range.
 
 Params:
 
-- `initial` (expression, required, default `"0"`) - Loop counter initial value.
-- `comparator` (enum, required, default `"<"`, enum: <|<=|>|>=|!=|==)
-- `final` (expression, required, default `"3"`) - Loop bound expression.
-- `modifier` (expression, required, default `"+1"`) - Counter increment expression, e.g. +1 or *2.
+- `initial` (<span data-cli="meta"><span data-cli="type">expression</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;0&quot;</span></span></span>) - Loop counter initial value.
+- `comparator` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&lt;&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">&lt;</span> <span data-cli="choice">&lt;=</span> <span data-cli="choice">&gt;</span> <span data-cli="choice">&gt;=</span> <span data-cli="choice">!=</span> <span data-cli="choice">==</span></span></span>)
+- `final` (<span data-cli="meta"><span data-cli="type">expression</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;3&quot;</span></span></span>) - Loop bound expression.
+- `modifier` (<span data-cli="meta"><span data-cli="type">expression</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;+1&quot;</span></span></span>) - Counter increment expression, e.g. +1 or *2.
 
 Features: container cancellable
 
@@ -3197,7 +3202,7 @@ Run child blocks when the condition is true. Chain `elseIf`/`else` siblings afte
 
 Params:
 
-- `condition` (expression, required, default `"true"`) - Condition expression.
+- `condition` (<span data-cli="meta"><span data-cli="type">expression</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;true&quot;</span></span></span>) - Condition expression.
 
 Features: container
 
@@ -3222,7 +3227,7 @@ Run child blocks once when the document starts or ends.
 
 Params:
 
-- `event` (enum, default `"On Start"`, enum: On Start|On End) - Document lifecycle moment that runs this block's children once.
+- `event` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;On Start&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">On Start</span> <span data-cli="choice">On End</span></span></span>) - Document lifecycle moment that runs this block's children once.
 
 Features: container
 
@@ -3247,7 +3252,7 @@ Run the first matching case.
 
 Params:
 
-- `variable` (variable_ref, required, default `"mode"`) - Variable to switch on.
+- `variable` (<span data-cli="meta"><span data-cli="type">variable_ref</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;mode&quot;</span></span></span>) - Variable to switch on.
 
 Features: container
 
@@ -3292,7 +3297,7 @@ Sleep for a fixed number of milliseconds.
 
 Params:
 
-- `ms` (duration_ms, required, 0-3.6e+06, default `500`) - Duration to sleep in milliseconds.
+- `ms` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">500</span></span></span>) - Duration to sleep in milliseconds.
 
 Default block:
 
@@ -3312,10 +3317,10 @@ Run child blocks while a condition is true.
 Params:
 
 **input**
-- `condition` (expression, required, default `"false"`) - Loop condition expression.
+- `condition` (<span data-cli="meta"><span data-cli="type">expression</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;false&quot;</span></span></span>) - Loop condition expression.
 
 **advanced**
-- `loopLimit` (integer, 1-1e+06, default `10`) - Maximum iterations (safety cap).
+- `loopLimit` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-1e+06</span>, <span data-cli="default">default <span data-cli="value">10</span></span></span>) - Maximum iterations (safety cap).
 
 Features: container cancellable
 
@@ -3342,28 +3347,28 @@ Decode each image once (libvips thumbnail) and emit quality / junk scores. Same 
 Params:
 
 **input**
-- `input` (image_path, required, from PREVIOUS, resolve: variables+globs) - Image file, folder, or glob. Uses PREVIOUS when unset.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">globs</span></span></span>) - Image file, folder, or glob. Uses PREVIOUS when unset.
 
 **scan**
-- `recursive` (boolean, default `true`) - Recurse into folder inputs.
+- `recursive` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Recurse into folder inputs.
 
 **filter**
-- `minScore` (float, 0-1, default `0.0`) - Keep rows with junk.hint >= this. 0 = every decoded image.
-- `junkKinds` (string, default `"all"`) - dark,bright,blur,flat,tiny or all.
-- `maxResults` (integer, 0-100000, default `0`) - 0 = unlimited.
+- `minScore` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.0</span></span></span>) - Keep rows with junk.hint >= this. 0 = every decoded image.
+- `junkKinds` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;all&quot;</span></span></span>) - dark,bright,blur,flat,tiny or all.
+- `maxResults` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - 0 = unlimited.
 
 **tune**
-- `edgeEnergyBlur` (float, 0-128, default `12.0`) - Blur: mean |dx|+|dy| at/above this → that term is 0.
-- `edgeEnergyP90Blur` (float, 0-256, default `40.0`) - Blur OOF path: p90 |dx|+|dy| at/above this → that term is 0.
-- `edgeEnergyP99Blur` (float, 0-510, default `88.0`) - Blur: p99 |dx|+|dy| at/above this → blur 0 (screenshots / sharp islands).
-- `edgeOrientBlur` (float, 0-1, default `0.2`) - Blur motion path: orientation peak at/below this → that term is 0.
-- `edgeDensityLo` (float, 0-1, default `0.06`) - edgeDensity at/above this counts as having edges.
-- `analyzeMaxSide` (integer, 16-1024, default `128`) - Analysis thumbnail longest side.
-- `tinyMinSide` (integer, 1-4096, default `128`) - tiny score 0 when min(width,height) >= this.
-- `edgeThreshold` (integer, 0-510, default `24`) - |dx|+|dy| above this is an edge pixel.
+- `edgeEnergyBlur` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-128</span>, <span data-cli="default">default <span data-cli="value">12.0</span></span></span>) - Blur: mean |dx|+|dy| at/above this → that term is 0.
+- `edgeEnergyP90Blur` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-256</span>, <span data-cli="default">default <span data-cli="value">40.0</span></span></span>) - Blur OOF path: p90 |dx|+|dy| at/above this → that term is 0.
+- `edgeEnergyP99Blur` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-510</span>, <span data-cli="default">default <span data-cli="value">88.0</span></span></span>) - Blur: p99 |dx|+|dy| at/above this → blur 0 (screenshots / sharp islands).
+- `edgeOrientBlur` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.2</span></span></span>) - Blur motion path: orientation peak at/below this → that term is 0.
+- `edgeDensityLo` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.06</span></span></span>) - edgeDensity at/above this counts as having edges.
+- `analyzeMaxSide` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">16-1024</span>, <span data-cli="default">default <span data-cli="value">128</span></span></span>) - Analysis thumbnail longest side.
+- `tinyMinSide` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-4096</span>, <span data-cli="default">default <span data-cli="value">128</span></span></span>) - tiny score 0 when min(width,height) >= this.
+- `edgeThreshold` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-510</span>, <span data-cli="default">default <span data-cli="value">24</span></span></span>) - |dx|+|dy| above this is an edge pixel.
 
 **output**
-- `storeAs` (string, default `"analyses"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;analyses&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -3398,36 +3403,36 @@ Generate an image from a prompt using the same core create_image API as the CLI 
 Params:
 
 **input**
-- `prompt` (prompt, required) - Prompt for image generation/editing.
+- `prompt` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Prompt for image generation/editing.
 
 **output_file**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output path. Empty = core default naming.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output path. Empty = core default naming.
 
 **model**
-- `provider` (string, default `""`) - Image generation provider. Empty = App Settings image provider.
-- `model` (string, default `""`, resolve: variables+deep) - Image generation model. Empty = App Settings image model.
-- `replicateCollection` (string, default `"official"`) - Replicate collection for browsing models. Only relevant when provider = replicate.
-- `providerOptions` (json_value, default `{}`) - Replicate model-specific input fields (seed, num_inference_steps, ...). Resolved per model via OpenAPI cache.
+- `provider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Image generation provider. Empty = App Settings image provider.
+- `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Image generation model. Empty = App Settings image model.
+- `replicateCollection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;official&quot;</span></span></span>) - Replicate collection for browsing models. Only relevant when provider = replicate.
+- `providerOptions` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Replicate model-specific input fields (seed, num_inference_steps, ...). Resolved per model via OpenAPI cache.
 
 **auth**
-- `apiKey` (api_key, default `""`) - API key override. Empty = from App Settings.
-- `baseUrl` (string, default `""`) - Provider base URL override. Empty = provider default/App Settings.
+- `apiKey` (<span data-cli="meta"><span data-cli="type">api_key</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - API key override. Empty = from App Settings.
+- `baseUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Provider base URL override. Empty = provider default/App Settings.
 
 **request**
-- `aspectRatio` (enum, default `""`, enum: |1:1|16:9|9:16|4:3|3:4|21:9) - Aspect ratio shortcut  -  not all providers use this; for Replicate use providerOptions instead.
-- `imageSize` (enum, default `""`, enum: |512|1K|2K|4K) - Size shortcut  -  not all providers use this; for Replicate use providerOptions instead.
-- `references` (args_list, default `[]`) - Reference image paths (one per row). Each supports the file picker.
+- `aspectRatio` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice"></span> <span data-cli="choice">1:1</span> <span data-cli="choice">16:9</span> <span data-cli="choice">9:16</span> <span data-cli="choice">4:3</span> <span data-cli="choice">3:4</span> <span data-cli="choice">21:9</span></span></span>) - Aspect ratio shortcut  -  not all providers use this; for Replicate use providerOptions instead.
+- `imageSize` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice"></span> <span data-cli="choice">512</span> <span data-cli="choice">1K</span> <span data-cli="choice">2K</span> <span data-cli="choice">4K</span></span></span>) - Size shortcut  -  not all providers use this; for Replicate use providerOptions instead.
+- `references` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - Reference image paths (one per row). Each supports the file picker.
 
 **pre_resize**
-- `resizeFirst` (boolean, default `false`) - Pre-resize input/reference raster before sending to the provider.
-- `resizeWidth` (integer, 0-8192, default `0`) - Longest edge for pre-resize when resizeFirst is on. 0 = provider/default.
-- `preresizeRawOnly` (boolean, default `false`) - When pre-resizing, only force RAW/HEIC rasters through the explicit long-edge resize.
+- `resizeFirst` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Pre-resize input/reference raster before sending to the provider.
+- `resizeWidth` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-8192</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Longest edge for pre-resize when resizeFirst is on. 0 = provider/default.
+- `preresizeRawOnly` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - When pre-resizing, only force RAW/HEIC rasters through the explicit long-edge resize.
 
 **hud**
-- `hud` (boolean, default `false`) - Show the movable overlay HUD while this block runs. Default off.
+- `hud` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Show the movable overlay HUD while this block runs. Default off.
 
 **output**
-- `storeAs` (string, default `"imagePath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;imagePath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: background cancellable
 
@@ -3463,32 +3468,32 @@ Find images by junk/accident scores or by filename. Same core as `tanit-cli find
 Params:
 
 **input**
-- `input` (image_path, required, from PREVIOUS, resolve: variables+globs) - Image file, folder, or glob. Uses PREVIOUS when unset.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">globs</span></span></span>) - Image file, folder, or glob. Uses PREVIOUS when unset.
 
 **query**
-- `mode` (enum, default `"junk"`, enum: junk|name) - junk = quality scores. name = filename / folder substring. duplicates = parked.
-- `prompt` (string, default `""`) - Required for mode=name.
+- `mode` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;junk&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">junk</span> <span data-cli="choice">name</span></span></span>) - junk = quality scores. name = filename / folder substring. duplicates = parked.
+- `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Required for mode=name.
 
 **scan**
-- `recursive` (boolean, default `true`) - Recurse into folder inputs.
+- `recursive` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Recurse into folder inputs.
 
 **filter**
-- `minScore` (float, 0-1, default `0.7`) - Junk: minimum hint to match.
-- `junkKinds` (string, default `"all"`) - dark,bright,blur,flat,tiny or all.
-- `maxResults` (integer, 0-100000, default `0`)
+- `minScore` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.7</span></span></span>) - Junk: minimum hint to match.
+- `junkKinds` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;all&quot;</span></span></span>) - dark,bright,blur,flat,tiny or all.
+- `maxResults` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>)
 
 **tune**
-- `edgeEnergyBlur` (float, 0-128, default `12.0`) - Same as find --edge-energy-blur.
-- `edgeEnergyP90Blur` (float, 0-256, default `40.0`) - Same as find --edge-energy-p90-blur.
-- `edgeEnergyP99Blur` (float, 0-510, default `88.0`) - Same as find --edge-energy-p99-blur.
-- `edgeOrientBlur` (float, 0-1, default `0.2`) - Same as find --edge-orient-blur.
-- `edgeDensityLo` (float, 0-1, default `0.06`) - Same as find --edge-density-lo.
-- `analyzeMaxSide` (integer, 16-1024, default `128`)
-- `tinyMinSide` (integer, 1-4096, default `128`)
-- `edgeThreshold` (integer, 0-510, default `24`)
+- `edgeEnergyBlur` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-128</span>, <span data-cli="default">default <span data-cli="value">12.0</span></span></span>) - Same as find --edge-energy-blur.
+- `edgeEnergyP90Blur` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-256</span>, <span data-cli="default">default <span data-cli="value">40.0</span></span></span>) - Same as find --edge-energy-p90-blur.
+- `edgeEnergyP99Blur` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-510</span>, <span data-cli="default">default <span data-cli="value">88.0</span></span></span>) - Same as find --edge-energy-p99-blur.
+- `edgeOrientBlur` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.2</span></span></span>) - Same as find --edge-orient-blur.
+- `edgeDensityLo` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.06</span></span></span>) - Same as find --edge-density-lo.
+- `analyzeMaxSide` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">16-1024</span>, <span data-cli="default">default <span data-cli="value">128</span></span></span>)
+- `tinyMinSide` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-4096</span>, <span data-cli="default">default <span data-cli="value">128</span></span></span>)
+- `edgeThreshold` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-510</span>, <span data-cli="default">default <span data-cli="value">24</span></span></span>)
 
 **output**
-- `storeAs` (string, default `"matches"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;matches&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -3525,11 +3530,11 @@ List or unload loaded local model instances for this xBlox process.
 Params:
 
 **lifecycle**
-- `action` (enum, default `"List"`, enum: List|Unload) - List loaded models in this xBlox process, or unload one by key.
-- `key` (string, default `"llama:vlm"`) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
+- `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;List&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">List</span> <span data-cli="choice">Unload</span></span></span>) - List loaded models in this xBlox process, or unload one by key.
+- `key` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;llama:vlm&quot;</span></span></span>) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
 
 **output**
-- `storeAs` (string, default `"modelKey"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;modelKey&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -3551,45 +3556,45 @@ Resize/transform one or more image files using the same libvips pipeline as the 
 Params:
 
 **input**
-- `input` (image_path, required, from PREVIOUS, resolve: variables+globs) - Input image path or glob. Uses PREVIOUS when unset.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">globs</span></span></span>) - Input image path or glob. Uses PREVIOUS when unset.
 
 **output_file**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output file, directory, or dst template. Empty = core default output path(s).
-- `suffix` (string, default `""`) - Suffix for implicit output names, e.g. _small.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output file, directory, or dst template. Empty = core default output path(s).
+- `suffix` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Suffix for implicit output names, e.g. _small.
 
 **dimensions**
-- `maxWidth` (integer, 0-100000, default `0`) - Target/max width. 0 = unconstrained.
-- `maxHeight` (integer, 0-100000, default `0`) - Target/max height. 0 = unconstrained.
-- `allowEnlargement` (boolean, default `false`) - Allow upscaling.
+- `maxWidth` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Target/max width. 0 = unconstrained.
+- `maxHeight` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Target/max height. 0 = unconstrained.
+- `allowEnlargement` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Allow upscaling.
 
 **format**
-- `format` (enum, default `""`, enum: |jpg|jpeg|png|webp|avif|tif|tiff|heic) - Output format. Empty = infer from output path/input.
-- `fit` (enum, default `"inside"`, enum: inside|cover|contain|fill|outside) - Resize fit mode, matching Sharp/libvips semantics.
-- `position` (string, default `"centre"`) - For cover: centre, attention, entropy, low, high, etc.
-- `kernel` (enum, default `"lanczos3"`, enum: nearest|cubic|mitchell|lanczos2|lanczos3) - Resize kernel.
-- `background` (string, default `"#ffffff"`) - Letterbox color for contain, e.g. #ffffff.
+- `format` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice"></span> <span data-cli="choice">jpg</span> <span data-cli="choice">jpeg</span> <span data-cli="choice">png</span> <span data-cli="choice">webp</span> <span data-cli="choice">avif</span> <span data-cli="choice">tif</span> <span data-cli="choice">tiff</span> <span data-cli="choice">heic</span></span></span>) - Output format. Empty = infer from output path/input.
+- `fit` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;inside&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">inside</span> <span data-cli="choice">cover</span> <span data-cli="choice">contain</span> <span data-cli="choice">fill</span> <span data-cli="choice">outside</span></span></span>) - Resize fit mode, matching Sharp/libvips semantics.
+- `position` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;centre&quot;</span></span></span>) - For cover: centre, attention, entropy, low, high, etc.
+- `kernel` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;lanczos3&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">nearest</span> <span data-cli="choice">cubic</span> <span data-cli="choice">mitchell</span> <span data-cli="choice">lanczos2</span> <span data-cli="choice">lanczos3</span></span></span>) - Resize kernel.
+- `background` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;#ffffff&quot;</span></span></span>) - Letterbox color for contain, e.g. #ffffff.
 
 **codec**
-- `quality` (integer, 1-100, default `85`) - JPEG/WebP/AVIF quality.
-- `pngCompression` (integer, 0-9, default `6`) - PNG DEFLATE compression level.
-- `stripMetadata` (boolean, default `true`) - Strip metadata on output where supported.
+- `quality` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-100</span>, <span data-cli="default">default <span data-cli="value">85</span></span></span>) - JPEG/WebP/AVIF quality.
+- `pngCompression` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-9</span>, <span data-cli="default">default <span data-cli="value">6</span></span></span>) - PNG DEFLATE compression level.
+- `stripMetadata` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Strip metadata on output where supported.
 
 **transform**
-- `rotate` (integer, 0-270, default `0`) - Rotate 0, 90, 180, or 270 degrees after autorotate.
-- `flip` (boolean, default `false`) - Vertical flip.
-- `flop` (boolean, default `false`) - Horizontal flop.
-- `autorotate` (boolean, default `true`) - Apply EXIF orientation.
+- `rotate` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-270</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Rotate 0, 90, 180, or 270 degrees after autorotate.
+- `flip` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Vertical flip.
+- `flop` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Horizontal flop.
+- `autorotate` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Apply EXIF orientation.
 
 **cache**
-- `cache` (boolean, default `true`) - Enable resize output cache.
-- `cacheDir` (dir_path, default `""`) - Cache directory. Empty = core default.
+- `cache` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Enable resize output cache.
+- `cacheDir` (<span data-cli="meta"><span data-cli="type">dir_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Cache directory. Empty = core default.
 
 **network**
-- `urlTimeoutSec` (integer, 0-3600, default `5`) - HTTP(S) input timeout in seconds.
-- `urlMaxRedirects` (integer, 0-100, default `20`) - Max HTTP redirects.
+- `urlTimeoutSec` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-3600</span>, <span data-cli="default">default <span data-cli="value">5</span></span></span>) - HTTP(S) input timeout in seconds.
+- `urlMaxRedirects` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Max HTTP redirects.
 
 **output**
-- `storeAs` (string, default `"imagePath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;imagePath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -3628,20 +3633,34 @@ Default block:
 
 #### Screenshot
 
-Capture a monitor, window, or webcam to an image file and/or clipboard. The input source string is typically wired from a Picker block (e.g. 'screen:0', 'screen:0:wintitle=Chrome*', or a camera device name).
+Capture a monitor, window, or webcam to an image file and/or clipboard. Set pick=interactive to choose the region in the same block (click window/UIA, drag a rectangle). pick=off uses input or PREVIOUS from a Picker block.
 
 Params:
 
 **input**
-- `input` (screen_input, from PREVIOUS, default `"screen:0"`) - Capture source same format as videoDetect / videoScreenCapture. Wire from a Picker block: 'screen:N', 'screen:N:wintitle=Glob*', 'screen:N:hwnd=<id>:rrect=x,y,w,h', or a camera device name.
+- `input` (<span data-cli="meta"><span data-cli="type">screen_input</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;screen:0&quot;</span></span></span>) - Capture source when pick=off. Same format as videoDetect. Ignored when pick=interactive (the pick becomes the source).
+
+**picker**
+- `pick` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;off&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">interactive</span></span></span>) - interactive runs the window/element picker, then captures that region. off uses input (or PREVIOUS). Click = window/UIA; drag = free rectangle; Alt+wheel or [ ] cycles the stack; Esc cancels.
+- `includeOpenWindows` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Monitor/desktop picks: capture open apps on that display (layer=monitor). Off = wallpaper only.
+- `highlight` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Translucent highlight overlay while picking.
+- `hud` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Picker HUD chip (stack name / shortcuts). Off keeps the highlight.
+- `resolveUia` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Resolve the UIA element under the cursor (web nodes, video players).
+- `showHidden` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Include non-visible child windows (Chrome render widget, etc.).
+- `siblings` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Alt+wheel / [ ] stack includes sibling panes and their union. Off = leaf and ancestors only.
+- `magnifier` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Open the 8× loupe at pick start (Z toggles).
+- `pickTimeoutMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1000-600000</span>, <span data-cli="default">default <span data-cli="value">60000</span></span></span>) - Abort the pick after this many milliseconds. Default 60 s.
 
 **output**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output path (.jpg or .png). Optional leave empty to skip saving.
-- `copyToClipboard` (boolean, default `false`) - Copy the captured image to the clipboard as CF_DIB (bitmap).
-- `storeAs` (string, default `"imagePath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output path (.jpg or .png). Optional leave empty to skip saving.
+- `copyToClipboard` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Copy the captured image to the clipboard as CF_DIB (bitmap).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;imagePath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 **advanced**
-- `timeoutMs` (integer, 100-60000, default `5000`) - Webcam capture timeout in milliseconds (unused for screen sources).
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">100-60000</span>, <span data-cli="default">default <span data-cli="value">5000</span></span></span>) - Webcam capture timeout in milliseconds (unused for screen sources).
+
+**capture_options**
+- `hudCapture` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">exclude</span> <span data-cli="choice">visible</span></span></span>) - Overlay capture policy. With pick=interactive, visible BitBlts the live picker HUD/highlight into the still before the overlay closes. auto and exclude omit overlays. Idle picker/status HUDs stay visible to Windows Snap and other-process recorders.
 
 Features: cancellable
 
@@ -3650,9 +3669,19 @@ Default block:
 ```json
 {
   "copyToClipboard": false,
+  "highlight": true,
+  "hud": true,
+  "hudCapture": "auto",
+  "includeOpenWindows": true,
   "input": "screen:0",
   "kind": "imageScreenshot",
+  "magnifier": false,
   "outputPath": "",
+  "pick": "off",
+  "pickTimeoutMs": 60000,
+  "resolveUia": true,
+  "showHidden": true,
+  "siblings": false,
   "storeAs": "imagePath",
   "timeoutMs": 5000
 }
@@ -3667,37 +3696,37 @@ Edit one or more images with an AI prompt using the same core transform_image AP
 Params:
 
 **input**
-- `input` (image_path, from PREVIOUS, default `""`, resolve: variables+globs) - Input image path or glob. Uses PREVIOUS when unset.
-- `prompt` (prompt, required) - Prompt for image generation/editing.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">globs</span></span></span>) - Input image path or glob. Uses PREVIOUS when unset.
+- `prompt` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Prompt for image generation/editing.
 
 **output_file**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output path. Empty = core default naming.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output path. Empty = core default naming.
 
 **model**
-- `provider` (string, default `""`) - Image generation provider. Empty = App Settings image provider.
-- `model` (string, default `""`, resolve: variables+deep) - Image generation model. Empty = App Settings image model.
-- `replicateCollection` (string, default `"official"`) - Replicate collection for browsing models. Only relevant when provider = replicate.
-- `providerOptions` (json_value, default `{}`) - Replicate model-specific input fields (seed, num_inference_steps, ...). Resolved per model via OpenAPI cache.
+- `provider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Image generation provider. Empty = App Settings image provider.
+- `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Image generation model. Empty = App Settings image model.
+- `replicateCollection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;official&quot;</span></span></span>) - Replicate collection for browsing models. Only relevant when provider = replicate.
+- `providerOptions` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Replicate model-specific input fields (seed, num_inference_steps, ...). Resolved per model via OpenAPI cache.
 
 **auth**
-- `apiKey` (api_key, default `""`) - API key override. Empty = from App Settings.
-- `baseUrl` (string, default `""`) - Provider base URL override. Empty = provider default/App Settings.
+- `apiKey` (<span data-cli="meta"><span data-cli="type">api_key</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - API key override. Empty = from App Settings.
+- `baseUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Provider base URL override. Empty = provider default/App Settings.
 
 **request**
-- `aspectRatio` (enum, default `""`, enum: |1:1|16:9|9:16|4:3|3:4|21:9) - Aspect ratio shortcut  -  not all providers use this; for Replicate use providerOptions instead.
-- `imageSize` (enum, default `""`, enum: |512|1K|2K|4K) - Size shortcut  -  not all providers use this; for Replicate use providerOptions instead.
-- `references` (args_list, default `[]`) - Reference image paths (one per row). Each supports the file picker.
+- `aspectRatio` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice"></span> <span data-cli="choice">1:1</span> <span data-cli="choice">16:9</span> <span data-cli="choice">9:16</span> <span data-cli="choice">4:3</span> <span data-cli="choice">3:4</span> <span data-cli="choice">21:9</span></span></span>) - Aspect ratio shortcut  -  not all providers use this; for Replicate use providerOptions instead.
+- `imageSize` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice"></span> <span data-cli="choice">512</span> <span data-cli="choice">1K</span> <span data-cli="choice">2K</span> <span data-cli="choice">4K</span></span></span>) - Size shortcut  -  not all providers use this; for Replicate use providerOptions instead.
+- `references` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - Reference image paths (one per row). Each supports the file picker.
 
 **pre_resize**
-- `resizeFirst` (boolean, default `false`) - Pre-resize input/reference raster before sending to the provider.
-- `resizeWidth` (integer, 0-8192, default `0`) - Longest edge for pre-resize when resizeFirst is on. 0 = provider/default.
-- `preresizeRawOnly` (boolean, default `false`) - When pre-resizing, only force RAW/HEIC rasters through the explicit long-edge resize.
+- `resizeFirst` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Pre-resize input/reference raster before sending to the provider.
+- `resizeWidth` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-8192</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Longest edge for pre-resize when resizeFirst is on. 0 = provider/default.
+- `preresizeRawOnly` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - When pre-resizing, only force RAW/HEIC rasters through the explicit long-edge resize.
 
 **hud**
-- `hud` (boolean, default `false`) - Show the movable overlay HUD while this block runs. Default off.
+- `hud` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Show the movable overlay HUD while this block runs. Default off.
 
 **output**
-- `storeAs` (string, default `"imagePath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;imagePath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: background cancellable
 
@@ -3734,34 +3763,34 @@ Ask the vision/recognition model a question about one or more images. Same pipel
 Params:
 
 **input**
-- `input` (image_path, required, from PREVIOUS, resolve: variables+globs) - Input image path or glob. Uses PREVIOUS when unset. Pass multiple images for comparison prompts.
-- `prompt` (prompt, required) - Vision question or instruction for the recognition model.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">globs</span></span></span>) - Input image path or glob. Uses PREVIOUS when unset. Pass multiple images for comparison prompts.
+- `prompt` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Vision question or instruction for the recognition model.
 
 **model**
-- `provider` (string, default `""`) - Image recognition provider. Empty = App Settings image recognition provider.
-- `model` (string, default `""`, resolve: variables+deep) - Image recognition model. Empty = App Settings image recognition model. For provider=llama, local VLMs come from vision.models.vlm.
-- `replicateCollection` (string, default `"official"`) - Replicate collection for browsing vision models. Only relevant when provider = replicate.
+- `provider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Image recognition provider. Empty = App Settings image recognition provider.
+- `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Image recognition model. Empty = App Settings image recognition model. For provider=llama, local VLMs come from vision.models.vlm.
+- `replicateCollection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;official&quot;</span></span></span>) - Replicate collection for browsing vision models. Only relevant when provider = replicate.
 
 **auth**
-- `apiKey` (api_key, default `""`) - API key override. Empty = from App Settings.
-- `baseUrl` (string, default `""`) - Provider base URL override. Empty = provider default/App Settings.
+- `apiKey` (<span data-cli="meta"><span data-cli="type">api_key</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - API key override. Empty = from App Settings.
+- `baseUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Provider base URL override. Empty = provider default/App Settings.
 
 **pre_resize**
-- `resizeFirst` (boolean, default `true`) - Pre-resize images before upload (default true, matching image_understand).
-- `resizeWidth` (integer, 64-2048, default `512`) - Longest edge for pre-resize when resizeFirst is on.
+- `resizeFirst` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Pre-resize images before upload (default true, matching image_understand).
+- `resizeWidth` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">64-2048</span>, <span data-cli="default">default <span data-cli="value">512</span></span></span>) - Longest edge for pre-resize when resizeFirst is on.
 
 **output**
-- `json` (boolean, default `false`) - When true, result is structured JSON; when false, result is answer text only.
-- `storeAs` (string, default `"answer"`) - Variable to also store the result in (always sets PREVIOUS).
+- `json` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - When true, result is structured JSON; when false, result is answer text only.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;answer&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 **runtime**
-- `threads` (integer, 1-64, default `4`) - CPU threads for local VLM (provider=llama).
-- `gpuLayers` (integer, -1-999, default `-1`) - GPU layers for local VLM. -1 = all available, 0 = CPU-only.
-- `ctx` (integer, 1024-65536, default `4096`) - Context size for local VLM. Use 8192+ for multi-image prompts.
-- `maxTokens` (integer, 1-32768, default `2048`) - Maximum generated tokens for local VLM.
+- `threads` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-64</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - CPU threads for local VLM (provider=llama).
+- `gpuLayers` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">-1-999</span>, <span data-cli="default">default <span data-cli="value">-1</span></span></span>) - GPU layers for local VLM. -1 = all available, 0 = CPU-only.
+- `ctx` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1024-65536</span>, <span data-cli="default">default <span data-cli="value">4096</span></span></span>) - Context size for local VLM. Use 8192+ for multi-image prompts.
+- `maxTokens` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-32768</span>, <span data-cli="default">default <span data-cli="value">2048</span></span></span>) - Maximum generated tokens for local VLM.
 
 **hud**
-- `hud` (boolean, default `false`) - Show the movable overlay HUD while this block runs. Default off.
+- `hud` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Show the movable overlay HUD while this block runs. Default off.
 
 Features: background cancellable
 
@@ -3798,14 +3827,14 @@ Sample a keyboard shortcut once and emit down/pressed/released/toggle state. Des
 Params:
 
 **input**
-- `keys` (shortcut, default `"F9"`) - Keyboard shortcut to sample, e.g. F9 or Ctrl+Shift+R. Ignored when anyKey is on.
+- `keys` (<span data-cli="meta"><span data-cli="type">shortcut</span>, <span data-cli="default">default <span data-cli="value">&quot;F9&quot;</span></span></span>) - Keyboard shortcut to sample, e.g. F9 or Ctrl+Shift+R. Ignored when anyKey is on.
 
 **options**
-- `anyKey` (boolean, default `false`) - Match any key press instead of the configured shortcut.
-- `toggle` (boolean, default `true`) - Flip the emitted toggle state on each press edge.
+- `anyKey` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Match any key press instead of the configured shortcut.
+- `toggle` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Flip the emitted toggle state on each press edge.
 
 **output**
-- `storeAs` (string, default `"key"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;key&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: pure
 
@@ -3830,16 +3859,16 @@ Wait for a keyboard shortcut then run child blocks. on=pressed fires on key-down
 Params:
 
 **input**
-- `keys` (shortcut, default `"F9"`) - Keyboard shortcut to listen for, e.g. F9 or Ctrl+Shift+R. Ignored when anyKey is on.
-- `on` (enum, default `"pressed"`, enum: pressed|held|released|toggle) - When to fire: pressed (leading edge), held (while down), released (trailing edge), or toggle (first press starts child blocks, second press cancels them).
+- `keys` (<span data-cli="meta"><span data-cli="type">shortcut</span>, <span data-cli="default">default <span data-cli="value">&quot;F9&quot;</span></span></span>) - Keyboard shortcut to listen for, e.g. F9 or Ctrl+Shift+R. Ignored when anyKey is on.
+- `on` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;pressed&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">pressed</span> <span data-cli="choice">held</span> <span data-cli="choice">released</span> <span data-cli="choice">toggle</span></span></span>) - When to fire: pressed (leading edge), held (while down), released (trailing edge), or toggle (first press starts child blocks, second press cancels them).
 
 **options**
-- `repeat` (boolean, default `false`) - Keep listening and fire on every matching event. Not applicable to toggle (which always re-arms after each cycle).
-- `anyKey` (boolean, default `false`) - Match any key press instead of the configured shortcut. Stores the key name in PREVIOUS / storeAs.
-- `timeoutMs` (duration_ms, default `0`) - Stop listening after this many milliseconds. 0 = wait forever.
+- `repeat` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Keep listening and fire on every matching event. Not applicable to toggle (which always re-arms after each cycle).
+- `anyKey` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Match any key press instead of the configured shortcut. Stores the key name in PREVIOUS / storeAs.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Stop listening after this many milliseconds. 0 = wait forever.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: container cancellable
 
@@ -3869,23 +3898,23 @@ Connect to an MQTT broker and Publish, Subscribe, or RoundTrip a test message. F
 Params:
 
 **mode**
-- `action` (enum, default `"RoundTrip"`, enum: Publish|Subscribe|RoundTrip) - Publish sends one message. Subscribe waits for one message. RoundTrip subscribes then publishes and waits for its echo.
+- `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;RoundTrip&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">Publish</span> <span data-cli="choice">Subscribe</span> <span data-cli="choice">RoundTrip</span></span></span>) - Publish sends one message. Subscribe waits for one message. RoundTrip subscribes then publishes and waits for its echo.
 
 **input**
-- `host` (string, default `"127.0.0.1"`) - Broker host.
-- `port` (integer, 1-65535, default `1883`) - Broker port.
-- `topic` (string, default `"xblox/smoke"`) - MQTT topic.
-- `payload` (prompt, default `"hello from xblox"`) - Payload to publish.
+- `host` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;127.0.0.1&quot;</span></span></span>) - Broker host.
+- `port` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-65535</span>, <span data-cli="default">default <span data-cli="value">1883</span></span></span>) - Broker port.
+- `topic` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;xblox/smoke&quot;</span></span></span>) - MQTT topic.
+- `payload` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="default">default <span data-cli="value">&quot;hello from xblox&quot;</span></span></span>) - Payload to publish.
 
 **advanced**
-- `clientId` (string, default `"xblox-mqtt"`) - MQTT client id.
-- `qos` (integer, 0-2, default `0`) - MQTT QoS level.
+- `clientId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;xblox-mqtt&quot;</span></span></span>) - MQTT client id.
+- `qos` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-2</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MQTT QoS level.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1-60000, default `5000`) - Client operation timeout.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1-60000</span>, <span data-cli="default">default <span data-cli="value">5000</span></span></span>) - Client operation timeout.
 
 **output**
-- `storeAs` (string, default `"mqtt"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;mqtt&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: container cancellable
 
@@ -3918,15 +3947,15 @@ Start, stop, or inspect a named in-process MQTT broker instance.
 Params:
 
 **server_lifecycle**
-- `action` (enum, default `"Start"`, enum: Start|Stop|Status) - Start a named MQTT broker, Stop it, or report Status.
-- `instance` (string, default `"default"`) - Named broker instance. Use the same name for Stop/Status.
+- `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;Start&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">Start</span> <span data-cli="choice">Stop</span> <span data-cli="choice">Status</span></span></span>) - Start a named MQTT broker, Stop it, or report Status.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;default&quot;</span></span></span>) - Named broker instance. Use the same name for Stop/Status.
 
 **network**
-- `bind` (string, default `"127.0.0.1"`) - Network interface to listen on.
-- `port` (integer, 1-65535, default `1883`) - MQTT TCP port.
+- `bind` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;127.0.0.1&quot;</span></span></span>) - Network interface to listen on.
+- `port` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-65535</span>, <span data-cli="default">default <span data-cli="value">1883</span></span></span>) - MQTT TCP port.
 
 **output**
-- `storeAs` (string, default `"mqttServer"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;mqttServer&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -3952,21 +3981,21 @@ Start, stop, or inspect a named cached Modbus client connection for fast repeate
 Params:
 
 **connection**
-- `action` (enum, default `"Start"`, enum: Start|Stop|Status) - Start/open a named connection, Stop/release it, or report Status.
-- `connection` (string, default `"default"`) - Named connection/pool key reused by read/write blocks.
-- `instance` (string, default `""`) - Alias for connection.
+- `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;Start&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">Start</span> <span data-cli="choice">Stop</span> <span data-cli="choice">Status</span></span></span>) - Start/open a named connection, Stop/release it, or report Status.
+- `connection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;default&quot;</span></span></span>) - Named connection/pool key reused by read/write blocks.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Alias for connection.
 
 **input**
-- `url` (string, default `"tcp:127.0.0.1:15020"`) - Endpoint to connect to.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;tcp:127.0.0.1:15020&quot;</span></span></span>) - Endpoint to connect to.
 
 **advanced**
-- `slave` (integer, 0-255) - Unit/slave id.
-- `unitId` (integer, 0-255) - Alias for slave.
-- `timeoutMs` (duration_ms, 0-3.6e+06, default `30000`)
-- `reload` (boolean, default `false`) - Force reconnect even if the named connection is already open.
+- `slave` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span></span>) - Unit/slave id.
+- `unitId` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span></span>) - Alias for slave.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>)
+- `reload` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Force reconnect even if the named connection is already open.
 
 **output**
-- `storeAs` (string, default `"modbusConnection"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;modbusConnection&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -3991,25 +4020,25 @@ Read coils, discrete inputs, holding registers, or input registers. ModbusPoll-s
 Params:
 
 **input**
-- `url` (string, required, default `"tcp:127.0.0.1:15020"`) - Endpoint to read from.
-- `area` (enum, default `"holdingRegisters"`, enum: holdingRegisters|inputRegisters|coils|discreteInputs) - Modbus table/function: holdingRegisters=FC03, inputRegisters=FC04, coils=FC01, discreteInputs=FC02.
-- `address` (integer, 0-65535, default `0`) - Starting address. Zero-based by default; 40001/30001/10001 style addresses are also accepted.
-- `count` (integer, 1-2000, default `1`) - Number of coils/registers to read.
-- `regCount` (integer, 1-2000, default `1`) - Alias for count, matching ModbusPoll wording.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;tcp:127.0.0.1:15020&quot;</span></span></span>) - Endpoint to read from.
+- `area` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;holdingRegisters&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">holdingRegisters</span> <span data-cli="choice">inputRegisters</span> <span data-cli="choice">coils</span> <span data-cli="choice">discreteInputs</span></span></span>) - Modbus table/function: holdingRegisters=FC03, inputRegisters=FC04, coils=FC01, discreteInputs=FC02.
+- `address` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Starting address. Zero-based by default; 40001/30001/10001 style addresses are also accepted.
+- `count` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-2000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Number of coils/registers to read.
+- `regCount` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-2000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Alias for count, matching ModbusPoll wording.
 
 **connection**
-- `connection` (string, default `""`) - Optional named connection to reuse/open for fast repeated reads.
-- `instance` (string, default `""`) - Alias for connection.
-- `reload` (boolean, default `false`) - Force reconnect the named connection before this operation.
+- `connection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional named connection to reuse/open for fast repeated reads.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Alias for connection.
+- `reload` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Force reconnect the named connection before this operation.
 
 **advanced**
-- `addressBase` (string, default `"zero"`) - zero (default), one, or modbus. one subtracts 1 from address.
-- `slave` (integer, 0-255) - Unit/slave id.
-- `timeoutMs` (duration_ms, 0-3.6e+06, default `30000`)
-- `waitTimeMs` (duration_ms, 0-60000, default `20`) - Cancellable delay after a successful read before the next block. 0 = no delay.
+- `addressBase` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;zero&quot;</span></span></span>) - zero (default), one, or modbus. one subtracts 1 from address.
+- `slave` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span></span>) - Unit/slave id.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>)
+- `waitTimeMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Cancellable delay after a successful read before the next block. 0 = no delay.
 
 **output**
-- `storeAs` (string, default `"values"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;values&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4033,25 +4062,25 @@ Read coils (FC01).
 Params:
 
 **input**
-- `url` (string, required, default `"tcp:127.0.0.1:15020"`) - Endpoint to read from.
-- `area` (enum, default `"holdingRegisters"`, enum: holdingRegisters|inputRegisters|coils|discreteInputs) - Modbus table/function: holdingRegisters=FC03, inputRegisters=FC04, coils=FC01, discreteInputs=FC02.
-- `address` (integer, 0-65535, default `0`) - Starting address. Zero-based by default; 40001/30001/10001 style addresses are also accepted.
-- `count` (integer, 1-2000, default `1`) - Number of coils/registers to read.
-- `regCount` (integer, 1-2000, default `1`) - Alias for count, matching ModbusPoll wording.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;tcp:127.0.0.1:15020&quot;</span></span></span>) - Endpoint to read from.
+- `area` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;holdingRegisters&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">holdingRegisters</span> <span data-cli="choice">inputRegisters</span> <span data-cli="choice">coils</span> <span data-cli="choice">discreteInputs</span></span></span>) - Modbus table/function: holdingRegisters=FC03, inputRegisters=FC04, coils=FC01, discreteInputs=FC02.
+- `address` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Starting address. Zero-based by default; 40001/30001/10001 style addresses are also accepted.
+- `count` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-2000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Number of coils/registers to read.
+- `regCount` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-2000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Alias for count, matching ModbusPoll wording.
 
 **connection**
-- `connection` (string, default `""`) - Optional named connection to reuse/open for fast repeated reads.
-- `instance` (string, default `""`) - Alias for connection.
-- `reload` (boolean, default `false`) - Force reconnect the named connection before this operation.
+- `connection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional named connection to reuse/open for fast repeated reads.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Alias for connection.
+- `reload` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Force reconnect the named connection before this operation.
 
 **advanced**
-- `addressBase` (string, default `"zero"`) - zero (default), one, or modbus. one subtracts 1 from address.
-- `slave` (integer, 0-255) - Unit/slave id.
-- `timeoutMs` (duration_ms, 0-3.6e+06, default `30000`)
-- `waitTimeMs` (duration_ms, 0-60000, default `20`) - Cancellable delay after a successful read before the next block. 0 = no delay.
+- `addressBase` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;zero&quot;</span></span></span>) - zero (default), one, or modbus. one subtracts 1 from address.
+- `slave` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span></span>) - Unit/slave id.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>)
+- `waitTimeMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Cancellable delay after a successful read before the next block. 0 = no delay.
 
 **output**
-- `storeAs` (string, default `"values"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;values&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4075,25 +4104,25 @@ Read discrete inputs (FC02).
 Params:
 
 **input**
-- `url` (string, required, default `"tcp:127.0.0.1:15020"`) - Endpoint to read from.
-- `area` (enum, default `"holdingRegisters"`, enum: holdingRegisters|inputRegisters|coils|discreteInputs) - Modbus table/function: holdingRegisters=FC03, inputRegisters=FC04, coils=FC01, discreteInputs=FC02.
-- `address` (integer, 0-65535, default `0`) - Starting address. Zero-based by default; 40001/30001/10001 style addresses are also accepted.
-- `count` (integer, 1-2000, default `1`) - Number of coils/registers to read.
-- `regCount` (integer, 1-2000, default `1`) - Alias for count, matching ModbusPoll wording.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;tcp:127.0.0.1:15020&quot;</span></span></span>) - Endpoint to read from.
+- `area` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;holdingRegisters&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">holdingRegisters</span> <span data-cli="choice">inputRegisters</span> <span data-cli="choice">coils</span> <span data-cli="choice">discreteInputs</span></span></span>) - Modbus table/function: holdingRegisters=FC03, inputRegisters=FC04, coils=FC01, discreteInputs=FC02.
+- `address` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Starting address. Zero-based by default; 40001/30001/10001 style addresses are also accepted.
+- `count` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-2000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Number of coils/registers to read.
+- `regCount` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-2000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Alias for count, matching ModbusPoll wording.
 
 **connection**
-- `connection` (string, default `""`) - Optional named connection to reuse/open for fast repeated reads.
-- `instance` (string, default `""`) - Alias for connection.
-- `reload` (boolean, default `false`) - Force reconnect the named connection before this operation.
+- `connection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional named connection to reuse/open for fast repeated reads.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Alias for connection.
+- `reload` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Force reconnect the named connection before this operation.
 
 **advanced**
-- `addressBase` (string, default `"zero"`) - zero (default), one, or modbus. one subtracts 1 from address.
-- `slave` (integer, 0-255) - Unit/slave id.
-- `timeoutMs` (duration_ms, 0-3.6e+06, default `30000`)
-- `waitTimeMs` (duration_ms, 0-60000, default `20`) - Cancellable delay after a successful read before the next block. 0 = no delay.
+- `addressBase` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;zero&quot;</span></span></span>) - zero (default), one, or modbus. one subtracts 1 from address.
+- `slave` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span></span>) - Unit/slave id.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>)
+- `waitTimeMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Cancellable delay after a successful read before the next block. 0 = no delay.
 
 **output**
-- `storeAs` (string, default `"values"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;values&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4117,25 +4146,25 @@ Read holding registers from a Modbus TCP/RTU endpoint.
 Params:
 
 **input**
-- `url` (string, required, default `"tcp:127.0.0.1:15020"`) - Endpoint to read from.
-- `area` (enum, default `"holdingRegisters"`, enum: holdingRegisters|inputRegisters|coils|discreteInputs) - Modbus table/function: holdingRegisters=FC03, inputRegisters=FC04, coils=FC01, discreteInputs=FC02.
-- `address` (integer, 0-65535, default `0`) - Starting address. Zero-based by default; 40001/30001/10001 style addresses are also accepted.
-- `count` (integer, 1-2000, default `1`) - Number of coils/registers to read.
-- `regCount` (integer, 1-2000, default `1`) - Alias for count, matching ModbusPoll wording.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;tcp:127.0.0.1:15020&quot;</span></span></span>) - Endpoint to read from.
+- `area` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;holdingRegisters&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">holdingRegisters</span> <span data-cli="choice">inputRegisters</span> <span data-cli="choice">coils</span> <span data-cli="choice">discreteInputs</span></span></span>) - Modbus table/function: holdingRegisters=FC03, inputRegisters=FC04, coils=FC01, discreteInputs=FC02.
+- `address` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Starting address. Zero-based by default; 40001/30001/10001 style addresses are also accepted.
+- `count` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-2000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Number of coils/registers to read.
+- `regCount` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-2000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Alias for count, matching ModbusPoll wording.
 
 **connection**
-- `connection` (string, default `""`) - Optional named connection to reuse/open for fast repeated reads.
-- `instance` (string, default `""`) - Alias for connection.
-- `reload` (boolean, default `false`) - Force reconnect the named connection before this operation.
+- `connection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional named connection to reuse/open for fast repeated reads.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Alias for connection.
+- `reload` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Force reconnect the named connection before this operation.
 
 **advanced**
-- `addressBase` (string, default `"zero"`) - zero (default), one, or modbus. one subtracts 1 from address.
-- `slave` (integer, 0-255) - Unit/slave id.
-- `timeoutMs` (duration_ms, 0-3.6e+06, default `30000`)
-- `waitTimeMs` (duration_ms, 0-60000, default `20`) - Cancellable delay after a successful read before the next block. 0 = no delay.
+- `addressBase` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;zero&quot;</span></span></span>) - zero (default), one, or modbus. one subtracts 1 from address.
+- `slave` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span></span>) - Unit/slave id.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>)
+- `waitTimeMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Cancellable delay after a successful read before the next block. 0 = no delay.
 
 **output**
-- `storeAs` (string, default `"values"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;values&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4158,25 +4187,25 @@ Read input registers (FC04).
 Params:
 
 **input**
-- `url` (string, required, default `"tcp:127.0.0.1:15020"`) - Endpoint to read from.
-- `area` (enum, default `"holdingRegisters"`, enum: holdingRegisters|inputRegisters|coils|discreteInputs) - Modbus table/function: holdingRegisters=FC03, inputRegisters=FC04, coils=FC01, discreteInputs=FC02.
-- `address` (integer, 0-65535, default `0`) - Starting address. Zero-based by default; 40001/30001/10001 style addresses are also accepted.
-- `count` (integer, 1-2000, default `1`) - Number of coils/registers to read.
-- `regCount` (integer, 1-2000, default `1`) - Alias for count, matching ModbusPoll wording.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;tcp:127.0.0.1:15020&quot;</span></span></span>) - Endpoint to read from.
+- `area` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;holdingRegisters&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">holdingRegisters</span> <span data-cli="choice">inputRegisters</span> <span data-cli="choice">coils</span> <span data-cli="choice">discreteInputs</span></span></span>) - Modbus table/function: holdingRegisters=FC03, inputRegisters=FC04, coils=FC01, discreteInputs=FC02.
+- `address` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Starting address. Zero-based by default; 40001/30001/10001 style addresses are also accepted.
+- `count` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-2000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Number of coils/registers to read.
+- `regCount` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-2000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Alias for count, matching ModbusPoll wording.
 
 **connection**
-- `connection` (string, default `""`) - Optional named connection to reuse/open for fast repeated reads.
-- `instance` (string, default `""`) - Alias for connection.
-- `reload` (boolean, default `false`) - Force reconnect the named connection before this operation.
+- `connection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional named connection to reuse/open for fast repeated reads.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Alias for connection.
+- `reload` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Force reconnect the named connection before this operation.
 
 **advanced**
-- `addressBase` (string, default `"zero"`) - zero (default), one, or modbus. one subtracts 1 from address.
-- `slave` (integer, 0-255) - Unit/slave id.
-- `timeoutMs` (duration_ms, 0-3.6e+06, default `30000`)
-- `waitTimeMs` (duration_ms, 0-60000, default `20`) - Cancellable delay after a successful read before the next block. 0 = no delay.
+- `addressBase` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;zero&quot;</span></span></span>) - zero (default), one, or modbus. one subtracts 1 from address.
+- `slave` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span></span>) - Unit/slave id.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>)
+- `waitTimeMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Cancellable delay after a successful read before the next block. 0 = no delay.
 
 **output**
-- `storeAs` (string, default `"values"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;values&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4200,25 +4229,25 @@ Run a Modbus TCP server until cancelled, durationMs expires, or maxRequests is r
 Params:
 
 **input**
-- `url` (string, default `"tcp:127.0.0.1:15020"`) - Listen endpoint, e.g. tcp:127.0.0.1:15020.
-- `holdingRegisters` (json_value) - Initial holding-register values (integer array).
-- `inputRegisters` (json_value) - Initial input-register values (integer array).
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;tcp:127.0.0.1:15020&quot;</span></span></span>) - Listen endpoint, e.g. tcp:127.0.0.1:15020.
+- `holdingRegisters` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Initial holding-register values (integer array).
+- `inputRegisters` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Initial input-register values (integer array).
 
 **advanced**
-- `registerCount` (integer, 0-65535, default `128`) - Number of holding registers to expose.
-- `inputRegisterCount` (integer, 0-65535, default `128`) - Number of input registers to expose.
-- `coilCount` (integer, 0-65535, default `128`) - Number of coils to expose.
-- `coils` (json_value) - Initial coil values (boolean/integer array).
-- `discreteInputCount` (integer, 0-65535, default `128`) - Number of discrete inputs to expose.
-- `discreteInputs` (json_value) - Initial discrete-input values (boolean/integer array).
-- `durationMs` (duration_ms, 0-3.6e+06, default `0`) - Auto-stop after this many ms. 0 = run until cancelled.
-- `maxRequests` (integer, 0-1e+06, default `0`) - Auto-stop after this many requests. 0 = unlimited.
-- `unitId` (integer, 0-255, default `1`) - Modbus unit/slave id.
-- `pollTimeoutMs` (integer, 1-60000, default `100`) - Server poll timeout in ms.
-- `debug` (boolean, default `false`) - Verbose server logging.
+- `registerCount` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">128</span></span></span>) - Number of holding registers to expose.
+- `inputRegisterCount` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">128</span></span></span>) - Number of input registers to expose.
+- `coilCount` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">128</span></span></span>) - Number of coils to expose.
+- `coils` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Initial coil values (boolean/integer array).
+- `discreteInputCount` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">128</span></span></span>) - Number of discrete inputs to expose.
+- `discreteInputs` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Initial discrete-input values (boolean/integer array).
+- `durationMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Auto-stop after this many ms. 0 = run until cancelled.
+- `maxRequests` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-1e+06</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Auto-stop after this many requests. 0 = unlimited.
+- `unitId` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Modbus unit/slave id.
+- `pollTimeoutMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-60000</span>, <span data-cli="default">default <span data-cli="value">100</span></span></span>) - Server poll timeout in ms.
+- `debug` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Verbose server logging.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -4261,25 +4290,25 @@ Write one or many holding registers/coils. Chooses FC06/FC16 or FC05/FC15 based 
 Params:
 
 **input**
-- `url` (string, required, default `"tcp:127.0.0.1:15020"`) - Endpoint to write to.
-- `area` (enum, default `"holdingRegisters"`, enum: holdingRegisters|coils) - Writable table/function: holdingRegisters=FC06/FC16, coils=FC05/FC15.
-- `address` (integer, 0-65535, default `0`) - Starting address. Zero-based by default; 40001/00001 style addresses are also accepted.
-- `value` (json_value) - Single 16-bit register value or coil boolean/0/1.
-- `values` (json_value) - Multiple values. Arrays and comma-separated strings are accepted.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;tcp:127.0.0.1:15020&quot;</span></span></span>) - Endpoint to write to.
+- `area` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;holdingRegisters&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">holdingRegisters</span> <span data-cli="choice">coils</span></span></span>) - Writable table/function: holdingRegisters=FC06/FC16, coils=FC05/FC15.
+- `address` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Starting address. Zero-based by default; 40001/00001 style addresses are also accepted.
+- `value` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Single 16-bit register value or coil boolean/0/1.
+- `values` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Multiple values. Arrays and comma-separated strings are accepted.
 
 **connection**
-- `connection` (string, default `""`) - Optional named connection to reuse/open for fast repeated writes.
-- `instance` (string, default `""`) - Alias for connection.
-- `reload` (boolean, default `false`) - Force reconnect the named connection before this operation.
+- `connection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional named connection to reuse/open for fast repeated writes.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Alias for connection.
+- `reload` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Force reconnect the named connection before this operation.
 
 **advanced**
-- `addressBase` (string, default `"zero"`) - zero (default), one, or modbus. one subtracts 1 from address.
-- `slave` (integer, 0-255) - Unit/slave id.
-- `timeoutMs` (duration_ms, 0-3.6e+06, default `30000`)
-- `waitTimeMs` (duration_ms, 0-60000, default `20`) - Cancellable delay after a successful write before the next block. 0 = no delay.
+- `addressBase` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;zero&quot;</span></span></span>) - zero (default), one, or modbus. one subtracts 1 from address.
+- `slave` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span></span>) - Unit/slave id.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>)
+- `waitTimeMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Cancellable delay after a successful write before the next block. 0 = no delay.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4305,25 +4334,25 @@ Write a single coil (FC05).
 Params:
 
 **input**
-- `url` (string, required, default `"tcp:127.0.0.1:15020"`) - Endpoint to write to.
-- `area` (enum, default `"holdingRegisters"`, enum: holdingRegisters|coils) - Writable table/function: holdingRegisters=FC06/FC16, coils=FC05/FC15.
-- `address` (integer, 0-65535, default `0`) - Starting address. Zero-based by default; 40001/00001 style addresses are also accepted.
-- `value` (json_value) - Single 16-bit register value or coil boolean/0/1.
-- `values` (json_value) - Multiple values. Arrays and comma-separated strings are accepted.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;tcp:127.0.0.1:15020&quot;</span></span></span>) - Endpoint to write to.
+- `area` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;holdingRegisters&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">holdingRegisters</span> <span data-cli="choice">coils</span></span></span>) - Writable table/function: holdingRegisters=FC06/FC16, coils=FC05/FC15.
+- `address` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Starting address. Zero-based by default; 40001/00001 style addresses are also accepted.
+- `value` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Single 16-bit register value or coil boolean/0/1.
+- `values` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Multiple values. Arrays and comma-separated strings are accepted.
 
 **connection**
-- `connection` (string, default `""`) - Optional named connection to reuse/open for fast repeated writes.
-- `instance` (string, default `""`) - Alias for connection.
-- `reload` (boolean, default `false`) - Force reconnect the named connection before this operation.
+- `connection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional named connection to reuse/open for fast repeated writes.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Alias for connection.
+- `reload` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Force reconnect the named connection before this operation.
 
 **advanced**
-- `addressBase` (string, default `"zero"`) - zero (default), one, or modbus. one subtracts 1 from address.
-- `slave` (integer, 0-255) - Unit/slave id.
-- `timeoutMs` (duration_ms, 0-3.6e+06, default `30000`)
-- `waitTimeMs` (duration_ms, 0-60000, default `20`) - Cancellable delay after a successful write before the next block. 0 = no delay.
+- `addressBase` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;zero&quot;</span></span></span>) - zero (default), one, or modbus. one subtracts 1 from address.
+- `slave` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span></span>) - Unit/slave id.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>)
+- `waitTimeMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Cancellable delay after a successful write before the next block. 0 = no delay.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4346,25 +4375,25 @@ Write multiple coils (FC15).
 Params:
 
 **input**
-- `url` (string, required, default `"tcp:127.0.0.1:15020"`) - Endpoint to write to.
-- `area` (enum, default `"holdingRegisters"`, enum: holdingRegisters|coils) - Writable table/function: holdingRegisters=FC06/FC16, coils=FC05/FC15.
-- `address` (integer, 0-65535, default `0`) - Starting address. Zero-based by default; 40001/00001 style addresses are also accepted.
-- `value` (json_value) - Single 16-bit register value or coil boolean/0/1.
-- `values` (json_value) - Multiple values. Arrays and comma-separated strings are accepted.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;tcp:127.0.0.1:15020&quot;</span></span></span>) - Endpoint to write to.
+- `area` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;holdingRegisters&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">holdingRegisters</span> <span data-cli="choice">coils</span></span></span>) - Writable table/function: holdingRegisters=FC06/FC16, coils=FC05/FC15.
+- `address` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Starting address. Zero-based by default; 40001/00001 style addresses are also accepted.
+- `value` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Single 16-bit register value or coil boolean/0/1.
+- `values` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Multiple values. Arrays and comma-separated strings are accepted.
 
 **connection**
-- `connection` (string, default `""`) - Optional named connection to reuse/open for fast repeated writes.
-- `instance` (string, default `""`) - Alias for connection.
-- `reload` (boolean, default `false`) - Force reconnect the named connection before this operation.
+- `connection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional named connection to reuse/open for fast repeated writes.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Alias for connection.
+- `reload` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Force reconnect the named connection before this operation.
 
 **advanced**
-- `addressBase` (string, default `"zero"`) - zero (default), one, or modbus. one subtracts 1 from address.
-- `slave` (integer, 0-255) - Unit/slave id.
-- `timeoutMs` (duration_ms, 0-3.6e+06, default `30000`)
-- `waitTimeMs` (duration_ms, 0-60000, default `20`) - Cancellable delay after a successful write before the next block. 0 = no delay.
+- `addressBase` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;zero&quot;</span></span></span>) - zero (default), one, or modbus. one subtracts 1 from address.
+- `slave` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span></span>) - Unit/slave id.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>)
+- `waitTimeMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Cancellable delay after a successful write before the next block. 0 = no delay.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4391,25 +4420,25 @@ Write a single holding register.
 Params:
 
 **input**
-- `url` (string, required, default `"tcp:127.0.0.1:15020"`) - Endpoint to write to.
-- `area` (enum, default `"holdingRegisters"`, enum: holdingRegisters|coils) - Writable table/function: holdingRegisters=FC06/FC16, coils=FC05/FC15.
-- `address` (integer, 0-65535, default `0`) - Starting address. Zero-based by default; 40001/00001 style addresses are also accepted.
-- `value` (json_value) - Single 16-bit register value or coil boolean/0/1.
-- `values` (json_value) - Multiple values. Arrays and comma-separated strings are accepted.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;tcp:127.0.0.1:15020&quot;</span></span></span>) - Endpoint to write to.
+- `area` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;holdingRegisters&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">holdingRegisters</span> <span data-cli="choice">coils</span></span></span>) - Writable table/function: holdingRegisters=FC06/FC16, coils=FC05/FC15.
+- `address` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Starting address. Zero-based by default; 40001/00001 style addresses are also accepted.
+- `value` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Single 16-bit register value or coil boolean/0/1.
+- `values` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Multiple values. Arrays and comma-separated strings are accepted.
 
 **connection**
-- `connection` (string, default `""`) - Optional named connection to reuse/open for fast repeated writes.
-- `instance` (string, default `""`) - Alias for connection.
-- `reload` (boolean, default `false`) - Force reconnect the named connection before this operation.
+- `connection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional named connection to reuse/open for fast repeated writes.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Alias for connection.
+- `reload` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Force reconnect the named connection before this operation.
 
 **advanced**
-- `addressBase` (string, default `"zero"`) - zero (default), one, or modbus. one subtracts 1 from address.
-- `slave` (integer, 0-255) - Unit/slave id.
-- `timeoutMs` (duration_ms, 0-3.6e+06, default `30000`)
-- `waitTimeMs` (duration_ms, 0-60000, default `20`) - Cancellable delay after a successful write before the next block. 0 = no delay.
+- `addressBase` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;zero&quot;</span></span></span>) - zero (default), one, or modbus. one subtracts 1 from address.
+- `slave` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span></span>) - Unit/slave id.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>)
+- `waitTimeMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Cancellable delay after a successful write before the next block. 0 = no delay.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4431,25 +4460,25 @@ Write multiple holding registers.
 Params:
 
 **input**
-- `url` (string, required, default `"tcp:127.0.0.1:15020"`) - Endpoint to write to.
-- `area` (enum, default `"holdingRegisters"`, enum: holdingRegisters|coils) - Writable table/function: holdingRegisters=FC06/FC16, coils=FC05/FC15.
-- `address` (integer, 0-65535, default `0`) - Starting address. Zero-based by default; 40001/00001 style addresses are also accepted.
-- `value` (json_value) - Single 16-bit register value or coil boolean/0/1.
-- `values` (json_value) - Multiple values. Arrays and comma-separated strings are accepted.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;tcp:127.0.0.1:15020&quot;</span></span></span>) - Endpoint to write to.
+- `area` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;holdingRegisters&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">holdingRegisters</span> <span data-cli="choice">coils</span></span></span>) - Writable table/function: holdingRegisters=FC06/FC16, coils=FC05/FC15.
+- `address` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-65535</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Starting address. Zero-based by default; 40001/00001 style addresses are also accepted.
+- `value` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Single 16-bit register value or coil boolean/0/1.
+- `values` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Multiple values. Arrays and comma-separated strings are accepted.
 
 **connection**
-- `connection` (string, default `""`) - Optional named connection to reuse/open for fast repeated writes.
-- `instance` (string, default `""`) - Alias for connection.
-- `reload` (boolean, default `false`) - Force reconnect the named connection before this operation.
+- `connection` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional named connection to reuse/open for fast repeated writes.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Alias for connection.
+- `reload` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Force reconnect the named connection before this operation.
 
 **advanced**
-- `addressBase` (string, default `"zero"`) - zero (default), one, or modbus. one subtracts 1 from address.
-- `slave` (integer, 0-255) - Unit/slave id.
-- `timeoutMs` (duration_ms, 0-3.6e+06, default `30000`)
-- `waitTimeMs` (duration_ms, 0-60000, default `20`) - Cancellable delay after a successful write before the next block. 0 = no delay.
+- `addressBase` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;zero&quot;</span></span></span>) - zero (default), one, or modbus. one subtracts 1 from address.
+- `slave` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-255</span></span>) - Unit/slave id.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>)
+- `waitTimeMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Cancellable delay after a successful write before the next block. 0 = no delay.
 
 **output**
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4474,68 +4503,68 @@ Fetch a URL. With decode:json + a JSON-array response, child blocks iterate over
 Params:
 
 **input**
-- `url` (string, required, default `"https://"`) - Request URL. Supports ${var} interpolation.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;https://&quot;</span></span></span>) - Request URL. Supports ${var} interpolation.
 
 **request**
-- `method` (string, default `"GET"`, enum: GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS) - HTTP method  -  GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS, or any custom verb.
-- `queryParams` (json_value) - Query-string parameters as a JSON object {"key":"value"}. Appended to the URL (percent-encoded). Merged with any params already in the URL.
-- `headers` (string, default `""`) - Extra request headers  -  JSON object {"Name":"value"} or array of "Name: value" strings.
+- `method` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;GET&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">GET</span> <span data-cli="choice">POST</span> <span data-cli="choice">PUT</span> <span data-cli="choice">PATCH</span> <span data-cli="choice">DELETE</span> <span data-cli="choice">HEAD</span> <span data-cli="choice">OPTIONS</span></span></span>) - HTTP method  -  GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS, or any custom verb.
+- `queryParams` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Query-string parameters as a JSON object {"key":"value"}. Appended to the URL (percent-encoded). Merged with any params already in the URL.
+- `headers` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Extra request headers  -  JSON object {"Name":"value"} or array of "Name: value" strings.
 
 **body**
-- `bodyType` (enum, default `"none"`, enum: none|raw|json|form|multipart) - Request body format. none = no body (GET / HEAD). raw = plain text body. json = serialize bodyJson + Content-Type: application/json. form = URL-encode bodyFields + Content-Type: application/x-www-form-urlencoded. multipart = curl_mime from bodyParts ("name=value" or "name@/path").
-- `body` (prompt, default `""`) - Raw request body (used when bodyType is raw). Supports ${var} interpolation.
-- `bodyJson` (json_value) - Body as a JSON value (object, array, string, ...). Serialized and sent with Content-Type: application/json. Used when bodyType is json.
-- `bodyFields` (json_value) - Form fields as a JSON object {"key": "value"}. URL-encoded and sent with Content-Type: application/x-www-form-urlencoded. Used when bodyType is form.
-- `bodyParts` (args_list) - Multipart form parts (bodyType: multipart). Each entry uses curl -F syntax: "name=value" for a text field, "name@/path/to/file" for a file part, or bare "/path/to/file" to use the filename as field name.
+- `bodyType` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;none&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">none</span> <span data-cli="choice">raw</span> <span data-cli="choice">json</span> <span data-cli="choice">form</span> <span data-cli="choice">multipart</span></span></span>) - Request body format. none = no body (GET / HEAD). raw = plain text body. json = serialize bodyJson + Content-Type: application/json. form = URL-encode bodyFields + Content-Type: application/x-www-form-urlencoded. multipart = curl_mime from bodyParts ("name=value" or "name@/path").
+- `body` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Raw request body (used when bodyType is raw). Supports ${var} interpolation.
+- `bodyJson` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Body as a JSON value (object, array, string, ...). Serialized and sent with Content-Type: application/json. Used when bodyType is json.
+- `bodyFields` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Form fields as a JSON object {"key": "value"}. URL-encoded and sent with Content-Type: application/x-www-form-urlencoded. Used when bodyType is form.
+- `bodyParts` (<span data-cli="meta"><span data-cli="type">args_list</span></span>) - Multipart form parts (bodyType: multipart). Each entry uses curl -F syntax: "name=value" for a text field, "name@/path/to/file" for a file part, or bare "/path/to/file" to use the filename as field name.
 
 **response**
-- `decode` (enum, default `"raw"`, enum: raw|json) - raw = body as a string. json = parse body as JSON and apply the parse selector.
-- `parse` (string, default `"."`) - Dotted-path selector applied after decode:json (e.g. .items[0].name). Default . = whole document.
+- `decode` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;raw&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">raw</span> <span data-cli="choice">json</span></span></span>) - raw = body as a string. json = parse body as JSON and apply the parse selector.
+- `parse` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;.&quot;</span></span></span>) - Dotted-path selector applied after decode:json (e.g. .items[0].name). Default . = whole document.
 
 **auth**
-- `auth` (enum, default `"none"`, enum: none|bearer|basic|apikey) - Authentication mode. none = no auth header added.
-- `authToken` (string, default `""`) - Bearer token or API key value.
-- `authUser` (string, default `""`) - HTTP Basic auth username.
-- `authPass` (string, default `""`) - HTTP Basic auth password.
-- `authHeader` (string, default `"X-Api-Key"`) - Header name used for apikey auth. Default: X-Api-Key.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;none&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">none</span> <span data-cli="choice">bearer</span> <span data-cli="choice">basic</span> <span data-cli="choice">apikey</span></span></span>) - Authentication mode. none = no auth header added.
+- `authToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Bearer token or API key value.
+- `authUser` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - HTTP Basic auth username.
+- `authPass` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - HTTP Basic auth password.
+- `authHeader` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;X-Api-Key&quot;</span></span></span>) - Header name used for apikey auth. Default: X-Api-Key.
 
 **download**
-- `downloadAs` (output_path, default `""`) - Save the response body to this file path; the saved path is available as the savedPath output. decode/parse/storeAs still apply normally — result (PREVIOUS) is the decoded value, not the path. "auto" derives the filename from Content-Disposition or the URL and saves to Downloads.
+- `downloadAs` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Save the response body to this file path; the saved path is available as the savedPath output. decode/parse/storeAs still apply normally — result (PREVIOUS) is the decoded value, not the path. "auto" derives the filename from Content-Disposition or the URL and saves to Downloads.
 
 **cache**
-- `cache` (boolean, default `false`) - Cache responses to disk. Sends ETag / Last-Modified revalidation on stale hits.
-- `cacheDir` (string, default `""`) - Cache directory. Default: system cache dir / pixlwiz / net.
-- `cacheTtlMs` (duration_ms, -1-8.64e+07, default `3600000`) - Cache TTL in ms. -1 = rely solely on server ETag / Last-Modified. Default: 1 h.
+- `cache` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Cache responses to disk. Sends ETag / Last-Modified revalidation on stale hits.
+- `cacheDir` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Cache directory. Default: system cache dir / pixlwiz / net.
+- `cacheTtlMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">-1-8.64e+07</span>, <span data-cli="default">default <span data-cli="value">3600000</span></span></span>) - Cache TTL in ms. -1 = rely solely on server ETag / Last-Modified. Default: 1 h.
 
 **proxy**
-- `proxy` (string, default `""`) - Proxy URL, e.g. http://proxy.corp:8080.
-- `proxyUser` (string, default `""`) - Proxy username.
-- `proxyPass` (string, default `""`) - Proxy password.
+- `proxy` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Proxy URL, e.g. http://proxy.corp:8080.
+- `proxyUser` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Proxy username.
+- `proxyPass` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Proxy password.
 
 **session**
-- `sessionId` (string, default `""`) - Named persistent cookie jar. All requests sharing the same sessionId reuse cookies set by previous responses (login flows, OAuth redirects, CSRF tokens). Concurrent requests to the same session are serialized. Empty = no session.
-- `sessionDir` (dir_path, default `""`) - Directory for session jar files. Default: system cache dir / pixlwiz / sessions.
+- `sessionId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Named persistent cookie jar. All requests sharing the same sessionId reuse cookies set by previous responses (login flows, OAuth redirects, CSRF tokens). Concurrent requests to the same session are serialized. Empty = no session.
+- `sessionDir` (<span data-cli="meta"><span data-cli="type">dir_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Directory for session jar files. Default: system cache dir / pixlwiz / sessions.
 
 **ssl**
-- `insecure` (boolean, default `false`) - Skip SSL peer and host verification. Implies verifyPeer=false + verifyHost=false.
-- `verifyPeer` (boolean, default `true`) - Verify SSL certificate chain. Overridden to false by insecure:true.
-- `verifyHost` (boolean, default `true`) - Verify SSL hostname. Overridden to false by insecure:true.
+- `insecure` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Skip SSL peer and host verification. Implies verifyPeer=false + verifyHost=false.
+- `verifyPeer` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Verify SSL certificate chain. Overridden to false by insecure:true.
+- `verifyHost` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Verify SSL hostname. Overridden to false by insecure:true.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 0-300000, default `30000`) - Total transfer timeout in ms (0 = no limit).
-- `connectTimeoutMs` (integer, 0-300000, default `10000`) - TCP connect timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - Total transfer timeout in ms (0 = no limit).
+- `connectTimeoutMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-300000</span>, <span data-cli="default">default <span data-cli="value">10000</span></span></span>) - TCP connect timeout in ms.
 
 **redirects**
-- `followRedirects` (boolean, default `true`) - Follow 3xx redirects automatically.
-- `maxRedirects` (integer, 0-30, default `5`) - Maximum number of redirects to follow.
+- `followRedirects` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Follow 3xx redirects automatically.
+- `maxRedirects` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-30</span>, <span data-cli="default">default <span data-cli="value">5</span></span></span>) - Maximum number of redirects to follow.
 
 **retry**
-- `retries` (integer, 0-10, default `2`) - Maximum number of retries after a transient failure (curl error or 5xx / 408 / 429).
-- `retryDelayMs` (integer, 0-60000, default `250`) - Base retry delay in ms. Each retry doubles the delay plus random jitter (exponential back-off).
+- `retries` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-10</span>, <span data-cli="default">default <span data-cli="value">2</span></span></span>) - Maximum number of retries after a transient failure (curl error or 5xx / 408 / 429).
+- `retryDelayMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">250</span></span></span>) - Base retry delay in ms. Each retry doubles the delay plus random jitter (exponential back-off).
 
 **output**
-- `statusCode` (integer) - HTTP status code of the final response. 0 for file:// and transport errors.
-- `storeAs` (string, default `"response"`) - Variable to also store the result in (always sets PREVIOUS).
+- `statusCode` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - HTTP status code of the final response. 0 for file:// and transport errors.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;response&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: iterable cancellable
 
@@ -4565,15 +4594,15 @@ Send a message to every live XBlox session.
 Params:
 
 **input**
-- `from` (string, default `"xblox"`) - Sender identity stored with the message.
-- `message` (string, default `""`) - Message text. Supports ${var} interpolation.
-- `data` (json_value) - Optional structured payload attached as message.data.
+- `from` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;xblox&quot;</span></span></span>) - Sender identity stored with the message.
+- `message` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Message text. Supports ${var} interpolation.
+- `data` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Optional structured payload attached as message.data.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1-300000, default `3000`) - Per-session IPC request timeout.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1-300000</span>, <span data-cli="default">default <span data-cli="value">3000</span></span></span>) - Per-session IPC request timeout.
 
 **output**
-- `storeAs` (string, default `"ipcBroadcast"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;ipcBroadcast&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4596,18 +4625,18 @@ Drain or wait for messages from a live XBlox session inbox. Child blocks iterate
 Params:
 
 **input**
-- `target` (string, required) - Target session key, descriptor stem, or unambiguous key prefix.
-- `peek` (boolean, default `false`) - Read without consuming messages.
+- `target` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Target session key, descriptor stem, or unambiguous key prefix.
+- `peek` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Read without consuming messages.
 
 **wait**
-- `waitMs` (duration_ms, 0-300000, default `0`) - Poll until messages arrive or this timeout elapses.
-- `pollMs` (duration_ms, 10-60000, default `100`) - Polling interval while waiting.
+- `waitMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-300000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Poll until messages arrive or this timeout elapses.
+- `pollMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">10-60000</span>, <span data-cli="default">default <span data-cli="value">100</span></span></span>) - Polling interval while waiting.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1-300000, default `3000`) - Per-IPC request timeout.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1-300000</span>, <span data-cli="default">default <span data-cli="value">3000</span></span></span>) - Per-IPC request timeout.
 
 **output**
-- `storeAs` (string, default `"messages"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;messages&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: iterable cancellable
 
@@ -4637,16 +4666,16 @@ Send a message to a live XBlox session.
 Params:
 
 **input**
-- `target` (string, required) - Target session key, descriptor stem, or unambiguous key prefix.
-- `from` (string, default `"xblox"`) - Sender identity stored with the message.
-- `message` (string, default `""`) - Message text. Supports ${var} interpolation.
-- `data` (json_value) - Optional structured payload attached as message.data.
+- `target` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Target session key, descriptor stem, or unambiguous key prefix.
+- `from` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;xblox&quot;</span></span></span>) - Sender identity stored with the message.
+- `message` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Message text. Supports ${var} interpolation.
+- `data` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Optional structured payload attached as message.data.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1-300000, default `3000`) - IPC request timeout.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1-300000</span>, <span data-cli="default">default <span data-cli="value">3000</span></span></span>) - IPC request timeout.
 
 **output**
-- `storeAs` (string, default `"ipcReply"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;ipcReply&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4670,18 +4699,18 @@ Send many messages to a live XBlox session in one IPC frame.
 Params:
 
 **input**
-- `target` (string, required) - Target session key, descriptor stem, or unambiguous key prefix.
-- `from` (string, default `"xblox"`) - Sender identity stored with each message.
-- `message` (string, default `""`) - Message text. Supports ${var} interpolation.
-- `count` (integer, 0-10000, default `1`) - Number of messages to create when source is empty.
-- `source` (string, default `""`) - Optional context array to send one message per element.
-- `data` (json_value) - Optional shared structured payload when source is empty.
+- `target` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Target session key, descriptor stem, or unambiguous key prefix.
+- `from` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;xblox&quot;</span></span></span>) - Sender identity stored with each message.
+- `message` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Message text. Supports ${var} interpolation.
+- `count` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-10000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Number of messages to create when source is empty.
+- `source` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional context array to send one message per element.
+- `data` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Optional shared structured payload when source is empty.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1-300000, default `3000`) - IPC request timeout.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1-300000</span>, <span data-cli="default">default <span data-cli="value">3000</span></span></span>) - IPC request timeout.
 
 **output**
-- `storeAs` (string, default `"ipcBatchReply"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;ipcBatchReply&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4707,11 +4736,11 @@ Host a named XBlox IPC session for this run. Reuses the same session on later lo
 Params:
 
 **input**
-- `name` (string, required) - Session name. Plain names are normalized to name:<value>.
-- `label` (string, default `""`) - Optional display label for the session.
+- `name` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Session name. Plain names are normalized to name:<value>.
+- `label` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional display label for the session.
 
 **output**
-- `storeAs` (string, default `"session"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;session&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4731,7 +4760,7 @@ List live XBlox sessions. Child blocks iterate over each session descriptor.
 
 Params:
 
-- `storeAs` (string, default `"sessions"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;sessions&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: iterable pure
 
@@ -4757,22 +4786,22 @@ Call a tool on an MCP server. Supports profile servers (mcp.json), bundled syste
 Params:
 
 **server**
-- `server` (string, required) - MCP server name from mcp.json, a bundled system server, or __custom__ for an inline config.  Supports ${var} interpolation.
+- `server` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>) - MCP server name from mcp.json, a bundled system server, or __custom__ for an inline config.  Supports ${var} interpolation.
 
 **connection**
-- `serverConfig` (json_value, default `{}`) - Inline MCP server config (used only when server == __custom__). Use ${USER:…} for secrets in headers / env / args.
+- `serverConfig` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Inline MCP server config (used only when server == __custom__). Use ${USER:…} for secrets in headers / env / args.
 
 **request**
-- `tool` (string, required) - Remote tool name on the selected server. Supports ${var} interpolation.
+- `tool` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Remote tool name on the selected server. Supports ${var} interpolation.
 
 **arguments**
-- `arguments` (json_value, default `{}`) - Tool arguments object. Supports ${var} interpolation on all fields.
+- `arguments` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Tool arguments object. Supports ${var} interpolation on all fields.
 
 **timeouts**
-- `timeoutMs` (duration_ms, default `60000`) - MCP request timeout in milliseconds.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="default">default <span data-cli="value">60000</span></span></span>) - MCP request timeout in milliseconds.
 
 **output**
-- `storeAs` (string, default `"mcpResult"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;mcpResult&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: iterable cancellable
 
@@ -4816,26 +4845,26 @@ Run a command on a remote host over SSH using password or public-key authenticat
 Params:
 
 **input**
-- `host` (string, required) - SSH host name or IP address.
-- `port` (integer, 1-65535, default `22`) - SSH port.
-- `username` (string, default `""`) - SSH username. Empty lets libssh use the current user.
-- `password` (string, default `""`) - Password authentication value. Empty tries public-key auth.
-- `privateKey` (file_path, default `""`) - Optional private key file for public-key auth.
-- `passphrase` (string, default `""`) - Optional private key passphrase.
-- `command` (prompt, required) - Remote command to execute. Supports ${var} interpolation.
+- `host` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>) - SSH host name or IP address.
+- `port` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-65535</span>, <span data-cli="default">default <span data-cli="value">22</span></span></span>) - SSH port.
+- `username` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - SSH username. Empty lets libssh use the current user.
+- `password` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Password authentication value. Empty tries public-key auth.
+- `privateKey` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional private key file for public-key auth.
+- `passphrase` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional private key passphrase.
+- `command` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Remote command to execute. Supports ${var} interpolation.
 
 **ssh**
-- `configFile` (file_path, default `""`) - Optional SSH config file. Empty parses the OS user default ~/.ssh/config.
-- `knownHosts` (file_path, default `""`) - Optional known_hosts file. Empty uses libssh defaults.
-- `verifyHost` (boolean, default `true`) - Verify the server host key against known_hosts.
-- `acceptUnknownHost` (boolean, default `false`) - Add an unknown host key to known_hosts when verifyHost is enabled.
+- `configFile` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional SSH config file. Empty parses the OS user default ~/.ssh/config.
+- `knownHosts` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional known_hosts file. Empty uses libssh defaults.
+- `verifyHost` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Verify the server host key against known_hosts.
+- `acceptUnknownHost` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Add an unknown host key to known_hosts when verifyHost is enabled.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1-300000, default `30000`) - Connect and command timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - Connect and command timeout in ms.
 
 **output**
-- `exitStatus` (integer) - Remote command exit status.
-- `storeAs` (string, default `"ssh"`) - Variable to also store the result in (always sets PREVIOUS).
+- `exitStatus` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Remote command exit status.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;ssh&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4860,11 +4889,11 @@ List or unload loaded local model instances for this xBlox process.
 Params:
 
 **lifecycle**
-- `action` (enum, default `"List"`, enum: List|Unload) - List loaded models in this xBlox process, or unload one by key.
-- `key` (string, default `"llama:vlm"`) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
+- `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;List&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">List</span> <span data-cli="choice">Unload</span></span></span>) - List loaded models in this xBlox process, or unload one by key.
+- `key` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;llama:vlm&quot;</span></span></span>) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
 
 **output**
-- `storeAs` (string, default `"modelKey"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;modelKey&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -4886,42 +4915,42 @@ Ready-to-go document OCR: PP-DocLayoutV3 detects layout, PaddleOCR-VL extracts t
 Params:
 
 **source_model**
-- `input` (image_path, required, from PREVIOUS, resolve: variables+globs) - Input image path or glob. Default: PREVIOUS chain value.
-- `provider` (enum, default `"auto"`, enum: auto|layout|table|text|vlm|paddle) - OCR runtime. Default: auto (PP-DocLayoutV3 + PaddleOCR-VL). layout/table/text force the VLM prompt; paddle uses raw ONNX PaddleOCR. Empty falls back to App Settings ocr_provider, then image_recognition_provider.
-- `mode` (enum, default `"layout"`, enum: layout|table|text) - Layout-table routing when provider=auto. Default: layout (detect tables first, then choose OCR: vs Table Recognition:).
-- `model` (string, default `""`, resolve: variables+deep) - Local OCR VLM model id or GGUF path. Default: empty → first OCR-slot VLM (prefers PaddleOCR-VL), else App Settings ocr_model / image_recognition_model.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">globs</span></span></span>) - Input image path or glob. Default: PREVIOUS chain value.
+- `provider` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">layout</span> <span data-cli="choice">table</span> <span data-cli="choice">text</span> <span data-cli="choice">vlm</span> <span data-cli="choice">paddle</span></span></span>) - OCR runtime. Default: auto (PP-DocLayoutV3 + PaddleOCR-VL). layout/table/text force the VLM prompt; paddle uses raw ONNX PaddleOCR. Empty falls back to App Settings ocr_provider, then image_recognition_provider.
+- `mode` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;layout&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">layout</span> <span data-cli="choice">table</span> <span data-cli="choice">text</span></span></span>) - Layout-table routing when provider=auto. Default: layout (detect tables first, then choose OCR: vs Table Recognition:).
+- `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Local OCR VLM model id or GGUF path. Default: empty → first OCR-slot VLM (prefers PaddleOCR-VL), else App Settings ocr_model / image_recognition_model.
 
 **vlm_prompt**
-- `prompt` (prompt, default `"OCR: Extract all text verbatim, preserving line breaks and spatial layout."`) - VLM prompt override for provider=vlm only. Default: OCR: Extract all text verbatim… Layout/table/text providers choose OCR: or Table Recognition: automatically.
+- `prompt` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="default">default <span data-cli="value">&quot;OCR: Extract all text verbatim, preserving line breaks and spatial layout.&quot;</span></span></span>) - VLM prompt override for provider=vlm only. Default: OCR: Extract all text verbatim… Layout/table/text providers choose OCR: or Table Recognition: automatically.
 
 **output**
-- `json` (boolean, default `true`) - Structured JSON document array vs plain markdown. Default: true.
-- `markdown` (boolean, default `true`) - Include markdown on each JSON document. Default: true.
-- `result` (json_value) - OCR document array when json=true; markdown string when json=false.
-- `storeAs` (string, default `"ocr"`) - Variable name for PREVIOUS / downstream blocks. Default: ocr.
+- `json` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Structured JSON document array vs plain markdown. Default: true.
+- `markdown` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Include markdown on each JSON document. Default: true.
+- `result` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - OCR document array when json=true; markdown string when json=false.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;ocr&quot;</span></span></span>) - Variable name for PREVIOUS / downstream blocks. Default: ocr.
 
 **runtime**
-- `backend` (enum, default `"auto"`, enum: auto|cpu|gpu|cuda|coreml|metal) - ONNX Runtime EP for PP-DocLayoutV3 / PaddleOCR ONNX. Default: auto.
-- `threads` (integer, 1-64, default `4`) - CPU threads for ONNX and VLM inference. Default: 4.
+- `backend` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">cpu</span> <span data-cli="choice">gpu</span> <span data-cli="choice">cuda</span> <span data-cli="choice">coreml</span> <span data-cli="choice">metal</span></span></span>) - ONNX Runtime EP for PP-DocLayoutV3 / PaddleOCR ONNX. Default: auto.
+- `threads` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-64</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - CPU threads for ONNX and VLM inference. Default: 4.
 
 **layout_model**
-- `layoutModel` (file_path, default `""`) - Override PP-DocLayoutV3.onnx path. Default: empty → auto-discover PP-DocLayoutV3.onnx under ${MODELS_DIR} then install models (exe/../models).
-- `layoutConf` (float, 0-1, default `0.5`) - Minimum PP-DocLayoutV3 region confidence. Default: 0.5.
+- `layoutModel` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Override PP-DocLayoutV3.onnx path. Default: empty → auto-discover PP-DocLayoutV3.onnx under ${MODELS_DIR} then install models (exe/../models).
+- `layoutConf` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.5</span></span></span>) - Minimum PP-DocLayoutV3 region confidence. Default: 0.5.
 
 **onnx_model_overrides**
-- `detModel` (file_path, default `""`) - Override PaddleOCR det ONNX path. Default: empty → en_PP-OCRv3_det_infer.onnx from paddleocr-en preset under model roots.
-- `recModel` (file_path, default `""`) - Override PaddleOCR rec ONNX path. Default: empty → en_PP-OCRv4_rec_infer.onnx (or v3) from paddleocr-en preset under model roots.
-- `dict` (file_path, default `""`) - Override OCR character dictionary. Default: empty → en_dict.txt from paddleocr-en preset.
+- `detModel` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Override PaddleOCR det ONNX path. Default: empty → en_PP-OCRv3_det_infer.onnx from paddleocr-en preset under model roots.
+- `recModel` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Override PaddleOCR rec ONNX path. Default: empty → en_PP-OCRv4_rec_infer.onnx (or v3) from paddleocr-en preset under model roots.
+- `dict` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Override OCR character dictionary. Default: empty → en_dict.txt from paddleocr-en preset.
 
 **onnx_options**
-- `threshold` (float, 0-1, default `0.3`) - PaddleOCR detection probability threshold. Default: 0.3.
-- `recThreshold` (float, 0-1, default `0.5`) - PaddleOCR recognition confidence threshold. Default: 0.5.
-- `maxSize` (integer, 32-4096, default `960`) - PaddleOCR detector max image side after resize (px). Default: 960.
+- `threshold` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.3</span></span></span>) - PaddleOCR detection probability threshold. Default: 0.3.
+- `recThreshold` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.5</span></span></span>) - PaddleOCR recognition confidence threshold. Default: 0.5.
+- `maxSize` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">32-4096</span>, <span data-cli="default">default <span data-cli="value">960</span></span></span>) - PaddleOCR detector max image side after resize (px). Default: 960.
 
 **vlm_runtime**
-- `maxTokens` (integer, 1-32768, default `2048`) - VLM max generated tokens. Default: 2048.
-- `ctx` (integer, 512-131072, default `8192`) - VLM context length. Default: 8192.
-- `gpuLayers` (integer, -1-999, default `-1`) - VLM GPU layer offload (-1 = all, 0 = CPU). Default: -1.
+- `maxTokens` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-32768</span>, <span data-cli="default">default <span data-cli="value">2048</span></span></span>) - VLM max generated tokens. Default: 2048.
+- `ctx` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">512-131072</span>, <span data-cli="default">default <span data-cli="value">8192</span></span></span>) - VLM context length. Default: 8192.
+- `gpuLayers` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">-1-999</span>, <span data-cli="default">default <span data-cli="value">-1</span></span></span>) - VLM GPU layer offload (-1 = all, 0 = CPU). Default: -1.
 
 Features: iterable background cancellable
 
@@ -4967,26 +4996,26 @@ POST /api/categories.
 Params:
 
 **input**
-- `name` (string, required, default `""`, resolve: variables+deep) - Category display name.
-- `slug` (string, default `""`, resolve: variables+deep) - Optional slug (derived from name when empty).
+- `name` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Category display name.
+- `slug` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Optional slug (derived from name when empty).
 
 **meta**
-- `description` (string, default `""`, resolve: variables+deep) - Optional description.
-- `visibility` (string, default `""`, resolve: variables+deep) - public | unlisted | private.
-- `parentId` (string, default `""`, resolve: variables+deep) - Optional parent category UUID.
-- `relationType` (string, default `""`, resolve: variables+deep) - Relation type for the parent link.
-- `type` (string, default `"pages"`, resolve: variables+deep) - Stored as meta.type.
+- `description` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Optional description.
+- `visibility` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - public | unlisted | private.
+- `parentId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Optional parent category UUID.
+- `relationType` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Relation type for the parent link.
+- `type` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;pages&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Stored as meta.type.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"category"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;category&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5010,18 +5039,18 @@ GET /api/categories/{categoryId}.
 Params:
 
 **input**
-- `categoryId` (string, required, default `""`, resolve: variables+deep) - Category UUID.
+- `categoryId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Category UUID.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"category"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;category&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5044,22 +5073,22 @@ GET /api/categories/{slug}/items.
 Params:
 
 **input**
-- `slug` (string, required, default `""`, resolve: variables+deep) - Category slug.
+- `slug` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Category slug.
 
 **filter**
-- `limit` (integer, 0-1000, default `0`) - Optional item limit (0 = server default).
-- `includeDescendants` (boolean, default `true`) - Include descendant category items.
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-1000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Optional item limit (0 = server default).
+- `includeDescendants` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Include descendant category items.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"items"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;items&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5083,25 +5112,25 @@ GET /api/categories  -  list categories (default: own only; optional parentSlug 
 Params:
 
 **input**
-- `userId` (string, default `""`, resolve: variables+deep) - Owner UUID for own-only list (default: current app user).
-- `parentSlug` (string, default `""`, resolve: variables+deep) - Optional parent category slug.
+- `userId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Owner UUID for own-only list (default: current app user).
+- `parentSlug` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Optional parent category slug.
 
 **filter**
-- `all` (boolean, default `false`) - List all visible categories, not just own.
-- `includeChildren` (boolean, default `false`) - Include nested children.
-- `lang` (string, default `""`, resolve: variables+deep) - Optional Accept-Language / lang query.
-- `type` (string, default `"pages"`, resolve: variables+deep) - Category meta.type filter (default: pages).
+- `all` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - List all visible categories, not just own.
+- `includeChildren` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Include nested children.
+- `lang` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Optional Accept-Language / lang query.
+- `type` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;pages&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Category meta.type filter (default: pages).
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"categories"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;categories&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5128,21 +5157,21 @@ DELETE /api/categories/{categoryId} after checking meta.type.
 Params:
 
 **input**
-- `categoryId` (string, required, default `""`, resolve: variables+deep) - Category UUID.
+- `categoryId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Category UUID.
 
 **filter**
-- `type` (string, default `"pages"`, resolve: variables+deep) - Expected meta.type (default: pages).
+- `type` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;pages&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Expected meta.type (default: pages).
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"removeResult"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;removeResult&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5166,25 +5195,25 @@ PATCH /api/categories/{categoryId}.
 Params:
 
 **input**
-- `categoryId` (string, required, default `""`, resolve: variables+deep) - Category UUID.
-- `name` (string, default `""`, resolve: variables+deep) - Replacement name.
-- `slug` (string, default `""`, resolve: variables+deep) - Replacement slug.
+- `categoryId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Category UUID.
+- `name` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Replacement name.
+- `slug` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Replacement slug.
 
 **meta**
-- `description` (string, default `""`, resolve: variables+deep) - Replacement description.
-- `visibility` (string, default `""`, resolve: variables+deep) - public | unlisted | private.
-- `type` (string, default `"pages"`, resolve: variables+deep) - Stored as meta.type.
+- `description` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Replacement description.
+- `visibility` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - public | unlisted | private.
+- `type` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;pages&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Stored as meta.type.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"category"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;category&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5208,22 +5237,22 @@ GET /api/vfs/ls/{mount}/{path}  -  list files in a VFS directory.
 Params:
 
 **input**
-- `mount` (string, default `"home"`, resolve: variables+deep) - VFS mount name. Supports ${var} interpolation.
-- `path` (string, default `""`, resolve: variables+deep) - Directory path within the mount (empty = root). Supports ${var} interpolation.
+- `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - VFS mount name. Supports ${var} interpolation.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Directory path within the mount (empty = root). Supports ${var} interpolation.
 
 **vfs**
-- `includeSize` (boolean, default `true`) - Include file/directory sizes in the listing (CLI default).
+- `includeSize` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Include file/directory sizes in the listing (CLI default).
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"fileList"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;fileList&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5251,23 +5280,23 @@ GET /api/vfs/read/{mount}/{path}  -  download a VFS file. Set downloadAs to save
 Params:
 
 **input**
-- `mount` (string, default `"home"`, resolve: variables+deep) - VFS mount name. Supports ${var} interpolation.
-- `path` (string, required, default `""`, resolve: variables+deep) - File path within the mount. Supports ${var} interpolation.
+- `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - VFS mount name. Supports ${var} interpolation.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - File path within the mount. Supports ${var} interpolation.
 
 **download**
-- `downloadAs` (output_path, default `""`, constraints: writable+createParents, resolve: variables+custom+deep) - Save response body to this path. Supports ${var} interpolation. Parent directories are created automatically. Empty = return body as string.
-- `overwrite` (boolean, default `false`) - Re-download even when downloadAs already exists (default: skip existing).
+- `downloadAs` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">custom</span> <span data-cli="choice">deep</span></span></span>) - Save response body to this path. Supports ${var} interpolation. Parent directories are created automatically. Empty = return body as string.
+- `overwrite` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Re-download even when downloadAs already exists (default: skip existing).
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"fileContent"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;fileContent&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5291,19 +5320,19 @@ DELETE /api/vfs/delete/{mount}/{path}  -  remove a file or folder from the VFS.
 Params:
 
 **input**
-- `mount` (string, default `"home"`, resolve: variables+deep) - VFS mount name. Supports ${var} interpolation.
-- `path` (string, required, default `""`, resolve: variables+deep) - File or folder path to remove. Supports ${var} interpolation.
+- `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - VFS mount name. Supports ${var} interpolation.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - File or folder path to remove. Supports ${var} interpolation.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"removeResult"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;removeResult&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5327,25 +5356,25 @@ GET /api/vfs/search/{mount}/{path}?q=...&type=...&maxResults=...&fts=1  -  searc
 Params:
 
 **input**
-- `q` (string, required, default `""`, resolve: variables+deep) - Search query (min 2 chars). Supports ${var} interpolation.
-- `mount` (string, default `"home"`, resolve: variables+deep) - VFS mount name (e.g. "home", "shared").
-- `path` (string, default `""`, resolve: variables+deep) - Subpath to restrict search within (optional).
+- `q` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Search query (min 2 chars). Supports ${var} interpolation.
+- `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - VFS mount name (e.g. "home", "shared").
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Subpath to restrict search within (optional).
 
 **filter**
-- `type` (enum, default `"all"`, enum: all|file|dir) - Node type filter.
-- `maxResults` (integer, 1-500, default `200`) - Max results (server cap: 500).
-- `fts` (integer, 0-1, default `0`) - 1 = use PostgreSQL full-text index (fast, but stale for fresh uploads). 0 = live filesystem walk (slower, always current).
+- `type` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;all&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">all</span> <span data-cli="choice">file</span> <span data-cli="choice">dir</span></span></span>) - Node type filter.
+- `maxResults` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-500</span>, <span data-cli="default">default <span data-cli="value">200</span></span></span>) - Max results (server cap: 500).
+- `fts` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - 1 = use PostgreSQL full-text index (fast, but stale for fresh uploads). 0 = live filesystem walk (slower, always current).
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"searchResult"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;searchResult&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5375,32 +5404,32 @@ POST /api/vfs/upload/{mount}/{remotePath}  -  upload any file to the VFS. Defaul
 Params:
 
 **input**
-- `file` (file_path, default `""`, constraints: mustExist+readable, resolve: variables+custom+deep) - Local file path to upload. Supports ${var} interpolation. Use 'files' for multiple.
-- `files` (args_list, resolve: variables+custom+deep) - Multiple local file paths. Each is uploaded separately.
+- `file` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mustExist</span> <span data-cli="choice">readable</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">custom</span> <span data-cli="choice">deep</span></span></span>) - Local file path to upload. Supports ${var} interpolation. Use 'files' for multiple.
+- `files` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">custom</span> <span data-cli="choice">deep</span></span></span>) - Multiple local file paths. Each is uploaded separately.
 
 **vfs**
-- `mount` (string, default `"home"`, resolve: variables+deep) - VFS mount name (e.g. home). Supports ${var} interpolation.
-- `remoteDir` (string, default `""`, resolve: variables+deep) - Remote VFS directory. Each file is placed under this path as its filename. Empty = mount root. Prefer public=true for the shared public folder.
-- `public` (boolean, default `false`) - Upload into home/public (same as remoteDir=public). Filebrowser links use ?mode=thumb&file=…
-- `remotePath` (string, default `""`, resolve: variables+deep) - Exact remote VFS path for one file (overrides remoteDir). Supports ${var} interpolation.
+- `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - VFS mount name (e.g. home). Supports ${var} interpolation.
+- `remoteDir` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Remote VFS directory. Each file is placed under this path as its filename. Empty = mount root. Prefer public=true for the shared public folder.
+- `public` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Upload into home/public (same as remoteDir=public). Filebrowser links use ?mode=thumb&file=…
+- `remotePath` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Exact remote VFS path for one file (overrides remoteDir). Supports ${var} interpolation.
 
 **conflict**
-- `conflict` (enum, default `"if-newer"`, enum: if-newer|skip|overwrite) - Conflict policy. if-newer (default) overwrites older remotes; skip leaves existing; overwrite always replaces.
-- `skip` (boolean, default `false`) - Skip when the remote file already exists (any age).
-- `overwrite` (boolean, default `false`) - Always replace the remote file.
-- `ifNewer` (boolean, default `false`) - Overwrite remote only when the local file is newer (default policy).
+- `conflict` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;if-newer&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">if-newer</span> <span data-cli="choice">skip</span> <span data-cli="choice">overwrite</span></span></span>) - Conflict policy. if-newer (default) overwrites older remotes; skip leaves existing; overwrite always replaces.
+- `skip` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Skip when the remote file already exists (any age).
+- `overwrite` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Always replace the remote file.
+- `ifNewer` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Overwrite remote only when the local file is newer (default policy).
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `failed` (integer) - Number of files that failed to upload (files[] mode).
-- `storeAs` (string, default `"fileResult"`) - Variable to also store the result in (always sets PREVIOUS).
+- `failed` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Number of files that failed to upload (files[] mode).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;fileResult&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5425,20 +5454,20 @@ POST /api/images?forward=vfs&original=true  -  multipart upload one or more imag
 Params:
 
 **input**
-- `file` (file_path, default `""`, constraints: mustExist+readable, resolve: variables+custom+deep) - Single image file path to upload. Supports ${var} interpolation. Use 'files' for multiple.
-- `files` (args_list, resolve: variables+custom+deep) - Multiple image file paths. Each is uploaded separately.
+- `file` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mustExist</span> <span data-cli="choice">readable</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">custom</span> <span data-cli="choice">deep</span></span></span>) - Single image file path to upload. Supports ${var} interpolation. Use 'files' for multiple.
+- `files` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">custom</span> <span data-cli="choice">deep</span></span></span>) - Multiple image file paths. Each is uploaded separately.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `failed` (integer) - Number of files that failed to upload.
-- `storeAs` (string, default `"uploadResults"`) - Variable to also store the result in (always sets PREVIOUS).
+- `failed` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Number of files that failed to upload.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;uploadResults&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5461,41 +5490,41 @@ POST /api/pages  -  create a CMS page. Provide slug + title + content, or a full
 Params:
 
 **input**
-- `slug` (string, default `""`, resolve: variables+deep) - Page slug (URL-safe identifier). Required unless 'body' or 'markdownFile' is set. Supports ${var} interpolation.
-- `title` (string, default `""`, resolve: variables+deep) - Page title. Supports ${var} interpolation.
-- `markdownFile` (string, default `""`, resolve: variables+custom+deep) - Local .md/.page file to publish (same as CLI pages create). Supports ${var} interpolation.
-- `content` (prompt, default `""`, resolve: variables+deep) - Page content (Markdown). Wrapped as a markdown-text widget. Supports ${var} interpolation.
-- `body` (json_value) - Full POST body as JSON object  -  overrides all individual params.
+- `slug` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Page slug (URL-safe identifier). Required unless 'body' or 'markdownFile' is set. Supports ${var} interpolation.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Page title. Supports ${var} interpolation.
+- `markdownFile` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">custom</span> <span data-cli="choice">deep</span></span></span>) - Local .md/.page file to publish (same as CLI pages create). Supports ${var} interpolation.
+- `content` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Page content (Markdown). Wrapped as a markdown-text widget. Supports ${var} interpolation.
+- `body` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Full POST body as JSON object  -  overrides all individual params.
 
 **images**
-- `includeImages` (boolean, default `false`) - Extract co-located image refs from markdownFile, upload to home/public, rewrite refs.
-- `conflict` (enum, default `"if-newer"`, enum: if-newer|skip|overwrite) - Image upload conflict policy when includeImages is true.
-- `skip` (boolean, default `false`) - Skip existing remote images.
-- `overwrite` (boolean, default `false`) - Always replace remote images.
-- `ifNewer` (boolean, default `false`) - Replace remote images only when local is newer.
+- `includeImages` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Extract co-located image refs from markdownFile, upload to home/public, rewrite refs.
+- `conflict` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;if-newer&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">if-newer</span> <span data-cli="choice">skip</span> <span data-cli="choice">overwrite</span></span></span>) - Image upload conflict policy when includeImages is true.
+- `skip` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Skip existing remote images.
+- `overwrite` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Always replace remote images.
+- `ifNewer` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Replace remote images only when local is newer.
 
 **meta**
-- `useFrontmatter` (boolean, default `true`) - When markdownFile is .md, apply YAML front matter to title/slug/tags/category.
-- `tags` (string, default `""`, resolve: variables+deep) - Comma-separated tag list. Supports ${var} interpolation.
-- `description` (string, default `""`, resolve: variables+deep) - Optional page description (stored in meta.description).
-- `parent` (string, default `""`, resolve: variables+deep) - Optional parent page UUID or slug.
-- `categoryId` (string, default `""`, resolve: variables+deep) - Category slug, display name, or UUID. Missing cats are created in user space on the server.
-- `categoryIds` (args_list) - Multiple category slugs/names/UUIDs. Missing cats are created in user space on the server.
-- `private` (boolean, default `false`) - Create with is_public=false.
-- `hidden` (boolean, default `false`) - Create with visible=false (default is link-only).
-- `visibility` (enum, default `""`, enum: |public|listed|private) - Page visibility: listed=link-only (default), public=listed in feeds, private.
-- `ownerId` (string, default `""`, resolve: variables+deep) - Owner user UUID (default: from zitadel-oauth.json).
+- `useFrontmatter` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - When markdownFile is .md, apply YAML front matter to title/slug/tags/category.
+- `tags` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Comma-separated tag list. Supports ${var} interpolation.
+- `description` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Optional page description (stored in meta.description).
+- `parent` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Optional parent page UUID or slug.
+- `categoryId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Category slug, display name, or UUID. Missing cats are created in user space on the server.
+- `categoryIds` (<span data-cli="meta"><span data-cli="type">args_list</span></span>) - Multiple category slugs/names/UUIDs. Missing cats are created in user space on the server.
+- `private` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Create with is_public=false.
+- `hidden` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Create with visible=false (default is link-only).
+- `visibility` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice"></span> <span data-cli="choice">public</span> <span data-cli="choice">listed</span> <span data-cli="choice">private</span></span></span>) - Page visibility: listed=link-only (default), public=listed in feeds, private.
+- `ownerId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Owner user UUID (default: from zitadel-oauth.json).
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"page"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;page&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5519,23 +5548,23 @@ GET /api/user-page/{identifier}/{slug}  -  fetch a single page by pageId or owne
 Params:
 
 **input**
-- `pageId` (string, default `""`, resolve: variables+deep) - Page UUID. If empty, slug lookup is used. Supports ${var} interpolation.
-- `slug` (string, default `""`, resolve: variables+deep) - Page slug for lookup when pageId is empty. Supports ${var} interpolation.
-- `ownerId` (string, default `""`, resolve: variables+deep) - Owner user UUID or username for slug lookup. Defaults to logged-in app user when empty.
+- `pageId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Page UUID. If empty, slug lookup is used. Supports ${var} interpolation.
+- `slug` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Page slug for lookup when pageId is empty. Supports ${var} interpolation.
+- `ownerId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Owner user UUID or username for slug lookup. Defaults to logged-in app user when empty.
 
 **lookup**
-- `userId` (string, default `""`, resolve: variables+deep) - Alias/fallback for ownerId in slug lookup. Supports ${var} interpolation.
+- `userId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Alias/fallback for ownerId in slug lookup. Supports ${var} interpolation.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"page"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;page&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5558,22 +5587,22 @@ GET /api/pages?userId=...&page=...&limit=...  -  list pages.
 Params:
 
 **input**
-- `userId` (string, default `""`, resolve: variables+deep) - Filter by owner user UUID. Supports ${var} interpolation.
+- `userId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Filter by owner user UUID. Supports ${var} interpolation.
 
 **pagination**
-- `page` (integer, 1-10000, default `1`) - Page number (1-based).
-- `limit` (integer, 1-200, default `20`) - Results per page.
+- `page` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-10000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Page number (1-based).
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-200</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Results per page.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"pages"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;pages&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5601,23 +5630,23 @@ DELETE /api/pages/{pageId}; or resolve ownerId/userId + slug before deleting.
 Params:
 
 **input**
-- `pageId` (string, default `""`, resolve: variables+deep) - Page UUID. If empty, slug lookup is used. Supports ${var} interpolation.
-- `slug` (string, default `""`, resolve: variables+deep) - Page slug for lookup when pageId is empty. Supports ${var} interpolation.
-- `ownerId` (string, default `""`, resolve: variables+deep) - Owner user UUID or username for slug lookup. Defaults to logged-in app user when empty.
+- `pageId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Page UUID. If empty, slug lookup is used. Supports ${var} interpolation.
+- `slug` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Page slug for lookup when pageId is empty. Supports ${var} interpolation.
+- `ownerId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Owner user UUID or username for slug lookup. Defaults to logged-in app user when empty.
 
 **lookup**
-- `userId` (string, default `""`, resolve: variables+deep) - Alias/fallback for ownerId in slug lookup. Supports ${var} interpolation.
+- `userId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Alias/fallback for ownerId in slug lookup. Supports ${var} interpolation.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"removeResult"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;removeResult&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5640,45 +5669,45 @@ PATCH /api/pages/{pageId}; or resolve ownerId/userId + slug before updating.
 Params:
 
 **input**
-- `pageId` (string, default `""`, resolve: variables+deep) - Page UUID. If empty, slug lookup is used. Supports ${var} interpolation.
-- `slug` (string, default `""`, resolve: variables+deep) - Existing page slug for lookup when pageId is empty. Supports ${var} interpolation.
-- `ownerId` (string, default `""`, resolve: variables+deep) - Owner user UUID or username for slug lookup. Defaults to logged-in app user when empty.
-- `markdownFile` (string, default `""`, resolve: variables+custom+deep) - Local .md/.page file to publish. Supports ${var} interpolation.
-- `content` (prompt, default `""`, resolve: variables+deep) - Replacement page content (Markdown). Wrapped as a markdown-text layout. Supports ${var} interpolation.
-- `title` (string, default `""`, resolve: variables+deep) - Optional replacement page title. Supports ${var} interpolation.
-- `newSlug` (string, default `""`, resolve: variables+deep) - Optional replacement page slug. Supports ${var} interpolation.
-- `body` (json_value) - Full PATCH body as JSON object  -  overrides individual update params.
+- `pageId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Page UUID. If empty, slug lookup is used. Supports ${var} interpolation.
+- `slug` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Existing page slug for lookup when pageId is empty. Supports ${var} interpolation.
+- `ownerId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Owner user UUID or username for slug lookup. Defaults to logged-in app user when empty.
+- `markdownFile` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">custom</span> <span data-cli="choice">deep</span></span></span>) - Local .md/.page file to publish. Supports ${var} interpolation.
+- `content` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Replacement page content (Markdown). Wrapped as a markdown-text layout. Supports ${var} interpolation.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Optional replacement page title. Supports ${var} interpolation.
+- `newSlug` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Optional replacement page slug. Supports ${var} interpolation.
+- `body` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Full PATCH body as JSON object  -  overrides individual update params.
 
 **lookup**
-- `userId` (string, default `""`, resolve: variables+deep) - Alias/fallback for ownerId in slug lookup. Supports ${var} interpolation.
+- `userId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Alias/fallback for ownerId in slug lookup. Supports ${var} interpolation.
 
 **images**
-- `includeImages` (boolean, default `false`) - Extract co-located image refs from markdownFile, upload to home/public, rewrite refs.
-- `conflict` (enum, default `"if-newer"`, enum: if-newer|skip|overwrite) - Image upload conflict policy when includeImages is true.
-- `skip` (boolean, default `false`) - Skip existing remote images.
-- `overwrite` (boolean, default `false`) - Always replace remote images.
-- `ifNewer` (boolean, default `false`) - Replace remote images only when local is newer.
+- `includeImages` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Extract co-located image refs from markdownFile, upload to home/public, rewrite refs.
+- `conflict` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;if-newer&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">if-newer</span> <span data-cli="choice">skip</span> <span data-cli="choice">overwrite</span></span></span>) - Image upload conflict policy when includeImages is true.
+- `skip` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Skip existing remote images.
+- `overwrite` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Always replace remote images.
+- `ifNewer` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Replace remote images only when local is newer.
 
 **meta**
-- `useFrontmatter` (boolean, default `true`) - When markdownFile is .md, apply YAML front matter to title/slug/tags/category.
-- `tags` (string, default `""`, resolve: variables+deep) - Comma-separated replacement tag list. Supports ${var} interpolation.
-- `description` (string, default `""`, resolve: variables+deep) - Optional replacement meta description.
-- `parent` (string, default `""`, resolve: variables+deep) - Optional replacement parent page UUID or slug.
-- `categoryId` (string, default `""`, resolve: variables+deep) - Category slug, display name, or UUID. Missing cats are created in user space on the server.
-- `categoryIds` (args_list) - Multiple category slugs/names/UUIDs. Missing cats are created in user space on the server.
-- `private` (boolean, default `false`) - Set is_public=false when this flag is present.
-- `hidden` (boolean, default `false`) - Set visible=false when this flag is present.
+- `useFrontmatter` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - When markdownFile is .md, apply YAML front matter to title/slug/tags/category.
+- `tags` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Comma-separated replacement tag list. Supports ${var} interpolation.
+- `description` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Optional replacement meta description.
+- `parent` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Optional replacement parent page UUID or slug.
+- `categoryId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Category slug, display name, or UUID. Missing cats are created in user space on the server.
+- `categoryIds` (<span data-cli="meta"><span data-cli="type">args_list</span></span>) - Multiple category slugs/names/UUIDs. Missing cats are created in user space on the server.
+- `private` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Set is_public=false when this flag is present.
+- `hidden` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Set visible=false when this flag is present.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"page"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;page&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5701,18 +5730,18 @@ GET /api/pictures/{pictureId}  -  fetch a picture record.
 Params:
 
 **input**
-- `pictureId` (string, required, default `""`, resolve: variables+deep) - Picture record ID. Supports ${var} interpolation.
+- `pictureId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Picture record ID. Supports ${var} interpolation.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"picture"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;picture&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5735,22 +5764,22 @@ GET /api/pictures?userId=...&page=...&limit=...  -  list picture records.
 Params:
 
 **input**
-- `userId` (string, default `""`, resolve: variables+deep) - Filter by owner user UUID. Supports ${var} interpolation.
+- `userId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Filter by owner user UUID. Supports ${var} interpolation.
 
 **pagination**
-- `page` (integer, 1-10000, default `1`) - Page number (1-based).
-- `limit` (integer, 1-200, default `20`) - Results per page.
+- `page` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-10000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Page number (1-based).
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-200</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Results per page.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"pictures"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;pictures&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5778,18 +5807,18 @@ DELETE /api/pictures/{pictureId}  -  remove a picture record.
 Params:
 
 **input**
-- `pictureId` (string, required, default `""`, resolve: variables+deep) - Picture record ID. Supports ${var} interpolation.
+- `pictureId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Picture record ID. Supports ${var} interpolation.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"removeResult"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;removeResult&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5812,27 +5841,27 @@ Full publish flow: POST /api/posts then upload each image via /api/images and at
 Params:
 
 **input**
-- `title` (string, default `""`, resolve: variables+deep) - Post title. Supports ${var} interpolation.
-- `description` (string, default `""`, resolve: variables+deep) - Post description. Supports ${var} interpolation.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Post title. Supports ${var} interpolation.
+- `description` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Post description. Supports ${var} interpolation.
 
 **meta**
-- `visibility` (enum, default `"public"`, enum: public|listed|private) - Post visibility.
-- `ownerId` (string, default `""`, resolve: variables+deep) - Owner user UUID.
+- `visibility` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;public&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">public</span> <span data-cli="choice">listed</span> <span data-cli="choice">private</span></span></span>) - Post visibility.
+- `ownerId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Owner user UUID.
 
 **images**
-- `file` (file_path, default `""`, constraints: mustExist+readable, resolve: variables+custom+deep) - Single image file to upload and attach. Supports ${var} interpolation.
-- `files` (args_list, resolve: variables+custom+deep) - Multiple image files to upload and attach (positional).
+- `file` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mustExist</span> <span data-cli="choice">readable</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">custom</span> <span data-cli="choice">deep</span></span></span>) - Single image file to upload and attach. Supports ${var} interpolation.
+- `files` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">custom</span> <span data-cli="choice">deep</span></span></span>) - Multiple image files to upload and attach (positional).
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"post"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;post&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5856,18 +5885,18 @@ GET /api/posts/{postId}  -  fetch a post with its pictures.
 Params:
 
 **input**
-- `postId` (string, required, default `""`, resolve: variables+deep) - Post ID. Supports ${var} interpolation.
+- `postId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Post ID. Supports ${var} interpolation.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"post"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;post&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5890,25 +5919,25 @@ GET /api/posts?page=...&limit=...&userId=...&visibilityFilter=...  -  list posts
 Params:
 
 **input**
-- `userId` (string, default `""`, resolve: variables+deep) - Filter by owner user UUID. Supports ${var} interpolation.
+- `userId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Filter by owner user UUID. Supports ${var} interpolation.
 
 **pagination**
-- `page` (integer, 1-10000, default `1`) - Page number (1-based).
-- `limit` (integer, 1-200, default `20`) - Results per page.
+- `page` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-10000</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Page number (1-based).
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-200</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Results per page.
 
 **filter**
-- `visibilityFilter` (enum, default `""`, enum: |listed|unlisted|private|non-public|all|public) - Owner-only: listed/unlisted (link-only), private, non-public, all, or public (default).
+- `visibilityFilter` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice"></span> <span data-cli="choice">listed</span> <span data-cli="choice">unlisted</span> <span data-cli="choice">private</span> <span data-cli="choice">non-public</span> <span data-cli="choice">all</span> <span data-cli="choice">public</span></span></span>) - Owner-only: listed/unlisted (link-only), private, non-public, all, or public (default).
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"posts"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;posts&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5936,18 +5965,18 @@ DELETE /api/posts/{postId}  -  remove a post.
 Params:
 
 **input**
-- `postId` (string, required, default `""`, resolve: variables+deep) - Post ID. Supports ${var} interpolation.
+- `postId` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Post ID. Supports ${var} interpolation.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"removeResult"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;removeResult&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -5970,25 +5999,25 @@ GET /api/search?q=...&type=...&limit=...  -  full-text search across pages, post
 Params:
 
 **input**
-- `q` (string, required, default `""`, resolve: variables+deep) - Search query. Supports ${var} interpolation.
+- `q` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Search query. Supports ${var} interpolation.
 
 **filter**
-- `type` (enum, default `"all"`, enum: all|pages|posts|pictures|files|places) - Content type to search (default: all).
-- `limit` (integer, 1-50, default `20`) - Max results (server cap: 50).
-- `sizes` (string, default `""`, resolve: variables+deep) - Comma-separated image widths for responsive variants, e.g. "320,640,1024".
-- `formats` (string, default `""`, resolve: variables+deep) - Comma-separated image formats, e.g. "avif,webp".
-- `visibilityFilter` (enum, default `""`, enum: |invisible|private) - Visibility filter (requires auth). empty = no filter.
+- `type` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;all&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">all</span> <span data-cli="choice">pages</span> <span data-cli="choice">posts</span> <span data-cli="choice">pictures</span> <span data-cli="choice">files</span> <span data-cli="choice">places</span></span></span>) - Content type to search (default: all).
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-50</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Max results (server cap: 50).
+- `sizes` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Comma-separated image widths for responsive variants, e.g. "320,640,1024".
+- `formats` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Comma-separated image formats, e.g. "avif,webp".
+- `visibilityFilter` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice"></span> <span data-cli="choice">invisible</span> <span data-cli="choice">private</span></span></span>) - Visibility filter (requires auth). empty = no filter.
 
 **auth**
-- `serverUrl` (string, default `""`, resolve: variables+deep) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
-- `auth` (enum, default `"auto"`, enum: auto|bearer|none) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
-- `bearerToken` (string, default `""`, resolve: variables+deep) - Explicit JWT bearer token. Supports ${var} interpolation.
+- `serverUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Tanit service base URL (e.g. https://tanit.polymech.info). Supports ${var} / ${ENV:NAME} interpolation. Empty = resolved from SERVER_URL / VITE_SERVER_IMAGE_API_URL env vars.
+- `auth` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">bearer</span> <span data-cli="choice">none</span></span></span>) - Auth mode. auto = bearerToken param if set, else zitadel-oauth.json (run `tanit-cli login` first). bearer = explicit bearerToken only. none = unauthenticated.
+- `bearerToken` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Explicit JWT bearer token. Supports ${var} interpolation.
 
 **timeouts**
-- `timeoutMs` (duration_ms, 1000-300000, default `30000`) - HTTP timeout in ms.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1000-300000</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - HTTP timeout in ms.
 
 **output**
-- `storeAs` (string, default `"results"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;results&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: cancellable
 
@@ -6016,13 +6045,13 @@ Open a file or folder with the OS default app, or inside Tanit.
 Params:
 
 **input**
-- `path` (file_path, required, resolve: variables+deep) - File or folder path to open.
+- `path` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - File or folder path to open.
 
 **options**
-- `openIn` (enum, default `"system"`, enum: system|app|edit) - system = OS default application. app = Tanit viewer (app command open). edit = Tanit editor (app command edit).
+- `openIn` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;system&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">system</span> <span data-cli="choice">app</span> <span data-cli="choice">edit</span></span></span>) - system = OS default application. app = Tanit viewer (app command open). edit = Tanit editor (app command edit).
 
 **output**
-- `storeAs` (string, default `"openedPath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;openedPath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -6044,22 +6073,22 @@ Run a shell command through the native RunTool.
 Params:
 
 **options**
-- `mode` (enum, default `"shell"`, enum: shell|powershell|cmd|bash|auto|argv) - Shell interpreter: shell|powershell|cmd|bash|auto|argv.
+- `mode` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;shell&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">shell</span> <span data-cli="choice">powershell</span> <span data-cli="choice">cmd</span> <span data-cli="choice">bash</span> <span data-cli="choice">auto</span> <span data-cli="choice">argv</span></span></span>) - Shell interpreter: shell|powershell|cmd|bash|auto|argv.
 
 **advanced**
-- `shell` (enum, default `"auto"`, enum: auto|cmd|powershell|bash|sh) - Shell binary override. auto = platform default.
-- `timeoutMs` (duration_ms, 0-3.6e+06, default `30000`) - Maximum execution time in milliseconds. 0 = no timeout.
-- `log` (boolean, default `false`) - Echo stdout/stderr to the host logger.
-- `stdout` (enum, default `"info"`, enum: trace|debug|info|warn|error|off) - Log level for stdout lines.
-- `stderr` (enum, default `"error"`, enum: trace|debug|info|warn|error|off) - Log level for stderr lines.
+- `shell` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">cmd</span> <span data-cli="choice">powershell</span> <span data-cli="choice">bash</span> <span data-cli="choice">sh</span></span></span>) - Shell binary override. auto = platform default.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-3.6e+06</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - Maximum execution time in milliseconds. 0 = no timeout.
+- `log` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Echo stdout/stderr to the host logger.
+- `stdout` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;info&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">error</span> <span data-cli="choice">off</span></span></span>) - Log level for stdout lines.
+- `stderr` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;error&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">error</span> <span data-cli="choice">off</span></span></span>) - Log level for stderr lines.
 
 **input**
-- `command` (string, required, default `"echo hello"`, resolve: variables+deep) - Command or script to execute.
-- `args` (args_list, default `[]`) - Argument tokens for argv mode. Each token supports variable interpolation and is quoted separately.
-- `cwd` (string, default `""`, resolve: variables+deep) - Working directory (supports ${var} interpolation). Empty = default.
+- `command` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">&quot;echo hello&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Command or script to execute.
+- `args` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - Argument tokens for argv mode. Each token supports variable interpolation and is quoted separately.
+- `cwd` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Working directory (supports ${var} interpolation). Empty = default.
 
 **output**
-- `storeAs` (string, default `"stdout"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;stdout&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: background cancellable
 
@@ -6089,28 +6118,28 @@ Run another XBlox document directly, with context overrides and optional documen
 Params:
 
 **lifecycle**
-- `action` (enum, default `"Run"`, enum: Run|Stop|Status) - Run the script, Stop a background run keyed by path, or report Status.
+- `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;Run&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">Run</span> <span data-cli="choice">Stop</span> <span data-cli="choice">Status</span></span></span>) - Run the script, Stop a background run keyed by path, or report Status.
 
 **input**
-- `path` (file_path, required, constraints: mustExist+readable) - XBlox document to run.
-- `context` (json_value, default `{}`) - Context variables merged into the child script before it runs.
+- `path` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mustExist</span> <span data-cli="choice">readable</span></span></span>) - XBlox document to run.
+- `context` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Context variables merged into the child script before it runs.
 
 **advanced**
-- `args` (args_list, default `[]`) - Advanced CLI-style overrides, e.g. --CURRENT_FILE path or --name=value. Merged after context.
-- `reload` (boolean, default `false`) - Reload the child script from disk before this run. Off reuses the run-scoped cached document.
-- `background` (boolean, default `false`) - Start the child script on a detached background thread and return immediately.
-- `log` (boolean, default `false`) - Forward captured child stdout/stderr lines to the parent xBlox run log.
-- `stdout` (enum, default `"info"`, enum: trace|debug|info|warn|error|off) - Parent run-log level for child stdout lines.
-- `stderr` (enum, default `"error"`, enum: trace|debug|info|warn|error|off) - Parent run-log level for child stderr lines.
-- `logLevel` (enum, default `"off"`, enum: off|trace|debug|info|warn|error) - Optional host log level for child-run summaries and collected child events.
+- `args` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - Advanced CLI-style overrides, e.g. --CURRENT_FILE path or --name=value. Merged after context.
+- `reload` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Reload the child script from disk before this run. Off reuses the run-scoped cached document.
+- `background` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Start the child script on a detached background thread and return immediately.
+- `log` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Forward captured child stdout/stderr lines to the parent xBlox run log.
+- `stdout` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;info&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">error</span> <span data-cli="choice">off</span></span></span>) - Parent run-log level for child stdout lines.
+- `stderr` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;error&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">error</span> <span data-cli="choice">off</span></span></span>) - Parent run-log level for child stderr lines.
+- `logLevel` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;off&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">error</span></span></span>) - Optional host log level for child-run summaries and collected child events.
 
 **loop**
-- `loop` (boolean, default `false`) - Override the child document loop setting and run it as a document loop.
-- `loopIntervalMs` (duration_ms, 0-8.64e+07, default `100`) - Loop interval override in milliseconds. 0 = as fast as possible.
-- `loopReset` (boolean, default `false`) - Reset child scope every loop pass instead of persisting variables.
+- `loop` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Override the child document loop setting and run it as a document loop.
+- `loopIntervalMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-8.64e+07</span>, <span data-cli="default">default <span data-cli="value">100</span></span></span>) - Loop interval override in milliseconds. 0 = as fast as possible.
+- `loopReset` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Reset child scope every loop pass instead of persisting variables.
 
 **output**
-- `storeAs` (string, default `"xbloxResult"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;xbloxResult&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: background cancellable
 
@@ -6146,14 +6175,14 @@ Encode a frame handle (or pass-through image) to a file on disk. The exit from t
 Params:
 
 **input**
-- `input` (image_path, from PREVIOUS, default `""`) - Frame handle (mem://...) from a previous filter, or an image path.
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output file path (.jpg/.png/.bmp). Required.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Frame handle (mem://...) from a previous filter, or an image path.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output file path (.jpg/.png/.bmp). Required.
 
 **advanced**
-- `quality` (integer, 1-100, default `90`) - JPEG quality (1-100).
+- `quality` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-100</span>, <span data-cli="default">default <span data-cli="value">90</span></span></span>) - JPEG quality (1-100).
 
 **output**
-- `storeAs` (string, default `"imagePath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;imagePath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -6176,172 +6205,172 @@ Capture a still image or record a camera, screen, or window source to H.264 MP4.
 Params:
 
 **mode**
-- `action` (enum, default `"Still"`, enum: Still|Record|Start|Update|Status|Stop) - Still = one frame; Record = capture MP4 until duration/cancel; Start keeps recording under instance; Update changes its viewport; Status reports it; Stop finalizes it.
+- `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;Still&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">Still</span> <span data-cli="choice">Record</span> <span data-cli="choice">Start</span> <span data-cli="choice">Update</span> <span data-cli="choice">Status</span> <span data-cli="choice">Stop</span></span></span>) - Still = one frame; Record = capture MP4 until duration/cancel; Start keeps recording under instance; Update changes its viewport; Status reports it; Stop finalizes it.
 
 **input**
-- `input` (video_input, default `""`) - Camera device name, screen/window spec (screen:current / screen for the monitor of the launching window, screen:N, screen:N:wintitle=GLOB, screen:N:hwnd=ID), image (.png/.jpg), or video file (.mp4). Empty = preferred camera.
+- `input` (<span data-cli="meta"><span data-cli="type">video_input</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Camera device name, screen/window spec (screen:current / screen for the monitor of the launching window, screen:N, screen:N:wintitle=GLOB, screen:N:hwnd=ID), image (.png/.jpg), or video file (.mp4). Empty = preferred camera.
 
 **recording**
-- `instance` (string, default `""`) - Recording instance name for Start/Stop. Use the same name to stop and finalize the recording.
-- `fps` (integer, 1-240, default `30`) - Target recording frame rate.
-- `bitrateKbps` (integer, 0-100000, default `0`) - H.264 bitrate in Kbps for fast (WGC) recording. 0 = automatic from resolution and fps. Ignored on compat fallback.
-- `captureEngine` (enum, default `"auto"`, enum: auto|fast|compat) - auto = prefer fast Windows WGC; fast = require it (zoom/follow/bitrate); compat = portable frame-pump fallback (no zoom/follow/bitrate).
-- `encoder` (enum, default `"auto"`, enum: auto|nvenc|mediaFoundation) - Fast Windows capture encoder: auto tries the optional NVIDIA plugin then Media Foundation; nvenc requires NVIDIA hardware; mediaFoundation uses the Windows encoder.
-- `durationMs` (duration_ms, 0-8.64e+07, default `0`) - Record action only: stop after this many ms. 0 = record until cancellation or stopKey. Start ignores this and runs until Stop or stopKey.
-- `pauseKey` (shortcut, default `""`) - Optional global shortcut that toggles recording pause/resume, e.g. F9 or Ctrl+Shift+P. Empty disables it.
-- `stopKey` (shortcut, default `""`) - Optional global shortcut that stops and finalizes recording, e.g. F10 or Ctrl+Shift+S. Empty disables it.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Recording instance name for Start/Stop. Use the same name to stop and finalize the recording.
+- `fps` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-240</span>, <span data-cli="default">default <span data-cli="value">30</span></span></span>) - Target recording frame rate.
+- `bitrateKbps` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - H.264 bitrate in Kbps for fast (WGC) recording. 0 = automatic from resolution and fps. Ignored on compat fallback.
+- `captureEngine` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">fast</span> <span data-cli="choice">compat</span></span></span>) - auto = prefer fast Windows WGC; fast = require it (zoom/follow/bitrate); compat = portable frame-pump fallback (no zoom/follow/bitrate).
+- `encoder` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">nvenc</span> <span data-cli="choice">mediaFoundation</span></span></span>) - Fast Windows capture encoder: auto tries the optional NVIDIA plugin then Media Foundation; nvenc requires NVIDIA hardware; mediaFoundation uses the Windows encoder.
+- `durationMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-8.64e+07</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Record action only: stop after this many ms. 0 = record until cancellation or stopKey. Start ignores this and runs until Stop or stopKey.
+- `pauseKey` (<span data-cli="meta"><span data-cli="type">shortcut</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional global shortcut that toggles recording pause/resume, e.g. F9 or Ctrl+Shift+P. Empty disables it.
+- `stopKey` (<span data-cli="meta"><span data-cli="type">shortcut</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional global shortcut that stops and finalizes recording, e.g. F10 or Ctrl+Shift+S. Empty disables it.
 
 **output_file**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output path (.jpg/.png for Still, .mp4 for Record/Start). Empty = auto temp file.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output path (.jpg/.png for Still, .mp4 for Record/Start). Empty = auto temp file.
 
 **capture_options**
-- `includeCursor` (boolean, default `true`) - Window fast recording: include the mouse cursor in the captured MP4 when supported.
-- `width` (integer, 0-7680, default `0`) - Preferred width in pixels. 0 = device default.
-- `height` (integer, 0-4320, default `0`) - Preferred height in pixels. 0 = device default.
-- `timeoutMs` (duration_ms, 100-30000, default `5000`) - Max ms to wait for first frame.
+- `includeCursor` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Window fast recording: include the mouse cursor in the captured MP4 when supported.
+- `width` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-7680</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Preferred width in pixels. 0 = device default.
+- `height` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-4320</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Preferred height in pixels. 0 = device default.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">100-30000</span>, <span data-cli="default">default <span data-cli="value">5000</span></span></span>) - Max ms to wait for first frame.
 
 **viewport**
-- `aspectRatio` (enum, default `"source"`, enum: source|16:9|9:16|4:3|3:4|1:1|21:9|3:2|2:3|custom) - Output and zoom-viewport aspect ratio. Kept through interactive zoom and cursor follow. source = capture region; custom uses aspectCustomW/H. Pair with sizeMode fill for a hard crop.
-- `aspectCustomW` (integer, 1-100, default `16`) - Custom aspect ratio width part (e.g. 16 in 16:10). Only used when aspectRatio is custom.
-- `aspectCustomH` (integer, 1-100, default `9`) - Custom aspect ratio height part (e.g. 10 in 16:10). Only used when aspectRatio is custom.
-- `sizeMode` (enum, default `"native"`, enum: native|pad|fit|fill) - Fixed-canvas layout: native/pad preserve 1:1 pixels when possible, fit shows the full region, fill crops to cover.
-- `zoom` (float, 1-32, default `1.0`) - Viewport zoom multiplier. Update changes zoom without restarting capture or encoding.
-- `follow` (enum, default `"none"`, enum: none|anchor|cursor) - Keep the initial picked anchor fixed, or smoothly follow the Windows cursor.
-- `followSpeed` (float, 0.01-1, default `0.2`) - Per-update cursor-follow interpolation factor.
-- `followDeadzone` (integer, 0-1000, default `3`) - Source pixels the cursor may move before the viewport follows.
-- `transitionMs` (duration_ms, 0-10000, default `300`) - Smooth zoom transition duration.
-- `updateIntervalMs` (duration_ms, 1-1000, default `16`) - Interactive/follow tracking interval.
-- `focusX` (float, -1-1, default `-1.0`) - Optional normalized horizontal focus point; -1 keeps the picked anchor.
-- `focusY` (float, -1-1, default `-1.0`) - Optional normalized vertical focus point; -1 keeps the picked anchor.
-- `interactiveZoom` (boolean, default `false`) - While recording, Shift+mouse-wheel changes zoom around the cursor.
-- `zoomStep` (float, 0.01-2, default `0.15`) - Zoom multiplier increment per Shift+wheel notch.
-- `zoomMin` (float, 1-32, default `1.0`) - Minimum interactive zoom.
-- `zoomMax` (float, 1-32, default `4.0`) - Maximum interactive zoom.
-- `consumeZoomInput` (boolean, default `true`) - Prevent Shift+wheel from also reaching the application under the cursor.
-- `showZoomStatus` (boolean, default `true`) - Show a click-through recording HUD and active viewport while zoom changes.
-- `hudCapture` (enum, default `"auto"`, enum: auto|exclude|visible) - Overlay capture policy. visible lets OBS and other screen recorders capture the HUD/frame; auto and exclude keep them out of captures.
+- `aspectRatio` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;source&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">source</span> <span data-cli="choice">16:9</span> <span data-cli="choice">9:16</span> <span data-cli="choice">4:3</span> <span data-cli="choice">3:4</span> <span data-cli="choice">1:1</span> <span data-cli="choice">21:9</span> <span data-cli="choice">3:2</span> <span data-cli="choice">2:3</span> <span data-cli="choice">custom</span></span></span>) - Output and zoom-viewport aspect ratio. Kept through interactive zoom and cursor follow. source = capture region; custom uses aspectCustomW/H. Pair with sizeMode fill for a hard crop.
+- `aspectCustomW` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-100</span>, <span data-cli="default">default <span data-cli="value">16</span></span></span>) - Custom aspect ratio width part (e.g. 16 in 16:10). Only used when aspectRatio is custom.
+- `aspectCustomH` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-100</span>, <span data-cli="default">default <span data-cli="value">9</span></span></span>) - Custom aspect ratio height part (e.g. 10 in 16:10). Only used when aspectRatio is custom.
+- `sizeMode` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;native&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">native</span> <span data-cli="choice">pad</span> <span data-cli="choice">fit</span> <span data-cli="choice">fill</span></span></span>) - Fixed-canvas layout: native/pad preserve 1:1 pixels when possible, fit shows the full region, fill crops to cover.
+- `zoom` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">1-32</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Viewport zoom multiplier. Update changes zoom without restarting capture or encoding.
+- `follow` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;none&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">none</span> <span data-cli="choice">anchor</span> <span data-cli="choice">cursor</span></span></span>) - Keep the initial picked anchor fixed, or smoothly follow the Windows cursor.
+- `followSpeed` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0.01-1</span>, <span data-cli="default">default <span data-cli="value">0.2</span></span></span>) - Per-update cursor-follow interpolation factor.
+- `followDeadzone` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-1000</span>, <span data-cli="default">default <span data-cli="value">3</span></span></span>) - Source pixels the cursor may move before the viewport follows.
+- `transitionMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-10000</span>, <span data-cli="default">default <span data-cli="value">300</span></span></span>) - Smooth zoom transition duration.
+- `updateIntervalMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">1-1000</span>, <span data-cli="default">default <span data-cli="value">16</span></span></span>) - Interactive/follow tracking interval.
+- `focusX` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">-1-1</span>, <span data-cli="default">default <span data-cli="value">-1.0</span></span></span>) - Optional normalized horizontal focus point; -1 keeps the picked anchor.
+- `focusY` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">-1-1</span>, <span data-cli="default">default <span data-cli="value">-1.0</span></span></span>) - Optional normalized vertical focus point; -1 keeps the picked anchor.
+- `interactiveZoom` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - While recording, Shift+mouse-wheel changes zoom around the cursor.
+- `zoomStep` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0.01-2</span>, <span data-cli="default">default <span data-cli="value">0.15</span></span></span>) - Zoom multiplier increment per Shift+wheel notch.
+- `zoomMin` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">1-32</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Minimum interactive zoom.
+- `zoomMax` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">1-32</span>, <span data-cli="default">default <span data-cli="value">4.0</span></span></span>) - Maximum interactive zoom.
+- `consumeZoomInput` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Prevent Shift+wheel from also reaching the application under the cursor.
+- `showZoomStatus` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Show a click-through recording HUD and active viewport while zoom changes.
+- `hudCapture` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">exclude</span> <span data-cli="choice">visible</span></span></span>) - Overlay capture policy. visible includes the recording zoom HUD/frame, a live picker HUD/highlight, and block status HUDs in WGC/BitBlt captures; auto and exclude keep them out. Status HUDs stay visible to Windows Snap when we are not capturing.
 
 **audio**
-- `audioSource` (enum, default `"none"`, enum: none|mic|desktop|mix) - Mux audio into MP4: none, mic, desktop (loopback), or mix. When enabled, audio is 48 kHz stereo AAC (no separate rate/channel params).
-- `audioDevice` (device_name, default `""`) - Mic device for audioSource mic/mix. Empty = app setting, then system default.
-- `desktopDevice` (string, default `""`) - Loopback device substring for audioSource desktop/mix. Empty = default render device.
-- `micGain` (float, 0-4, default `1.0`) - Mic level multiplier (linear) for mix mode.
-- `desktopGain` (float, 0-4, default `1.0`) - Desktop/loopback level multiplier for desktop/mix.
-- `filter` (enum, default `"off"`, enum: off|deepfilter|gtcrn) - Live DeepFilterNet on the AAC mux worker (mic/mix/cameraAudio). off = dry. desktop-only loopback stays dry. gtcrn is reserved.
-- `filterModel` (string, default `""`) - Optional DeepFilterNet tar.gz. Default: empty → ${MODELS_DIR}/deepfilter.
-- `attenLim` (float, 0-100, default `100.0`) - Attenuation limit in dB. Default: 100.
-- `postFilter` (boolean, default `false`) - Over-attenuate very noisy sections. Implies deepfilter when filter is off.
-- `compensateDelay` (boolean, default `true`) - Compensate STFT / model lookahead. Default: true.
-- `audioNormalize` (boolean, default `false`) - Reserved (low risk): normalize mixed audio level before AAC encode.
-- `audioAutoGain` (boolean, default `false`) - Reserved (low risk): gentle automatic gain on the microphone path.
+- `audioSource` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;none&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">none</span> <span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - Mux audio into MP4: none, mic, desktop (loopback), or mix. When enabled, audio is 48 kHz stereo AAC (no separate rate/channel params).
+- `audioDevice` (<span data-cli="meta"><span data-cli="type">device_name</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Mic device for audioSource mic/mix. Empty = app setting, then system default.
+- `desktopDevice` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Loopback device substring for audioSource desktop/mix. Empty = default render device.
+- `micGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-4</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Mic level multiplier (linear) for mix mode.
+- `desktopGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-4</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Desktop/loopback level multiplier for desktop/mix.
+- `filter` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;off&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">deepfilter</span> <span data-cli="choice">gtcrn</span></span></span>) - Live DeepFilterNet on the AAC mux worker (mic/mix/cameraAudio). off = dry. desktop-only loopback stays dry. gtcrn is reserved.
+- `filterModel` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional DeepFilterNet tar.gz. Default: empty → ${MODELS_DIR}/deepfilter.
+- `attenLim` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-100</span>, <span data-cli="default">default <span data-cli="value">100.0</span></span></span>) - Attenuation limit in dB. Default: 100.
+- `postFilter` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Over-attenuate very noisy sections. Implies deepfilter when filter is off.
+- `compensateDelay` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Compensate STFT / model lookahead. Default: true.
+- `audioNormalize` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Reserved (low risk): normalize mixed audio level before AAC encode.
+- `audioAutoGain` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Reserved (low risk): gentle automatic gain on the microphone path.
 
 **hud**
-- `hudMode` (enum, default `"overlay"`, enum: off|taskbar|overlay|both) - Status HUD while Still / Record / Start is running. taskbar = app taskbar button. overlay = movable pill over the clock. both = combine. off = none. Separate from showZoomStatus / hudCapture.
-- `hud` (boolean, default `false`) - Master switch for hudMode. Stop on the overlay or taskbar ends Record early, or finalizes a Start session. Default off.
+- `hudMode` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;overlay&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">taskbar</span> <span data-cli="choice">overlay</span> <span data-cli="choice">both</span></span></span>) - Status HUD while Still / Record / Start is running. taskbar = app taskbar button. overlay = movable pill over the clock. both = combine. off = none. Separate from showZoomStatus / hudCapture.
+- `hud` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Master switch for hudMode. Stop on the overlay or taskbar ends Record early, or finalizes a Start session. Default off.
 
 **output**
-- `storeAs` (string, default `"capturePath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;capturePath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 **key_overlay**
-- `keyOverlay` (boolean, default `false`) - Show typed / shortcut keystrokes as an on-screen overlay while recording.
-- `keyOverlayBurnIn` (boolean, default `false`) - Also burn keystrokes into the encoded MP4 (independent of hudCapture).
-- `keyOverlayAlign` (enum, default `"bottom"`, enum: center|left|right|top|bottom|top-left|top-right|bottom-left|bottom-right) - VLC-style subtitle / marquee position (0/1/2/4/5/6/8/9/10).
-- `keyOverlayMarginX` (integer, 0-500, default `0`) - Horizontal margin in px. 0 = auto from short edge (~1.2%).
-- `keyOverlayMarginY` (integer, 0-500, default `0`) - Vertical margin in px. 0 = auto from short edge (~1.2%).
-- `keyOverlayFontSize` (integer, 0-96, default `0`) - Chip font size in px. 0 = auto (~2.2% of short edge, clamped 14–32).
-- `keyOverlayColor` (color, default `"#F8F9FB"`) - Key label text color.
-- `keyOverlayBgColor` (color, default `"#181B21"`) - Chip background color.
-- `keyOverlayAccentColor` (color, default `"#EB445A"`) - Left accent bar color.
-- `keyOverlayOpacity` (float, 0-1, default `0.9`) - Overlay opacity (0–1).
-- `keyOverlayHoldMs` (duration_ms, 100-10000, default `1200`) - How long each keychip stays fully visible before fading.
-- `keyOverlayFadeMs` (duration_ms, 0-5000, default `450`) - Fade-out duration after hold.
-- `keyOverlayMaxEntries` (integer, 1-16, default `5`) - Max stacked recent keychips; oldest are evicted.
-- `keyOverlayFilter` (enum, default `"all"`, enum: all|printable|shortcuts) - all = every key; printable = letters/digits; shortcuts = modifier chords only.
-- `keyOverlayStack` (enum, default `"auto"`, enum: auto|up|down) - Chip stack growth. auto = up for bottom-* (newest at screen edge), down for top/center. up/down force direction.
-- `keyOverlayModifiers` (boolean, default `true`) - Prefix Ctrl/Alt/Shift/Win on displayed chords.
-- `keyOverlayCapture` (enum, default `"visible"`, enum: inherit|auto|exclude|visible) - Capture policy. Default visible so keys appear in the MP4 even when hudCapture excludes the zoom HUD. inherit uses hudCapture.
+- `keyOverlay` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Show typed / shortcut keystrokes as an on-screen overlay while recording.
+- `keyOverlayBurnIn` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Also burn keystrokes into the encoded MP4 (independent of hudCapture).
+- `keyOverlayAlign` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;bottom&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">center</span> <span data-cli="choice">left</span> <span data-cli="choice">right</span> <span data-cli="choice">top</span> <span data-cli="choice">bottom</span> <span data-cli="choice">top-left</span> <span data-cli="choice">top-right</span> <span data-cli="choice">bottom-left</span> <span data-cli="choice">bottom-right</span></span></span>) - VLC-style subtitle / marquee position (0/1/2/4/5/6/8/9/10).
+- `keyOverlayMarginX` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-500</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Horizontal margin in px. 0 = auto from short edge (~1.2%).
+- `keyOverlayMarginY` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-500</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Vertical margin in px. 0 = auto from short edge (~1.2%).
+- `keyOverlayFontSize` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-96</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Chip font size in px. 0 = auto (~2.2% of short edge, clamped 14–32).
+- `keyOverlayColor` (<span data-cli="meta"><span data-cli="type">color</span>, <span data-cli="default">default <span data-cli="value">&quot;#F8F9FB&quot;</span></span></span>) - Key label text color.
+- `keyOverlayBgColor` (<span data-cli="meta"><span data-cli="type">color</span>, <span data-cli="default">default <span data-cli="value">&quot;#181B21&quot;</span></span></span>) - Chip background color.
+- `keyOverlayAccentColor` (<span data-cli="meta"><span data-cli="type">color</span>, <span data-cli="default">default <span data-cli="value">&quot;#EB445A&quot;</span></span></span>) - Left accent bar color.
+- `keyOverlayOpacity` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.9</span></span></span>) - Overlay opacity (0–1).
+- `keyOverlayHoldMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">100-10000</span>, <span data-cli="default">default <span data-cli="value">1200</span></span></span>) - How long each keychip stays fully visible before fading.
+- `keyOverlayFadeMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-5000</span>, <span data-cli="default">default <span data-cli="value">450</span></span></span>) - Fade-out duration after hold.
+- `keyOverlayMaxEntries` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-16</span>, <span data-cli="default">default <span data-cli="value">5</span></span></span>) - Max stacked recent keychips; oldest are evicted.
+- `keyOverlayFilter` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;all&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">all</span> <span data-cli="choice">printable</span> <span data-cli="choice">shortcuts</span></span></span>) - all = every key; printable = letters/digits; shortcuts = modifier chords only.
+- `keyOverlayStack` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">up</span> <span data-cli="choice">down</span></span></span>) - Chip stack growth. auto = up for bottom-* (newest at screen edge), down for top/center. up/down force direction.
+- `keyOverlayModifiers` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Prefix Ctrl/Alt/Shift/Win on displayed chords.
+- `keyOverlayCapture` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;visible&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">inherit</span> <span data-cli="choice">auto</span> <span data-cli="choice">exclude</span> <span data-cli="choice">visible</span></span></span>) - Capture policy. Default visible so keys appear in the MP4 even when hudCapture excludes the zoom HUD. inherit uses hudCapture.
 
 **cursor**
-- `cursorHighlight` (boolean, default `false`) - Soft highlight ring around the pointer (capture-visible overlay).
-- `cursorHighlightColor` (color, default `"#F5C542"`) - Cursor highlight ring color.
-- `cursorHighlightSize` (integer, 0-256, default `0`) - Highlight diameter in px. 0 = auto (~72).
-- `cursorClicks` (boolean, default `false`) - Animate a ripple at the click point (left/right/middle).
-- `cursorClickColor` (color, default `"#EB445A"`) - Left-click ripple color. Right/middle use complementary hues (+180° / +120°) derived from this.
-- `cursorTrail` (boolean, default `false`) - Short motion trail behind the pointer.
-- `hideCursorWhenTyping` (boolean, default `false`) - Temporarily hide highlight/trail while typing.
+- `cursorHighlight` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Soft highlight ring around the pointer (capture-visible overlay).
+- `cursorHighlightColor` (<span data-cli="meta"><span data-cli="type">color</span>, <span data-cli="default">default <span data-cli="value">&quot;#F5C542&quot;</span></span></span>) - Cursor highlight ring color.
+- `cursorHighlightSize` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-256</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Highlight diameter in px. 0 = auto (~72).
+- `cursorClicks` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Animate a ripple at the click point (left/right/middle).
+- `cursorClickColor` (<span data-cli="meta"><span data-cli="type">color</span>, <span data-cli="default">default <span data-cli="value">&quot;#EB445A&quot;</span></span></span>) - Left-click ripple color. Right/middle use complementary hues (+180° / +120°) derived from this.
+- `cursorTrail` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Short motion trail behind the pointer.
+- `hideCursorWhenTyping` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Temporarily hide highlight/trail while typing.
 
 **camera_overlay**
-- `cameraOverlay` (boolean, default `false`) - Picture-in-picture webcam over the recording (capture-visible overlay). When on, skin / lips / blur / mirror and the other face knobs apply to this PiP camera only — the screen stays on the fast recorder.
-- `cameraAudio` (boolean, default `false`) - Include the webcam microphone in the recording mix (matched from Camera; combines with audioSource).
-- `cameraAudioGain` (float, 0-4, default `1.0`) - Linear gain for the webcam mic (0 = mute, 1 = unity).
-- `cameraInput` (video_input, default `""`) - Webcam device for the PiP / camera mic. Empty = system default camera.
-- `cameraResolution` (string, default `"auto"`) - Webcam capture mode: auto (PiP-sized), max (highest native, including 4K), or a device mode like 1920x1080@30.
-- `cameraPosition` (enum, default `"bottom-right"`, enum: top-left|top-right|bottom-left|bottom-right) - PiP corner on the capture monitor/window.
-- `cameraSize` (float, 4-80, default `22.0`) - PiP size as percent of the short capture edge.
-- `cameraShape` (enum, default `"circle"`, enum: circle|rounded|square) - Webcam mask shape (circle / rounded / square).
-- `cameraBorder` (boolean, default `true`) - Draw a border around the PiP.
-- `cameraBorderColor` (color, default `"#FFFFFF"`) - PiP border color.
-- `cameraShadow` (boolean, default `true`) - Soft drop shadow under the PiP.
+- `cameraOverlay` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Picture-in-picture webcam over the recording (capture-visible overlay). When on, skin / lips / blur / mirror and the other face knobs apply to this PiP camera only — the screen stays on the fast recorder.
+- `cameraAudio` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Include the webcam microphone in the recording mix (matched from Camera; combines with audioSource).
+- `cameraAudioGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-4</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Linear gain for the webcam mic (0 = mute, 1 = unity).
+- `cameraInput` (<span data-cli="meta"><span data-cli="type">video_input</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Webcam device for the PiP / camera mic. Empty = system default camera.
+- `cameraResolution` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span></span>) - Webcam capture mode: auto (PiP-sized), max (highest native, including 4K), or a device mode like 1920x1080@30.
+- `cameraPosition` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;bottom-right&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">top-left</span> <span data-cli="choice">top-right</span> <span data-cli="choice">bottom-left</span> <span data-cli="choice">bottom-right</span></span></span>) - PiP corner on the capture monitor/window.
+- `cameraSize` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">4-80</span>, <span data-cli="default">default <span data-cli="value">22.0</span></span></span>) - PiP size as percent of the short capture edge.
+- `cameraShape` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;circle&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">circle</span> <span data-cli="choice">rounded</span> <span data-cli="choice">square</span></span></span>) - Webcam mask shape (circle / rounded / square).
+- `cameraBorder` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Draw a border around the PiP.
+- `cameraBorderColor` (<span data-cli="meta"><span data-cli="type">color</span>, <span data-cli="default">default <span data-cli="value">&quot;#FFFFFF&quot;</span></span></span>) - PiP border color.
+- `cameraShadow` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Soft drop shadow under the PiP.
 
 **idle**
-- `autoPause` (enum, default `"off"`, enum: off|visual|audio|both) - Skip encoder writes while the capture is idle. Capture stays up. Activity = user input OR speech-mic energy OR a substantial frame change.
-- `autoPauseIdleMs` (duration_ms, 0-60000, default `3000`) - Overall idle timer. No activity for this long sets PauseIdle. 0 with autoPause off.
-- `autoPauseResumeMs` (duration_ms, 0-5000, default `300`) - Visual must persist this long while auto-paused. Pre-roll covers the start of the action.
-- `autoPauseGridW` (integer, 8-128, default `32`) - Logical tile columns.
-- `autoPauseGridH` (integer, 8-72, default `18`) - Logical tile rows.
-- `autoPauseProbeW` (integer, 64-192, default `64`) - Intermediate luma width (aggregated into logical tiles).
-- `autoPauseProbeH` (integer, 36-108, default `36`) - Intermediate luma height.
-- `autoPausePixelDelta` (integer, 1-255, default `12`) - Luma abs-diff threshold (0–255).
-- `autoPauseTilePercent` (integer, 1-100, default `8`) - Percent of a tile’s probe samples over pixelDelta.
-- `autoPauseMinTiles` (integer, 1-512, default `4`) - Minimum changed logical tiles. Typing is input activity, not this gate.
-- `autoPauseMinCoveragePercent` (float, 0-100, default `2.0`) - sum(activeTile.changedFraction) / gridTileCount as percent. Not bbox area.
-- `autoPauseSampleFps` (integer, 1-30, default `8`) - Visual probe rate (independent of encode fps).
-- `autoPauseMicWake` (boolean, default `true`) - Use speech-mic energy as activity (RMS/peak, not VAD). Desktop-only loopback ignored.
-- `autoPauseMicActivityDb` (float, -90-0, default `-40.0`) - Mic activity threshold in dBFS (not speech). Swappable for WebRTC VAD later.
-- `autoPauseMicHangoverMs` (duration_ms, 0-5000, default `500`) - Mic activity hold after the last hot window.
-- `autoPauseKeyHoldMs` (duration_ms, 0-5000, default `750`) - Key / click / wheel hold. Not the overall idle timer.
-- `autoPauseMouseHoldMs` (duration_ms, 0-5000, default `350`) - Mouse-move hold. A nudge must not keep recording for idleMs.
-- `autoPauseWakeKey` (boolean, default `true`) - Count keyboard as first-class activity (ignore pauseKey/stopKey).
-- `autoPauseWakeMouse` (boolean, default `true`) - Count mouse move/click/wheel as activity.
-- `autoPauseMouseDeltaPx` (integer, 0-64, default `4`) - Ignore cursor jitter below this many screen pixels.
-- `autoPausePrerollMs` (duration_ms, 0-2000, default `500`) - Frames kept while PauseIdle and flushed on resume.
+- `autoPause` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;off&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">visual</span> <span data-cli="choice">audio</span> <span data-cli="choice">both</span></span></span>) - Skip encoder writes while the capture is idle. Capture stays up. Activity = user input OR speech-mic energy OR a substantial frame change.
+- `autoPauseIdleMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-60000</span>, <span data-cli="default">default <span data-cli="value">3000</span></span></span>) - Overall idle timer. No activity for this long sets PauseIdle. 0 with autoPause off.
+- `autoPauseResumeMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-5000</span>, <span data-cli="default">default <span data-cli="value">300</span></span></span>) - Visual must persist this long while auto-paused. Pre-roll covers the start of the action.
+- `autoPauseGridW` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">8-128</span>, <span data-cli="default">default <span data-cli="value">32</span></span></span>) - Logical tile columns.
+- `autoPauseGridH` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">8-72</span>, <span data-cli="default">default <span data-cli="value">18</span></span></span>) - Logical tile rows.
+- `autoPauseProbeW` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">64-192</span>, <span data-cli="default">default <span data-cli="value">64</span></span></span>) - Intermediate luma width (aggregated into logical tiles).
+- `autoPauseProbeH` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">36-108</span>, <span data-cli="default">default <span data-cli="value">36</span></span></span>) - Intermediate luma height.
+- `autoPausePixelDelta` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-255</span>, <span data-cli="default">default <span data-cli="value">12</span></span></span>) - Luma abs-diff threshold (0–255).
+- `autoPauseTilePercent` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-100</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Percent of a tile’s probe samples over pixelDelta.
+- `autoPauseMinTiles` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-512</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - Minimum changed logical tiles. Typing is input activity, not this gate.
+- `autoPauseMinCoveragePercent` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-100</span>, <span data-cli="default">default <span data-cli="value">2.0</span></span></span>) - sum(activeTile.changedFraction) / gridTileCount as percent. Not bbox area.
+- `autoPauseSampleFps` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-30</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Visual probe rate (independent of encode fps).
+- `autoPauseMicWake` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Use speech-mic energy as activity (RMS/peak, not VAD). Desktop-only loopback ignored.
+- `autoPauseMicActivityDb` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">-90-0</span>, <span data-cli="default">default <span data-cli="value">-40.0</span></span></span>) - Mic activity threshold in dBFS (not speech). Swappable for WebRTC VAD later.
+- `autoPauseMicHangoverMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-5000</span>, <span data-cli="default">default <span data-cli="value">500</span></span></span>) - Mic activity hold after the last hot window.
+- `autoPauseKeyHoldMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-5000</span>, <span data-cli="default">default <span data-cli="value">750</span></span></span>) - Key / click / wheel hold. Not the overall idle timer.
+- `autoPauseMouseHoldMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-5000</span>, <span data-cli="default">default <span data-cli="value">350</span></span></span>) - Mouse-move hold. A nudge must not keep recording for idleMs.
+- `autoPauseWakeKey` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Count keyboard as first-class activity (ignore pauseKey/stopKey).
+- `autoPauseWakeMouse` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Count mouse move/click/wheel as activity.
+- `autoPauseMouseDeltaPx` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-64</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - Ignore cursor jitter below this many screen pixels.
+- `autoPausePrerollMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-2000</span>, <span data-cli="default">default <span data-cli="value">500</span></span></span>) - Frames kept while PauseIdle and flushed on resume.
 
 **captions**
-- `captions` (enum, default `"off"`, enum: off|sidecar) - After finalize, transcribe the encoded-timeline 16 kHz dump and write sidecars. Not a live HUD (use audioTranscribe for that).
-- `captionFormat` (enum, default `"srt"`, enum: srt|vtt|sbv|all) - YouTube-accepted sidecar: SubRip, WebVTT, SubViewer, or all three.
-- `captionStt` (stt_route, default `{}`) - Dictation STT route. Empty {} inherits App Settings Voice & Audio.
-- `subtitleMaxChars` (integer, 8-120, default `42`) - Cue wrap width (writer, not viewport).
-- `subtitleMaxLines` (integer, 1-4, default `2`) - Cue wrap line count.
+- `captions` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;off&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">sidecar</span></span></span>) - After finalize, transcribe the encoded-timeline 16 kHz dump and write sidecars. Not a live HUD (use audioTranscribe for that).
+- `captionFormat` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;srt&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">srt</span> <span data-cli="choice">vtt</span> <span data-cli="choice">sbv</span> <span data-cli="choice">all</span></span></span>) - YouTube-accepted sidecar: SubRip, WebVTT, SubViewer, or all three.
+- `captionStt` (<span data-cli="meta"><span data-cli="type">stt_route</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Dictation STT route. Empty {} inherits App Settings Voice & Audio.
+- `subtitleMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">8-120</span>, <span data-cli="default">default <span data-cli="value">42</span></span></span>) - Cue wrap width (writer, not viewport).
+- `subtitleMaxLines` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-4</span>, <span data-cli="default">default <span data-cli="value">2</span></span></span>) - Cue wrap line count.
 
 **beauty**
-- `skin` (boolean, default `false`) - Smooth skin (face oval minus eyes/lips). Forces the compatibility CPU recorder.
-- `skinBlend` (float, 0-1, default `0.5`) - Skin mix 0..1 (0 dry / 1 wet). Same as CLI --skin-blend / --skin-strength.
-- `lips` (boolean, default `false`) - Tint lips from the face mesh. Forces the compatibility CPU recorder.
-- `lipsColor` (color, default `"#C45C6A"`) - Lip tint color.
-- `lipsBlend` (float, 0-1, default `0.35`) - Lip tint mix 0..1. Same as CLI --lips-blend / --lips-alpha.
-- `teeth` (boolean, default `false`) - Whiten teeth from the face mesh. Forces the compatibility CPU recorder.
-- `teethBlend` (float, 0-1, default `0.4`) - Teeth mix 0..1. Same as CLI --teeth-blend / --teeth-strength.
-- `landmarks` (boolean, default `false`) - Draw face-mesh landmarks on the frame (debug).
-- `faceGain` (float, 0-1, default `0.0`) - Lift crushed face exposure (Lab L*). 0 = off. Same oval as skin. Same as CLI --face-gain.
-- `warmth` (float, 0-1, default `0.0`) - Warm the face oval (Lab b*). 0 = off. Same as CLI --warmth.
-- `undereye` (boolean, default `false`) - Lighten under-eye bands (dark circles). Forces the compatibility CPU recorder.
-- `undereyeBlend` (float, 0-1, default `0.45`) - Under-eye mix 0..1. Same as CLI --undereye-blend.
-- `redness` (boolean, default `false`) - Mute flush / acne (Lab a* toward neutral). Forces the compatibility CPU recorder.
-- `rednessBlend` (float, 0-1, default `0.4`) - Redness mute mix 0..1. Same as CLI --redness-blend.
-- `eyeSharpen` (boolean, default `false`) - Unsharp the eye polys after skin. Forces the compatibility CPU recorder.
-- `eyeSharpenBlend` (float, 0-1, default `0.35`) - Eye sharpen mix 0..1. Same as CLI --eye-sharpen-blend.
+- `skin` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Smooth skin (face oval minus eyes/lips). Forces the compatibility CPU recorder.
+- `skinBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.5</span></span></span>) - Skin mix 0..1 (0 dry / 1 wet). Same as CLI --skin-blend / --skin-strength.
+- `lips` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Tint lips from the face mesh. Forces the compatibility CPU recorder.
+- `lipsColor` (<span data-cli="meta"><span data-cli="type">color</span>, <span data-cli="default">default <span data-cli="value">&quot;#C45C6A&quot;</span></span></span>) - Lip tint color.
+- `lipsBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Lip tint mix 0..1. Same as CLI --lips-blend / --lips-alpha.
+- `teeth` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Whiten teeth from the face mesh. Forces the compatibility CPU recorder.
+- `teethBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Teeth mix 0..1. Same as CLI --teeth-blend / --teeth-strength.
+- `landmarks` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Draw face-mesh landmarks on the frame (debug).
+- `faceGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.0</span></span></span>) - Lift crushed face exposure (Lab L*). 0 = off. Same oval as skin. Same as CLI --face-gain.
+- `warmth` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.0</span></span></span>) - Warm the face oval (Lab b*). 0 = off. Same as CLI --warmth.
+- `undereye` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Lighten under-eye bands (dark circles). Forces the compatibility CPU recorder.
+- `undereyeBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.45</span></span></span>) - Under-eye mix 0..1. Same as CLI --undereye-blend.
+- `redness` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Mute flush / acne (Lab a* toward neutral). Forces the compatibility CPU recorder.
+- `rednessBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Redness mute mix 0..1. Same as CLI --redness-blend.
+- `eyeSharpen` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Unsharp the eye polys after skin. Forces the compatibility CPU recorder.
+- `eyeSharpenBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Eye sharpen mix 0..1. Same as CLI --eye-sharpen-blend.
 
 **frame**
-- `mirror` (boolean, default `false`) - Horizontal flip (webcam mirror). No model.
-- `preview` (boolean, default `false`) - Live window at the captured frame size. Close the window to stop. Forces the compatibility CPU recorder. Same as CLI --preview.
+- `mirror` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Horizontal flip (webcam mirror). No model.
+- `preview` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Live window at the captured frame size. Close the window to stop. Forces the compatibility CPU recorder. Same as CLI --preview.
 
 **background**
-- `blur` (boolean, default `false`) - Blur the non-person region (ImageSegmenter). Forces the compatibility CPU recorder.
-- `blurBlend` (float, 0-1, default `0.65`) - Background blur mix 0..1. Same as CLI --blur-strength.
-- `background` (boolean, default `false`) - Replace the non-person region with bgColor / bgImage.
-- `bgColor` (color, default `"#1A1A1A"`) - Solid replacement color.
-- `bgImage` (image_path, default `""`) - Replacement image, scaled to the frame.
-- `featherPx` (integer, default `8`) - Person-mask feather in pixels.
+- `blur` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Blur the non-person region (ImageSegmenter). Forces the compatibility CPU recorder.
+- `blurBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.65</span></span></span>) - Background blur mix 0..1. Same as CLI --blur-strength.
+- `background` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Replace the non-person region with bgColor / bgImage.
+- `bgColor` (<span data-cli="meta"><span data-cli="type">color</span>, <span data-cli="default">default <span data-cli="value">&quot;#1A1A1A&quot;</span></span></span>) - Solid replacement color.
+- `bgImage` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Replacement image, scaled to the frame.
+- `featherPx` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Person-mask feather in pixels.
 
 Features: cancellable
 
@@ -6800,18 +6829,18 @@ Adjust brightness / contrast / saturation of a frame. Pipes a frame handle in/ou
 Params:
 
 **input**
-- `input` (image_path, from PREVIOUS, default `""`) - Frame handle (mem://...) from a previous filter, or an image path.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Frame handle (mem://...) from a previous filter, or an image path.
 
 **options**
-- `brightness` (float, -1-1, default `0.0`) - Brightness offset. 0 = none; -1..1 maps to ±255.
-- `contrast` (float, 0-3, default `1.0`) - Contrast multiplier around mid-gray. 1 = none.
-- `saturation` (float, 0-3, default `1.0`) - Saturation. 1 = none; 0 = grayscale; >1 = more vivid.
+- `brightness` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">-1-1</span>, <span data-cli="default">default <span data-cli="value">0.0</span></span></span>) - Brightness offset. 0 = none; -1..1 maps to ±255.
+- `contrast` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-3</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Contrast multiplier around mid-gray. 1 = none.
+- `saturation` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-3</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Saturation. 1 = none; 0 = grayscale; >1 = more vivid.
 
 **advanced**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output file (.jpg/.png). Empty = keep in-memory (mem:// handle) for the next filter.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output file (.jpg/.png). Empty = keep in-memory (mem:// handle) for the next filter.
 
 **output**
-- `storeAs` (string, default `"imagePath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;imagePath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -6836,36 +6865,36 @@ Generate a video from a prompt using the same core create_video API as `video cr
 Params:
 
 **input**
-- `prompt` (prompt, required) - Motion / camera / lighting prompt.
+- `prompt` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Motion / camera / lighting prompt.
 
 **source**
-- `input` (image_path, from PREVIOUS, default `""`, resolve: variables+globs) - Keyframe stills. First path = start frame, second = end frame. Uses PREVIOUS when unset. Extra style images go in references.
-- `startFrame` (image_path, default `""`) - Optional start-frame still (alias of a single input).
-- `lastFrame` (image_path, default `""`) - Optional last-frame still.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">globs</span></span></span>) - Keyframe stills. First path = start frame, second = end frame. Uses PREVIOUS when unset. Extra style images go in references.
+- `startFrame` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional start-frame still (alias of a single input).
+- `lastFrame` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional last-frame still.
 
 **references**
-- `references` (args_list, default `[]`) - Style / brand reference images (not keyframes). Sent as OpenRouter input_references.
+- `references` (<span data-cli="meta"><span data-cli="type">args_list</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - Style / brand reference images (not keyframes). Sent as OpenRouter input_references.
 
 **output_file**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output path (.mp4). Empty = core default naming.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output path (.mp4). Empty = core default naming.
 
 **model**
-- `provider` (string, default `""`) - Video generation provider. Empty = App Settings video provider.
-- `model` (string, default `""`, resolve: variables+deep) - Video model (video-fast, video-deep, or a Replicate slug). Empty = App Settings video model.
-- `providerOptions` (json_value, default `{}`) - Extra provider fields (personGeneration, negativePrompt, …).
+- `provider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Video generation provider. Empty = App Settings video provider.
+- `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Video model (video-fast, video-deep, or a Replicate slug). Empty = App Settings video model.
+- `providerOptions` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Extra provider fields (personGeneration, negativePrompt, …).
 
 **request**
-- `duration` (integer, 0-8, default `0`) - Seconds. Veo accepts 4 / 6 / 8. 0 = model default (4 fast / 8 deep).
-- `resolution` (enum, default `"720p"`, enum: 720p|1080p|4K) - Output resolution. 4K is video-deep only.
-- `aspectRatio` (enum, default `"16:9"`, enum: 16:9|9:16) - Output aspect ratio.
-- `generateAudio` (boolean, default `false`) - Request native audio (higher cost on OpenRouter Veo).
+- `duration` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-8</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Seconds. Veo accepts 4 / 6 / 8. 0 = model default (4 fast / 8 deep).
+- `resolution` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;720p&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">720p</span> <span data-cli="choice">1080p</span> <span data-cli="choice">4K</span></span></span>) - Output resolution. 4K is video-deep only.
+- `aspectRatio` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;16:9&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">16:9</span> <span data-cli="choice">9:16</span></span></span>) - Output aspect ratio.
+- `generateAudio` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Request native audio (higher cost on OpenRouter Veo).
 
 **auth**
-- `apiKey` (api_key, default `""`) - API key override. Empty = from App Settings.
-- `baseUrl` (string, default `""`) - Provider base URL override. Empty = App Settings.
+- `apiKey` (<span data-cli="meta"><span data-cli="type">api_key</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - API key override. Empty = from App Settings.
+- `baseUrl` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Provider base URL override. Empty = App Settings.
 
 **output**
-- `storeAs` (string, default `"videoPath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;videoPath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: background cancellable
 
@@ -6983,19 +7012,19 @@ Crop a rectangular region from a frame. Pipes a frame handle in/out.
 Params:
 
 **input**
-- `input` (image_path, from PREVIOUS, default `""`) - Frame handle (mem://...) from a previous filter, or an image path.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Frame handle (mem://...) from a previous filter, or an image path.
 
 **options**
-- `x` (integer, 0-32768, default `0`) - Left edge (px).
-- `y` (integer, 0-32768, default `0`) - Top edge (px).
-- `width` (integer, 0-32768, default `0`) - Crop width (px). 0 = to right edge.
-- `height` (integer, 0-32768, default `0`) - Crop height (px). 0 = to bottom edge.
+- `x` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-32768</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Left edge (px).
+- `y` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-32768</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Top edge (px).
+- `width` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-32768</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Crop width (px). 0 = to right edge.
+- `height` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-32768</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Crop height (px). 0 = to bottom edge.
 
 **advanced**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output file (.jpg/.png). Empty = keep in-memory (mem:// handle) for the next filter.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output file (.jpg/.png). Empty = keep in-memory (mem:// handle) for the next filter.
 
 **output**
-- `storeAs` (string, default `"imagePath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;imagePath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -7021,57 +7050,57 @@ Capture one frame (webcam or screen) and run a YOLO model. task = detect/obb/pos
 Params:
 
 **source_model**
-- `model` (file_path, required) - YOLO ONNX model path (required). Examples: ${MODELS_DIR}/yolov8n.onnx, yolo11n-obb.onnx, yolo11n-cls.onnx, yolo11n-pose.onnx under model roots.
-- `input` (screen_input, default `""`) - Webcam device name or screen spec (screen:0, screen:0:wintitle*). Default: empty → App Settings video_capture_device, then default webcam.
-- `task` (enum, default `"auto"`, enum: auto|detect|classify|obb|pose|segment) - YOLO head to decode. Default: auto (infer detect/classify/segment from model). obb and pose must be selected explicitly.
+- `model` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="tag" data-variant="required">required</span></span>) - YOLO ONNX model path (required). Examples: ${MODELS_DIR}/yolov8n.onnx, yolo11n-obb.onnx, yolo11n-cls.onnx, yolo11n-pose.onnx under model roots.
+- `input` (<span data-cli="meta"><span data-cli="type">screen_input</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Webcam device name or screen spec (screen:0, screen:0:wintitle*). Default: empty → App Settings video_capture_device, then default webcam.
+- `task` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">detect</span> <span data-cli="choice">classify</span> <span data-cli="choice">obb</span> <span data-cli="choice">pose</span> <span data-cli="choice">segment</span></span></span>) - YOLO head to decode. Default: auto (infer detect/classify/segment from model). obb and pose must be selected explicitly.
 
 **labels_filter**
-- `labels` (file_path, default `""`) - Optional YOLO labels YAML. Default: empty → classes CSV, then task default (obb: DOTA-15, classify: imagenet-classes.txt beside model, else COCO-80).
-- `classes` (string, default `""`) - Comma-separated class names (index order). Default: empty. Ignored when labels is set.
-- `filterClasses` (string, default `""`) - Comma-separated class names to keep. Default: empty → keep all detections.
+- `labels` (<span data-cli="meta"><span data-cli="type">file_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional YOLO labels YAML. Default: empty → classes CSV, then task default (obb: DOTA-15, classify: imagenet-classes.txt beside model, else COCO-80).
+- `classes` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Comma-separated class names (index order). Default: empty. Ignored when labels is set.
+- `filterClasses` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Comma-separated class names to keep. Default: empty → keep all detections.
 
 **thresholds**
-- `conf` (float, 0-1, default `0.25`) - Detection confidence threshold (0–1). Default: 0.25.
-- `nms` (float, 0-1, default `0.45`) - NMS IoU threshold for detect/obb/pose. Default: 0.45.
-- `topK` (integer, 1-100, default `5`) - classify task: top predictions to return. Default: 5.
+- `conf` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.25</span></span></span>) - Detection confidence threshold (0–1). Default: 0.25.
+- `nms` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.45</span></span></span>) - NMS IoU threshold for detect/obb/pose. Default: 0.45.
+- `topK` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-100</span>, <span data-cli="default">default <span data-cli="value">5</span></span></span>) - classify task: top predictions to return. Default: 5.
 
 **runtime**
-- `inputSize` (integer, 0-4096, default `0`) - Model input size (px). Default: 0 → from metadata (detect 640, classify 224, obb 1024).
-- `threads` (integer, 1-64, default `4`) - ONNX Runtime intra-op CPU threads. Default: 4.
-- `provider` (enum, default `"gpu"`, enum: gpu|auto|cpu|cuda) - ONNX execution provider. Default: gpu (CUDA required). auto = CUDA then CPU fallback.
-- `gpuStats` (boolean, default `false`) - Attach NVIDIA VRAM telemetry when activeProvider=cuda. Default: false.
-- `instance` (string, default `""`) - Named cached model/session instance across loop passes. Default: empty → hash by args.
+- `inputSize` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-4096</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Model input size (px). Default: 0 → from metadata (detect 640, classify 224, obb 1024).
+- `threads` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-64</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - ONNX Runtime intra-op CPU threads. Default: 4.
+- `provider` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;gpu&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">gpu</span> <span data-cli="choice">auto</span> <span data-cli="choice">cpu</span> <span data-cli="choice">cuda</span></span></span>) - ONNX execution provider. Default: gpu (CUDA required). auto = CUDA then CPU fallback.
+- `gpuStats` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Attach NVIDIA VRAM telemetry when activeProvider=cuda. Default: false.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Named cached model/session instance across loop passes. Default: empty → hash by args.
 
 **visualization**
-- `visualize` (boolean, default `false`) - Live detection window (Win32). Default: false. Persists across loop passes.
-- `visualizeMode` (enum, default `"auto"`, enum: auto|overlay|preview) - Visualization window mode. Default: auto (overlay for screen:*, preview otherwise).
-- `visualizeStats` (boolean, default `true`) - Draw FPS / infer-time / class-count overlay text. Default: true.
-- `visualizeLabels` (boolean, default `true`) - Draw label + confidence on boxes. Default: true.
+- `visualize` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Live detection window (Win32). Default: false. Persists across loop passes.
+- `visualizeMode` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">overlay</span> <span data-cli="choice">preview</span></span></span>) - Visualization window mode. Default: auto (overlay for screen:*, preview otherwise).
+- `visualizeStats` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Draw FPS / infer-time / class-count overlay text. Default: true.
+- `visualizeLabels` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Draw label + confidence on boxes. Default: true.
 
 **smoothing**
-- `smoothAlpha` (float, 0-1, default `0.35`) - Temporal EMA for overlay boxes (viz only). Default: 0.35.
-- `smoothAge` (integer, 0-60, default `4`) - Overlay box persistence after disappearance (viz only). Default: 4 frames.
-- `smoothMinHits` (integer, 0-60, default `0`) - Frames before a track is drawn (viz only). Default: 0.
+- `smoothAlpha` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Temporal EMA for overlay boxes (viz only). Default: 0.35.
+- `smoothAge` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-60</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - Overlay box persistence after disappearance (viz only). Default: 4 frames.
+- `smoothMinHits` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-60</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Frames before a track is drawn (viz only). Default: 0.
 
 **tracking**
-- `trackIds` (boolean, default `false`) - Stable track ids and per-track colors (viz only). Default: false.
-- `trackTwoStage` (boolean, default `false`) - ByteTrack-style high/low association (viz only). Default: false.
-- `trackConfHigh` (float, 0-1, default `0.5`) - High-confidence split for trackTwoStage (viz only). Default: 0.5.
-- `trackCenter` (boolean, default `true`) - Center-distance fallback matching (viz only). Default: true.
-- `trackCenterDist` (float, 0-10, default `1.2`) - Center-distance gate as multiple of mean box side (viz only). Default: 1.2.
-- `trackVelBlend` (float, 0-1, default `0.7`) - Velocity EMA during dropouts (viz only). Default: 0.7.
+- `trackIds` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Stable track ids and per-track colors (viz only). Default: false.
+- `trackTwoStage` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - ByteTrack-style high/low association (viz only). Default: false.
+- `trackConfHigh` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.5</span></span></span>) - High-confidence split for trackTwoStage (viz only). Default: 0.5.
+- `trackCenter` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Center-distance fallback matching (viz only). Default: true.
+- `trackCenterDist` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-10</span>, <span data-cli="default">default <span data-cli="value">1.2</span></span></span>) - Center-distance gate as multiple of mean box side (viz only). Default: 1.2.
+- `trackVelBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.7</span></span></span>) - Velocity EMA during dropouts (viz only). Default: 0.7.
 
 **pose**
-- `kptMinScore` (float, 0-1, default `0.3`) - Min pose keypoint score to update a joint (viz only). Default: 0.30.
+- `kptMinScore` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.3</span></span></span>) - Min pose keypoint score to update a joint (viz only). Default: 0.30.
 
 **output_recording**
-- `timeoutMs` (duration_ms, 100-30000, default `5000`) - Webcam capture timeout (ms). Default: 5000. Ignored for screen input.
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Optional annotated still image (.jpg/.png). Default: empty → do not save.
-- `recordPath` (output_path, default `""`, constraints: writable+createParents) - Optional annotated burn-in video (.mp4). Default: empty → do not record.
-- `recordFps` (integer, 1-240, default `30`) - Burn-in video frame rate when recordPath is set. Default: 30.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">100-30000</span>, <span data-cli="default">default <span data-cli="value">5000</span></span></span>) - Webcam capture timeout (ms). Default: 5000. Ignored for screen input.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Optional annotated still image (.jpg/.png). Default: empty → do not save.
+- `recordPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Optional annotated burn-in video (.mp4). Default: empty → do not record.
+- `recordFps` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-240</span>, <span data-cli="default">default <span data-cli="value">30</span></span></span>) - Burn-in video frame rate when recordPath is set. Default: 30.
 
 **output**
-- `storeAs` (string, default `"detections"`) - Variable for PREVIOUS / downstream blocks. Default: detections.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;detections&quot;</span></span></span>) - Variable for PREVIOUS / downstream blocks. Default: detections.
 
 Features: container cancellable
 
@@ -7129,13 +7158,13 @@ Convert a frame to grayscale (Rec.601 luma). Pipes a frame handle in/out.
 Params:
 
 **input**
-- `input` (image_path, from PREVIOUS, default `""`) - Frame handle (mem://...) from a previous filter, or an image path.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Frame handle (mem://...) from a previous filter, or an image path.
 
 **advanced**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output file (.jpg/.png). Empty = keep in-memory (mem:// handle) for the next filter.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output file (.jpg/.png). Empty = keep in-memory (mem:// handle) for the next filter.
 
 **output**
-- `storeAs` (string, default `"imagePath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;imagePath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -7156,7 +7185,7 @@ List all available video capture (camera) devices.
 
 Params:
 
-- `storeAs` (string, default `""`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: non-blocking
 
@@ -7177,7 +7206,7 @@ Enumerate physical monitors and visible windows. Stores {monitors:[...], windows
 
 Params:
 
-- `storeAs` (string, default `"screens"`) - Variable for PREVIOUS / downstream blocks. Default: screens.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;screens&quot;</span></span></span>) - Variable for PREVIOUS / downstream blocks. Default: screens.
 
 Features: non-blocking
 
@@ -7199,11 +7228,11 @@ List or unload loaded local model instances for this xBlox process.
 Params:
 
 **lifecycle**
-- `action` (enum, default `"List"`, enum: List|Unload) - List loaded models in this xBlox process, or unload one by key.
-- `key` (string, default `""`) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
+- `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;List&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">List</span> <span data-cli="choice">Unload</span></span></span>) - List loaded models in this xBlox process, or unload one by key.
+- `key` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
 
 **output**
-- `storeAs` (string, default `"modelKey"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;modelKey&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -7225,17 +7254,17 @@ Resize / resample a frame (bilinear). A 0 dimension is derived from the other to
 Params:
 
 **input**
-- `input` (image_path, from PREVIOUS, default `""`) - Frame handle (mem://...) from a previous filter, or an image path.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Frame handle (mem://...) from a previous filter, or an image path.
 
 **options**
-- `width` (integer, 0-16384, default `0`) - Target width (px). 0 = keep aspect from height.
-- `height` (integer, 0-16384, default `0`) - Target height (px). 0 = keep aspect from width.
+- `width` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-16384</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Target width (px). 0 = keep aspect from height.
+- `height` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-16384</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Target height (px). 0 = keep aspect from width.
 
 **advanced**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output file (.jpg/.png). Empty = keep in-memory (mem:// handle) for the next filter.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output file (.jpg/.png). Empty = keep in-memory (mem:// handle) for the next filter.
 
 **output**
-- `storeAs` (string, default `"imagePath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;imagePath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -7259,13 +7288,13 @@ Capture a single frame from a screen or window via GDI BitBlt. input: "screen:0"
 Params:
 
 **input**
-- `input` (screen_input, default `"screen:0"`) - Screen spec. Default: screen:0 (primary monitor). Examples: screen:current, screen:N, screen:N:wintitle=GLOB.
+- `input` (<span data-cli="meta"><span data-cli="type">screen_input</span>, <span data-cli="default">default <span data-cli="value">&quot;screen:0&quot;</span></span></span>) - Screen spec. Default: screen:0 (primary monitor). Examples: screen:current, screen:N, screen:N:wintitle=GLOB.
 
 **advanced**
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output image path (.jpg/.png). Default: empty → temp file in system temp directory.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output image path (.jpg/.png). Default: empty → temp file in system temp directory.
 
 **output**
-- `storeAs` (string, default `"imagePath"`) - Variable for PREVIOUS / downstream blocks. Default: imagePath.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;imagePath&quot;</span></span></span>) - Variable for PREVIOUS / downstream blocks. Default: imagePath.
 
 Default block:
 
@@ -7287,25 +7316,25 @@ Pump frames from a webcam, screen/window, image, or video file. With child items
 Params:
 
 **input**
-- `input` (screen_input, default `""`) - Camera name, screen/window spec (screen:current / screen for the monitor of the launching window, screen:N, screen:N:wintitle=GLOB, screen:N:hwnd=ID), image (.png/.jpg), or video file (.mp4). Empty = preferred camera.
+- `input` (<span data-cli="meta"><span data-cli="type">screen_input</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Camera name, screen/window spec (screen:current / screen for the monitor of the launching window, screen:N, screen:N:wintitle=GLOB, screen:N:hwnd=ID), image (.png/.jpg), or video file (.mp4). Empty = preferred camera.
 
 **one_shot_output**
-- `emit` (enum, default `"both"`, enum: both|file|handle) - One-shot mode only (no child items): both = write file + cache frame; file = write only; handle = in-memory only (mem:// handle, no file).
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - One-shot output file path (.jpg/.png) for emit=file/both. Empty = auto temp file.
+- `emit` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;both&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">both</span> <span data-cli="choice">file</span> <span data-cli="choice">handle</span></span></span>) - One-shot mode only (no child items): both = write file + cache frame; file = write only; handle = in-memory only (mem:// handle, no file).
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - One-shot output file path (.jpg/.png) for emit=file/both. Empty = auto temp file.
 
 **pump_limits**
-- `frames` (integer, 0-1e+06, default `0`) - Max frames to pump (0 = unbounded -> video files run to EOF; live sources run until durationMs/cancel). Use N for a fixed-length grab.
-- `durationMs` (duration_ms, 0-8.64e+07, default `0`) - Live sources only: stop after this wall-clock budget (0 = no cap).
-- `progressEvery` (integer, 0-100000, default `60`) - Pump mode: emit a progress event every N frames (child events are muted). 0 = only the final summary.
+- `frames` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-1e+06</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Max frames to pump (0 = unbounded -> video files run to EOF; live sources run until durationMs/cancel). Use N for a fixed-length grab.
+- `durationMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">0-8.64e+07</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Live sources only: stop after this wall-clock budget (0 = no cap).
+- `progressEvery` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100000</span>, <span data-cli="default">default <span data-cli="value">60</span></span></span>) - Pump mode: emit a progress event every N frames (child events are muted). 0 = only the final summary.
 
 **capture_options**
-- `fps` (integer, 0-240, default `0`) - Preferred capture rate for live sources. 0 = source default.
-- `width` (integer, 0-7680, default `0`) - Preferred width in pixels (live sources). 0 = source default.
-- `height` (integer, 0-4320, default `0`) - Preferred height in pixels (live sources). 0 = source default.
-- `timeoutMs` (duration_ms, 100-30000, default `5000`) - Max ms to wait for the first frame of a live source.
+- `fps` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-240</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Preferred capture rate for live sources. 0 = source default.
+- `width` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-7680</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Preferred width in pixels (live sources). 0 = source default.
+- `height` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-4320</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Preferred height in pixels (live sources). 0 = source default.
+- `timeoutMs` (<span data-cli="meta"><span data-cli="type">duration_ms</span>, <span data-cli="type">100-30000</span>, <span data-cli="default">default <span data-cli="value">5000</span></span></span>) - Max ms to wait for the first frame of a live source.
 
 **output**
-- `storeAs` (string, default `"imagePath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;imagePath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Features: container cancellable
 
@@ -7341,17 +7370,17 @@ Append a frame (handle or image path) to an .mp4. Stateful across loop iteration
 Params:
 
 **input**
-- `input` (image_path, from PREVIOUS, default `""`) - Frame handle (mem://...) from a previous filter, or an image path.
-- `outputPath` (output_path, default `""`, constraints: writable+createParents) - Output video path (.mp4). Required.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Frame handle (mem://...) from a previous filter, or an image path.
+- `outputPath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Output video path (.mp4). Required.
 
 **options**
-- `fps` (integer, 0-240, default `0`) - Output frame rate. 0 = follow the source (videoSource's detected fps; 30 if unknown). Set a value to force constant-rate output.
+- `fps` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-240</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Output frame rate. 0 = follow the source (videoSource's detected fps; 30 if unknown). Set a value to force constant-rate output.
 
 **advanced**
-- `instance` (string, default `""`) - Optional writer id. Empty = keyed by output path. Use distinct ids for parallel writers.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional writer id. Empty = keyed by output path. Use distinct ids for parallel writers.
 
 **output**
-- `storeAs` (string, default `"videoPath"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;videoPath&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -7375,34 +7404,34 @@ Ask a local MiniCPM-style VLM about one or more images.
 Params:
 
 **input**
-- `input` (image_path, from PREVIOUS, default `""`, resolve: variables+globs) - Image path, glob, or PREVIOUS. Glob arrays are passed as multiple images.
+- `input` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">globs</span></span></span>) - Image path, glob, or PREVIOUS. Glob arrays are passed as multiple images.
 
 **source_model**
-- `frames` (json_value, default `[]`) - Additional image paths for multi-frame or comparison prompts.
-- `model` (string, default `""`, resolve: variables+deep) - Local vision VLM model id/path. Empty = prefer MiniCPM-V from downloaded models.
-- `slot` (enum, default `"vision"`, enum: vision|image|video) - Local model catalog slot used for auto-selection.
+- `frames` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - Additional image paths for multi-frame or comparison prompts.
+- `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Local vision VLM model id/path. Empty = prefer MiniCPM-V from downloaded models.
+- `slot` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;vision&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">vision</span> <span data-cli="choice">image</span> <span data-cli="choice">video</span></span></span>) - Local model catalog slot used for auto-selection.
 
 **prompt**
-- `prompt` (prompt, default `"Describe what you see in detail."`) - Question or instruction for the vision model.
+- `prompt` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="default">default <span data-cli="value">&quot;Describe what you see in detail.&quot;</span></span></span>) - Question or instruction for the vision model.
 
 **output**
-- `json` (boolean, default `true`) - When true, result is structured JSON; when false, result is only generated text.
-- `includeRaw` (boolean, default `false`) - Include rawText in JSON output for debugging before normalizers were applied.
-- `result` (json_value) - Structured vision response when json=true.
-- `storeAs` (string, default `"vision"`) - Variable to also store the result in (always sets PREVIOUS).
+- `json` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - When true, result is structured JSON; when false, result is only generated text.
+- `includeRaw` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Include rawText in JSON output for debugging before normalizers were applied.
+- `result` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Structured vision response when json=true.
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;vision&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 **output_normalization**
-- `normalizers` (flags, default `15`) - Post-process generated text for common model-output artifacts.
+- `normalizers` (<span data-cli="meta"><span data-cli="type">flags</span>, <span data-cli="default">default <span data-cli="value">15</span></span></span>) - Post-process generated text for common model-output artifacts.
   - `1` Strip thinking - Remove reasoning sections such as <think>...</think>, including unclosed sections.
   - `2` Strip fences - Unwrap a single outer Markdown/code fence around the whole answer.
   - `4` Strip role labels - Remove common leading/trailing assistant role or template markers.
   - `8` Trim output - Trim leading and trailing whitespace after other normalizers.
 
 **runtime**
-- `threads` (integer, 1-64, default `8`) - CPU thread count for llama.cpp.
-- `gpuLayers` (integer, -1-999, default `-1`) - GPU layers to offload. -1 = all available, 0 = CPU-only.
-- `ctx` (integer, 1024-65536, default `4096`) - Context size. Use 8192+ for multi-frame prompts.
-- `maxTokens` (integer, 1-8192, default `512`) - Maximum generated tokens.
+- `threads` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-64</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - CPU thread count for llama.cpp.
+- `gpuLayers` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">-1-999</span>, <span data-cli="default">default <span data-cli="value">-1</span></span></span>) - GPU layers to offload. -1 = all available, 0 = CPU-only.
+- `ctx` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1024-65536</span>, <span data-cli="default">default <span data-cli="value">4096</span></span></span>) - Context size. Use 8192+ for multi-frame prompts.
+- `maxTokens` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-8192</span>, <span data-cli="default">default <span data-cli="value">512</span></span></span>) - Maximum generated tokens.
 
 Features: background cancellable
 
@@ -7440,11 +7469,11 @@ List or unload loaded local model instances for this xBlox process.
 Params:
 
 **lifecycle**
-- `action` (enum, default `"List"`, enum: List|Unload) - List loaded models in this xBlox process, or unload one by key.
-- `key` (string, default `"llama:vlm"`) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
+- `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;List&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">List</span> <span data-cli="choice">Unload</span></span></span>) - List loaded models in this xBlox process, or unload one by key.
+- `key` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;llama:vlm&quot;</span></span></span>) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
 
 **output**
-- `storeAs` (string, default `"modelKey"`) - Variable to also store the result in (always sets PREVIOUS).
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;modelKey&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
 
 Default block:
 
@@ -7465,20 +7494,15 @@ Default block:
 | `file.prev` | Previous | `app:previousfile` |  |
 | `custom.command-mtlnivuv-4aae3` | Explorer | `app:togglefiletree` |  |
 | `file.next` | Next | `app:nextfile` |  |
-| `custom.command-mpx9r1ur-8c6df` | Assistant | `cli:llm` | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime` |
+| `custom.command-mpx9r1ur-8c6df` | Assistant | `cli:llm` | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | `app:togglelauncher` |  |
-| `custom.command-mq6i351x-bdb01` | Edit | `app:edit` |  |
-| `custom.command-ms1sb66o-f4ae7` | Commands | `app:togglecommandpalette` |  |
-| `custom.native-search` | Search | `app:togglesearchnative` |  |
-| `custom.command-mr87jv7l-cbcd4` | Edit Home | `app:edit` |  |
-| `custom.command-mu1mbvt3-ecf83` | Commands | `app:togglecommandpalette` |  |
+| `custom.command-mtox7vvr-093fc` | Voice Commands | `app:togglevoicecommand` |  |
 | `custom.dropdown-msx1rszr-19148` | New | `metadata` |  |
 | `custom.command-msx1rszr-32ae1` | XBlox Script | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |
 | `custom.command-msx1xf70-ed2f7` | Text File | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
 | `custom.command-mtfnk3hu-47302` | Markdown File | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
 | `custom.command-mtczu1xa-c605f` | File Tab | `app:newfiletab` |  |
 | `custom.command-mtfpcfxj-e1333` | Screen Recording | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-recorder-16-9.xblox` |
-| `custom.command-mtox7vvr-093fc` | Voice Commands | `app:togglevoicecommand` |  |
 | `custom.dropdown-mset8bmm-ad9d3` | Installer | `metadata` |  |
 | `custom.command-mqj3lo3h-fed59` | Register | `cli:register-explorer` |  |
 | `custom.command-mr90wbc8-2bf79` | Installer | `cli:installer` | `--no-seed` |

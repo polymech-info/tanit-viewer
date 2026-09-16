@@ -19,37 +19,46 @@ Use this skill when composing Tanit CLI invocations or calling user custom comma
 
 UI launch (main window). Launch `tanit.exe` with **no subcommand** (full reference: `info ui`).
 
-- `--src` (TEXT, default `{}`) - Seed the UI with file(s) or URL(s). Local paths open in the workbench; `http(s)://…`, `//host/…`, and CMS-relative `/…` open in the centre browser. Uses saved default workbench unless --ui-preset is set. Repeat or separate with `;`.
-- `--view-locate` (TEXT) - Viewer locate fragment without '#', used by protocol startup.
-- `--ui-preset` (TEXT:{main,chat,viewer}, one of: `main`, `chat`, `viewer`) - Open the UI: `main`, `chat`, or `viewer` (one-shot; overrides saved default `ui.workbench`).
-- `--mic` (TEXT:{start,off}, one of: `start`, `off`) - Chat launch hint: `start` enables microphone when the composer is ready.
-- `--prompt` (TEXT) - Pre-fill the chat composer with this text on launch.
-- `--type` (TEXT:{completion,responses,realtime}, one of: `completion`, `responses`, `realtime`) - LLM API mode: completion, responses, or realtime.
-- `--system-prompt` (TEXT) - Override the system prompt. Use `null` to clear, `@path` to read from a file.
-- `--no-tools` - Disable agent tools; send a text-only LLM turn.
-- `--no-skills` - Skip skill discovery and injection.
-- `--app` (TEXT) - Force a specific viewer app (reserved). Default: auto-detect from file type.
-- `--edit` - Open files in the code editor instead of the default viewer.
-- `--send` - Auto-send the pre-filled prompt when the composer is ready.
-- `--consent-ui` (TEXT) - Chat consent surface for this UI launch: empty (WebView cards) | auto-allow (alias: yolo) | auto-deny. auto-allow grants every Ask with a session grant — use for computer-use harness.
-- `--attach-realtime` - Move an active background realtime voice session into the chat panel.
-- `--viewer-dev` - Dev mode: navigate the viewer WebView2 to the rspack dev server (http://localhost:5180).
+- `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Seed the UI with file(s) or URL(s). Local paths open in the workbench; `http(s)://…`, `//host/…`, and CMS-relative `/…` open in the centre browser. Uses saved default workbench unless --ui-preset is set. Repeat or separate with `;`.
+- `--view-locate` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Viewer locate fragment without '#', used by protocol startup.
+- `--ui-preset` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">main</span> <span data-cli="choice">chat</span> <span data-cli="choice">viewer</span></span></span>) - Open the UI: `main`, `chat`, or `viewer` (one-shot; overrides saved default `ui.workbench`).
+- `--ui-open` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Open a lightweight UI surface without constructing MainFrame. Usage: --ui-open command-settings [--ui-command-id ID | ID]. Reserved surfaces: fileviewer, webapp.
+- `--ui-command-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Stable commands.json id for --ui-open command-settings.
+- `--ui-web-app` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Web application id for --ui-open webapp.
+- `--ui-owner-hwnd` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional decimal owner HWND for lightweight UI placement.
+- `--ui-context-cwd` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Command-variable cwd for a lightweight command-settings launch.
+- `--ui-context-hwnd` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Command-variable CURRENT_HWND for a lightweight command-settings launch.
+- `--ui-request-token` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Opaque callback token for an internally launched lightweight UI surface.
+- `--mic` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">start</span> <span data-cli="choice">off</span></span></span>) - Chat launch hint: `start` enables microphone when the composer is ready.
+- `--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Pre-fill the chat composer with this text on launch.
+- `--type` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">completion</span> <span data-cli="choice">responses</span> <span data-cli="choice">realtime</span></span></span>) - LLM API mode: completion, responses, or realtime.
+- `--system-prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the system prompt. Use `null` to clear, `@path` to read from a file.
+- `--no-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable agent tools; send a text-only LLM turn.
+- `--no-skills` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip skill discovery and injection.
+- `--app` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Force a specific viewer app (reserved). Default: auto-detect from file type.
+- `--edit` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Open files in the code editor instead of the default viewer.
+- `--send` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Auto-send the pre-filled prompt when the composer is ready.
+- `--consent-ui` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat consent surface for this UI launch: empty (WebView cards) | auto-allow (alias: yolo) | auto-deny. auto-allow grants every Ask with a session grant — use for computer-use harness.
+- `--attach-realtime` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Move an active background realtime voice session into the chat panel.
+- `--viewer-dev` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dev mode: navigate the viewer WebView2 to the rspack dev server (http://localhost:5180).
 Use --viewer-dev-url=URL to override the default address.
 Equivalent to setting PM_VIEWER_DEV_URL before launch; zero production impact.
-- `--viewer-dev-url` (TEXT, default `http://localhost:5180`) - Override the rspack dev server URL used by --viewer-dev (default: http://localhost:5180).
-- `--xblox-dev` - Dev mode: navigate xblox WebView2 to the rspack dev server (http://127.0.0.1:5173).
+- `--viewer-dev-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the rspack dev server URL used by --viewer-dev (default: http://localhost:5180).
+- `--xblox-dev` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dev mode: navigate xblox WebView2 to the rspack dev server (http://127.0.0.1:5173).
 Use --xblox-dev-url=URL to override the default address.
 Equivalent to setting PM_XBLOX_DEV_URL before launch; zero production impact.
-- `--xblox-dev-url` (TEXT, default `http://127.0.0.1:5173`) - Override the rspack dev server URL used by --xblox-dev (default: http://127.0.0.1:5173).
-- `--ui-reset` - Reset window layout to built-in defaults for this launch.
-- `--layout` (TEXT) - Apply an exported layout JSON for this launch without persisting it.
-- `--size` (TEXT) - Override main frame outer size for this launch: WxH in pixels, e.g. 800x600. Applied during layout restore so there is no second resize pass.
-- `--show-panel` (TEXT, flags: `filetree`, `search`, `queue`, `log`, `console`, `settings`, `chat`, `findresults`, `dupresults`, `nodes`) - Force panels visible for this launch (comma-separated ids; not persisted). Ids: filetree, search, queue, log, console, settings, chat, findresults, dupresults, nodes. Aliases: explorer→filetree.
-- `--hide-panel` (TEXT, flags: `filetree`, `search`, `queue`, `log`, `console`, `settings`, `chat`, `findresults`, `dupresults`, `nodes`) - Force panels hidden for this launch (comma-separated ids; not persisted). Same ids as --show-panel. On conflict with --show-panel, hide wins.
-- `--console` - Attach a console window for stdout/stderr (default: off).
-- `--pause-on-exit` - Wait for Enter before the process exits.
-- `--splash,--no-splash` - Show the startup splash screen (default: off).
-- `--settings` (TEXT) - Read app settings from this file for this process only. Use `settings import` to persist.
+- `--xblox-dev-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the rspack dev server URL used by --xblox-dev (default: http://127.0.0.1:5173).
+- `--ui-reset` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Reset window layout to built-in defaults for this launch.
+- `--layout` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Apply an exported layout JSON for this launch without persisting it.
+- `--size` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override main frame outer size for this launch: WxH in pixels, e.g. 800x600. Applied during layout restore so there is no second resize pass.
+- `--show-panel` (<span data-cli="meta"><span data-cli="tag" data-variant="flags">flags</span> <span data-cli="choices" data-variant="flags"><span data-cli="choice">filetree</span> <span data-cli="choice">search</span> <span data-cli="choice">queue</span> <span data-cli="choice">log</span> <span data-cli="choice">console</span> <span data-cli="choice">settings</span> <span data-cli="choice">chat</span> <span data-cli="choice">findresults</span> <span data-cli="choice">dupresults</span> <span data-cli="choice">nodes</span></span></span>) - Force panels visible for this launch (comma-separated ids; not persisted). Ids: filetree, search, queue, log, console, settings, chat, findresults, dupresults, nodes. Aliases: explorer→filetree.
+- `--hide-panel` (<span data-cli="meta"><span data-cli="tag" data-variant="flags">flags</span> <span data-cli="choices" data-variant="flags"><span data-cli="choice">filetree</span> <span data-cli="choice">search</span> <span data-cli="choice">queue</span> <span data-cli="choice">log</span> <span data-cli="choice">console</span> <span data-cli="choice">settings</span> <span data-cli="choice">chat</span> <span data-cli="choice">findresults</span> <span data-cli="choice">dupresults</span> <span data-cli="choice">nodes</span></span></span>) - Force panels hidden for this launch (comma-separated ids; not persisted). Same ids as --show-panel. On conflict with --show-panel, hide wins.
+- `--show-components` (<span data-cli="meta"><span data-cli="tag" data-variant="flags">flags</span> <span data-cli="choices" data-variant="flags"><span data-cli="choice">ribbon</span> <span data-cli="choice">statusbar</span></span></span>) - Force chrome components visible for this launch (comma-separated ids; not persisted). Ids: ribbon, statusbar. Aliases: status-bar, status_bar.
+- `--hide-components` (<span data-cli="meta"><span data-cli="tag" data-variant="flags">flags</span> <span data-cli="choices" data-variant="flags"><span data-cli="choice">ribbon</span> <span data-cli="choice">statusbar</span></span></span>) - Force chrome components hidden for this launch (comma-separated ids; not persisted). Same ids as --show-components. On conflict with --show-components, hide wins.
+- `--console` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Attach a console window for stdout/stderr (default: off).
+- `--pause-on-exit` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Wait for Enter before the process exits.
+- `--splash,--no-splash` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Show the startup splash screen (default: off).
+- `--settings` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Read app settings from this file for this process only. Use `settings import` to persist.
 
 ### Image
 
@@ -59,29 +68,29 @@ Resize / transform an image (libvips, Sharp-like options)
 
 Options:
 
-- `input` (TEXT) - Input path, glob (*, ?, **), or http(s):// URL
-- `output` (TEXT) - Output file/dir, or omit when there is exactly one input; writes under cwd (sanitized name)
-- `--src` (TEXT, default `{}`) - Input (repeat for multiple); use with --dst; Explorer passes several files
-- `--dst` (TEXT) - Same as positional output; directory if multiple inputs
-- `--max-width` (INT, default `0`) - Target / max width (0 = no limit)
-- `--max-height` (INT, default `0`) - Target / max height (0 = no limit)
-- `--format` (TEXT) - Output format (default: from extension)
-- `--fit` (TEXT, default `inside`) - inside|cover|contain|fill|outside (see Sharp resize.fit)
-- `--position` (TEXT, default `centre`) - For cover: centre|attention|entropy|...
-- `--kernel` (TEXT, default `lanczos3`) - nearest|cubic|mitchell|lanczos2|lanczos3
-- `-q,--quality` (INT, default `85`) - JPEG/WebP/AVIF quality 1-100
-- `--png-compression` (INT, default `6`) - PNG DEFLATE 0-9
-- `--background` (TEXT, default `#ffffff`) - Letterbox colour #rrggbb (contain)
-- `--rotate` (INT, default `0`) - Rotate 0|90|180|270 after EXIF autorotate
-- `--flip` - Vertical flip
-- `--flop` - Horizontal flop
-- `--no-autorotate` - Disable EXIF orientation
-- `--no-strip` - Keep metadata on output
-- `--allow-enlargement` - Allow upscaling (inside/contain/outside)
-- `--no-cache` - Disable output cache (default: cache on)
-- `--cache-dir` (TEXT) - Cache root (default: <cwd>/cache/images)
-- `--url-timeout` (INT, default `5`) - HTTP(S) fetch timeout (seconds, 0 = libcurl default)
-- `--url-max-redirects` (INT, default `20`) - Max redirects when fetching URL inputs
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Input path, glob (*, ?, **), or http(s):// URL
+- `output` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output file/dir, or omit when there is exactly one input; writes under cwd (sanitized name)
+- `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Input (repeat for multiple); use with --dst; Explorer passes several files
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Same as positional output; directory if multiple inputs
+- `--max-width` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Target / max width (0 = no limit)
+- `--max-height` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Target / max height (0 = no limit)
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output format (default: from extension)
+- `--fit` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">inside</span></span></span>) - inside|cover|contain|fill|outside (see Sharp resize.fit)
+- `--position` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">centre</span></span></span>) - For cover: centre|attention|entropy|...
+- `--kernel` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">lanczos3</span></span></span>) - nearest|cubic|mitchell|lanczos2|lanczos3
+- `-q,--quality` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">85</span></span></span>) - JPEG/WebP/AVIF quality 1-100
+- `--png-compression` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">6</span></span></span>) - PNG DEFLATE 0-9
+- `--background` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Letterbox colour #rrggbb (contain)
+- `--rotate` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Rotate 0|90|180|270 after EXIF autorotate
+- `--flip` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Vertical flip
+- `--flop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Horizontal flop
+- `--no-autorotate` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable EXIF orientation
+- `--no-strip` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Keep metadata on output
+- `--allow-enlargement` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Allow upscaling (inside/contain/outside)
+- `--no-cache` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable output cache (default: cache on)
+- `--cache-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Cache root (default: <cwd>/cache/images)
+- `--url-timeout` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">5</span></span></span>) - HTTP(S) fetch timeout (seconds, 0 = libcurl default)
+- `--url-max-redirects` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Max redirects when fetching URL inputs
 
 **Example**
 
@@ -101,24 +110,24 @@ Compress images: MozJPEG re-encode or optimised PNG (+ libimagequant / zopfli)
 
 Options:
 
-- `input` (TEXT) - Input file / glob
-- `output` (TEXT) - Output file path (relative or absolute)
-- `--src` (TEXT, default `{}`) - Input(s); pair with --dst
-- `--dst` (TEXT) - Output file path for one --src; output directory when multiple --src (relative paths resolve from cwd; parent dirs are created)
-- `--compressor` (TEXT:{mozjpeg,png}) - mozjpeg | png  (default: inferred from output extension; falls back to mozjpeg)
-- `-q,--quality` (INT, default `85`) - MozJPEG quality 1–100
-- `--no-progressive` - Disable progressive (interlaced) JPEG
-- `--optimize-scans` - MozJPEG: split DCT coefficient spectrum into separate scans
-- `--trellis-quant` - MozJPEG: trellis quantisation (slower, smaller)
-- `--level` (INT, default `9`) - PNG DEFLATE level 1–9
-- `--quantize` - PNG: libimagequant palette reduction — lossy, up to ~60 % smaller (requires FEATURE_PNG_COMPRESSOR)
-- `--colors` (INT, default `256`) - Palette size 8–256
-- `--quant-quality` (INT, default `85`) - Quantise quality 60–100
-- `--zopfli` - PNG: ultra-compress DEFLATE with zopfli — lossless, slow (requires FEATURE_PNG_ZOPFLI)
-- `--zopfli-iter` (INT, default `15`) - Zopfli iteration count
-- `--no-strip` - Keep metadata on output
-- `--suffix` (TEXT) - Stem suffix for auto-generated output names (default: _compressed when format unchanged)
-- `--job-ui` - List-style job window (pause / cancel) — Windows
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Input file / glob
+- `output` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output file path (relative or absolute)
+- `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Input(s); pair with --dst
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output file path for one --src; output directory when multiple --src (relative paths resolve from cwd; parent dirs are created)
+- `--compressor` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mozjpeg</span> <span data-cli="choice">png</span></span></span>) - mozjpeg | png  (default: inferred from output extension; falls back to mozjpeg)
+- `-q,--quality` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">85</span></span></span>) - MozJPEG quality 1–100
+- `--no-progressive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable progressive (interlaced) JPEG
+- `--optimize-scans` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - MozJPEG: split DCT coefficient spectrum into separate scans
+- `--trellis-quant` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - MozJPEG: trellis quantisation (slower, smaller)
+- `--level` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">9</span></span></span>) - PNG DEFLATE level 1–9
+- `--quantize` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - PNG: libimagequant palette reduction — lossy, up to ~60 % smaller (requires FEATURE_PNG_COMPRESSOR)
+- `--colors` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">256</span></span></span>) - Palette size 8–256
+- `--quant-quality` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">85</span></span></span>) - Quantise quality 60–100
+- `--zopfli` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - PNG: ultra-compress DEFLATE with zopfli — lossless, slow (requires FEATURE_PNG_ZOPFLI)
+- `--zopfli-iter` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">15</span></span></span>) - Zopfli iteration count
+- `--no-strip` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Keep metadata on output
+- `--suffix` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Stem suffix for auto-generated output names (default: _compressed when format unchanged)
+- `--job-ui` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List-style job window (pause / cancel) — Windows
 
 **Example**
 
@@ -138,19 +147,19 @@ AI image editing (Gemini / Google)
 
 Options:
 
-- `input` (TEXT) - Input image, or use --src for a batch (Explorer multi-select uses --src)
-- `--src` (TEXT, default `{}`) - Input path (repeat for multiple files; one job queue / one window with --job-ui on Windows)
-- `output` (TEXT) - Output path (omit = auto from input + prompt)
-- `-p,--prompt` (TEXT) - Editing prompt (required if --preset-id is not set, unless preset supplies prompt)
-- `--preset-id` (TEXT) - Preset id from settings: explorer_presets (op=transform), or chat_web quick action as chat-<id>
-- `--preset` (TEXT) - Chat settings preset name or id; loads image_provider/image_model; explicit --provider/--model override
-- `--provider` (TEXT) - AI provider (google, replicate, pixlwiz, openrouter, openai); omit = from preset / app Chat image_provider (aborts if unset)
-- `--model` (TEXT) - Model id; omit = from preset / app Chat image_model (aborts if unset)
-- `--api-key` (TEXT) - API key (optional; default from app provider settings)
-- `--aspect-ratio` (TEXT) - Output aspect ratio (1:1,16:9,4:3,...)
-- `--image-size` (TEXT) - Output size (512,1K,2K,4K)
-- `-r,--reference` (TEXT, default `{}`) - Reference image path (logo / brand sheet / style swatch). Repeatable: -r logo.png -r palette.jpg
-- `--job-ui` - List-style job window (pause / cancel) — Windows
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Input image, or use --src for a batch (Explorer multi-select uses --src)
+- `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Input path (repeat for multiple files; one job queue / one window with --job-ui on Windows)
+- `output` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output path (omit = auto from input + prompt)
+- `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Editing prompt (required if --preset-id is not set, unless preset supplies prompt)
+- `--preset-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Preset id from settings: explorer_presets (op=transform), or chat_web quick action as chat-<id>
+- `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id; loads image_provider/image_model; explicit --provider/--model override
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - AI provider (google, replicate, pixlwiz, openrouter, openai); omit = from preset / app Chat image_provider (aborts if unset)
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model id; omit = from preset / app Chat image_model (aborts if unset)
+- `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key (optional; default from app provider settings)
+- `--aspect-ratio` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output aspect ratio (1:1,16:9,4:3,...)
+- `--image-size` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output size (512,1K,2K,4K)
+- `-r,--reference` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Reference image path (logo / brand sheet / style swatch). Repeatable: -r logo.png -r palette.jpg
+- `--job-ui` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List-style job window (pause / cancel) — Windows
 
 **Example**
 
@@ -170,15 +179,15 @@ AI text-to-image (Gemini / Google, no input file)
 
 Options:
 
-- `output` (TEXT) - Output path (omit = create_<slug>.png in cwd)
-- `-p,--prompt` (TEXT, required) - Generation prompt
-- `--provider` (TEXT) - AI provider (google, replicate, pixlwiz, openrouter, openai); omit = from preset / app Chat image_provider (aborts if unset)
-- `--model` (TEXT) - Model id; omit = from preset / app Chat image_model (aborts if unset)
-- `--preset` (TEXT) - Chat settings preset name or id; loads image_provider/image_model; explicit --provider/--model override
-- `--api-key` (TEXT) - API key (optional; default from app provider settings)
-- `--aspect-ratio` (TEXT) - Output aspect ratio (1:1,16:9,4:3,...)
-- `--image-size` (TEXT) - Output size (512,1K,2K,4K)
-- `-r,--reference` (TEXT, default `{}`) - Reference image path (style / brand). Repeat as needed.
+- `output` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output path (omit = create_<slug>.png in cwd)
+- `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Generation prompt
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - AI provider (google, replicate, pixlwiz, openrouter, openai); omit = from preset / app Chat image_provider (aborts if unset)
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model id; omit = from preset / app Chat image_model (aborts if unset)
+- `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id; loads image_provider/image_model; explicit --provider/--model override
+- `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key (optional; default from app provider settings)
+- `--aspect-ratio` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output aspect ratio (1:1,16:9,4:3,...)
+- `--image-size` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output size (512,1K,2K,4K)
+- `-r,--reference` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Reference image path (style / brand). Repeat as needed.
 
 **Example**
 
@@ -198,16 +207,16 @@ Vision OCR / markdown extraction (image_understand; not sidecar meta)
 
 Options:
 
-- `input` (TEXT, required) - Input image path
-- `-p,--prompt` (TEXT) - Instruction; empty = verbatim OCR as structured Markdown (tables, lists, headings)
-- `--dst` (TEXT) - Write markdown answer here (default: same folder, stem.md beside input; omit with --stdout)
-- `--stdout` - Print markdown answer on stdout only; do not write --dst (overrides default stem.md)
-- `--provider` (TEXT) - AI provider; omit = from preset / app Chat image_recognition_provider (aborts if unset)
-- `--model` (TEXT) - Model id; omit = from preset / app image_recognition_model (ocr_model fallback)
-- `--preset` (TEXT) - Chat settings preset name or id; loads image_recognition/ocr provider+model; explicit --provider/--model override
-- `--api-key` (TEXT) - API key (optional; default from app provider settings)
-- `--no-resize` - Do NOT pre-resize in memory before sending to the model
-- `--resize-width` (INT, default `1024`) - In-memory resize longest edge (default 1024 for OCR)
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Input image path
+- `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Instruction; empty = verbatim OCR as structured Markdown (tables, lists, headings)
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write markdown answer here (default: same folder, stem.md beside input; omit with --stdout)
+- `--stdout` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print markdown answer on stdout only; do not write --dst (overrides default stem.md)
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - AI provider; omit = from preset / app Chat image_recognition_provider (aborts if unset)
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model id; omit = from preset / app image_recognition_model (ocr_model fallback)
+- `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id; loads image_recognition/ocr provider+model; explicit --provider/--model override
+- `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key (optional; default from app provider settings)
+- `--no-resize` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do NOT pre-resize in memory before sending to the model
+- `--resize-width` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">1024</span></span></span>) - In-memory resize longest edge (default 1024 for OCR)
 
 **Example**
 
@@ -243,8 +252,8 @@ Print page count and page sizes.
 
 Options:
 
-- `path` (TEXT, required, default `{}`) - PDF file path(s).
-- `--password` (TEXT) - Document password, if encrypted.
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - PDF file path(s).
+- `--password` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Document password, if encrypted.
 
 **Example**
 
@@ -300,16 +309,16 @@ Rasterize pages to image files (all, ranges, or specific pages).
 
 Options:
 
-- `path` (TEXT, required, default `{}`) - PDF file path.
-- `--pages` (TEXT, default `all`) - Pages to render (1-based): all (default), 3, 1-5, 1,3,7, 2-.
-- `--dpi` (FLOAT, default `300`) - Render DPI (default 300).
-- `--rotation` (INT:{0,90,180,270}, default `0`) - Clockwise rotation in degrees.
-- `-o,--output` (TEXT) - Output image path (single-page selection only; otherwise inferred as stem_N.ext).
-- `--output-dir` (TEXT) - Output directory (default: PDF folder when multiple pages are rendered).
-- `--format` (TEXT:{auto,png,jpeg,jpg,webp}, default `auto`) - Output format: auto (default), png, jpeg, webp. auto => JPEG for grayscale pages, PNG otherwise.
-- `--quality` (INT:INT in [1 - 100], default `95`) - JPEG/WebP quality (1-100).
-- `--password` (TEXT) - Document password, if encrypted.
-- `--no-annot` - Skip annotation rendering.
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - PDF file path.
+- `--pages` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">all</span></span></span>) - Pages to render (1-based): all (default), 3, 1-5, 1,3,7, 2-.
+- `--dpi` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">300</span></span></span>) - Render DPI (default 300).
+- `--rotation` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">0</span> <span data-cli="choice">90</span> <span data-cli="choice">180</span> <span data-cli="choice">270</span></span></span>) - Clockwise rotation in degrees.
+- `-o,--output` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output image path (single-page selection only; otherwise inferred as stem_N.ext).
+- `--output-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output directory (default: PDF folder when multiple pages are rendered).
+- `--format` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">png</span> <span data-cli="choice">jpeg</span> <span data-cli="choice">jpg</span> <span data-cli="choice">webp</span></span></span>) - Output format: auto (default), png, jpeg, webp. auto => JPEG for grayscale pages, PNG otherwise.
+- `--quality` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 100]</span>, <span data-cli="default">default <span data-cli="value">95</span></span></span>) - JPEG/WebP quality (1-100).
+- `--password` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Document password, if encrypted.
+- `--no-annot` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip annotation rendering.
 
 **Example**
 
@@ -411,14 +420,14 @@ Extract document text to Markdown via modular PDFium pipeline.
 
 Options:
 
-- `path` (TEXT, required, default `{}`) - PDF file path.
-- `--pages` (TEXT, default `all`) - Pages to convert (1-based): all (default), 3, 1-5, 1,3,7, 2-.
-- `-o,--output` (TEXT) - Output Markdown or JSON path (default: input stem + .md).
-- `--output-dir` (TEXT) - Output bundle directory: page_N.md files plus figures/page_N_fig_M.png embedded images.
-- `--dpi` (FLOAT, default `300`) - Figure render DPI when using --output-dir (default 300).
-- `--pipe` (TEXT, default `default`) - Pipeline preset: default, text-only, with-struct, with-ocr, with-vlm.
-- `--password` (TEXT) - Document password, if encrypted.
-- `--stdout` - Write Markdown/JSON to stdout.
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - PDF file path.
+- `--pages` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">all</span></span></span>) - Pages to convert (1-based): all (default), 3, 1-5, 1,3,7, 2-.
+- `-o,--output` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output Markdown or JSON path (default: input stem + .md).
+- `--output-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output bundle directory: page_N.md files plus figures/page_N_fig_M.png embedded images.
+- `--dpi` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">300</span></span></span>) - Figure render DPI when using --output-dir (default 300).
+- `--pipe` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">default</span></span></span>) - Pipeline preset: default, text-only, with-struct, with-ocr, with-vlm.
+- `--password` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Document password, if encrypted.
+- `--stdout` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write Markdown/JSON to stdout.
 
 **Example**
 
@@ -500,41 +509,41 @@ Find images by name/folder, semantic LLM prompt, or junk (dark/blur/flat/blown/t
 
 Options:
 
-- `input` (TEXT, required, default `{}`) - Input file(s), folder(s) or glob(s); repeatable
-- `-p,--prompt` (TEXT) - Search query (required for name / --llm; unused with --junk)
-- `--junk` - Find likely junk/accident images from pixels (no LLM, no sidecar)
-- `--junk-kinds` (TEXT) - Junk kinds: dark,bright,blur,flat,tiny (comma list or all)
-- `--min-score` (FLOAT, default `0.7`) - Junk: minimum 0..1 score to match
-- `--action` (TEXT, default `none`) - After matches: none | delete | recyclebin
-- `--junk-opt` (TEXT, default `{}`) - Junk knob key=value (repeatable). Keys: edge_energy_blur_hi, edge_energy_p90_blur_hi, edge_energy_p99_blur_hi, edge_orient_blur_lo, edge_orient_blur_span, edge_density_content_lo, entropy_content_lo, dark_fraction_lo, bright_fraction_lo, analyze_max_side, tiny_min_side, edge_threshold, …
-- `--edge-energy-blur` (FLOAT, default `12`) - Junk blur (OOF path): mean |dx|+|dy| at/above this → that term is 0 (default 12). Motion smear uses --edge-orient-blur; screenshots use --edge-energy-p99-blur.
-- `--edge-energy-p90-blur` (FLOAT, default `40`) - Junk blur (OOF path): p90 |dx|+|dy| at/above this → that term is 0 (default 40). Keeps sharp subjects on empty walls from matching.
-- `--edge-energy-p99-blur` (FLOAT, default `88`) - Junk blur: p99 |dx|+|dy| at/above this → blur 0 (default 88). Keeps screenshots and sharp islands (hand / specular) from matching.
-- `--edge-orient-blur` (FLOAT, default `0.2`) - Junk blur (motion path): orientation peak at/below this → that term is 0 (default 0.20). Motion smear concentrates; a sharp subject with mixed edges does not.
-- `--edge-density-lo` (FLOAT, default `0.06`) - Junk: edgeDensity at/above this is “has edges” (default 0.06)
-- `--analyze-max-side` (INT, default `128`) - Junk thumbnail longest side (default 128)
-- `--tiny-min-side` (INT, default `128`) - Junk tiny: min(width,height) at/above this → tiny 0 (default 128)
-- `--edge-threshold` (INT, default `24`) - Junk: |dx|+|dy| above this counts as an edge pixel (default 24)
-- `--llm` - Query mode: match prompt vs filename + .md/.json/EXIF (or generate them); default = LLM judge per file, or --local-text
-- `--local-text` - With --llm: no find:judge Gemini; case-insensitive substring/word match on text only
-- `--case-sensitive` - Name mode: case-sensitive match
-- `--no-folders` - Name mode: don't match parent folder names
-- `--no-recursive` - Don't recurse into directory inputs
-- `--bypass-cache` - LLM: ignore existing .md/.json/EXIF, force re-generate
-- `--no-generate` - LLM: skip images without cached meta (don't call meta_extract)
-- `--no-md` - LLM: don't read sidecar .md
-- `--no-json` - LLM: don't read sidecar .json
-- `--no-exif` - LLM: don't read libvips EXIF tags
-- `--max` (INT, default `0`) - Max results (0 = unlimited)
-- `--dry-run` - Resolve + scan; no LLM writes and no --action deletes
-- `--provider` (TEXT) - AI provider for --llm meta/judge; omit = app Chat image_recognition_provider (aborts if unset when --llm)
-- `--model` (TEXT) - Model for --llm; omit = app image_recognition_model (aborts if unset when --llm)
-- `--api-key` (TEXT) - API key (optional; default from app provider settings)
-- `--judge-prompt` (TEXT) - Override the LLM judge prompt
-- `--meta-prompt` (TEXT) - Override the cataloguer prompt used when generating cache
-- `--no-resize` - Generation: skip in-memory resize before sending to model
-- `--resize-width` (INT, default `512`) - Generation: resize-width for the model input
-- `-r,--reference` (TEXT, default `{}`) - LLM: reference image(s), examples of what you're looking for; sent as multimodal parts in every judge call. Repeatable: -r logo.png -r palette.jpg
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Input file(s), folder(s) or glob(s); repeatable
+- `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Search query (required for name / --llm; unused with --junk)
+- `--junk` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Find likely junk/accident images from pixels (no LLM, no sidecar)
+- `--junk-kinds` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Junk kinds: dark,bright,blur,flat,tiny (comma list or all)
+- `--min-score` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.7</span></span></span>) - Junk: minimum 0..1 score to match
+- `--action` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">none</span></span></span>) - After matches: none | delete | recyclebin
+- `--junk-opt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Junk knob key=value (repeatable). Keys: edge_energy_blur_hi, edge_energy_p90_blur_hi, edge_energy_p99_blur_hi, edge_orient_blur_lo, edge_orient_blur_span, edge_density_content_lo, entropy_content_lo, dark_fraction_lo, bright_fraction_lo, analyze_max_side, tiny_min_side, edge_threshold, …
+- `--edge-energy-blur` (<span data-cli="meta"><span data-cli="type">FLOAT</span></span>) - Junk blur (OOF path): mean |dx|+|dy| at/above this → that term is 0 (default 12). Motion smear uses --edge-orient-blur; screenshots use --edge-energy-p99-blur.
+- `--edge-energy-p90-blur` (<span data-cli="meta"><span data-cli="type">FLOAT</span></span>) - Junk blur (OOF path): p90 |dx|+|dy| at/above this → that term is 0 (default 40). Keeps sharp subjects on empty walls from matching.
+- `--edge-energy-p99-blur` (<span data-cli="meta"><span data-cli="type">FLOAT</span></span>) - Junk blur: p99 |dx|+|dy| at/above this → blur 0 (default 88). Keeps screenshots and sharp islands (hand / specular) from matching.
+- `--edge-orient-blur` (<span data-cli="meta"><span data-cli="type">FLOAT</span></span>) - Junk blur (motion path): orientation peak at/below this → that term is 0 (default 0.20). Motion smear concentrates; a sharp subject with mixed edges does not.
+- `--edge-density-lo` (<span data-cli="meta"><span data-cli="type">FLOAT</span></span>) - Junk: edgeDensity at/above this is “has edges” (default 0.06)
+- `--analyze-max-side` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Junk thumbnail longest side (default 128)
+- `--tiny-min-side` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Junk tiny: min(width,height) at/above this → tiny 0 (default 128)
+- `--edge-threshold` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Junk: |dx|+|dy| above this counts as an edge pixel (default 24)
+- `--llm` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Query mode: match prompt vs filename + .md/.json/EXIF (or generate them); default = LLM judge per file, or --local-text
+- `--local-text` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - With --llm: no find:judge Gemini; case-insensitive substring/word match on text only
+- `--case-sensitive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Name mode: case-sensitive match
+- `--no-folders` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Name mode: don't match parent folder names
+- `--no-recursive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Don't recurse into directory inputs
+- `--bypass-cache` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - LLM: ignore existing .md/.json/EXIF, force re-generate
+- `--no-generate` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - LLM: skip images without cached meta (don't call meta_extract)
+- `--no-md` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - LLM: don't read sidecar .md
+- `--no-json` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - LLM: don't read sidecar .json
+- `--no-exif` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - LLM: don't read libvips EXIF tags
+- `--max` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Max results (0 = unlimited)
+- `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Resolve + scan; no LLM writes and no --action deletes
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - AI provider for --llm meta/judge; omit = app Chat image_recognition_provider (aborts if unset when --llm)
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model for --llm; omit = app image_recognition_model (aborts if unset when --llm)
+- `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key (optional; default from app provider settings)
+- `--judge-prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the LLM judge prompt
+- `--meta-prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the cataloguer prompt used when generating cache
+- `--no-resize` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Generation: skip in-memory resize before sending to model
+- `--resize-width` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">512</span></span></span>) - Generation: resize-width for the model input
+- `-r,--reference` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - LLM: reference image(s), examples of what you're looking for; sent as multimodal parts in every judge call. Repeatable: -r logo.png -r palette.jpg
 
 **Example**
 
@@ -605,17 +614,17 @@ Copy files or folders through the VFS queue (local, ssh://, ftp://, vfs://).
 
 Options:
 
-- `paths` (TEXT, default `{}`) - Sources and destination folder. Last path is dest unless --dst is set.
-- `-s,--src` (TEXT, default `{}`) - Source path, glob, or URI (repeatable). ${CWD} ${KNOWNFOLDER:…} ${ENV:…} ${SRC_NAME} …
-- `-d,--dst,--dest` (TEXT) - Destination folder path or URI. Same ${…} variables as --src.
-- `--conflict` (TEXT) - Conflict strategy: error (default), overwrite, skip, rename, if-newer.
-- `--overwrite` - Overwrite existing dest files.
-- `--skip` - Skip existing dest files.
-- `--rename` - Rename dest when it already exists.
-- `--if-newer` - Overwrite dest only when the source is newer.
-- `--include` (TEXT, default `{}`) - Keep sources matching this glob (repeatable).
-- `--exclude` (TEXT, default `{}`) - Drop sources matching this glob (repeatable).
-- `--dry-run` - Expand sources and dest; do not copy.
+- `paths` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sources and destination folder. Last path is dest unless --dst is set.
+- `-s,--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Source path, glob, or URI (repeatable). ${CWD} ${KNOWNFOLDER:…} ${ENV:…} ${SRC_NAME} …
+- `-d,--dst,--dest` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Destination folder path or URI. Same ${…} variables as --src.
+- `--conflict` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Conflict strategy: error (default), overwrite, skip, rename, if-newer.
+- `--overwrite` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Overwrite existing dest files.
+- `--skip` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip existing dest files.
+- `--rename` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Rename dest when it already exists.
+- `--if-newer` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Overwrite dest only when the source is newer.
+- `--include` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Keep sources matching this glob (repeatable).
+- `--exclude` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Drop sources matching this glob (repeatable).
+- `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Expand sources and dest; do not copy.
 
 **Example**
 
@@ -653,59 +662,59 @@ Search files with the unified search facade (exact first; semantic later).
 
 Options:
 
-- `input` (TEXT, default `{}`) - File(s), folder(s), or glob(s)
-- `--log-level` (TEXT:{trace,debug,info,warn,warning,error,err,critical,off,none}, default `info`) - Log level for this search command: trace, debug, info, warn, error, critical, off
-- `--mode` (TEXT:{auto,name,grep,semantic,metadata,fingerprint}, default `{}`) - auto | name | grep | semantic | metadata | fingerprint (repeatable or comma-separated)
-- `--content` (TEXT:{any,text,code,image,document,office,pdf,catalog}, default `{}`) - any | text | code | image | document | office | pdf | catalog (repeatable or comma-separated)
-- `--backend` (TEXT:{auto,any,exact,image-meta,vector,fingerprint,catalog}, default `{}`) - auto | exact | image-meta | vector | fingerprint | catalog (repeatable or comma-separated)
-- `--sort` (TEXT:{auto,none,score,path,relevance}, default `auto`) - Result order for merged/fan-out search: auto | none | score | path
-- `-q,--query` (TEXT) - Search pattern (filename substring, regex, semantic query, or grep needle)
-- `--type` (TEXT) - any | image, or rg-style type shorthand: cpp, ts, py, md, ...
-- `--indexer` (TEXT:{own,os,rg}, default `own`) - own (default) | os | rg - exact-search indexer
-- `--grep` - Alias for --mode grep
-- `--names-only` - With grep: report only the filepath, not individual match lines
-- `--regex` - Treat --query as ECMAScript regex
-- `--case-sensitive` - Case-sensitive match
-- `--whole-word` - Require word-boundary match
-- `--no-recursive` - Do not recurse into directory inputs
-- `--include-hidden` - Include dot-files and dot-directories
-- `--follow-symlinks` - Follow symbolic links
-- `--no-skip-binary` - Scan binary files
-- `-C,--context` (INT:NONNEGATIVE, default `0`) - Symmetric context lines
-- `-B,--context-before` (INT:NONNEGATIVE, default `0`) - Context lines before
-- `-A,--context-after` (INT:NONNEGATIVE, default `0`) - Context lines after
-- `--multiline` - Enable multiline regex
-- `--output-mode` (TEXT:{content,files_with_matches,count}, default `content`) - content (default) | files_with_matches | count
-- `--head-limit` (INT, default `0`) - Cap output to first N entries
-- `--offset` (INT, default `0`) - Skip first N entries
-- `--max` (INT, default `0`) - Max total results
-- `--max-per-file` (INT, default `0`) - Max grep matches per file
-- `--max-file-size` (INT, default `0`) - Skip grep files larger than N bytes
-- `--include` (TEXT, default `{}`) - Only scan filename glob; repeatable
-- `--exclude` (TEXT, default `{}`) - Skip filename glob; repeatable
-- `--exclude-dir` (TEXT, default `{}`) - Directory names to prune; repeatable
-- `--dry-run` - Resolve candidates and print counts; no matching
-- `--stream` - Stream NDJSON events (start/task/hit/done) incrementally; cancelable, web-friendly
-- `--md` - Print Markdown result tables/details
-- `--markdown` (TEXT:{auto,plain,render}, default `auto`) - With --md: auto (render on TTY), plain (raw Markdown), or render (always run terminal markdown)
-- `--markdown-color` (TEXT:{auto,never,always}, default `auto`) - With rendered --md: auto, never, or always
-- `--index-policy` (TEXT:{same-dir,specific-dir,disabled}, default `same-dir`) - same-dir | specific-dir | disabled
-- `--index` (TEXT, default `{}`) - Vector store/index dir(s); repeatable or glob. Multiple stores => search merges across them
-- `--model` (TEXT) - Embedding model hint/path
-- `--threads` (INT:POSITIVE, default `4`) - Embedding CPU threads
-- `--gpu-layers` (INT, default `0`) - Embedding GPU layers: 0 CPU, -1 all GPU
-- `--reindex` - Force re-ingest before searching
-- `--no-index-create` - Fail if an index is needed but missing
-- `--extract` (TEXT, default `auto`) - auto | text | office | pdf
-- `--adapter` (TEXT) - Source adapter hint, e.g. image-sidecar | ocr-local | llm-meta | office-officecli
-- `--fingerprint` (TEXT:{off,cheap}, default `off`) - off | cheap
-- `--chunk-size` (INT, default `500`) - Semantic ingest chunk size
-- `--chunk-overlap` (INT, default `100`) - Semantic ingest chunk overlap
-- `--meta-prompt` (TEXT) - For --adapter llm-meta: image_understand prompt; empty = built-in search metadata prompt
-- `--resize-width` (INT, default `768`) - For --adapter llm-meta: pre-resize longest edge before external image understanding
-- `--no-resize` - For --adapter llm-meta: disable image_understand pre-resize
-- `--include-detail` (TEXT:{auto,row,page,section,object,metadata}) - Expand search hits with adapter detail: auto | row | page | section | object | metadata
-- `--detail-max` (INT:NONNEGATIVE, default `0`) - With --include-detail: expand at most N hits (0 = all returned hits)
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - File(s), folder(s), or glob(s)
+- `--log-level` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">info</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">warning</span> <span data-cli="choice">error</span> <span data-cli="choice">err</span> <span data-cli="choice">critical</span> <span data-cli="choice">off</span> <span data-cli="choice">none</span></span></span>) - Log level for this search command: trace, debug, info, warn, error, critical, off
+- `--mode` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">{}</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">name</span> <span data-cli="choice">grep</span> <span data-cli="choice">semantic</span> <span data-cli="choice">metadata</span> <span data-cli="choice">fingerprint</span></span></span>) - auto | name | grep | semantic | metadata | fingerprint (repeatable or comma-separated)
+- `--content` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">{}</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">any</span> <span data-cli="choice">text</span> <span data-cli="choice">code</span> <span data-cli="choice">image</span> <span data-cli="choice">document</span> <span data-cli="choice">office</span> <span data-cli="choice">pdf</span> <span data-cli="choice">catalog</span></span></span>) - any | text | code | image | document | office | pdf | catalog (repeatable or comma-separated)
+- `--backend` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">{}</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">any</span> <span data-cli="choice">exact</span> <span data-cli="choice">image-meta</span> <span data-cli="choice">vector</span> <span data-cli="choice">fingerprint</span> <span data-cli="choice">catalog</span></span></span>) - auto | exact | image-meta | vector | fingerprint | catalog (repeatable or comma-separated)
+- `--sort` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">none</span> <span data-cli="choice">score</span> <span data-cli="choice">path</span> <span data-cli="choice">relevance</span></span></span>) - Result order for merged/fan-out search: auto | none | score | path
+- `-q,--query` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Search pattern (filename substring, regex, semantic query, or grep needle)
+- `--type` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - any | image, or rg-style type shorthand: cpp, ts, py, md, ...
+- `--indexer` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">own</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">own</span> <span data-cli="choice">os</span> <span data-cli="choice">rg</span></span></span>) - own (default) | os | rg - exact-search indexer
+- `--grep` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Alias for --mode grep
+- `--names-only` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - With grep: report only the filepath, not individual match lines
+- `--regex` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Treat --query as ECMAScript regex
+- `--case-sensitive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Case-sensitive match
+- `--whole-word` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Require word-boundary match
+- `--no-recursive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not recurse into directory inputs
+- `--include-hidden` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include dot-files and dot-directories
+- `--follow-symlinks` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Follow symbolic links
+- `--no-skip-binary` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Scan binary files
+- `-C,--context` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Symmetric context lines
+- `-B,--context-before` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Context lines before
+- `-A,--context-after` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Context lines after
+- `--multiline` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable multiline regex
+- `--output-mode` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">content</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">content</span> <span data-cli="choice">files_with_matches</span> <span data-cli="choice">count</span></span></span>) - content (default) | files_with_matches | count
+- `--head-limit` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Cap output to first N entries
+- `--offset` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Skip first N entries
+- `--max` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Max total results
+- `--max-per-file` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Max grep matches per file
+- `--max-file-size` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Skip grep files larger than N bytes
+- `--include` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Only scan filename glob; repeatable
+- `--exclude` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Skip filename glob; repeatable
+- `--exclude-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Directory names to prune; repeatable
+- `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Resolve candidates and print counts; no matching
+- `--stream` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Stream NDJSON events (start/task/hit/done) incrementally; cancelable, web-friendly
+- `--md` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print Markdown result tables/details
+- `--markdown` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">plain</span> <span data-cli="choice">render</span></span></span>) - With --md: auto (render on TTY), plain (raw Markdown), or render (always run terminal markdown)
+- `--markdown-color` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">never</span> <span data-cli="choice">always</span></span></span>) - With rendered --md: auto, never, or always
+- `--index-policy` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">same-dir</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">same-dir</span> <span data-cli="choice">specific-dir</span> <span data-cli="choice">disabled</span></span></span>) - same-dir | specific-dir | disabled
+- `--index` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Vector store/index dir(s); repeatable or glob. Multiple stores => search merges across them
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Embedding model hint/path
+- `--threads` (<span data-cli="meta"><span data-cli="type">INT:POSITIVE</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - Embedding CPU threads
+- `--gpu-layers` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Embedding GPU layers: 0 CPU, -1 all GPU
+- `--reindex` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Force re-ingest before searching
+- `--no-index-create` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Fail if an index is needed but missing
+- `--extract` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">auto</span></span></span>) - auto | text | office | pdf
+- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Source adapter hint, e.g. image-sidecar | ocr-local | llm-meta | office-officecli
+- `--fingerprint` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">off</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">cheap</span></span></span>) - off | cheap
+- `--chunk-size` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">500</span></span></span>) - Semantic ingest chunk size
+- `--chunk-overlap` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">100</span></span></span>) - Semantic ingest chunk overlap
+- `--meta-prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - For --adapter llm-meta: image_understand prompt; empty = built-in search metadata prompt
+- `--resize-width` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">768</span></span></span>) - For --adapter llm-meta: pre-resize longest edge before external image understanding
+- `--no-resize` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - For --adapter llm-meta: disable image_understand pre-resize
+- `--include-detail` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">row</span> <span data-cli="choice">page</span> <span data-cli="choice">section</span> <span data-cli="choice">object</span> <span data-cli="choice">metadata</span></span></span>) - Expand search hits with adapter detail: auto | row | page | section | object | metadata
+- `--detail-max` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - With --include-detail: expand at most N hits (0 = all returned hits)
 
 **Example**
 
@@ -727,30 +736,30 @@ Index files for semantic search (cron-friendly).
 
 Options:
 
-- `input` (TEXT, default `{}`) - File(s), folder(s), or glob(s)
-- `--log-level` (TEXT:{trace,debug,info,warn,warning,error,err,critical,off,none}, default `info`) - Log level for this search command: trace, debug, info, warn, error, critical, off
-- `--mode` (TEXT:{auto,name,grep,semantic,metadata,fingerprint}, default `{}`) - auto | name | grep | semantic | metadata | fingerprint (repeatable or comma-separated)
-- `--content` (TEXT:{any,text,code,image,document,office,pdf,catalog}, default `{}`) - any | text | code | image | document | office | pdf | catalog (repeatable or comma-separated)
-- `--backend` (TEXT:{auto,any,exact,image-meta,vector,fingerprint,catalog}, default `{}`) - auto | exact | image-meta | vector | fingerprint | catalog (repeatable or comma-separated)
-- `--sort` (TEXT:{auto,none,score,path,relevance}, default `auto`) - Result order for merged/fan-out search: auto | none | score | path
-- `--index-policy` (TEXT:{same-dir,specific-dir,disabled}, default `same-dir`) - same-dir | specific-dir | disabled
-- `--index` (TEXT, default `{}`) - Vector store/index dir(s); repeatable or glob. Multiple stores => search merges across them
-- `--model` (TEXT) - Embedding model hint/path
-- `--threads` (INT:POSITIVE, default `4`) - Embedding CPU threads
-- `--gpu-layers` (INT, default `0`) - Embedding GPU layers: 0 CPU, -1 all GPU
-- `--reindex` - Force re-ingest before searching
-- `--no-index-create` - Fail if an index is needed but missing
-- `--extract` (TEXT, default `auto`) - auto | text | office | pdf
-- `--adapter` (TEXT) - Source adapter hint, e.g. image-sidecar | ocr-local | llm-meta | office-officecli
-- `--fingerprint` (TEXT:{off,cheap}, default `off`) - off | cheap
-- `--chunk-size` (INT, default `500`) - Semantic ingest chunk size
-- `--chunk-overlap` (INT, default `100`) - Semantic ingest chunk overlap
-- `--meta-prompt` (TEXT) - For --adapter llm-meta: image_understand prompt; empty = built-in search metadata prompt
-- `--resize-width` (INT, default `768`) - For --adapter llm-meta: pre-resize longest edge before external image understanding
-- `--no-resize` - For --adapter llm-meta: disable image_understand pre-resize
-- `--md` - Print Markdown result tables
-- `--markdown` (TEXT:{auto,plain,render}, default `auto`) - With --md: auto (render on TTY), plain (raw Markdown), or render
-- `--markdown-color` (TEXT:{auto,never,always}, default `auto`) - With rendered --md: auto, never, or always
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - File(s), folder(s), or glob(s)
+- `--log-level` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">warning</span> <span data-cli="choice">error</span> <span data-cli="choice">err</span> <span data-cli="choice">critical</span> <span data-cli="choice">off</span> <span data-cli="choice">none</span></span></span>) - Log level for this search command: trace, debug, info, warn, error, critical, off
+- `--mode` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">name</span> <span data-cli="choice">grep</span> <span data-cli="choice">semantic</span> <span data-cli="choice">metadata</span> <span data-cli="choice">fingerprint</span></span></span>) - auto | name | grep | semantic | metadata | fingerprint (repeatable or comma-separated)
+- `--content` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">any</span> <span data-cli="choice">text</span> <span data-cli="choice">code</span> <span data-cli="choice">image</span> <span data-cli="choice">document</span> <span data-cli="choice">office</span> <span data-cli="choice">pdf</span> <span data-cli="choice">catalog</span></span></span>) - any | text | code | image | document | office | pdf | catalog (repeatable or comma-separated)
+- `--backend` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">any</span> <span data-cli="choice">exact</span> <span data-cli="choice">image-meta</span> <span data-cli="choice">vector</span> <span data-cli="choice">fingerprint</span> <span data-cli="choice">catalog</span></span></span>) - auto | exact | image-meta | vector | fingerprint | catalog (repeatable or comma-separated)
+- `--sort` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">none</span> <span data-cli="choice">score</span> <span data-cli="choice">path</span> <span data-cli="choice">relevance</span></span></span>) - Result order for merged/fan-out search: auto | none | score | path
+- `--index-policy` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">same-dir</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">same-dir</span> <span data-cli="choice">specific-dir</span> <span data-cli="choice">disabled</span></span></span>) - same-dir | specific-dir | disabled
+- `--index` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Vector store/index dir(s); repeatable or glob. Multiple stores => search merges across them
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Embedding model hint/path
+- `--threads` (<span data-cli="meta"><span data-cli="type">INT:POSITIVE</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - Embedding CPU threads
+- `--gpu-layers` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Embedding GPU layers: 0 CPU, -1 all GPU
+- `--reindex` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Force re-ingest before searching
+- `--no-index-create` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Fail if an index is needed but missing
+- `--extract` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">auto</span></span></span>) - auto | text | office | pdf
+- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Source adapter hint, e.g. image-sidecar | ocr-local | llm-meta | office-officecli
+- `--fingerprint` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">off</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">cheap</span></span></span>) - off | cheap
+- `--chunk-size` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">500</span></span></span>) - Semantic ingest chunk size
+- `--chunk-overlap` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">100</span></span></span>) - Semantic ingest chunk overlap
+- `--meta-prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - For --adapter llm-meta: image_understand prompt; empty = built-in search metadata prompt
+- `--resize-width` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">768</span></span></span>) - For --adapter llm-meta: pre-resize longest edge before external image understanding
+- `--no-resize` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - For --adapter llm-meta: disable image_understand pre-resize
+- `--md` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print Markdown result tables
+- `--markdown` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">plain</span> <span data-cli="choice">render</span></span></span>) - With --md: auto (render on TTY), plain (raw Markdown), or render
+- `--markdown-color` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">never</span> <span data-cli="choice">always</span></span></span>) - With rendered --md: auto, never, or always
 
 **Example**
 
@@ -772,20 +781,20 @@ Expand a search hit through the owning source adapter.
 
 Options:
 
-- `--log-level` (TEXT:{trace,debug,info,warn,warning,error,err,critical,off,none}, default `info`) - Log level for this search command: trace, debug, info, warn, error, critical, off
-- `--adapter` (TEXT) - Owning source adapter ID, e.g. office-officecli
-- `--path` (TEXT, required) - Source file path
-- `--selector` (TEXT) - Adapter-owned selector, e.g. officecli query selector
-- `--office-path` (TEXT) - Office native/XML path, e.g. /Sheet1/row[6]
-- `--include-detail` (TEXT:{auto,row,page,section,object,metadata}) - auto | row | page | section | object | metadata
-- `--meta-prompt` (TEXT) - For --adapter llm-meta: image_understand prompt; empty = built-in search metadata prompt
-- `--resize-width` (INT, default `768`) - For --adapter llm-meta: pre-resize longest edge before external image understanding
-- `--no-resize` - For --adapter llm-meta: disable image_understand pre-resize
-- `--context-before` (INT:NONNEGATIVE, default `0`) - Nearby units before
-- `--context-after` (INT:NONNEGATIVE, default `0`) - Nearby units after
-- `--md` - Print Markdown detail
-- `--markdown` (TEXT:{auto,plain,render}, default `auto`) - With --md: auto (render on TTY), plain (raw Markdown), or render
-- `--markdown-color` (TEXT:{auto,never,always}, default `auto`) - With rendered --md: auto, never, or always
+- `--log-level` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">warning</span> <span data-cli="choice">error</span> <span data-cli="choice">err</span> <span data-cli="choice">critical</span> <span data-cli="choice">off</span> <span data-cli="choice">none</span></span></span>) - Log level for this search command: trace, debug, info, warn, error, critical, off
+- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owning source adapter ID, e.g. office-officecli
+- `--path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Source file path
+- `--selector` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Adapter-owned selector, e.g. officecli query selector
+- `--office-path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Office native/XML path, e.g. /Sheet1/row[6]
+- `--include-detail` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">row</span> <span data-cli="choice">page</span> <span data-cli="choice">section</span> <span data-cli="choice">object</span> <span data-cli="choice">metadata</span></span></span>) - auto | row | page | section | object | metadata
+- `--meta-prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - For --adapter llm-meta: image_understand prompt; empty = built-in search metadata prompt
+- `--resize-width` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">768</span></span></span>) - For --adapter llm-meta: pre-resize longest edge before external image understanding
+- `--no-resize` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - For --adapter llm-meta: disable image_understand pre-resize
+- `--context-before` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Nearby units before
+- `--context-after` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Nearby units after
+- `--md` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print Markdown detail
+- `--markdown` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">plain</span> <span data-cli="choice">render</span></span></span>) - With --md: auto (render on TTY), plain (raw Markdown), or render
+- `--markdown-color` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">never</span> <span data-cli="choice">always</span></span></span>) - With rendered --md: auto, never, or always
 
 **Example**
 
@@ -807,45 +816,45 @@ Run a search-scoped action such as replace (implementation pending).
 
 Options:
 
-- `input` (TEXT, default `{}`) - File(s), folder(s), or glob(s)
-- `--log-level` (TEXT:{trace,debug,info,warn,warning,error,err,critical,off,none}, default `info`) - Log level for this search command: trace, debug, info, warn, error, critical, off
-- `--mode` (TEXT:{auto,name,grep,semantic,metadata,fingerprint}, default `{}`) - auto | name | grep | semantic | metadata | fingerprint (repeatable or comma-separated)
-- `--content` (TEXT:{any,text,code,image,document,office,pdf,catalog}, default `{}`) - any | text | code | image | document | office | pdf | catalog (repeatable or comma-separated)
-- `--backend` (TEXT:{auto,any,exact,image-meta,vector,fingerprint,catalog}, default `{}`) - auto | exact | image-meta | vector | fingerprint | catalog (repeatable or comma-separated)
-- `--sort` (TEXT:{auto,none,score,path,relevance}, default `auto`) - Result order for merged/fan-out search: auto | none | score | path
-- `-q,--query` (TEXT) - Search pattern (filename substring, regex, semantic query, or grep needle)
-- `--type` (TEXT) - any | image, or rg-style type shorthand: cpp, ts, py, md, ...
-- `--indexer` (TEXT:{own,os,rg}, default `own`) - own (default) | os | rg - exact-search indexer
-- `--grep` - Alias for --mode grep
-- `--names-only` - With grep: report only the filepath, not individual match lines
-- `--regex` - Treat --query as ECMAScript regex
-- `--case-sensitive` - Case-sensitive match
-- `--whole-word` - Require word-boundary match
-- `--no-recursive` - Do not recurse into directory inputs
-- `--include-hidden` - Include dot-files and dot-directories
-- `--follow-symlinks` - Follow symbolic links
-- `--no-skip-binary` - Scan binary files
-- `-C,--context` (INT:NONNEGATIVE, default `0`) - Symmetric context lines
-- `-B,--context-before` (INT:NONNEGATIVE, default `0`) - Context lines before
-- `-A,--context-after` (INT:NONNEGATIVE, default `0`) - Context lines after
-- `--multiline` - Enable multiline regex
-- `--output-mode` (TEXT:{content,files_with_matches,count}, default `content`) - content (default) | files_with_matches | count
-- `--head-limit` (INT, default `0`) - Cap output to first N entries
-- `--offset` (INT, default `0`) - Skip first N entries
-- `--max` (INT, default `0`) - Max total results
-- `--max-per-file` (INT, default `0`) - Max grep matches per file
-- `--max-file-size` (INT, default `0`) - Skip grep files larger than N bytes
-- `--include` (TEXT, default `{}`) - Only scan filename glob; repeatable
-- `--exclude` (TEXT, default `{}`) - Skip filename glob; repeatable
-- `--exclude-dir` (TEXT, default `{}`) - Directory names to prune; repeatable
-- `--dry-run` - Resolve candidates and print counts; no matching
-- `--stream` - Stream NDJSON events (start/task/hit/done) incrementally; cancelable, web-friendly
-- `--md` - Print Markdown result tables/details
-- `--markdown` (TEXT:{auto,plain,render}, default `auto`) - With --md: auto (render on TTY), plain (raw Markdown), or render (always run terminal markdown)
-- `--markdown-color` (TEXT:{auto,never,always}, default `auto`) - With rendered --md: auto, never, or always
-- `--action` (TEXT, default `replace`) - replace
-- `--replacement` (TEXT) - Replacement text or prompt
-- `--reference-image` (TEXT, default `{}`) - Reference image for image actions; repeatable
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - File(s), folder(s), or glob(s)
+- `--log-level` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">warning</span> <span data-cli="choice">error</span> <span data-cli="choice">err</span> <span data-cli="choice">critical</span> <span data-cli="choice">off</span> <span data-cli="choice">none</span></span></span>) - Log level for this search command: trace, debug, info, warn, error, critical, off
+- `--mode` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">name</span> <span data-cli="choice">grep</span> <span data-cli="choice">semantic</span> <span data-cli="choice">metadata</span> <span data-cli="choice">fingerprint</span></span></span>) - auto | name | grep | semantic | metadata | fingerprint (repeatable or comma-separated)
+- `--content` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">any</span> <span data-cli="choice">text</span> <span data-cli="choice">code</span> <span data-cli="choice">image</span> <span data-cli="choice">document</span> <span data-cli="choice">office</span> <span data-cli="choice">pdf</span> <span data-cli="choice">catalog</span></span></span>) - any | text | code | image | document | office | pdf | catalog (repeatable or comma-separated)
+- `--backend` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">any</span> <span data-cli="choice">exact</span> <span data-cli="choice">image-meta</span> <span data-cli="choice">vector</span> <span data-cli="choice">fingerprint</span> <span data-cli="choice">catalog</span></span></span>) - auto | exact | image-meta | vector | fingerprint | catalog (repeatable or comma-separated)
+- `--sort` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">none</span> <span data-cli="choice">score</span> <span data-cli="choice">path</span> <span data-cli="choice">relevance</span></span></span>) - Result order for merged/fan-out search: auto | none | score | path
+- `-q,--query` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Search pattern (filename substring, regex, semantic query, or grep needle)
+- `--type` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - any | image, or rg-style type shorthand: cpp, ts, py, md, ...
+- `--indexer` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">own</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">own</span> <span data-cli="choice">os</span> <span data-cli="choice">rg</span></span></span>) - own (default) | os | rg - exact-search indexer
+- `--grep` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Alias for --mode grep
+- `--names-only` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - With grep: report only the filepath, not individual match lines
+- `--regex` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Treat --query as ECMAScript regex
+- `--case-sensitive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Case-sensitive match
+- `--whole-word` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Require word-boundary match
+- `--no-recursive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not recurse into directory inputs
+- `--include-hidden` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include dot-files and dot-directories
+- `--follow-symlinks` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Follow symbolic links
+- `--no-skip-binary` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Scan binary files
+- `-C,--context` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Symmetric context lines
+- `-B,--context-before` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Context lines before
+- `-A,--context-after` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Context lines after
+- `--multiline` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable multiline regex
+- `--output-mode` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">content</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">content</span> <span data-cli="choice">files_with_matches</span> <span data-cli="choice">count</span></span></span>) - content (default) | files_with_matches | count
+- `--head-limit` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Cap output to first N entries
+- `--offset` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Skip first N entries
+- `--max` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Max total results
+- `--max-per-file` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Max grep matches per file
+- `--max-file-size` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Skip grep files larger than N bytes
+- `--include` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Only scan filename glob; repeatable
+- `--exclude` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Skip filename glob; repeatable
+- `--exclude-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Directory names to prune; repeatable
+- `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Resolve candidates and print counts; no matching
+- `--stream` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Stream NDJSON events (start/task/hit/done) incrementally; cancelable, web-friendly
+- `--md` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print Markdown result tables/details
+- `--markdown` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">plain</span> <span data-cli="choice">render</span></span></span>) - With --md: auto (render on TTY), plain (raw Markdown), or render (always run terminal markdown)
+- `--markdown-color` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">never</span> <span data-cli="choice">always</span></span></span>) - With rendered --md: auto, never, or always
+- `--action` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">replace</span></span></span>) - replace
+- `--replacement` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement text or prompt
+- `--reference-image` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Reference image for image actions; repeatable
 
 **Example**
 
@@ -889,14 +898,14 @@ Replace the live profile store with the given UTF-8 JSON file (full document rep
 
 Options:
 
-- `path` (TEXT, required) - Source file (relative paths are from cwd)
-- `--archive` - Read a profile ZIP exported by `settings export --archive`. Skips web* folders and never imports .settings-key.dat.
-- `--pmbackup` - Read an encrypted .pmbackup file (requires config_dir/.cloud_storage_key from the source machine).
-- `--cloud-storage-key` (TEXT) - Key file for --pmbackup (32-byte secret; default: config_dir/.cloud_storage_key).
-- `--passphrase` (TEXT) - Passphrase for --pmbackup (v2 encryption; required to decrypt passphrase-protected backups).
-- `--no-include-commands` - Omit commands.json from --pmbackup export/import.
-- `--no-include-mcp` - Omit MCP config from --pmbackup export/import.
-- `--no-include-prompts` - Omit agent prompts from --pmbackup export/import.
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Source file (relative paths are from cwd)
+- `--archive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Read a profile ZIP exported by `settings export --archive`. Skips web* folders and never imports .settings-key.dat.
+- `--pmbackup` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Read an encrypted .pmbackup file (requires config_dir/.cloud_storage_key from the source machine).
+- `--cloud-storage-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Key file for --pmbackup (32-byte secret; default: config_dir/.cloud_storage_key).
+- `--passphrase` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Passphrase for --pmbackup (v2 encryption; required to decrypt passphrase-protected backups).
+- `--no-include-commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit commands.json from --pmbackup export/import.
+- `--no-include-mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit MCP config from --pmbackup export/import.
+- `--no-include-prompts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit agent prompts from --pmbackup export/import.
 
 **Example**
 
@@ -918,15 +927,15 @@ Write the current profile settings to a UTF-8 JSON file (default: settings.json 
 
 Options:
 
-- `path` (TEXT, default `settings.json`) - Output file (relative paths are from cwd)
-- `--encrypted` - Write PME1 binary (DPAPI-bound key on this profile) instead of UTF-8 JSON.
-- `--archive` - Write a ZIP of the app profile. Skips web* WebView folders; Windows settings.json is portable JSON; .settings-key.dat is omitted.
-- `--pmbackup` - Write an encrypted portable .pmbackup (auto-creates config_dir/.cloud_storage_key when missing).
-- `--cloud-storage-key` (TEXT) - Key file for --pmbackup (32-byte secret; default: config_dir/.cloud_storage_key).
-- `--passphrase` (TEXT) - Passphrase for --pmbackup (v2 encryption instead of the key file).
-- `--no-include-commands` - Omit commands.json from --pmbackup export.
-- `--no-include-mcp` - Omit MCP config from --pmbackup export.
-- `--no-include-prompts` - Omit agent prompts from --pmbackup export.
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">settings.json</span></span></span>) - Output file (relative paths are from cwd)
+- `--encrypted` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write PME1 binary (DPAPI-bound key on this profile) instead of UTF-8 JSON.
+- `--archive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write a ZIP of the app profile. Skips web* WebView folders; Windows settings.json is portable JSON; .settings-key.dat is omitted.
+- `--pmbackup` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write an encrypted portable .pmbackup (auto-creates config_dir/.cloud_storage_key when missing).
+- `--cloud-storage-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Key file for --pmbackup (32-byte secret; default: config_dir/.cloud_storage_key).
+- `--passphrase` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Passphrase for --pmbackup (v2 encryption instead of the key file).
+- `--no-include-commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit commands.json from --pmbackup export.
+- `--no-include-mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit MCP config from --pmbackup export.
+- `--no-include-prompts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit agent prompts from --pmbackup export.
 
 **Example**
 
@@ -980,13 +989,13 @@ List provider models and return full JSON payload
 
 Options:
 
-- `--provider` (TEXT, default `replicate`) - Provider id (replicate|openrouter)
-- `--api-key` (TEXT) - API key (Replicate: required. OpenRouter: optional for public /v1/models; from app if set for openrouter)
-- `--base-url` (TEXT) - Replicate: catalog URL (default official collection). OpenRouter: API root (default https://openrouter.ai/api/v1)
-- `--limit` (INT, default `0`) - Replicate /v1/models: optional page size (ignored for openrouter)
-- `--cursor` (TEXT) - Replicate: optional pagination cursor (ignored for openrouter)
-- `--sort-by` (TEXT) - Replicate: optional sort field (ignored for openrouter)
-- `--sort-direction` (TEXT) - Replicate: optional sort direction (asc|desc) (ignored for openrouter)
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">replicate</span></span></span>) - Provider id (replicate|openrouter)
+- `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key (Replicate: required. OpenRouter: optional for public /v1/models; from app if set for openrouter)
+- `--base-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replicate: catalog URL (default official collection). OpenRouter: API root (default https://openrouter.ai/api/v1)
+- `--limit` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Replicate /v1/models: optional page size (ignored for openrouter)
+- `--cursor` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replicate: optional pagination cursor (ignored for openrouter)
+- `--sort-by` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replicate: optional sort field (ignored for openrouter)
+- `--sort-direction` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replicate: optional sort direction (asc|desc) (ignored for openrouter)
 
 **Example**
 
@@ -1022,12 +1031,12 @@ Show Chat router/model and image provider/model from app settings, effective def
 
 Options:
 
-- `--compress-md` - Print raw compact Markdown for router/planner context: tools, skills, XBlox blocks. Ignored with --json.
-- `--preset` (TEXT) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
-- `--markdown` (TEXT:{auto,plain,render}, default `render`) - Human stdout: render (default — always pretty-print), auto (only on TTY), or plain (raw UTF-8). Ignored with --json.
-- `--color` (TEXT:{auto,never,always}, default `auto`) - When markdown rendering is used: auto (color on TTY unless NO_COLOR/TERM=dumb), never, or always.
-- `--no-mcp-probe` - Do not run live MCP profile probes (stdio/HTTP handshakes). JSON/text output still lists settings; the `mcp` object notes that the probe was skipped.
-- `--mcp-probe` - Run live MCP profile probes (stdio/HTTP handshakes).
+- `--compress-md` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print raw compact Markdown for router/planner context: tools, skills, XBlox blocks. Ignored with --json.
+- `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
+- `--markdown` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">render</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">plain</span> <span data-cli="choice">render</span></span></span>) - Human stdout: render (default — always pretty-print), auto (only on TTY), or plain (raw UTF-8). Ignored with --json.
+- `--color` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">never</span> <span data-cli="choice">always</span></span></span>) - When markdown rendering is used: auto (color on TTY unless NO_COLOR/TERM=dumb), never, or always.
+- `--no-mcp-probe` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not run live MCP profile probes (stdio/HTTP handshakes). JSON/text output still lists settings; the `mcp` object notes that the probe was skipped.
+- `--mcp-probe` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Run live MCP profile probes (stdio/HTTP handshakes).
 
 **Example**
 
@@ -1047,7 +1056,7 @@ List enabled LLM providers from the provider registry and app settings.
 
 Options:
 
-- `--all` - Include providers disabled by FEATURE_PROVIDER_* or Group Policy (for GPO generation).
+- `--all` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include providers disabled by FEATURE_PROVIDER_* or Group Policy (for GPO generation).
 
 **Example**
 
@@ -1069,8 +1078,8 @@ List models for a given provider. local / llama: text/planner GGUF models. vlm: 
 
 Options:
 
-- `--provider` (TEXT, required) - Provider to query: local | llama | vlm | whisper | pixlwiz | openrouter | replicate | <name from `llm info providers`>
-- `--no-cache` - Bypass the disk cache and force a live HTTP fetch (pixlwiz / openrouter).
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Provider to query: local | llama | vlm | whisper | pixlwiz | openrouter | replicate | <name from `llm info providers`>
+- `--no-cache` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Bypass the disk cache and force a live HTTP fetch (pixlwiz / openrouter).
 
 **Example**
 
@@ -1092,7 +1101,7 @@ List all built-in path-mode agent tools (name + description). These are the tool
 
 Options:
 
-- `--all` - Show the full built-in registry, ignoring user/GPO filtering (for GPO template generation).
+- `--all` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Show the full built-in registry, ignoring user/GPO filtering (for GPO template generation).
 
 **Example**
 
@@ -1138,7 +1147,7 @@ Print the JSON-Schema tool catalog (one entry per tanit op)
 
 Options:
 
-- `--path` - List path-mode chat agent tools (default catalog for llm agent). Omit for in-buffer REST/MCP tools.
+- `--path` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List path-mode chat agent tools (default catalog for llm agent). Omit for in-buffer REST/MCP tools.
 
 **Example**
 
@@ -1160,9 +1169,9 @@ Invoke a tool by name with a JSON arguments envelope
 
 Options:
 
-- `--name` (TEXT, required) - Tool name (image_resize|image_compress|image_transform|image_create|image_meta|image_find|file_read)
-- `--args` (TEXT) - Path to JSON arguments file ('-' or '@-' for stdin; omit = empty {}).
-- `--image-file` (TEXT) - Convenience: read this file, base64-encode it, and inject as arguments.image.b64.
+- `--name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Tool name (image_resize|image_compress|image_transform|image_create|image_meta|image_find|file_read)
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path to JSON arguments file ('-' or '@-' for stdin; omit = empty {}).
+- `--image-file` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Convenience: read this file, base64-encode it, and inject as arguments.image.b64.
 
 **Example**
 
@@ -1185,113 +1194,113 @@ Run a single chat-agent turn: LLM picks tools (image_resize / compress / transfo
 Options:
 
 **Input**
-- `-p,--prompt` (TEXT) - User prompt (required unless piped via stdin or --mic is used, e.g. 'compress these as MozJPEG quality 70'). Supports ${VAR} variable substitution (CWD, SRC_FILE, YYYY, …) and file references: `@path`, `file:path`, or an absolute path to a UTF-8 text file.
-- `--logging-dir` (TEXT) - Directory for pm-image.log and per-run agent JSON artifacts. Relative paths are resolved from cwd. Same as the global --logging-dir.
-- `--include` (TEXT, default `{}`) - One or more file paths to put in the agent's selection context. Repeatable. When omitted, --cwd is used as the folder context.
-- `--embed` (TEXT, default `{}`) - One or more text file paths to inline into the user prompt under 'Embedded Content'. Uses the same text read policy as file_read. Repeatable; works even with --system-prompt null.
+- `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - User prompt (required unless piped via stdin or --mic is used, e.g. 'compress these as MozJPEG quality 70'). Supports ${VAR} variable substitution (CWD, SRC_FILE, YYYY, …) and file references: `@path`, `file:path`, or an absolute path to a UTF-8 text file.
+- `--logging-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Directory for pm-image.log and per-run agent JSON artifacts. Relative paths are resolved from cwd. Same as the global --logging-dir.
+- `--include` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - One or more file paths to put in the agent's selection context. Repeatable. When omitted, --cwd is used as the folder context.
+- `--embed` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - One or more text file paths to inline into the user prompt under 'Embedded Content'. Uses the same text read policy as file_read. Repeatable; works even with --system-prompt null.
 
 **Prompts**
-- `--system-prompt` (TEXT) - Override the full system prompt. Use `null`/`none` to send no system message, `@path` or `file:path` to read a UTF-8 file (relative or absolute), or literal text.
-- `--planner-prompt` (TEXT) - Override the planner system prompt. Same grammar as --system-prompt (literal text, `@path`, `file:path`, or `null`/`none`). The loaded text is run through `${...}` template substitution; `${builtin}` resolves to the baked-in planner instructions so you can extend rather than fully replace. A `planner-prompt.md` file in the exe folder or the config dir is used automatically when no CLI override is given.
+- `--system-prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the full system prompt. Use `null`/`none` to send no system message, `@path` or `file:path` to read a UTF-8 file (relative or absolute), or literal text.
+- `--planner-prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the planner system prompt. Same grammar as --system-prompt (literal text, `@path`, `file:path`, or `null`/`none`). The loaded text is run through `${...}` template substitution; `${builtin}` resolves to the baked-in planner instructions so you can extend rather than fully replace. A `planner-prompt.md` file in the exe folder or the config dir is used automatically when no CLI override is given.
 
 **Provider**
-- `--preset` (TEXT) - Chat settings preset name or id. Loads saved router/model/max-iter/planner defaults; explicit CLI flags override it.
-- `--runner` (TEXT) - Agent backend: native (default) | claude-code | codex | cursor. Also reads PM_LLM_AGENT_RUNNER when unset.
-- `--save-preset` (TEXT) - Save the resolved chat/tool/MCP/skill settings as a preset name. With --preset, clones/updates from that base; without --prompt, saves and exits.
-- `--router` (TEXT) - LLM router (llama|openrouter|openai|deepseek|gemini|ollama|fireworks|xai|huggingface). Default: from Chat Provider Settings in app.
-- `--model` (TEXT) - Model id (router-specific, e.g. openai/gpt-4o-mini). Default: from Chat Provider Settings in app.
-- `--ai-consent-review` - Run the SecurityAgent as an advisory reviewer before CLI consent prompts. The review is shown on stderr; human approval is still required.
-- `--ai-consent-router` (TEXT) - Router for the advisory SecurityAgent reviewer. Implies --ai-consent-review. Default: Chat security router, then planner router, then text router.
-- `--ai-consent-model` (TEXT) - Model/script for the advisory SecurityAgent reviewer. Implies --ai-consent-review. Default: Chat security model, then planner model, then text model.
-- `--api-key` (TEXT) - API key (optional; default from app chat / API Keys in settings.json)
-- `--base-url` (TEXT) - Override the router's default base URL (OpenAI-compatible endpoints). Default: from app API Providers settings.
-- `--timeout-ms` (INT, default `0`) - HTTP timeout per LLM round (ms). Default: from Chat Provider Settings (or 60000).
+- `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. Loads saved router/model/max-iter/planner defaults; explicit CLI flags override it.
+- `--runner` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Agent backend: native (default) | claude-code | codex | cursor. Also reads PM_LLM_AGENT_RUNNER when unset.
+- `--save-preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Save the resolved chat/tool/MCP/skill settings as a preset name. With --preset, clones/updates from that base; without --prompt, saves and exits.
+- `--router` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - LLM router (llama|openrouter|openai|deepseek|gemini|ollama|fireworks|xai|huggingface). Default: from Chat Provider Settings in app.
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model id (router-specific, e.g. openai/gpt-4o-mini). Default: from Chat Provider Settings in app.
+- `--ai-consent-review` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Run the SecurityAgent as an advisory reviewer before CLI consent prompts. The review is shown on stderr; human approval is still required.
+- `--ai-consent-router` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Router for the advisory SecurityAgent reviewer. Implies --ai-consent-review. Default: Chat security router, then planner router, then text router.
+- `--ai-consent-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model/script for the advisory SecurityAgent reviewer. Implies --ai-consent-review. Default: Chat security model, then planner model, then text model.
+- `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key (optional; default from app chat / API Keys in settings.json)
+- `--base-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the router's default base URL (OpenAI-compatible endpoints). Default: from app API Providers settings.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - HTTP timeout per LLM round (ms). Default: from Chat Provider Settings (or 60000).
 
 **Security**
-- `--consent-ui` (TEXT) - Consent surface for security-gated tools: cli | win32 | owner | auto-deny | auto-allow | auto | preset. cli = stdio prompt (stderr/stdin); win32 = native modal dialog; auto-deny = deny every Ask (headless); auto-allow (alias: yolo) = allow every Ask with a session grant; owner = route to owning surface (not yet wired -> auto). When omitted: chat preset `consent_ui` (Yolo) if set, else auto (cli when stdin is attached, else win32 on an interactive desktop, else auto-deny).
-- `--consent-owner` (TEXT) - Target descriptor (ipc id) for --consent-ui owner routing. Reserved; owner delegation is not wired yet.
+- `--consent-ui` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Consent surface for security-gated tools: cli | win32 | owner | auto-deny | auto-allow | auto | preset. cli = stdio prompt (stderr/stdin); win32 = native modal dialog; auto-deny = deny every Ask (headless); auto-allow (alias: yolo) = allow every Ask with a session grant; owner = route to owning surface (not yet wired -> auto). When omitted: chat preset `consent_ui` (Yolo) if set, else auto (cli when stdin is attached, else win32 on an interactive desktop, else auto-deny).
+- `--consent-owner` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target descriptor (ipc id) for --consent-ui owner routing. Reserved; owner delegation is not wired yet.
 
 **Tool Overrides**
-- `--ocr-provider` (TEXT) - Override the OCR tool provider for this run (e.g. llama, onnx, replicate). Wins over Chat → OCR settings and the active preset.
-- `--ocr-model` (TEXT) - Override the OCR tool model id for this run (e.g. paddleocr-vl-1-5). Wins over Chat → OCR settings and the active preset.
-- `--recognition-provider` (TEXT) - Override the image recognition (image_understand) provider for this run.
-- `--recognition-model` (TEXT) - Override the image recognition model id for this run.
-- `--image-provider` (TEXT) - Override the image creation (image_create) provider for this run.
-- `--image-model` (TEXT) - Override the image creation model id for this run.
-- `--video-provider` (TEXT) - Override the video creation (create_video) provider for this run.
-- `--video-model` (TEXT) - Override the video creation model id for this run.
+- `--ocr-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the OCR tool provider for this run (e.g. llama, onnx, replicate). Wins over Chat → OCR settings and the active preset.
+- `--ocr-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the OCR tool model id for this run (e.g. paddleocr-vl-1-5). Wins over Chat → OCR settings and the active preset.
+- `--recognition-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the image recognition (image_understand) provider for this run.
+- `--recognition-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the image recognition model id for this run.
+- `--image-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the image creation (image_create) provider for this run.
+- `--image-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the image creation model id for this run.
+- `--video-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the video creation (create_video) provider for this run.
+- `--video-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the video creation model id for this run.
 
 **Agent**
-- `--max-iter` (INT, default `0`) - Maximum tool-call iterations before forcing a final response. Default: from Chat Provider Settings (or 8).
-- `--no-tools` - Do not register path tools (no list_images, image_resize, image_compress, …) — one LLM text turn only
-- `--no-mcp` - Suppress MCP-backed tools for this turn, overriding the chat preset (path/run tools still register).
-- `--no-skills` - Skip agent skill discovery/injection for this turn, overriding the chat preset.
-- `--skills` - Force roaming/workspace skill discovery for this turn, overriding disabled chat/global skill policy.
-- `--no-planner` - Force the planner pre-pass off for this turn, overriding --planner and any chat-preset default.
-- `--planner` - Run a compact planner pass first to select a budgeted subset of tool schemas, then execute the normal agent.
-- `--planner-budget` (INT, default `8`) - Maximum tool schemas the planner may pre-expand before falling back to the full catalog.
-- `--no-parallel-tools` - Disable concurrent tool dispatch and fall back to serial execution. Parallel dispatch (P6) is on by default; use this flag to opt out.
-- `--parallel-tools` - Dispatch all tool calls in a single LLM response concurrently (std::async). On by default — this flag is accepted for compatibility but is a no-op unless --no-parallel-tools was previously applied.
-- `--disable-tools` (TEXT) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
-- `--enable-tools` (TEXT) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
+- `--max-iter` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Maximum tool-call iterations before forcing a final response. Default: from Chat Provider Settings (or 8).
+- `--no-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not register path tools (no list_images, image_resize, image_compress, …) — one LLM text turn only
+- `--no-mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Suppress MCP-backed tools for this turn, overriding the chat preset (path/run tools still register).
+- `--no-skills` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip agent skill discovery/injection for this turn, overriding the chat preset.
+- `--skills` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Force roaming/workspace skill discovery for this turn, overriding disabled chat/global skill policy.
+- `--no-planner` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Force the planner pre-pass off for this turn, overriding --planner and any chat-preset default.
+- `--planner` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Run a compact planner pass first to select a budgeted subset of tool schemas, then execute the normal agent.
+- `--planner-budget` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Maximum tool schemas the planner may pre-expand before falling back to the full catalog.
+- `--no-parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable concurrent tool dispatch and fall back to serial execution. Parallel dispatch (P6) is on by default; use this flag to opt out.
+- `--parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dispatch all tool calls in a single LLM response concurrently (std::async). On by default — this flag is accepted for compatibility but is a no-op unless --no-parallel-tools was previously applied.
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
 
 **Session**
-- `--multi-turn` - Enable session memory across turns (default: on).
-- `--single-turn` - Disable session memory and run as one-shot only.
-- `--session-id` (TEXT) - Optional session id used when --multi-turn is enabled (allows continuity across CLI invocations).
-- `--load-snapshot` (TEXT) - P12: Load a named snapshot before the agent run. Merges the snapshot's memory_state / recent_events into the session context so the agent starts with that knowledge baseline. Name is sanitized to a filename; file lives under <config>/snapshots/<name>.json.
-- `--save-snapshot` (TEXT) - P12: Save the current session state to a named snapshot after the agent run. Requires --multi-turn (needs an active session). The snapshot captures memory_state + recent_events so the workflow can be restored later via --load-snapshot.
-- `--memory-features` (TEXT) - Override structured-memory feature mask. Accepts a decimal/0xHEX literal or comma-separated flag names with optional +/- deltas. Special tokens: all, default, none. Examples: --memory-features=0x7FF | --memory-features=CaptureWriteArtifacts,InjectItems | --memory-features=default,-ReplayTranscript. Overrides PM_LLM_STRUCTURED_MEMORY_FEATURES. See pm::llm::StructuredMemoryFeature.
-- `--no-replay` - Clear the ReplayTranscript bit from the structured-memory mask (skip raw chat-history injection; rely on session items/rules only).
+- `--multi-turn` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable session memory across turns (default: on).
+- `--single-turn` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable session memory and run as one-shot only.
+- `--session-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional session id used when --multi-turn is enabled (allows continuity across CLI invocations).
+- `--load-snapshot` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - P12: Load a named snapshot before the agent run. Merges the snapshot's memory_state / recent_events into the session context so the agent starts with that knowledge baseline. Name is sanitized to a filename; file lives under <config>/snapshots/<name>.json.
+- `--save-snapshot` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - P12: Save the current session state to a named snapshot after the agent run. Requires --multi-turn (needs an active session). The snapshot captures memory_state + recent_events so the workflow can be restored later via --load-snapshot.
+- `--memory-features` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override structured-memory feature mask. Accepts a decimal/0xHEX literal or comma-separated flag names with optional +/- deltas. Special tokens: all, default, none. Examples: --memory-features=0x7FF | --memory-features=CaptureWriteArtifacts,InjectItems | --memory-features=default,-ReplayTranscript. Overrides PM_LLM_STRUCTURED_MEMORY_FEATURES. See pm::llm::StructuredMemoryFeature.
+- `--no-replay` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Clear the ReplayTranscript bit from the structured-memory mask (skip raw chat-history injection; rely on session items/rules only).
 
 **Scheduler**
-- `--scheduler` - After the first turn completes, start the agent scheduler in this process so schedule_every / schedule_in / schedule_at tasks created by the agent actually fire. Blocks until Ctrl+C, --scheduler-timeout expires, or --scheduler-exit-when-idle and no tasks remain.
-- `--scheduler-timeout` (INT, default `0`) - When --scheduler is set, auto-exit after N seconds (0 = run until Ctrl+C / idle).
-- `--scheduler-exit-when-idle` - When --scheduler is set, exit cleanly once every scheduled task is disabled (one-shots done, every-tasks hit max_runs / cancelled).
+- `--scheduler` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - After the first turn completes, start the agent scheduler in this process so schedule_every / schedule_in / schedule_at tasks created by the agent actually fire. Blocks until Ctrl+C, --scheduler-timeout expires, or --scheduler-exit-when-idle and no tasks remain.
+- `--scheduler-timeout` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - When --scheduler is set, auto-exit after N seconds (0 = run until Ctrl+C / idle).
+- `--scheduler-exit-when-idle` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - When --scheduler is set, exit cleanly once every scheduled task is disabled (one-shots done, every-tasks hit max_runs / cancelled).
 
 **Output**
-- `--hud` - Show the overlay HUD over the clock. Stop cancels the run. Default off.
-- `--hud-mode` (TEXT:{off,taskbar,overlay,both}) - HUD mode: off, taskbar, overlay, or both. Empty + --hud = overlay. taskbar/overlay/both enable the HUD even without --hud.
-- `--dry-run` - Resolve provider + tools + selection; print context as Markdown to stdout. With --planner, runs only the planner LLM pass to preview selected schemas.
-- `--log` (TEXT, default `agent.json`) - Write a JSON run log (provider, per-event tool calls with full envelopes, transcript) to this file (truncates). Default: <logging-dir>/agent.json.
-- `--dst` (TEXT) - Write the agent response to this file path (truncates on each turn). Without --json: writes result.final_text (raw markdown, no ANSI). With --json: writes the full result JSON object. Supports ${VAR} variable substitution (CWD, SRC_FILE, YYYY, MM, DD, …) resolved against --cwd / --include paths. Relative paths are resolved from --cwd. Parent directories are created automatically.
-- `--streaming` (TEXT:{auto,on,off}, default `on`) - Streaming mode: on (default), auto (catalog-gated), off. Implemented now for --type responses; completion remains non-streaming.
-- `--markdown` (TEXT:{auto,plain,render}, default `auto`) - Human stdout: auto (render when stdout is a TTY), plain (raw model UTF-8), or render (always run the terminal markdown pass). Ignored with --json.
-- `--color` (TEXT:{auto,never,always}, default `auto`) - When markdown rendering is used: auto (color on TTY unless NO_COLOR/TERM=dumb), never, or always.
+- `--hud` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Show the overlay HUD over the clock. Stop cancels the run. Default off.
+- `--hud-mode` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">taskbar</span> <span data-cli="choice">overlay</span> <span data-cli="choice">both</span></span></span>) - HUD mode: off, taskbar, overlay, or both. Empty + --hud = overlay. taskbar/overlay/both enable the HUD even without --hud.
+- `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Resolve provider + tools + selection; print context as Markdown to stdout. With --planner, runs only the planner LLM pass to preview selected schemas.
+- `--log` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">agent.json</span></span></span>) - Write a JSON run log (provider, per-event tool calls with full envelopes, transcript) to this file (truncates). Default: <logging-dir>/agent.json.
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write the agent response to this file path (truncates on each turn). Without --json: writes result.final_text (raw markdown, no ANSI). With --json: writes the full result JSON object. Supports ${VAR} variable substitution (CWD, SRC_FILE, YYYY, MM, DD, …) resolved against --cwd / --include paths. Relative paths are resolved from --cwd. Parent directories are created automatically.
+- `--streaming` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">on</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">on</span> <span data-cli="choice">off</span></span></span>) - Streaming mode: on (default), auto (catalog-gated), off. Implemented now for --type responses; completion remains non-streaming.
+- `--markdown` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">plain</span> <span data-cli="choice">render</span></span></span>) - Human stdout: auto (render when stdout is a TTY), plain (raw model UTF-8), or render (always run the terminal markdown pass). Ignored with --json.
+- `--color` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">never</span> <span data-cli="choice">always</span></span></span>) - When markdown rendering is used: auto (color on TTY unless NO_COLOR/TERM=dumb), never, or always.
 
 **API Mode**
-- `--type` (TEXT:{completion,responses,realtime}, default `responses`) - LLM API type: completion (POST /chat/completions) or responses (POST /responses — OpenAI Responses API; supported by OpenAI, OpenRouter, and LiteLLM proxy), or realtime (experimental WebSocket /realtime PoC; text-only; best with router=openai). Default: responses.
-- `--realtime` - Start a live speech-to-speech voice session over the WebSocket /v1/realtime endpoint (mic + speaker; the full agent is exposed as the run_pm_agent tool). No --prompt is required; if given it seeds the conversation. Runs until Ctrl+C or `--realtime-stop`. Best with router=openai / a realtime model. (With --save-preset, falls back to the text PoC `--type realtime` path.)
-- `--realtime-stop` - Signal a running `--realtime` live voice session (this or another process) to stop cooperatively, then exit. Uses the cross-process session file.
-- `--realtime-status` - Print whether a live `--realtime` voice session is running (add --json for machine-readable output), then exit.
-- `--realtime-idle-ms` (INT, default `120000`) - Self-stop a live `--realtime` session after this many ms of genuine idle time — no speech, no reply, and no delegated run_pm_agent in flight (a running agent task always keeps the session alive). Stops headless sessions from lingering. 0 = never auto-stop. Default: 120000 (2 min).
+- `--type` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">responses</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">completion</span> <span data-cli="choice">responses</span> <span data-cli="choice">realtime</span></span></span>) - LLM API type: completion (POST /chat/completions) or responses (POST /responses — OpenAI Responses API; supported by OpenAI, OpenRouter, and LiteLLM proxy), or realtime (experimental WebSocket /realtime PoC; text-only; best with router=openai). Default: responses.
+- `--realtime` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Start a live speech-to-speech voice session over the WebSocket /v1/realtime endpoint (mic + speaker; the full agent is exposed as the run_pm_agent tool). No --prompt is required; if given it seeds the conversation. Runs until Ctrl+C or `--realtime-stop`. Best with router=openai / a realtime model. (With --save-preset, falls back to the text PoC `--type realtime` path.)
+- `--realtime-stop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Signal a running `--realtime` live voice session (this or another process) to stop cooperatively, then exit. Uses the cross-process session file.
+- `--realtime-status` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print whether a live `--realtime` voice session is running (add --json for machine-readable output), then exit.
+- `--realtime-idle-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">120000</span></span></span>) - Self-stop a live `--realtime` session after this many ms of genuine idle time — no speech, no reply, and no delegated run_pm_agent in flight (a running agent task always keeps the session alive). Stops headless sessions from lingering. 0 = never auto-stop. Default: 120000 (2 min).
 
 **Server**
-- `--serve` - Run an OpenAI-compatible HTTP daemon (GET /health, GET /v1/models, POST /v1/chat/completions). Turns inherit the same preset/tools/MCP/skills pipeline as a normal `llm agent` run. Default consent is auto-deny. See docs/llm/llm-server.md.
-- `--host` (TEXT, default `127.0.0.1`) - Bind host for --serve (default 127.0.0.1).
-- `--port` (INT, default `8090`) - Bind port for --serve (default 8090).
-- `--concurrency` (INT, default `2`) - Max concurrent agent turns for --serve (default 2).
-- `--http-workers` (INT, default `0`) - httplib worker threads for --serve (default: max(32, concurrency*2); raise for stress with many waiting clients).
-- `--serve-api-key` (TEXT) - Require Authorization: Bearer <key> on /v1/* when set. Empty = open (dev). Overrides TANIT_SERVE_API_KEY when passed.
-- `--host-tool-provider` (TEXT, default `{}`) - Register an HTTP IAgentToolProvider as id=http://127.0.0.1:port/path (repeatable). Loopback HTTP only. Also TANIT_HOST_TOOL_PROVIDER.
+- `--serve` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Run an OpenAI-compatible HTTP daemon (GET /health, GET /v1/models, POST /v1/chat/completions). Turns inherit the same preset/tools/MCP/skills pipeline as a normal `llm agent` run. Default consent is auto-deny. See docs/llm/llm-server.md.
+- `--host` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Bind host for --serve (default 127.0.0.1).
+- `--port` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8090</span></span></span>) - Bind port for --serve (default 8090).
+- `--concurrency` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">2</span></span></span>) - Max concurrent agent turns for --serve (default 2).
+- `--http-workers` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - httplib worker threads for --serve (default: max(32, concurrency*2); raise for stress with many waiting clients).
+- `--serve-api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Require Authorization: Bearer <key> on /v1/* when set. Empty = open (dev). Overrides TANIT_SERVE_API_KEY when passed.
+- `--host-tool-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Register an HTTP IAgentToolProvider as id=http://127.0.0.1:port/path (repeatable). Loopback HTTP only. Also TANIT_HOST_TOOL_PROVIDER.
 
 **Voice**
-- `--mic` - Use the microphone as prompt input (continuous STT → LLM → TTS loop). Replaces --prompt for user input; --prompt may still be given as context. Requires --stt-api-key or ELEVENLABS_API_KEY. Press Ctrl+C to stop.
-- `--stt-api-key` (TEXT) - ElevenLabs API key for real-time STT (and TTS when --voice-id is set). Falls back to ELEVENLABS_API_KEY environment variable.
-- `--voice-id` (TEXT) - ElevenLabs voice ID to speak LLM responses aloud (empty = text-only). Browse voices at elevenlabs.io/app/voice-library.
-- `--no-tts` - Mic mode: disable TTS playback entirely (keep listening continuously after each response).
-- `--tts-model-id` (TEXT, default `eleven_v3`) - ElevenLabs TTS model used with --voice-id (default: eleven_v3).
-- `--input` (TEXT) - Microphone device name (case-insensitive substring; use `audio info` to list). Omit to use the system default input device.
-- `--input-source` (TEXT:{mic,desktop,mix}, default `mic`) - Input source for the realtime session: mic (default), desktop (system loopback), or mix (mic + desktop summed). Use `audio info` to list available devices.
-- `--desktop` (TEXT) - Loopback device name substring for --input-source desktop or mix (case-insensitive; empty = default render device). Sets --input-source desktop when --input-source is not explicitly provided.
-- `--mic-gain` (FLOAT:NONNEGATIVE, default `1`) - Mic input level multiplier (linear; 0 = mute, 1 = unity, 2 = double). Applied before mixing when --input-source mix is set.
-- `--desktop-gain` (FLOAT:NONNEGATIVE, default `1`) - Desktop/loopback input level multiplier (linear; 0 = mute, 1 = unity). Applied before mixing when --input-source desktop or mix is set.
-- `--silence-ms` (INT, default `1500`) - Silence duration in ms after which speech is auto-committed to the LLM (0 = disabled; default 1500).
-- `--stt-provider` (TEXT) - Override the STT provider for this run (whisper for local built-in, elevenlabs, …). Default: from Chat → Voice & Audio settings. Use 'whisper' to select the built-in local whisper.cpp (no API key needed).
-- `--stt-model` (TEXT) - Override the STT model id / alias for this run (e.g. base.en, small.en for whisper; scribe_v2_realtime for ElevenLabs). Default: from settings.
-- `--tts-provider` (TEXT) - Override the TTS provider for this run (e.g. elevenlabs). Default: from settings.
-- `--tts-model` (TEXT) - Override the TTS model id for this run (e.g. eleven_flash_v2_5). Also applies as --tts-model-id when --voice-id is used.
-- `--tts-voice-id` (TEXT) - Override the TTS voice id for this run. Alias for --voice-id; wins if both are set.
+- `--mic` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Use the microphone as prompt input (continuous STT → LLM → TTS loop). Replaces --prompt for user input; --prompt may still be given as context. Requires --stt-api-key or ELEVENLABS_API_KEY. Press Ctrl+C to stop.
+- `--stt-api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ElevenLabs API key for real-time STT (and TTS when --voice-id is set). Falls back to ELEVENLABS_API_KEY environment variable.
+- `--voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ElevenLabs voice ID to speak LLM responses aloud (empty = text-only). Browse voices at elevenlabs.io/app/voice-library.
+- `--no-tts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Mic mode: disable TTS playback entirely (keep listening continuously after each response).
+- `--tts-model-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">eleven_v3</span></span></span>) - ElevenLabs TTS model used with --voice-id (default: eleven_v3).
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Microphone device name (case-insensitive substring; use `audio info` to list). Omit to use the system default input device.
+- `--input-source` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">mic</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - Input source for the realtime session: mic (default), desktop (system loopback), or mix (mic + desktop summed). Use `audio info` to list available devices.
+- `--desktop` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Loopback device name substring for --input-source desktop or mix (case-insensitive; empty = default render device). Sets --input-source desktop when --input-source is not explicitly provided.
+- `--mic-gain` (<span data-cli="meta"><span data-cli="type">FLOAT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Mic input level multiplier (linear; 0 = mute, 1 = unity, 2 = double). Applied before mixing when --input-source mix is set.
+- `--desktop-gain` (<span data-cli="meta"><span data-cli="type">FLOAT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Desktop/loopback input level multiplier (linear; 0 = mute, 1 = unity). Applied before mixing when --input-source desktop or mix is set.
+- `--silence-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">1500</span></span></span>) - Silence duration in ms after which speech is auto-committed to the LLM (0 = disabled; default 1500).
+- `--stt-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the STT provider for this run (whisper for local built-in, elevenlabs, …). Default: from Chat → Voice & Audio settings. Use 'whisper' to select the built-in local whisper.cpp (no API key needed).
+- `--stt-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the STT model id / alias for this run (e.g. base.en, small.en for whisper; scribe_v2_realtime for ElevenLabs). Default: from settings.
+- `--tts-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the TTS provider for this run (e.g. elevenlabs). Default: from settings.
+- `--tts-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the TTS model id for this run (e.g. eleven_flash_v2_5). Also applies as --tts-model-id when --voice-id is used.
+- `--tts-voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the TTS voice id for this run. Alias for --voice-id; wins if both are set.
 
 **Example**
 
@@ -1321,27 +1330,27 @@ Transform selected JSON string fields with a prompt (async iterator). --source/-
 Options:
 
 **Each**
-- `-i,--source` (TEXT, required) - Input JSON file (e.g. dist/data/commands.json)
-- `--selector,--path` (TEXT, required) - jq filter selecting string leaves to transform (JSONPath-ish accepted: $.a[*].b -> .a[].b). Example: .ribbon.groups[].items[].label
-- `--target,--as` (TEXT) - Optional sibling field name for the transformed value on the parent object. Omit to overwrite the selected leaf in place. Ignored when --merge-json is set. Example: --selector '.items[].label' --target label_de -> writes items[i].label_de
-- `--merge-json` - Expect a JSON object from the transformer/LLM (checked; optional ```json fences ok). Merge object keys onto the selected leaf's parent. HARD OVERWRITE: existing keys with the same name are replaced (dev-tool semantics). Use for multi-language replies in one shot, e.g. {"label_de":"…","label_fr":"…"}. Incompatible with --target.
-- `-o,--dst` (TEXT) - Output path for the full mutated JSON document (not a single field). Required unless --json (stdout payload includes output).
-- `-p,--prompt` (TEXT) - Prompt applied to each selected value (shaped as: <prompt>\n\nText to transform: "…"). Required unless --dry-run. With --merge-json, ask for a JSON object only.
-- `--dry-run` - Skip live LLM; use --transform (default upper) for offline/fixture runs.
-- `--transform` (TEXT:{upper,prefix,identity,llm-stub,json-stub}, default `upper`) - Dry-run transformer: upper | prefix | identity | llm-stub | json-stub (json-stub emits {label_de,label_fr} for --merge-json tests)
-- `--prefix` (TEXT, default `x`) - Prefix string when --transform prefix
-- `--concurrency` (INT:INT in [0 - 64], default `0`) - Max concurrent leaf transforms (0 = auto: 1 dry-run, 4 live)
-- `--max-retries` (INT:INT in [0 - 16], default `0`) - Per-leaf retries on transform failure (0 = auto: 1 dry-run, 3 live)
-- `--throttle-ms` (INT:INT in [0 - 60000], default `0`) - Minimum delay between transform starts (rate limit)
-- `--no-cache` - Disable identical-input result cache (default: cache on).
+- `-i,--source` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Input JSON file (e.g. dist/data/commands.json)
+- `--selector,--path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - jq filter selecting string leaves to transform (JSONPath-ish accepted: $.a[*].b -> .a[].b). Example: .ribbon.groups[].items[].label
+- `--target,--as` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional sibling field name for the transformed value on the parent object. Omit to overwrite the selected leaf in place. Ignored when --merge-json is set. Example: --selector '.items[].label' --target label_de -> writes items[i].label_de
+- `--merge-json` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Expect a JSON object from the transformer/LLM (checked; optional ```json fences ok). Merge object keys onto the selected leaf's parent. HARD OVERWRITE: existing keys with the same name are replaced (dev-tool semantics). Use for multi-language replies in one shot, e.g. {"label_de":"…","label_fr":"…"}. Incompatible with --target.
+- `-o,--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output path for the full mutated JSON document (not a single field). Required unless --json (stdout payload includes output).
+- `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Prompt applied to each selected value (shaped as: <prompt>\n\nText to transform: "…"). Required unless --dry-run. With --merge-json, ask for a JSON object only.
+- `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip live LLM; use --transform (default upper) for offline/fixture runs.
+- `--transform` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">upper</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">upper</span> <span data-cli="choice">prefix</span> <span data-cli="choice">identity</span> <span data-cli="choice">llm-stub</span> <span data-cli="choice">json-stub</span></span></span>) - Dry-run transformer: upper | prefix | identity | llm-stub | json-stub (json-stub emits {label_de,label_fr} for --merge-json tests)
+- `--prefix` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">x</span></span></span>) - Prefix string when --transform prefix
+- `--concurrency` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 64]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Max concurrent leaf transforms (0 = auto: 1 dry-run, 4 live)
+- `--max-retries` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 16]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Per-leaf retries on transform failure (0 = auto: 1 dry-run, 3 live)
+- `--throttle-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 60000]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Minimum delay between transform starts (rate limit)
+- `--no-cache` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable identical-input result cache (default: cache on).
 
 **Provider**
-- `--preset` (TEXT) - Chat settings preset name or id (same as parent llm agent).
-- `--router` (TEXT) - LLM router (llama|openrouter|openai|…). Default: Chat Provider Settings.
-- `--model` (TEXT) - Model id (router-specific). Default: Chat Provider Settings.
-- `--api-key` (TEXT) - API key (optional; default from app chat / API Keys).
-- `--base-url` (TEXT) - Override the router's default base URL (OpenAI-compatible).
-- `--timeout-ms` (INT, default `0`) - HTTP timeout per LLM round (ms). Default: Chat Provider Settings (or 60000).
+- `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id (same as parent llm agent).
+- `--router` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - LLM router (llama|openrouter|openai|…). Default: Chat Provider Settings.
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model id (router-specific). Default: Chat Provider Settings.
+- `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key (optional; default from app chat / API Keys).
+- `--base-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the router's default base URL (OpenAI-compatible).
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - HTTP timeout per LLM round (ms). Default: Chat Provider Settings (or 60000).
 
 **Example**
 
@@ -1459,15 +1468,15 @@ Cluster jq-selected string leaves by local embedding cosine similarity. Annotate
 
 Options:
 
-- `-i,--source` (TEXT, required) - Input JSON file (e.g. changelog leaf bundle)
-- `--selector,--path` (TEXT, required) - jq filter selecting string leaves to compare (e.g. .items[].text)
-- `-m,--embed-model` (TEXT, required) - Path to GGUF embedding model (e.g. ${MODELS_DIR}/all-MiniLM-L6-v2.Q5_K_M.gguf).
-- `-o,--dst` (TEXT) - Output JSON report path (required unless --json).
-- `--threshold` (FLOAT:FLOAT in [0 - 1], default `0.78`) - Cosine similarity threshold to treat two entries as duplicates (default 0.78).
-- `--margin` (FLOAT:FLOAT in [0 - 1], default `0.05`) - Required lead over the runner-up cluster score (default 0.05).
-- `-j,--threads` (INT:INT in [1 - 256], default `4`) - CPU threads for embedding inference (default 4).
-- `--ctx` (INT:INT in [32 - 8192], default `512`) - Embedding model context length (default 512).
-- `--drop` - Include output.keptTexts in the report (kept strings only).
+- `-i,--source` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Input JSON file (e.g. changelog leaf bundle)
+- `--selector,--path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - jq filter selecting string leaves to compare (e.g. .items[].text)
+- `-m,--embed-model` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to GGUF embedding model (e.g. ${MODELS_DIR}/all-MiniLM-L6-v2.Q5_K_M.gguf).
+- `-o,--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output JSON report path (required unless --json).
+- `--threshold` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0.78</span></span></span>) - Cosine similarity threshold to treat two entries as duplicates (default 0.78).
+- `--margin` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0.05</span></span></span>) - Required lead over the runner-up cluster score (default 0.05).
+- `-j,--threads` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 256]</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - CPU threads for embedding inference (default 4).
+- `--ctx` (<span data-cli="meta"><span data-cli="type">INT:INT in [32 - 8192]</span>, <span data-cli="default">default <span data-cli="value">512</span></span></span>) - Embedding model context length (default 512).
+- `--drop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include output.keptTexts in the report (kept strings only).
 
 **Example**
 
@@ -1490,26 +1499,26 @@ Run one turn via the Codex CLI (`codex exec --json`). Requires `codex login`. Bu
 Options:
 
 **Input**
-- `-p,--prompt` (TEXT) - User prompt (required). Supports the same path grammar as `llm agent --prompt`.
-- `--include` (TEXT, default `{}`) - File paths to inject as Pixlwiz selection context. Repeatable.
-- `--embed` (TEXT, default `{}`) - Text files whose contents are appended to the prompt (same as `llm agent --embed`). Repeatable. Max 1 MiB per file.
-- `--cwd` (TEXT, default `.`) - Working directory / workspace root for the external agent.
+- `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - User prompt (required). Supports the same path grammar as `llm agent --prompt`.
+- `--include` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - File paths to inject as Pixlwiz selection context. Repeatable.
+- `--embed` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Text files whose contents are appended to the prompt (same as `llm agent --embed`). Repeatable. Max 1 MiB per file.
+- `--cwd` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Working directory / workspace root for the external agent.
 
 **Provider**
-- `-m,--model` (TEXT) - External CLI model override.
+- `-m,--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - External CLI model override.
 
 **Session**
-- `--resume` (TEXT) - Resume a prior external session (Codex thread id; Claude/Cursor session id).
-- `--ephemeral` - Do not persist the external session to disk (Codex --ephemeral).
+- `--resume` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Resume a prior external session (Codex thread id; Claude/Cursor session id).
+- `--ephemeral` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not persist the external session to disk (Codex --ephemeral).
 
 **Runtime**
-- `--timeout-ms` (INT, default `0`) - Max wait for the external CLI process (default 600000).
-- `--executable` (TEXT) - Override CLI executable name/path (default: codex | claude | agent).
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Max wait for the external CLI process (default 600000).
+- `--executable` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override CLI executable name/path (default: codex | claude | agent).
 
 **Codex**
-- `-s,--sandbox` (TEXT:{read-only,workspace-write,danger-full-access}, default `read-only`) - Codex sandbox: read-only | workspace-write | danger-full-access (default read-only).
-- `-a,--ask-for-approval` (TEXT:{untrusted,on-request,never}, default `never`) - Ignored for Codex (use -s/--sandbox). Kept for CLI parity with other agents.
-- `--skip-git-repo-check` - Allow Codex outside a git repository (default on).
+- `-s,--sandbox` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">read-only</span> <span data-cli="choice">workspace-write</span> <span data-cli="choice">danger-full-access</span></span></span>) - Codex sandbox: read-only | workspace-write | danger-full-access (default read-only).
+- `-a,--ask-for-approval` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">untrusted</span> <span data-cli="choice">on-request</span> <span data-cli="choice">never</span></span></span>) - Ignored for Codex (use -s/--sandbox). Kept for CLI parity with other agents.
+- `--skip-git-repo-check` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Allow Codex outside a git repository (default on).
 
 **Example**
 
@@ -1532,21 +1541,21 @@ Run one turn via Claude Code (`claude -p --output-format stream-json`). Build fl
 Options:
 
 **Input**
-- `-p,--prompt` (TEXT) - User prompt (required). Supports the same path grammar as `llm agent --prompt`.
-- `--include` (TEXT, default `{}`) - File paths to inject as Pixlwiz selection context. Repeatable.
-- `--embed` (TEXT, default `{}`) - Text files whose contents are appended to the prompt (same as `llm agent --embed`). Repeatable. Max 1 MiB per file.
-- `--cwd` (TEXT, default `.`) - Working directory / workspace root for the external agent.
+- `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - User prompt (required). Supports the same path grammar as `llm agent --prompt`.
+- `--include` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - File paths to inject as Pixlwiz selection context. Repeatable.
+- `--embed` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Text files whose contents are appended to the prompt (same as `llm agent --embed`). Repeatable. Max 1 MiB per file.
+- `--cwd` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Working directory / workspace root for the external agent.
 
 **Provider**
-- `-m,--model` (TEXT) - External CLI model override.
+- `-m,--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - External CLI model override.
 
 **Session**
-- `--resume` (TEXT) - Resume a prior external session (Codex thread id; Claude/Cursor session id).
-- `--ephemeral` - Do not persist the external session to disk (Codex --ephemeral).
+- `--resume` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Resume a prior external session (Codex thread id; Claude/Cursor session id).
+- `--ephemeral` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not persist the external session to disk (Codex --ephemeral).
 
 **Runtime**
-- `--timeout-ms` (INT, default `0`) - Max wait for the external CLI process (default 600000).
-- `--executable` (TEXT) - Override CLI executable name/path (default: codex | claude | agent).
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Max wait for the external CLI process (default 600000).
+- `--executable` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override CLI executable name/path (default: codex | claude | agent).
 
 **Example**
 
@@ -1569,25 +1578,25 @@ Run one turn via Cursor Agent (`agent -p --output-format stream-json`). Build fl
 Options:
 
 **Input**
-- `-p,--prompt` (TEXT) - User prompt (required). Supports the same path grammar as `llm agent --prompt`.
-- `--include` (TEXT, default `{}`) - File paths to inject as Pixlwiz selection context. Repeatable.
-- `--embed` (TEXT, default `{}`) - Text files whose contents are appended to the prompt (same as `llm agent --embed`). Repeatable. Max 1 MiB per file.
-- `--cwd` (TEXT, default `.`) - Working directory / workspace root for the external agent.
+- `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - User prompt (required). Supports the same path grammar as `llm agent --prompt`.
+- `--include` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - File paths to inject as Pixlwiz selection context. Repeatable.
+- `--embed` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Text files whose contents are appended to the prompt (same as `llm agent --embed`). Repeatable. Max 1 MiB per file.
+- `--cwd` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Working directory / workspace root for the external agent.
 
 **Provider**
-- `-m,--model` (TEXT) - External CLI model override.
+- `-m,--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - External CLI model override.
 
 **Session**
-- `--resume` (TEXT) - Resume a prior external session (Codex thread id; Claude/Cursor session id).
-- `--ephemeral` - Do not persist the external session to disk (Codex --ephemeral).
+- `--resume` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Resume a prior external session (Codex thread id; Claude/Cursor session id).
+- `--ephemeral` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not persist the external session to disk (Codex --ephemeral).
 
 **Runtime**
-- `--timeout-ms` (INT, default `0`) - Max wait for the external CLI process (default 600000).
-- `--executable` (TEXT) - Override CLI executable name/path (default: codex | claude | agent).
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Max wait for the external CLI process (default 600000).
+- `--executable` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override CLI executable name/path (default: codex | claude | agent).
 
 **Cursor**
-- `--trust` - Trust workspace without prompting (Cursor --trust; headless only).
-- `--mode` (TEXT) - Cursor mode: plan | ask (empty = default agent).
+- `--trust` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Trust workspace without prompting (Cursor --trust; headless only).
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Cursor mode: plan | ask (empty = default agent).
 
 **Example**
 
@@ -1609,12 +1618,12 @@ Register Windows Explorer menus: resize / convert / meta + Workbench + Viewer + 
 
 Options:
 
-- `--group` (TEXT, default `Tanit`)
-- `--unregister`
-- `--dry`
-- `--no-refresh-shell`
-- `--media-bin` (TEXT) - Path to tanit.exe (default: GUI sibling when this is tanit-cli.exe)
-- `--widths` (TEXT, default `1980,1200`)
+- `--group` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">Tanit</span></span></span>)
+- `--unregister` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
+- `--dry` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
+- `--no-refresh-shell` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
+- `--media-bin` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path to tanit.exe (default: GUI sibling when this is tanit-cli.exe)
+- `--widths` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">1980,1200</span></span></span>)
 
 **Example**
 
@@ -1634,11 +1643,11 @@ Register current-user Start Menu shortcuts for a zip/unpacked install.
 
 Options:
 
-- `--folder` (TEXT, default `PolyMech`)
-- `--unregister`
-- `--dry`
-- `--media-bin` (TEXT) - Path to tanit.exe (default: this executable)
-- `--install-root` (TEXT) - Install/zip root for docs and Uninstall.exe lookup (default: parent of win-x64, or exe directory).
+- `--folder` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">PolyMech</span></span></span>)
+- `--unregister` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
+- `--dry` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
+- `--media-bin` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path to tanit.exe (default: this executable)
+- `--install-root` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Install/zip root for docs and Uninstall.exe lookup (default: parent of win-x64, or exe directory).
 
 **Example**
 
@@ -1654,25 +1663,25 @@ tanit-cli register-startmenu --folder 'PolyMech' --unregister --dry --media-bin 
 
 #### installer
 
-Zip/unpacked install helper: seed profile data, register Explorer integration, Start Menu shortcuts, and optional Chrome native host.
+Zip/unpacked install helper: seed profile data, register Explorer integration, Start Menu shortcuts, optional Chrome native host.
 
 Options:
 
-- `--uninstall,--uninistall` - Unregister Explorer and Start Menu integration. Profile data is kept.
-- `--dry`
-- `--no-seed` - Skip copying missing dist/data files into the roaming profile.
-- `--no-explorer` - Skip register-explorer / unregister.
-- `--no-startmenu` - Skip register-startmenu / unregister.
-- `--no-url-schemes` - Skip registering / unregistering the tanit:// URL scheme handler.
-- `--no-chrome` - Skip registering / unregistering the Tanit Chrome native messaging host.
-- `--root` (TEXT) - Install/zip root. Default: parent of win-x64, or exe directory.
-- `--bundle` (TEXT) - Path to a JSON bundle manifest (${VAR}-aware; resolved after --root/--config). Executed after seed/register steps. ${INSTALL_ROOT} resolves to --root.
-- `--verbs` (TEXT) - Comma-separated verb allow globs (e.g. copy,vfs_*). Empty = all registered verbs.
-- `--journal-dir` (TEXT) - Directory for run-journal sidecars (resume support; ${VAR}-aware).
-- `--resume` - Resume from an existing journal (default).
-- `--fresh` - Ignore any existing journal and start fresh.
-- `--server-url` (TEXT) - Service base URL override for vfs_pull / vfs_push verbs.
-- `--config` (TEXT) - JSON variable overrides applied before manifest resolution. Flat object or { "variables": { … } }. Installer keys include DEFAULT_VFS_SERVER (CMS host for vfs:// sources). Values are deep-resolved (${OTHER}/sub, ${ENV:NAME}, ${KNOWNFOLDER:…}).
+- `--uninstall,--uninistall` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Unregister Explorer and Start Menu integration. Profile data is kept.
+- `--dry` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
+- `--no-seed` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip copying missing dist/data files into the roaming profile.
+- `--no-explorer` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip register-explorer / unregister.
+- `--no-startmenu` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip register-startmenu / unregister.
+- `--no-url-schemes` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip registering / unregistering the tanit:// URL scheme handler.
+- `--no-chrome` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip registering / unregistering the Tanit Chrome native messaging host.
+- `--root` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Install/zip root. Default: parent of win-x64, or exe directory.
+- `--bundle` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path to a JSON bundle manifest (${VAR}-aware; resolved after --root/--config). Executed after seed/register steps. ${INSTALL_ROOT} resolves to --root.
+- `--verbs` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma-separated verb allow globs (e.g. copy,vfs_*). Empty = all registered verbs.
+- `--journal-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Directory for run-journal sidecars (resume support; ${VAR}-aware).
+- `--resume` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Resume from an existing journal (default).
+- `--fresh` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Ignore any existing journal and start fresh.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL override for vfs_pull / vfs_push verbs.
+- `--config` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON variable overrides applied before manifest resolution. Flat object or { "variables": { … } }. Installer keys include DEFAULT_VFS_SERVER (CMS host for vfs:// sources). Values are deep-resolved (${OTHER}/sub, ${ENV:NAME}, ${KNOWNFOLDER:…}).
 
 **Example**
 
@@ -1692,7 +1701,7 @@ Register Tanit Chrome native messaging host only (no npm). Run once per user, th
 
 Options:
 
-- `--verify` - Check registry, host manifest, and host exe.
+- `--verify` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Check registry, host manifest, and host exe.
 
 **Example**
 
@@ -1730,7 +1739,7 @@ Print resolved CMS, LLM, license, and Zitadel service URLs.
 
 Options:
 
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -1752,14 +1761,14 @@ GET /api/search?q=... - full-text search across pages, posts, pictures, VFS file
 
 Options:
 
-- `query` (TEXT, required) - Search query.
-- `--type` (TEXT, default `all`) - Content type: all, pages, posts, pictures, files, places (default: all).
-- `--limit` (INT, default `20`) - Max results (default: 20, server cap: 50).
-- `--sizes` (TEXT) - Comma-separated responsive image widths.
-- `--formats` (TEXT) - Comma-separated responsive image formats.
-- `--visibility-filter` (TEXT) - Filter authenticated results: invisible or private.
-- `--public` - Anonymous/global search without bearer token (public content only).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Search query.
+- `--type` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Content type: all, pages, posts, pictures, files, places (default: all).
+- `--limit` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Max results (default: 20, server cap: 50).
+- `--sizes` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma-separated responsive image widths.
+- `--formats` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma-separated responsive image formats.
+- `--visibility-filter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Filter authenticated results: invisible or private.
+- `--public` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Anonymous/global search without bearer token (public content only).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -1781,7 +1790,7 @@ AI gateway spend APIs on the CMS server (GET /api/ai-gateway/spend/me).
 
 Options:
 
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -1801,15 +1810,15 @@ GET /api/ai-gateway/spend/me/logs - paginated request-level spend logs.
 
 Options:
 
-- `--days-back` (INT, default `7`) - Lookback window when start/end dates are omitted (default: 7).
-- `--start-date` (TEXT) - Range start (YYYY-MM-DD).
-- `--end-date` (TEXT) - Range end (YYYY-MM-DD).
-- `--page` (INT, default `1`) - Page number (default: 1).
-- `--page-size` (INT, default `25`) - Page size (default: 25, max: 100).
-- `--sort-by` (TEXT, default `startTime`) - Sort column (default: startTime).
-- `--sort-order` (TEXT, default `desc`) - asc or desc (default: desc).
-- `--all-pages` - Fetch and merge every page in range (CMS path; direct LiteLLM fallback when empty).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--days-back` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Lookback window when start/end dates are omitted (default: 7).
+- `--start-date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Range start (YYYY-MM-DD).
+- `--end-date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Range end (YYYY-MM-DD).
+- `--page` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Page number (default: 1).
+- `--page-size` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Page size (default: 25, max: 100).
+- `--sort-by` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sort column (default: startTime).
+- `--sort-order` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - asc or desc (default: desc).
+- `--all-pages` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Fetch and merge every page in range (CMS path; direct LiteLLM fallback when empty).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -1831,7 +1840,7 @@ GET /api/ai-gateway/balance/me - purchased credits minus synced spend.
 
 Options:
 
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -1853,7 +1862,7 @@ GET /api/ai-gateway/health - gateway configured/alive state.
 
 Options:
 
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -1875,9 +1884,9 @@ Deprecated alias for `service images upload`.
 
 Options:
 
-- `files` (TEXT, required, default `{}`) - Local image path(s); repeat or list several
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
-- `--dump-raw-http` - Implies JSON stdout; each line also includes http_status and raw_body (exact /api/images response string).
+- `files` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Local image path(s); repeat or list several
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; each line also includes http_status and raw_body (exact /api/images response string).
 
 **Example**
 
@@ -1915,9 +1924,9 @@ POST /api/images?forward=vfs&original=true - multipart field "file" (same as upl
 
 Options:
 
-- `files` (TEXT, required, default `{}`) - Local image path(s); repeat or list several
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
-- `--dump-raw-http` - Implies JSON stdout; each line also includes http_status and raw_body (exact /api/images response string).
+- `files` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Local image path(s); repeat or list several
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; each line also includes http_status and raw_body (exact /api/images response string).
 
 **Example**
 
@@ -1955,10 +1964,10 @@ Upload portable unencrypted settings.json to VFS for cross-machine sync.
 
 Options:
 
-- `--remote-dir` (TEXT, default `settings`) - Remote VFS directory under home mount (default: settings).
-- `--commands` - Also upload commands.json when present.
-- `--mcp` - Also upload MCP config files/folder when present.
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--remote-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">settings</span></span></span>) - Remote VFS directory under home mount (default: settings).
+- `--commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also upload commands.json when present.
+- `--mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also upload MCP config files/folder when present.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -1980,11 +1989,11 @@ Import portable unencrypted settings.json from VFS into the local profile.
 
 Options:
 
-- `--remote-dir` (TEXT, default `settings`) - Remote VFS directory under home mount (default: settings).
-- `--download-dir` (TEXT, default `.`) - Temporary/local directory for downloaded files before importing settings.json (default: cwd).
-- `--commands` - Also import commands.json when present remotely.
-- `--mcp` - Also import MCP config files/folder when present remotely.
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--remote-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Remote VFS directory under home mount (default: settings).
+- `--download-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Temporary/local directory for downloaded files before importing settings.json (default: cwd).
+- `--commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also import commands.json when present remotely.
+- `--mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also import MCP config files/folder when present remotely.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2006,8 +2015,8 @@ Remove the remote settings sync directory from VFS.
 
 Options:
 
-- `--remote-dir` (TEXT, default `settings`) - Remote VFS directory under home mount (default: settings).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--remote-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Remote VFS directory under home mount (default: settings).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2045,17 +2054,17 @@ POST /api/vfs/upload/{mount}/{path} for any file type (multipart field "file"). 
 
 Options:
 
-- `files` (TEXT, required, default `{}`) - Local file path(s), globs, or brace groups (e.g. dir/**/*.{png,jpg}); repeat or list several
-- `--mount` (TEXT, default `home`) - VFS mount name (default: home). Resulting user URL is /app/filebrowser/<mount>?file=...
-- `--remote-dir` (TEXT) - Remote VFS directory. Each matched file is placed under this path; glob matches preserve relative subfolders. Default: VFS root. Prefer --public for the shared public folder.
-- `--public` - Upload into the home/public folder (same as --remote-dir public). Filebrowser URL uses ?mode=thumb&file=… for explorer links.
-- `--remote-path` (TEXT) - Exact remote VFS path for one matched file (overrides --remote-dir; one positional spec only).
-- `--conflict` (TEXT) - Conflict policy: if-newer (default; overwrite older remotes), skip, overwrite.
-- `--skip` - Skip when the remote file already exists (any age).
-- `--overwrite` - Always replace the remote file.
-- `--if-newer` - Overwrite remote only when the local file is newer (default).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
-- `--dump-raw-http` - Implies JSON stdout; each uploaded-file line also includes http_status and raw_body from /api/vfs/upload.
+- `files` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Local file path(s), globs, or brace groups (e.g. dir/**/*.{png,jpg}); repeat or list several
+- `--mount` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">home</span></span></span>) - VFS mount name (default: home). Resulting user URL is /app/filebrowser/<mount>?file=...
+- `--remote-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Remote VFS directory. Each matched file is placed under this path; glob matches preserve relative subfolders. Default: VFS root. Prefer --public for the shared public folder.
+- `--public` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Upload into the home/public folder (same as --remote-dir public). Filebrowser URL uses ?mode=thumb&file=… for explorer links.
+- `--remote-path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Exact remote VFS path for one matched file (overrides --remote-dir; one positional spec only).
+- `--conflict` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Conflict policy: if-newer (default; overwrite older remotes), skip, overwrite.
+- `--skip` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip when the remote file already exists (any age).
+- `--overwrite` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Always replace the remote file.
+- `--if-newer` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Overwrite remote only when the local file is newer (default).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; each uploaded-file line also includes http_status and raw_body from /api/vfs/upload.
 
 **Example**
 
@@ -2077,9 +2086,9 @@ GET /api/vfs/ls/{mount}/{path} - list files in a VFS directory.
 
 Options:
 
-- `path` (TEXT) - Directory path inside the mount. Default: root.
-- `--mount` (TEXT, default `home`) - VFS mount name (default: home).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Directory path inside the mount. Default: root.
+- `--mount` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - VFS mount name (default: home).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2101,16 +2110,16 @@ Stream-download VFS file(s) to a local directory (HTTP Range resume, retries). S
 
 Options:
 
-- `path` (TEXT, required) - Remote file or directory path inside the mount.
-- `--mount` (TEXT, default `home`) - VFS mount name (default: home).
-- `--local-dir` (TEXT) - Local destination root (default: MODELS_DIR when --mount models, else cwd).
-- `--pattern` (TEXT) - Glob filter when pulling a directory (e.g. widget-test.md, **/*.gguf).
-- `--no-resume` - Disable HTTP Range resume.
-- `--overwrite` - Re-download even when the local file already exists (default: skip existing).
-- `--retries` (INT, default `3`) - Per-file retry count (default: 3).
-- `--read-endpoint` - Use GET /api/vfs/read instead of /api/vfs/get.
-- `--progress` - Log download progress ([service-pull]).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Remote file or directory path inside the mount.
+- `--mount` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - VFS mount name (default: home).
+- `--local-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Local destination root (default: MODELS_DIR when --mount models, else cwd).
+- `--pattern` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Glob filter when pulling a directory (e.g. widget-test.md, **/*.gguf).
+- `--no-resume` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable HTTP Range resume.
+- `--overwrite` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Re-download even when the local file already exists (default: skip existing).
+- `--retries` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Per-file retry count (default: 3).
+- `--read-endpoint` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Use GET /api/vfs/read instead of /api/vfs/get.
+- `--progress` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Log download progress ([service-pull]).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2132,13 +2141,13 @@ GET /api/vfs/read/{mount}/{path} - read raw file content for download/buffer use
 
 Options:
 
-- `path` (TEXT, required) - File path inside the mount.
-- `--mount` (TEXT, default `home`) - VFS mount name (default: home).
-- `--out` (TEXT) - Write raw bytes to this file and print JSON metadata. Default: write raw bytes to stdout.
-- `--download` (TEXT) - Save to current directory using this name; omit name to use the remote path basename. Refused for binary/large files when no destination is given.
-- `--download-as` (TEXT) - Save to this exact local path (creates parent directories automatically).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
-- `--overwrite` - Re-download even when the local destination already exists (default: skip existing).
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - File path inside the mount.
+- `--mount` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - VFS mount name (default: home).
+- `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write raw bytes to this file and print JSON metadata. Default: write raw bytes to stdout.
+- `--download` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Save to current directory using this name; omit name to use the remote path basename. Refused for binary/large files when no destination is given.
+- `--download-as` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Save to this exact local path (creates parent directories automatically).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--overwrite` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Re-download even when the local destination already exists (default: skip existing).
 
 **Example**
 
@@ -2160,13 +2169,13 @@ Alias for `files read`: GET /api/vfs/read/{mount}/{path}. Binary and large files
 
 Options:
 
-- `path` (TEXT, required) - File path inside the mount.
-- `--mount` (TEXT, default `home`) - VFS mount name (default: home).
-- `--download` (TEXT) - Save to current directory using this name; omit name to use the remote path basename.
-- `--download-as` (TEXT) - Save to this exact local path (creates parent directories automatically).
-- `--out` (TEXT) - Alias for --download-as: write raw bytes to this file and print metadata.
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
-- `--overwrite` - Re-download even when the local destination already exists (default: skip existing).
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - File path inside the mount.
+- `--mount` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - VFS mount name (default: home).
+- `--download` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Save to current directory using this name; omit name to use the remote path basename.
+- `--download-as` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Save to this exact local path (creates parent directories automatically).
+- `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Alias for --download-as: write raw bytes to this file and print metadata.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--overwrite` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Re-download even when the local destination already exists (default: skip existing).
 
 **Example**
 
@@ -2188,9 +2197,9 @@ DELETE /api/vfs/delete/{mount}/{path} - remove one or more VFS files/folders.
 
 Options:
 
-- `paths` (TEXT, required, default `{}`) - VFS path(s) inside the mount.
-- `--mount` (TEXT, default `home`) - VFS mount name (default: home).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `paths` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - VFS path(s) inside the mount.
+- `--mount` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - VFS mount name (default: home).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2228,20 +2237,20 @@ POST /api/pages. .md is wrapped as a markdown-text widget; .page uploads raw pag
 
 Options:
 
-- `input` (TEXT, required, default `{}`) - Local .md/.page file(s), globs, or brace groups (e.g. docs/**/*.{md,page}); repeatable
-- `--title` (TEXT) - Page title (default: filename, or title from .page JSON).
-- `--slug` (TEXT) - Page URL slug (default: generated from title).
-- `--description` (TEXT) - Optional page description.
-- `--tags` (TEXT) - Comma-separated page tags.
-- `--owner` (TEXT) - Owner user UUID for API create (default: app_user_id from zitadel-oauth.json). Output URL prefers cached app_username when available.
-- `--parent` (TEXT) - Optional parent page UUID or slug.
-- `--category-id` (TEXT, default `{}`) - Optional category slug, display name, or UUID; repeatable.
-- `--include-images` - Find image refs in markdown, probe with libmagic, upload to home/public/{page-id-prefix}-{slug}/, and rewrite refs as ./{folder}/… for server render (default upload policy: if-newer).
-- `--conflict` (TEXT) - Image upload policy with --include-images: if-newer (default), skip, overwrite.
-- `--private` (TEXT) - Create with is_public=false. Optional value: true/false.
-- `--hidden` (TEXT) - Set visible=false (default without flags: link-only / hidden).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
-- `--dump-raw-http` - Implies JSON stdout; also includes http_raw_steps and raw /api/pages response.
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Local .md/.page file(s), globs, or brace groups (e.g. docs/**/*.{md,page}); repeatable
+- `--title` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page title (default: filename, or title from .page JSON).
+- `--slug` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page URL slug (default: generated from title).
+- `--description` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional page description.
+- `--tags` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma-separated page tags.
+- `--owner` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owner user UUID for API create (default: app_user_id from zitadel-oauth.json). Output URL prefers cached app_username when available.
+- `--parent` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional parent page UUID or slug.
+- `--category-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Optional category slug, display name, or UUID; repeatable.
+- `--include-images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Find image refs in markdown, probe with libmagic, upload to home/public/{page-id-prefix}-{slug}/, and rewrite refs as ./{folder}/… for server render (default upload policy: if-newer).
+- `--conflict` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Image upload policy with --include-images: if-newer (default), skip, overwrite.
+- `--private` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Create with is_public=false. Optional value: true/false.
+- `--hidden` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set visible=false (default without flags: link-only / hidden).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; also includes http_raw_steps and raw /api/pages response.
 
 **Example**
 
@@ -2263,22 +2272,22 @@ PATCH /api/pages/{id}; with --slug, resolves /api/user-page/{owner}/{slug} first
 
 Options:
 
-- `input` (TEXT, required, default `{}`) - Local .md/.page file(s), globs, or brace groups; repeatable. Batch update uses slug/id from markdown front matter or .page JSON.
-- `--id` (TEXT) - Page UUID to update.
-- `--slug` (TEXT) - Existing page slug to update when --id is omitted.
-- `--owner` (TEXT) - Owner user UUID or username for --slug lookup (default: app_user_id from zitadel-oauth.json).
-- `--title` (TEXT) - Optional replacement page title.
-- `--new-slug` (TEXT) - Optional replacement page slug.
-- `--description` (TEXT) - Optional replacement meta description.
-- `--tags` (TEXT) - Comma-separated replacement page tags.
-- `--parent` (TEXT) - Optional replacement parent page UUID or slug.
-- `--category-id` (TEXT, default `{}`) - Optional replacement category slug, display name, or UUID; repeatable.
-- `--include-images` - Find image refs in markdown, probe with libmagic, upload to home/public/{page-id-prefix}-{slug}/, and rewrite refs as ./{folder}/… for server render (default upload policy: if-newer).
-- `--conflict` (TEXT) - Image upload policy with --include-images: if-newer (default), skip, overwrite.
-- `--private` (TEXT) - Set is_public=false. Optional value: true/false.
-- `--hidden` (TEXT) - Set visible=false. Optional value: true/false.
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
-- `--dump-raw-http` - Implies JSON stdout; also includes http_raw_steps and raw /api/pages response.
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Local .md/.page file(s), globs, or brace groups; repeatable. Batch update uses slug/id from markdown front matter or .page JSON.
+- `--id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page UUID to update.
+- `--slug` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Existing page slug to update when --id is omitted.
+- `--owner` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owner user UUID or username for --slug lookup (default: app_user_id from zitadel-oauth.json).
+- `--title` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional replacement page title.
+- `--new-slug` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional replacement page slug.
+- `--description` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional replacement meta description.
+- `--tags` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma-separated replacement page tags.
+- `--parent` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional replacement parent page UUID or slug.
+- `--category-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional replacement category slug, display name, or UUID; repeatable.
+- `--include-images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Find image refs in markdown, probe with libmagic, upload to home/public/{page-id-prefix}-{slug}/, and rewrite refs as ./{folder}/… for server render (default upload policy: if-newer).
+- `--conflict` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Image upload policy with --include-images: if-newer (default), skip, overwrite.
+- `--private` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set is_public=false. Optional value: true/false.
+- `--hidden` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set visible=false. Optional value: true/false.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; also includes http_raw_steps and raw /api/pages response.
 
 **Example**
 
@@ -2300,8 +2309,8 @@ GET /api/pages?userId=... - list pages for a user.
 
 Options:
 
-- `--user-id` (TEXT) - Owner user UUID (default: app_user_id from zitadel-oauth.json, then Tanit default).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--user-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owner user UUID (default: app_user_id from zitadel-oauth.json, then Tanit default).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2323,12 +2332,12 @@ GET /api/user-page/{identifier}/{slug}; if slug is omitted, fetch by page id.
 
 Options:
 
-- `identifier` (TEXT, required) - Owner/username for route lookup, or page id when slug is omitted.
-- `slug` (TEXT) - Page slug. Omit to fetch by page id.
-- `--lang` (TEXT) - Optional page language query parameter.
-- `--download` - Export page content to disk. Writes markdown-text content as .md when present, otherwise raw .page JSON.
-- `--out` (TEXT) - Destination file or directory for --download. Default: slug/title/id with .md or .page.
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `identifier` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Owner/username for route lookup, or page id when slug is omitted.
+- `slug` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page slug. Omit to fetch by page id.
+- `--lang` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional page language query parameter.
+- `--download` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Export page content to disk. Writes markdown-text content as .md when present, otherwise raw .page JSON.
+- `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Destination file or directory for --download. Default: slug/title/id with .md or .page.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2350,10 +2359,10 @@ DELETE /api/pages/{id}; with --slug, resolves /api/user-page/{owner}/{slug} firs
 
 Options:
 
-- `ids` (TEXT, default `{}`) - Page UUID(s).
-- `--slug` (TEXT) - Existing page slug to remove.
-- `--owner` (TEXT) - Owner user UUID or username for --slug lookup (default: app_user_id from zitadel-oauth.json).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `ids` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page UUID(s).
+- `--slug` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Existing page slug to remove.
+- `--owner` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owner user UUID or username for --slug lookup (default: app_user_id from zitadel-oauth.json).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2391,10 +2400,10 @@ GET /api/pictures?userId=...&page=...&limit=... - list pictures for a user.
 
 Options:
 
-- `--user-id` (TEXT) - Owner user UUID (default: app_user_id from zitadel-oauth.json, then Tanit default).
-- `--page` (INT, default `0`) - Page index (default: 0).
-- `--limit` (INT, default `9999`) - Page size (default: 9999).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--user-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owner user UUID (default: app_user_id from zitadel-oauth.json, then Tanit default).
+- `--page` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Page index (default: 0).
+- `--limit` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">9999</span></span></span>) - Page size (default: 9999).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2416,10 +2425,10 @@ GET /api/pictures/{id} - fetch a picture record.
 
 Options:
 
-- `id` (TEXT, required) - Picture UUID.
-- `--download` - Download the picture asset referenced by image_url/url instead of printing the detail summary.
-- `--out` (TEXT) - Destination file or directory for --download. Default: filename from URL in the current directory.
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Picture UUID.
+- `--download` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Download the picture asset referenced by image_url/url instead of printing the detail summary.
+- `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Destination file or directory for --download. Default: filename from URL in the current directory.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2441,8 +2450,8 @@ DELETE /api/pictures/{id} - remove one or more picture records.
 
 Options:
 
-- `ids` (TEXT, required, default `{}`) - Picture UUID(s).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `ids` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Picture UUID(s).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2480,11 +2489,11 @@ GET /api/posts?page=...&limit=...&userId=... - list posts for a user.
 
 Options:
 
-- `--user-id` (TEXT) - Owner user UUID (default: app_user_id from zitadel-oauth.json, then Tanit default).
-- `--page` (INT, default `0`) - Page index (default: 0).
-- `--limit` (INT, default `9999`) - Page size (default: 9999).
-- `--visibility-filter` (TEXT) - Owner-only filter: listed | unlisted | private | non-public | all (default: public only).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--user-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owner user UUID (default: app_user_id from zitadel-oauth.json, then Tanit default).
+- `--page` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Page index (default: 0).
+- `--limit` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">9999</span></span></span>) - Page size (default: 9999).
+- `--visibility-filter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owner-only filter: listed | unlisted | private | non-public | all (default: public only).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2506,13 +2515,13 @@ GET /api/posts/{id} - fetch post details.
 
 Options:
 
-- `id` (TEXT, required) - Post UUID.
-- `--sizes` (TEXT) - Optional responsive image sizes query.
-- `--formats` (TEXT) - Optional responsive image formats query.
-- `--lang` (TEXT) - Optional language query parameter.
-- `--download` - Download media assets referenced by the post detail response instead of printing the detail summary.
-- `--out` (TEXT) - Destination file/directory for --download. Multiple post media files are written into this directory.
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Post UUID.
+- `--sizes` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional responsive image sizes query.
+- `--formats` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional responsive image formats query.
+- `--lang` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional language query parameter.
+- `--download` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Download media assets referenced by the post detail response instead of printing the detail summary.
+- `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Destination file/directory for --download. Multiple post media files are written into this directory.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2534,8 +2543,8 @@ DELETE /api/posts/{id} - remove one or more posts.
 
 Options:
 
-- `ids` (TEXT, required, default `{}`) - Post UUID(s).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `ids` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Post UUID(s).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2557,13 +2566,13 @@ POST /api/posts then multipart /api/images per file, then POST /api/pictures (sa
 
 Options:
 
-- `files` (TEXT, required, default `{}`) - Local image path(s)
-- `--title` (TEXT) - Post title (default: filename of the first image, e.g. photo.png).
-- `--description` (TEXT) - Optional post description.
-- `--visibility` (TEXT:{public,listed,private}, default `public`) - Post visibility: public | listed | private (JSON settings.visibility; default public).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
-- `--dump-raw-http` - Implies JSON stdout; also includes http_raw_steps: label, http_status, body_raw for each API call.
-- `--job-ui` - Windows: list-style job window + Tanit post dialog (Explorer `Share to Tanit...` verb).
+- `files` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Local image path(s)
+- `--title` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Post title (default: filename of the first image, e.g. photo.png).
+- `--description` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional post description.
+- `--visibility` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">public</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">public</span> <span data-cli="choice">listed</span> <span data-cli="choice">private</span></span></span>) - Post visibility: public | listed | private (JSON settings.visibility; default public).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; also includes http_raw_steps: label, http_status, body_raw for each API call.
+- `--job-ui` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Windows: list-style job window + Tanit post dialog (Explorer `Share to Tanit...` verb).
 
 **Example**
 
@@ -2585,7 +2594,7 @@ Category APIs: list, fetch, create, update, and remove Tanit categories.
 
 Options:
 
-- `--type` (TEXT, default `pages`) - Category meta.type filter/field (default: pages). Applies to list, get, items, create, update, and remove.
+- `--type` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">pages</span></span></span>) - Category meta.type filter/field (default: pages). Applies to list, get, items, create, update, and remove.
 
 **Example**
 
@@ -2605,12 +2614,12 @@ GET /api/categories - list categories (default: own categories only).
 
 Options:
 
-- `--user-id` (TEXT) - Owner user UUID (default: app_user_id from zitadel-oauth.json, then Tanit default). Used unless --all.
-- `--all` - Include all visible categories (public/global), not just categories owned by --user-id.
-- `--parent-slug` (TEXT) - Only list children of this parent category slug.
-- `--include-children` - Return only top-level categories with nested children.
-- `--lang` (TEXT) - Optional language for translated names.
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--user-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owner user UUID (default: app_user_id from zitadel-oauth.json, then Tanit default). Used unless --all.
+- `--all` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include all visible categories (public/global), not just categories owned by --user-id.
+- `--parent-slug` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Only list children of this parent category slug.
+- `--include-children` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Return only top-level categories with nested children.
+- `--lang` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional language for translated names.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2632,8 +2641,8 @@ GET /api/categories/{id} - fetch a category with its parents and children.
 
 Options:
 
-- `id` (TEXT, required) - Category UUID.
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Category UUID.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2655,10 +2664,10 @@ GET /api/categories/{slug}/items - list pages in a category with resolved variab
 
 Options:
 
-- `slug` (TEXT, required) - Category slug.
-- `--limit` (INT, default `9999`) - Max items (default: server default 50).
-- `--no-descendants{false}` - Exclude items from child categories.
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `slug` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Category slug.
+- `--limit` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Max items (default: server default 50).
+- `--no-descendants{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Exclude items from child categories.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2680,14 +2689,14 @@ POST /api/categories - create a category.
 
 Options:
 
-- `name` (TEXT, required) - Category name.
-- `--slug` (TEXT) - Category slug (default: from name).
-- `--description` (TEXT) - Optional description.
-- `--visibility` (TEXT) - public | unlisted | private (default: public).
-- `--parent` (TEXT) - Optional parent category UUID (creates a relation).
-- `--relation-type` (TEXT) - Relation type for --parent (default: generalization).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
-- `--dump-raw-http` - Implies JSON stdout; also includes http_status and raw_body.
+- `name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Category name.
+- `--slug` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Category slug (default: from name).
+- `--description` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional description.
+- `--visibility` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - public | unlisted | private (default: public).
+- `--parent` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional parent category UUID (creates a relation).
+- `--relation-type` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Relation type for --parent (default: generalization).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; also includes http_status and raw_body.
 
 **Example**
 
@@ -2709,13 +2718,13 @@ PATCH /api/categories/{id} - update category fields.
 
 Options:
 
-- `id` (TEXT, required) - Category UUID.
-- `--name` (TEXT) - Replacement name.
-- `--slug` (TEXT) - Replacement slug.
-- `--description` (TEXT) - Replacement description.
-- `--visibility` (TEXT) - Replacement visibility: public | unlisted | private.
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
-- `--dump-raw-http` - Implies JSON stdout; also includes http_status and raw_body.
+- `id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Category UUID.
+- `--name` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement name.
+- `--slug` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement slug.
+- `--description` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement description.
+- `--visibility` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement visibility: public | unlisted | private.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; also includes http_status and raw_body.
 
 **Example**
 
@@ -2737,8 +2746,8 @@ DELETE /api/categories/{id} - remove one or more categories.
 
 Options:
 
-- `ids` (TEXT, required, default `{}`) - Category UUID(s).
-- `--server-url` (TEXT) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `ids` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Category UUID(s).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
 
 **Example**
 
@@ -2782,7 +2791,7 @@ GET /api/billing/ms/health (public; shows mock flag and product ids).
 
 Options:
 
-- `--license-server-url` (TEXT) - License/billing API base (default: PM_SERVICE_LICENSE_SERVER_BASE or SERVER_URL).
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base (default: PM_SERVICE_LICENSE_SERVER_BASE or SERVER_URL).
 
 **Example**
 
@@ -2804,8 +2813,8 @@ POST /api/billing/ms/link — associate UserCollectionsId with your account.
 
 Options:
 
-- `--collections-id` (TEXT) - UserCollectionsId (default: cached or dev-mock-collections-* for MS_STORE_MOCK).
-- `--license-server-url` (TEXT) - License/billing API base.
+- `--collections-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - UserCollectionsId (default: cached or dev-mock-collections-* for MS_STORE_MOCK).
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
 
 **Example**
 
@@ -2827,7 +2836,7 @@ POST /api/billing/ms/reconcile — grant credits and Pro entitlements.
 
 Options:
 
-- `--license-server-url` (TEXT) - License/billing API base.
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
 
 **Example**
 
@@ -2849,7 +2858,7 @@ GET /api/billing/balance — credit_ledger sum (not AI gateway balance).
 
 Options:
 
-- `--license-server-url` (TEXT) - License/billing API base.
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
 
 **Example**
 
@@ -2871,7 +2880,7 @@ GET /api/billing/ms/entitlements — durable/subscription rows.
 
 Options:
 
-- `--license-server-url` (TEXT) - License/billing API base.
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
 
 **Example**
 
@@ -2893,10 +2902,10 @@ POST /api/billing/ms/mock/enqueue — seed a pending purchase (server MS_STORE_M
 
 Options:
 
-- `--product-id` (TEXT, required) - Store product id (e.g. STORE_PRODUCT_ID_100K).
-- `--kind` (TEXT, default `consumable`) - consumable | durable | subscription (default: consumable).
-- `--microsoft-item-id` (TEXT) - Optional stable item id for idempotency tests.
-- `--license-server-url` (TEXT) - License/billing API base.
+- `--product-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Store product id (e.g. STORE_PRODUCT_ID_100K).
+- `--kind` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - consumable | durable | subscription (default: consumable).
+- `--microsoft-item-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional stable item id for idempotency tests.
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
 
 **Example**
 
@@ -2918,7 +2927,7 @@ POST /api/billing/ms/mock/reset — delete billing rows for the logged-in user.
 
 Options:
 
-- `--license-server-url` (TEXT) - License/billing API base.
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
 
 **Example**
 
@@ -2962,7 +2971,7 @@ Remove a saved session by id.
 
 Options:
 
-- `session-id` (TEXT, required) - Session id to remove
+- `session-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Session id to remove
 
 **Example**
 
@@ -2984,7 +2993,7 @@ Resume a saved session by id (auto-detects op and re-runs pending items).
 
 Options:
 
-- `session-id` (TEXT, required) - Session id to resume
+- `session-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Session id to resume
 
 **Example**
 
@@ -3006,13 +3015,13 @@ Sign in via OIDC PKCE or RFC 8628 device code, or use --probe / --decode-jwt.
 
 Options:
 
-- `--probe` - Fetch OIDC discovery + JWKS only; verbose stderr logs; no browser.
-- `--no-browser` - Do not launch a browser; print the PKCE URL or device verification instructions.
-- `--device-code` - Use RFC 8628 Device Authorization Grant (no loopback callback port).
-- `--decode-jwt` (TEXT) - Decode a JWT access token and explain `sub` vs app user id (optional value; if omitted, uses ZITADEL_TEST_ACCESS_TOKEN from the environment).
-- `--issuer` (TEXT) - Override ZITADEL_ISSUER / VITE_ZITADEL_AUTHORITY.
-- `--client-id` (TEXT) - Override ZITADEL_NATIVE_CLIENT_ID / ZITADEL_OIDC_CLIENT_ID.
-- `--oauth-port` (INT:INT in [0 - 65535], default `0`) - Diagnostic fixed loopback port. Default 0 asks Windows for an ephemeral port; the ZITADEL application must be a Native client with http://127.0.0.1/callback registered.
+- `--probe` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Fetch OIDC discovery + JWKS only; verbose stderr logs; no browser.
+- `--no-browser` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not launch a browser; print the PKCE URL or device verification instructions.
+- `--device-code` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Use RFC 8628 Device Authorization Grant (no loopback callback port).
+- `--decode-jwt` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Decode a JWT access token and explain `sub` vs app user id (optional value; if omitted, uses ZITADEL_TEST_ACCESS_TOKEN from the environment).
+- `--issuer` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override ZITADEL_ISSUER / VITE_ZITADEL_AUTHORITY.
+- `--client-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override ZITADEL_NATIVE_CLIENT_ID / ZITADEL_OIDC_CLIENT_ID.
+- `--oauth-port` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 65535]</span></span>) - Diagnostic fixed loopback port. Default 0 asks Windows for an ephemeral port; the ZITADEL application must be a Native client with http://127.0.0.1/callback registered.
 
 **Example**
 
@@ -3050,9 +3059,9 @@ List audio devices: capture inputs by default; use --playback for MMDevice rende
 
 Options:
 
-- `--models` - List discovered local whisper.cpp ggml models instead of capture devices.
-- `--playback` - List MMDevice playback (render) endpoints instead of capture devices. Shows active speakers, monitors, and Bluetooth audio outputs.
-- `--all` - List all playback endpoints including UNPLUGGED (paired Bluetooth speakers/headphones that are not currently connected). Implies --playback.
+- `--models` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List discovered local whisper.cpp ggml models instead of capture devices.
+- `--playback` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List MMDevice playback (render) endpoints instead of capture devices. Shows active speakers, monitors, and Bluetooth audio outputs.
+- `--all` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List all playback endpoints including UNPLUGGED (paired Bluetooth speakers/headphones that are not currently connected). Implies --playback.
 
 **Example**
 
@@ -3075,58 +3084,58 @@ Record from mic, desktop loopback, or mix. Default capture: PCM s16le 48 kHz ste
 Options:
 
 **Output**
-- `--dst` (TEXT) - Destination audio file; extension selects format. .wav = PCM WAV (long recordings keep ~30 s in RAM then spill PCM to disk). .m4a or .aac = AAC-LC via Media Foundation (Windows only; 48 kHz; no full-RAM buffer). Optional when --text-out is set (scratch file used internally). Relative paths are resolved from the current working directory.
-- `--duration,--duration-ms` (INT:NONNEGATIVE, default `0`) - Stop recording after this many milliseconds (0 = run until Ctrl+C).
-- `--seconds` (INT:NONNEGATIVE, default `0`) - Stop recording after this many seconds (0 = run until Ctrl+C).
-- `--hud` - Show the overlay HUD while recording or transcribing. Stop ends the take. Default off.
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Destination audio file; extension selects format. .wav = PCM WAV (long recordings keep ~30 s in RAM then spill PCM to disk). .m4a or .aac = AAC-LC via Media Foundation (Windows only; 48 kHz; no full-RAM buffer). Optional when --text-out is set (scratch file used internally). Relative paths are resolved from the current working directory.
+- `--duration,--duration-ms` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Stop recording after this many milliseconds (0 = run until Ctrl+C).
+- `--seconds` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Stop recording after this many seconds (0 = run until Ctrl+C).
+- `--hud` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Show the overlay HUD while recording or transcribing. Stop ends the take. Default off.
 
 **Source**
-- `--input` (TEXT) - Capture device name (case-insensitive substring; use `audio info` to list names). Omit to use the system default input device. Ignored when --input-source desktop is set.
-- `--input-source` (TEXT:{mic,desktop,mix}, default `mic`) - Input source: mic (default), desktop (system loopback), or mix (mic + desktop).
-- `--desktop` (TEXT) - Loopback device name substring for --input-source desktop/mix (empty = default render device). Sets --input-source desktop when --input-source is not explicitly given.
-- `--mic-gain` (FLOAT:NONNEGATIVE, default `1`) - Mic level multiplier (linear; 0 = mute, 1 = unity). Used with --input-source mix.
-- `--desktop-gain` (FLOAT:NONNEGATIVE, default `1`) - Desktop/loopback level multiplier (linear; 0 = mute, 1 = unity). Used with --input-source desktop or mix.
-- `--output` (TEXT) - Playback device name for TTS output during STT→TTS loop (case-insensitive substring). Omit to use the system default output device.
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Capture device name (case-insensitive substring; use `audio info` to list names). Omit to use the system default input device. Ignored when --input-source desktop is set.
+- `--input-source` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">mic</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - Input source: mic (default), desktop (system loopback), or mix (mic + desktop).
+- `--desktop` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Loopback device name substring for --input-source desktop/mix (empty = default render device). Sets --input-source desktop when --input-source is not explicitly given.
+- `--mic-gain` (<span data-cli="meta"><span data-cli="type">FLOAT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Mic level multiplier (linear; 0 = mute, 1 = unity). Used with --input-source mix.
+- `--desktop-gain` (<span data-cli="meta"><span data-cli="type">FLOAT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Desktop/loopback level multiplier (linear; 0 = mute, 1 = unity). Used with --input-source desktop or mix.
+- `--output` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Playback device name for TTS output during STT→TTS loop (case-insensitive substring). Omit to use the system default output device.
 
 **Format**
-- `--sample-rate` (INT:INT in [8000 - 192000], default `0`) - Capture/output sample rate in Hz (default 48000). Common: 44100, 48000, 96000. AAC (.m4a/.aac) on Windows is always encoded at 48000 Hz (resampled when needed).
-- `--channels` (INT:{0,1,2}, default `0`) - Output channels: 1 = mono, 2 = stereo (default 2). Applies to .wav and .m4a/.aac. Ignored for the final file when --filter is set (DeepFilterNet writes 48 kHz mono).
+- `--sample-rate` (<span data-cli="meta"><span data-cli="type">INT:INT in [8000 - 192000]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Capture/output sample rate in Hz (default 48000). Common: 44100, 48000, 96000. AAC (.m4a/.aac) on Windows is always encoded at 48000 Hz (resampled when needed).
+- `--channels` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">0</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">0</span> <span data-cli="choice">1</span> <span data-cli="choice">2</span></span></span>) - Output channels: 1 = mono, 2 = stereo (default 2). Applies to .wav and .m4a/.aac. Ignored for the final file when --filter is set (DeepFilterNet writes 48 kHz mono).
 
 **Filter**
-- `--filter` (TEXT:{deepfilter,dfn,deepfilternet,gtcrn}) - Enhance after capture (same lib as `audio filter`). deepfilter = DeepFilterNet @ 48 kHz mono WAV. gtcrn = reserved. Omit to keep the dry recording. Not applied on the capture callback.
-- `--filter-model` (TEXT) - DeepFilterNet tar.gz. Default: ${MODELS_DIR}/deepfilter/DeepFilterNet3_onnx.tar.gz. Use this instead of --model (that flag is STT).
-- `--atten` (FLOAT:FLOAT in [0 - 100], default `100`) - Attenuation limit in dB (in-process libDF only). Default: 100.
-- `--post-filter,--pf` - Over-attenuate very noisy sections. Implies --filter deepfilter.
-- `--no-delay` - Do not compensate STFT / model lookahead. Implies --filter deepfilter.
+- `--filter` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">deepfilter</span> <span data-cli="choice">dfn</span> <span data-cli="choice">deepfilternet</span> <span data-cli="choice">gtcrn</span></span></span>) - Enhance after capture (same lib as `audio filter`). deepfilter = DeepFilterNet @ 48 kHz mono WAV. gtcrn = reserved. Omit to keep the dry recording. Not applied on the capture callback.
+- `--filter-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - DeepFilterNet tar.gz. Default: ${MODELS_DIR}/deepfilter/DeepFilterNet3_onnx.tar.gz. Use this instead of --model (that flag is STT).
+- `--atten` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 100]</span></span>) - Attenuation limit in dB (in-process libDF only). Default: 100.
+- `--post-filter,--pf` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Over-attenuate very noisy sections. Implies --filter deepfilter.
+- `--no-delay` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not compensate STFT / model lookahead. Implies --filter deepfilter.
 
 **Bluetooth**
-- `--connect` (TEXT) - Connect a paired Bluetooth audio device by address or fuzzy name before recording. If --input is omitted, this value is also used as the capture device selector.
-- `--connect-timeout-ms` (INT:POSITIVE, default `30000`) - Maximum ms to wait for --connect device to become ready (default 30000 = 30 s). Increase for AV receivers or devices that take a long time to boot from standby.
-- `--connect-delay-ms,--delay` (INT:NONNEGATIVE, default `0`) - Extra delay (ms) after --connect succeeds, before recording starts. Useful when the BT device needs time to switch inputs or unmute (default 0).
+- `--connect` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Connect a paired Bluetooth audio device by address or fuzzy name before recording. If --input is omitted, this value is also used as the capture device selector.
+- `--connect-timeout-ms` (<span data-cli="meta"><span data-cli="type">INT:POSITIVE</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - Maximum ms to wait for --connect device to become ready (default 30000 = 30 s). Increase for AV receivers or devices that take a long time to boot from standby.
+- `--connect-delay-ms,--delay` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Extra delay (ms) after --connect succeeds, before recording starts. Useful when the BT device needs time to switch inputs or unmute (default 0).
 
 **STT**
-- `--stt` - Enable speech-to-text alongside recording (live ElevenLabs or batch Whisper). Implied by --text-out, --subtitle-format, --provider, or --model. Without STT flags, --dst records audio only (.wav or .m4a/.aac by extension). Batch Whisper with .m4a uses a temporary WAV for transcription.
-- `--provider` (TEXT:{elevenlabs,tanit,whisper}) - STT provider. Implies transcription when no --dst/--text-out is set. Currently supported: elevenlabs (Scribe v2 Realtime), pixlwiz (Whisper batch), whisper (local whisper.cpp, offline). Defaults to chat.stt_provider from app settings.
-- `--model` (TEXT) - STT model override. For --provider whisper this may be a ggml model path, for example ${MODELS_DIR}/ggml-base.en.bin. Defaults to Chat Provider voice model settings.
-- `--api-key` (TEXT) - API key for the selected STT provider (--provider elevenlabs → xi-api-key). Also used as the TTS key when --voice-id is set. Falls back to the provider entry in App Settings when omitted.
-- `--from-wav` (TEXT:FILE) - Transcribe an existing WAV file instead of capturing from the mic (batch providers only: whisper local / pixlwiz). Implies --stt. Prints the transcript and exits; combine with --text-out / --subtitle-format to write files.
-- `--silence-ms` (INT, default `1500`) - Auto-commit STT utterance after this many milliseconds of silence (0 = disabled; requires --stt or --text-out; default: 1500).
-- `--text-out` (TEXT) - Write the full STT transcript to this file (UTF-8 text). Enables STT automatically. --dst is optional. Relative paths are resolved from the current working directory.
-- `--subtitle-format` (TEXT:{none,off,srt,vtt,sbv,all,on}, default `none`) - Write YouTube-accepted subtitle sidecar(s) next to --dst (or --subtitle-path). none (default) | srt | vtt | sbv | all. Implies --stt.
-- `--subtitle-path` (TEXT) - Sidecar stem. Default: empty → next to --dst, --from-wav, or --text-out.
-- `--subtitle-max-chars` (INT:INT in [8 - 120], default `42`) - Cue wrap width (default 42).
-- `--subtitle-max-lines` (INT:INT in [1 - 4], default `2`) - Cue wrap line count (default 2).
+- `--stt` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable speech-to-text alongside recording (live ElevenLabs or batch Whisper). Implied by --text-out, --subtitle-format, --provider, or --model. Without STT flags, --dst records audio only (.wav or .m4a/.aac by extension). Batch Whisper with .m4a uses a temporary WAV for transcription.
+- `--provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">whisper</span></span></span>) - STT provider. Implies transcription when no --dst/--text-out is set. Currently supported: elevenlabs (Scribe v2 Realtime), pixlwiz (Whisper batch), whisper (local whisper.cpp, offline). Defaults to chat.stt_provider from app settings.
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - STT model override. For --provider whisper this may be a ggml model path, for example ${MODELS_DIR}/ggml-base.en.bin. Defaults to Chat Provider voice model settings.
+- `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key for the selected STT provider (--provider elevenlabs → xi-api-key). Also used as the TTS key when --voice-id is set. Falls back to the provider entry in App Settings when omitted.
+- `--from-wav` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span></span>) - Transcribe an existing WAV file instead of capturing from the mic (batch providers only: whisper local / pixlwiz). Implies --stt. Prints the transcript and exits; combine with --text-out / --subtitle-format to write files.
+- `--silence-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">1500</span></span></span>) - Auto-commit STT utterance after this many milliseconds of silence (0 = disabled; requires --stt or --text-out; default: 1500).
+- `--text-out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write the full STT transcript to this file (UTF-8 text). Enables STT automatically. --dst is optional. Relative paths are resolved from the current working directory.
+- `--subtitle-format` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">none</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">none</span> <span data-cli="choice">off</span> <span data-cli="choice">srt</span> <span data-cli="choice">vtt</span> <span data-cli="choice">sbv</span> <span data-cli="choice">all</span> <span data-cli="choice">on</span></span></span>) - Write YouTube-accepted subtitle sidecar(s) next to --dst (or --subtitle-path). none (default) | srt | vtt | sbv | all. Implies --stt.
+- `--subtitle-path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sidecar stem. Default: empty → next to --dst, --from-wav, or --text-out.
+- `--subtitle-max-chars` (<span data-cli="meta"><span data-cli="type">INT:INT in [8 - 120]</span>, <span data-cli="default">default <span data-cli="value">42</span></span></span>) - Cue wrap width (default 42).
+- `--subtitle-max-lines` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 4]</span>, <span data-cli="default">default <span data-cli="value">2</span></span></span>) - Cue wrap line count (default 2).
 
 **Whisper**
-- `--backend` (TEXT:{cpu,gpu}, default `cpu`) - Local whisper.cpp only: inference backend policy, cpu or gpu. Default: cpu.
-- `--gpu-device` (INT:NONNEGATIVE, default `0`) - Local whisper.cpp only: GPU device index, only meaningful with --backend gpu.
-- `--flash-attn` (TEXT:{auto,on,off}, default `auto`) - Local whisper.cpp only: flash attention policy, auto/on/off. Default: auto.
-- `--threads` (INT:NONNEGATIVE, default `0`) - Local whisper.cpp only: CPU thread count (0 = auto, capped by the wrapper).
-- `--language` (TEXT, default `auto`) - Local whisper.cpp only: language code such as en or de, or auto. Default: auto.
+- `--backend` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">cpu</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">cpu</span> <span data-cli="choice">gpu</span></span></span>) - Local whisper.cpp only: inference backend policy, cpu or gpu. Default: cpu.
+- `--gpu-device` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Local whisper.cpp only: GPU device index, only meaningful with --backend gpu.
+- `--flash-attn` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">on</span> <span data-cli="choice">off</span></span></span>) - Local whisper.cpp only: flash attention policy, auto/on/off. Default: auto.
+- `--threads` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Local whisper.cpp only: CPU thread count (0 = auto, capped by the wrapper).
+- `--language` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">auto</span></span></span>) - Local whisper.cpp only: language code such as en or de, or auto. Default: auto.
 
 **Live TTS**
-- `--voice-id` (TEXT) - ElevenLabs voice ID for real-time TTS playback. When set, each committed transcript is synthesised and played through the speakers. Requires --stt/--text-out and --provider elevenlabs. Browse voices at elevenlabs.io/app/voice-library.
-- `--model-id` (TEXT, default `eleven_v3`) - ElevenLabs TTS model used with --voice-id (default: eleven_v3).
+- `--voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ElevenLabs voice ID for real-time TTS playback. When set, each committed transcript is synthesised and played through the speakers. Requires --stt/--text-out and --provider elevenlabs. Browse voices at elevenlabs.io/app/voice-library.
+- `--model-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">eleven_v3</span></span></span>) - ElevenLabs TTS model used with --voice-id (default: eleven_v3).
 
 **Example**
 
@@ -3250,14 +3259,14 @@ Play an audio file through the default output device. Supports MP3, WAV, FLAC vi
 Options:
 
 **Playback**
-- `path` (TEXT, required) - Path to the audio file. Relative paths are resolved from the current working directory.
-- `--wait` - Block until playback finishes (normally async). Ctrl+C aborts playback.
-- `--output` (TEXT) - Playback device name (case-insensitive substring; use `audio info` to list names). Omit to use the system default output device.
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to the audio file. Relative paths are resolved from the current working directory.
+- `--wait` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Block until playback finishes (normally async). Ctrl+C aborts playback.
+- `--output` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Playback device name (case-insensitive substring; use `audio info` to list names). Omit to use the system default output device.
 
 **Bluetooth**
-- `--connect` (TEXT) - Connect a paired Bluetooth audio device by address or fuzzy name before playback. When --output is omitted, playback uses the newly connected default endpoint.
-- `--connect-timeout-ms` (INT:POSITIVE, default `30000`) - Maximum ms to wait for --connect device to become ready (default 30000 = 30 s).
-- `--connect-delay-ms,--delay` (INT:NONNEGATIVE, default `0`) - Extra delay (ms) after --connect succeeds, before playback starts. Useful for AV receivers that need time to switch inputs or unmute (default 0).
+- `--connect` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Connect a paired Bluetooth audio device by address or fuzzy name before playback. When --output is omitted, playback uses the newly connected default endpoint.
+- `--connect-timeout-ms` (<span data-cli="meta"><span data-cli="type">INT:POSITIVE</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - Maximum ms to wait for --connect device to become ready (default 30000 = 30 s).
+- `--connect-delay-ms,--delay` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Extra delay (ms) after --connect succeeds, before playback starts. Useful for AV receivers that need time to switch inputs or unmute (default 0).
 
 **Example**
 
@@ -3280,17 +3289,17 @@ Enhance a recorded audio file. Default: DeepFilterNet at 48 kHz (same lib as xbl
 Options:
 
 **Input**
-- `source,--input` (TEXT:FILE, required) - Source audio file (wav, mp3, flac, …). Decoded and resampled to 48 kHz mono.
+- `source,--input` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Source audio file (wav, mp3, flac, …). Decoded and resampled to 48 kHz mono.
 
 **Output**
-- `--dst` (TEXT, required) - Destination WAV (48 kHz mono s16le).
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Destination WAV (48 kHz mono s16le).
 
 **Filter**
-- `--filter` (TEXT:{deepfilter,dfn,deepfilternet,gtcrn}, default `deepfilter`) - Enhancer: deepfilter (DeepFilterNet, default) or gtcrn (reserved).
-- `--model` (TEXT) - DeepFilterNet tar.gz. Default: ${MODELS_DIR}/deepfilter/DeepFilterNet3_onnx.tar.gz (same catalog as embeddings; `hg download deepfilternet3` / `hg download gtcrn`).
-- `--atten` (FLOAT:FLOAT in [0 - 100], default `100`) - Attenuation limit in dB (in-process libDF only). Default: 100.
-- `--post-filter,--pf` - Over-attenuate very noisy sections.
-- `--no-delay` - Do not compensate STFT / model lookahead.
+- `--filter` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">deepfilter</span> <span data-cli="choice">dfn</span> <span data-cli="choice">deepfilternet</span> <span data-cli="choice">gtcrn</span></span></span>) - Enhancer: deepfilter (DeepFilterNet, default) or gtcrn (reserved).
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - DeepFilterNet tar.gz. Default: ${MODELS_DIR}/deepfilter/DeepFilterNet3_onnx.tar.gz (same catalog as embeddings; `hg download deepfilternet3` / `hg download gtcrn`).
+- `--atten` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 100]</span></span>) - Attenuation limit in dB (in-process libDF only). Default: 100.
+- `--post-filter,--pf` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Over-attenuate very noisy sections.
+- `--no-delay` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not compensate STFT / model lookahead.
 
 **Example**
 
@@ -3313,34 +3322,34 @@ Transform speech into an ElevenLabs voice while preserving timing, emotion, and 
 Options:
 
 **Input**
-- `source` (TEXT:FILE, required) - Source audio file. Encoded audio is accepted by default; use --input-format pcm_s16le_16 for raw 16 kHz mono signed 16-bit little-endian PCM.
-- `--input-format` (TEXT:{other,pcm_s16le_16}, default `other`) - Input encoding hint: other (encoded audio) or pcm_s16le_16 (raw PCM).
+- `source` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Source audio file. Encoded audio is accepted by default; use --input-format pcm_s16le_16 for raw 16 kHz mono signed 16-bit little-endian PCM.
+- `--input-format` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">other</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">other</span> <span data-cli="choice">pcm_s16le_16</span></span></span>) - Input encoding hint: other (encoded audio) or pcm_s16le_16 (raw PCM).
 
 **Output**
-- `--dst` (TEXT, required) - Destination audio file. .mp3, .wav, and .opus select a matching default --format.
-- `--format` (TEXT) - ElevenLabs output format, for example mp3_44100_128, wav_44100, or opus_48000_128. Defaults from --dst extension.
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Destination audio file. .mp3, .wav, and .opus select a matching default --format.
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ElevenLabs output format, for example mp3_44100_128, wav_44100, or opus_48000_128. Defaults from --dst extension.
 
 **Voice**
-- `--voice-id` (TEXT) - Target ElevenLabs voice ID. Defaults to the configured TTS voice.
-- `--model-id` (TEXT, default `eleven_multilingual_sts_v2`) - Speech-to-speech model ID.
+- `--voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target ElevenLabs voice ID. Defaults to the configured TTS voice.
+- `--model-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">eleven_multilingual_sts_v2</span></span></span>) - Speech-to-speech model ID.
 
 **Auth**
-- `--api-key` (TEXT) - ElevenLabs API key. Falls back to the configured ElevenLabs provider, then ELEVENLABS_API_KEY.
-- `--base-url` (TEXT) - ElevenLabs API origin for regional residency, without /v1 (default: https://api.elevenlabs.io).
+- `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ElevenLabs API key. Falls back to the configured ElevenLabs provider, then ELEVENLABS_API_KEY.
+- `--base-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ElevenLabs API origin for regional residency, without /v1 (default: https://api.elevenlabs.io).
 
 **Voice Settings**
-- `--voice-settings` (TEXT) - Advanced JSON object overriding target voice settings. Individual flags below override matching JSON fields.
-- `--stability` (FLOAT:FLOAT in [0 - 1], default `-1`) - Voice stability from 0 to 1. Lower is more expressive; higher is more consistent.
-- `--similarity-boost` (FLOAT:FLOAT in [0 - 1], default `-1`) - Target-voice similarity from 0 to 1.
-- `--style` (FLOAT:FLOAT in [0 - 1], default `-1`) - Style exaggeration from 0 to 1.
-- `--speaker-boost` - Enable ElevenLabs speaker boost for stronger target-voice similarity.
-- `--no-speaker-boost` - Explicitly disable ElevenLabs speaker boost.
+- `--voice-settings` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Advanced JSON object overriding target voice settings. Individual flags below override matching JSON fields.
+- `--stability` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span></span>) - Voice stability from 0 to 1. Lower is more expressive; higher is more consistent.
+- `--similarity-boost` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span></span>) - Target-voice similarity from 0 to 1.
+- `--style` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span></span>) - Style exaggeration from 0 to 1.
+- `--speaker-boost` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable ElevenLabs speaker boost for stronger target-voice similarity.
+- `--no-speaker-boost` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Explicitly disable ElevenLabs speaker boost.
 
 **Advanced**
-- `--seed` (INT:INT in [0 - 4294967295], default `-1`) - Best-effort deterministic seed (0..4294967295).
-- `--optimize-streaming-latency` (INT:INT in [0 - 4], default `0`) - ElevenLabs latency optimisation level (0..4).
-- `--remove-background-noise` - Remove background noise from the source using ElevenLabs Audio Isolation.
-- `--zero-retention` - Send enable_logging=false. ElevenLabs restricts zero-retention mode to eligible enterprise accounts.
+- `--seed` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 4294967295]</span></span>) - Best-effort deterministic seed (0..4294967295).
+- `--optimize-streaming-latency` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 4]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - ElevenLabs latency optimisation level (0..4).
+- `--remove-background-noise` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Remove background noise from the source using ElevenLabs Audio Isolation.
+- `--zero-retention` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Send enable_logging=false. ElevenLabs restricts zero-retention mode to eligible enterprise accounts.
 
 **Example**
 
@@ -3363,38 +3372,38 @@ Synthesise speech from text using a TTS provider and write audio to a file.
 Options:
 
 **Input**
-- `--text` (TEXT, required) - Text to synthesise, or path to a plain-text file (.txt, .md, …). When the value is an existing readable file it is loaded (binary files rejected). Use quotes for inline multi-word input.
+- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to synthesise, or path to a plain-text file (.txt, .md, …). When the value is an existing readable file it is loaded (binary files rejected). Use quotes for inline multi-word input.
 
 **Output**
-- `--dst` (TEXT) - Destination file (.mp3 / .wav / .opus). Extension determines the default output format when --format is omitted. Omit to play through speakers without saving.
-- `--hud` - Show the overlay HUD while synthesizing and playing. Stop cancels playback. Default off.
-- `--no-play` - Do not play audio through speakers; only save to --dst.
-- `--output` (TEXT) - Playback device name (case-insensitive substring; use `audio info` to list names). Omit to use the system default output device.
-- `--no-stream` - Opt out of the streaming playback path (curl → ring → device). When omitted and --dst is not set, the playback path uses streaming for lowest first-audio latency (mirrors the agent's `do_speak`). Ignored when --dst is set (the file write requires the full buffer).
-- `--format` (TEXT) - Output format override. ElevenLabs: mp3_44100_128, pcm_44100, opus_48000_32. Tanit proxy: mp3, opus, aac, flac. Defaults to mp3_44100_128 for .mp3, pcm_44100 for .wav.
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Destination file (.mp3 / .wav / .opus). Extension determines the default output format when --format is omitted. Omit to play through speakers without saving.
+- `--hud` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Show the overlay HUD while synthesizing and playing. Stop cancels playback. Default off.
+- `--no-play` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not play audio through speakers; only save to --dst.
+- `--output` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Playback device name (case-insensitive substring; use `audio info` to list names). Omit to use the system default output device.
+- `--no-stream` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Opt out of the streaming playback path (curl → ring → device). When omitted and --dst is not set, the playback path uses streaming for lowest first-audio latency (mirrors the agent's `do_speak`). Ignored when --dst is set (the file write requires the full buffer).
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output format override. ElevenLabs: mp3_44100_128, pcm_44100, opus_48000_32. Tanit proxy: mp3, opus, aac, flac. Defaults to mp3_44100_128 for .mp3, pcm_44100 for .wav.
 
 **Bluetooth**
-- `--connect` (TEXT) - Connect a paired Bluetooth audio device by address or fuzzy name before TTS playback. Synthesis is overlapped with the device wake-up so total latency is minimised. Ignored with --no-play.
-- `--connect-timeout-ms` (INT:POSITIVE, default `30000`) - Maximum ms to wait for --connect device to become ready (default 30000 = 30 s).
-- `--connect-delay-ms,--delay` (INT:NONNEGATIVE, default `0`) - Extra delay (ms) after --connect succeeds, before TTS playback starts. Useful for AV receivers that need time to switch inputs or unmute (default 0).
+- `--connect` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Connect a paired Bluetooth audio device by address or fuzzy name before TTS playback. Synthesis is overlapped with the device wake-up so total latency is minimised. Ignored with --no-play.
+- `--connect-timeout-ms` (<span data-cli="meta"><span data-cli="type">INT:POSITIVE</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - Maximum ms to wait for --connect device to become ready (default 30000 = 30 s).
+- `--connect-delay-ms,--delay` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Extra delay (ms) after --connect succeeds, before TTS playback starts. Useful for AV receivers that need time to switch inputs or unmute (default 0).
 
 **Provider**
-- `--provider` (TEXT:{elevenlabs,tanit,vibevoice,moss}) - TTS provider: elevenlabs (direct API), pixlwiz (proxy /audio/speech), vibevoice (local ggml), or moss (local MOSS-TTS-Nano). Defaults to chat.tts_provider from app settings, then elevenlabs.
-- `--tokenizer` (TEXT) - Tokenizer GGUF path for vibevoice or moss. MOSS defaults to models/moss-tts-nano/moss-nano-tokenizer.gguf.
-- `--codec` (TEXT) - MOSS Audio Tokenizer Nano GGUF. Defaults to models/moss-tts-nano/moss-audio-tokenizer-nano.gguf.
-- `--ref-audio` (TEXT) - Reference WAV for local voice cloning (vibevoice 1.5B or MOSS Nano).
-- `--api-key` (TEXT) - API key for the TTS provider. Falls back to ELEVENLABS_API_KEY env var.
-- `--voice-id` (TEXT, default `tLK6fPv15M0oKv4V3ACR`) - Voice ID. For elevenlabs: ElevenLabs voice UUID. For pixlwiz: ElevenLabs voice UUID override (empty = proxy default). Defaults to chat.tts_model from app settings when omitted.
-- `--model-id` (TEXT, default `eleven_v3`) - Model ID. For elevenlabs: eleven_v3, eleven_turbo_v2, etc. For pixlwiz: proxy alias (pixlwiz-speech, pixlwiz-speech-turbo). Defaults to chat.tts_model from app settings when omitted.
+- `--provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">vibevoice</span> <span data-cli="choice">moss</span></span></span>) - TTS provider: elevenlabs (direct API), pixlwiz (proxy /audio/speech), vibevoice (local ggml), or moss (local MOSS-TTS-Nano). Defaults to chat.tts_provider from app settings, then elevenlabs.
+- `--tokenizer` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Tokenizer GGUF path for vibevoice or moss. MOSS defaults to models/moss-tts-nano/moss-nano-tokenizer.gguf.
+- `--codec` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - MOSS Audio Tokenizer Nano GGUF. Defaults to models/moss-tts-nano/moss-audio-tokenizer-nano.gguf.
+- `--ref-audio` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Reference WAV for local voice cloning (vibevoice 1.5B or MOSS Nano).
+- `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key for the TTS provider. Falls back to ELEVENLABS_API_KEY env var.
+- `--voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">tLK6fPv15M0oKv4V3ACR</span></span></span>) - Voice ID. For elevenlabs: ElevenLabs voice UUID. For pixlwiz: ElevenLabs voice UUID override (empty = proxy default). Defaults to chat.tts_model from app settings when omitted.
+- `--model-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">eleven_v3</span></span></span>) - Model ID. For elevenlabs: eleven_v3, eleven_turbo_v2, etc. For pixlwiz: proxy alias (pixlwiz-speech, pixlwiz-speech-turbo). Defaults to chat.tts_model from app settings when omitted.
 
 **Voice Settings**
-- `--no-voice-settings` - Do not send explicit ElevenLabs voice_settings (use voice defaults).
-- `--no-chunk` - Disable sentence chunking + request stitching for long ElevenLabs inputs.
-- `--chunk-target-chars` (INT:INT in [100 - 800], default `400`) - Greedy-merge sentences up to this many chars per ElevenLabs request (default 400; range 100–800).
-- `--chunk-max-chars` (INT:INT in [200 - 2000], default `800`) - Hard-split a single sentence beyond this length (default 800; range 200–2000).
-- `--stability` (FLOAT:FLOAT in [0 - 1], default `0.9`) - ElevenLabs voice_settings.stability (0–1, default 0.9). Higher reduces drift on long inputs.
-- `--similarity-boost` (FLOAT:FLOAT in [0 - 1], default `0.75`) - ElevenLabs voice_settings.similarity_boost (0–1, default 0.75).
-- `--style` (FLOAT:FLOAT in [0 - 1], default `0`) - ElevenLabs voice_settings.style (0–1, default 0). Non-zero style can cause inconsistent speed and added sounds.
+- `--no-voice-settings` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not send explicit ElevenLabs voice_settings (use voice defaults).
+- `--no-chunk` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable sentence chunking + request stitching for long ElevenLabs inputs.
+- `--chunk-target-chars` (<span data-cli="meta"><span data-cli="type">INT:INT in [100 - 800]</span>, <span data-cli="default">default <span data-cli="value">400</span></span></span>) - Greedy-merge sentences up to this many chars per ElevenLabs request (default 400; range 100–800).
+- `--chunk-max-chars` (<span data-cli="meta"><span data-cli="type">INT:INT in [200 - 2000]</span>, <span data-cli="default">default <span data-cli="value">800</span></span></span>) - Hard-split a single sentence beyond this length (default 800; range 200–2000).
+- `--stability` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0.9</span></span></span>) - ElevenLabs voice_settings.stability (0–1, default 0.9). Higher reduces drift on long inputs.
+- `--similarity-boost` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0.75</span></span></span>) - ElevenLabs voice_settings.similarity_boost (0–1, default 0.75).
+- `--style` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - ElevenLabs voice_settings.style (0–1, default 0). Non-zero style can cause inconsistent speed and added sounds.
 
 **Example**
 
@@ -3567,18 +3576,18 @@ Place scripted TTS from an SRT/VTT/JSON script onto a 48 kHz PCM timeline.
 
 Options:
 
-- `--srt` (TEXT, required) - SRT, VTT, or JSON cues file.
-- `--dst` (TEXT, required) - Output 48 kHz mono WAV.
-- `--provider` (TEXT) - TTS provider override.
-- `--api-key` (TEXT) - API key override.
-- `--voice-id` (TEXT) - Voice id override.
-- `--model-id` (TEXT) - Model id override.
-- `--overflow` (TEXT:{resolve,truncate}, default `resolve`) - resolve (default) or truncate.
-- `--speed` (FLOAT:FLOAT in [0.7 - 1.2], default `1`) - Initial ElevenLabs speed (0.7–1.2).
-- `--max-stretch-pct` (FLOAT:FLOAT in [0 - 25], default `12`) - Max DSP compress percent before speed regen.
-- `--min-gap-ms` (INT, default `80`) - Minimum inter-utterance gap.
-- `--seed` (INT, default `-1`) - Best-effort seed (-1 = derived).
-- `--cache-dir` (TEXT) - Take cache directory.
+- `--srt` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - SRT, VTT, or JSON cues file.
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Output 48 kHz mono WAV.
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - TTS provider override.
+- `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key override.
+- `--voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Voice id override.
+- `--model-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model id override.
+- `--overflow` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">resolve</span> <span data-cli="choice">truncate</span></span></span>) - resolve (default) or truncate.
+- `--speed` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0.7 - 1.2]</span></span>) - Initial ElevenLabs speed (0.7–1.2).
+- `--max-stretch-pct` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 25]</span></span>) - Max DSP compress percent before speed regen.
+- `--min-gap-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Minimum inter-utterance gap.
+- `--seed` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Best-effort seed (-1 = derived).
+- `--cache-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Take cache directory.
 
 **Example**
 
@@ -3614,26 +3623,26 @@ Listen for a wake-prefixed command.
 
 Options:
 
-- `--route` (TEXT:{trigger,agent}, default `trigger`) - Route: trigger emits a mapping envelope; agent starts realtime voice.
-- `--wake-phrase` (TEXT) - Spoken prefix. Empty = no prefix; the whole utterance is the command.
-- `--filter` (TEXT:{auto,off,deepfilter,gtcrn}, default `auto`) - Utterance enhancement: auto, off, deepfilter, or gtcrn.
-- `--filter-model` (TEXT) - Enhancement model override.
-- `--post-filter` - DeepFilterNet aggressive post-filter for very noisy audio.
-- `--filter-blend` (FLOAT:FLOAT in [0 - 1], default `1`) - Wet/dry mix for utterance enhancement: 0 = original, 1 = full filter. Default: 1.
-- `--provider` (TEXT:{whisper,tanit,pixlwiz,elevenlabs}) - STT provider: whisper, tanit/pixlwiz, or elevenlabs.
-- `--model` (TEXT) - STT model override.
-- `--language` (TEXT, default `auto`) - Whisper language: auto, ISO code (de), or name (german).
-- `--backend` (TEXT:{cpu,gpu}, default `gpu`) - Local whisper.cpp only: cpu or gpu. Default: gpu (falls back to cpu).
-- `--gpu-device` (INT, default `0`) - Local whisper.cpp only: GPU device index (with --backend gpu).
-- `--flash-attn` (TEXT:{auto,on,off}, default `auto`) - Local whisper.cpp only: flash attention auto, on, or off.
-- `--threads` (INT, default `0`) - Local whisper.cpp only: CPU threads; 0 = auto.
-- `--jsonl,--json` - Emit versioned envelopes on stdout (JSONL). Heard speech always prints to stderr.
-- `--input-source` (TEXT:{mic,desktop,mix}, default `mic`) - mic, desktop, or mix.
-- `--input` (TEXT) - Microphone device substring.
-- `--desktop` (TEXT) - Desktop loopback device substring.
-- `--mic-gain` (FLOAT:NONNEGATIVE, default `1`) - Microphone gain.
-- `--desktop-gain` (FLOAT:NONNEGATIVE, default `1`) - Desktop gain.
-- `--duration-ms` (INT:NONNEGATIVE, default `0`) - Optional bounded listen duration; 0 runs until stopped.
+- `--route` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">trigger</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trigger</span> <span data-cli="choice">agent</span></span></span>) - Route: trigger emits a mapping envelope; agent starts realtime voice.
+- `--wake-phrase` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Spoken prefix. Empty = no prefix; the whole utterance is the command.
+- `--filter` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">off</span> <span data-cli="choice">deepfilter</span> <span data-cli="choice">gtcrn</span></span></span>) - Utterance enhancement: auto, off, deepfilter, or gtcrn.
+- `--filter-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Enhancement model override.
+- `--post-filter` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - DeepFilterNet aggressive post-filter for very noisy audio.
+- `--filter-blend` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Wet/dry mix for utterance enhancement: 0 = original, 1 = full filter. Default: 1.
+- `--provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">whisper</span> <span data-cli="choice">tanit</span> <span data-cli="choice">pixlwiz</span> <span data-cli="choice">elevenlabs</span></span></span>) - STT provider: whisper, tanit/pixlwiz, or elevenlabs.
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - STT model override.
+- `--language` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">auto</span></span></span>) - Whisper language: auto, ISO code (de), or name (german).
+- `--backend` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">gpu</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">cpu</span> <span data-cli="choice">gpu</span></span></span>) - Local whisper.cpp only: cpu or gpu. Default: gpu (falls back to cpu).
+- `--gpu-device` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Local whisper.cpp only: GPU device index (with --backend gpu).
+- `--flash-attn` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">on</span> <span data-cli="choice">off</span></span></span>) - Local whisper.cpp only: flash attention auto, on, or off.
+- `--threads` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Local whisper.cpp only: CPU threads; 0 = auto.
+- `--jsonl,--json` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Emit versioned envelopes on stdout (JSONL). Heard speech always prints to stderr.
+- `--input-source` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">mic</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - mic, desktop, or mix.
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Microphone device substring.
+- `--desktop` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Desktop loopback device substring.
+- `--mic-gain` (<span data-cli="meta"><span data-cli="type">FLOAT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Microphone gain.
+- `--desktop-gain` (<span data-cli="meta"><span data-cli="type">FLOAT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Desktop gain.
+- `--duration-ms` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Optional bounded listen duration; 0 runs until stopped.
 
 **Example**
 
@@ -3655,22 +3664,22 @@ Run a WAV or injected transcript through wake/intent routing.
 
 Options:
 
-- `--route` (TEXT:{trigger,agent}, default `trigger`) - Route: trigger emits a mapping envelope; agent starts realtime voice.
-- `--wake-phrase` (TEXT) - Spoken prefix. Empty = no prefix; the whole utterance is the command.
-- `--filter` (TEXT:{auto,off,deepfilter,gtcrn}, default `auto`) - Utterance enhancement: auto, off, deepfilter, or gtcrn.
-- `--filter-model` (TEXT) - Enhancement model override.
-- `--post-filter` - DeepFilterNet aggressive post-filter for very noisy audio.
-- `--filter-blend` (FLOAT:FLOAT in [0 - 1], default `1`) - Wet/dry mix for utterance enhancement: 0 = original, 1 = full filter. Default: 1.
-- `--provider` (TEXT:{whisper,tanit,pixlwiz,elevenlabs}) - STT provider: whisper, tanit/pixlwiz, or elevenlabs.
-- `--model` (TEXT) - STT model override.
-- `--language` (TEXT, default `auto`) - Whisper language: auto, ISO code (de), or name (german).
-- `--backend` (TEXT:{cpu,gpu}, default `gpu`) - Local whisper.cpp only: cpu or gpu. Default: gpu (falls back to cpu).
-- `--gpu-device` (INT, default `0`) - Local whisper.cpp only: GPU device index (with --backend gpu).
-- `--flash-attn` (TEXT:{auto,on,off}, default `auto`) - Local whisper.cpp only: flash attention auto, on, or off.
-- `--threads` (INT, default `0`) - Local whisper.cpp only: CPU threads; 0 = auto.
-- `--jsonl,--json` - Emit versioned envelopes on stdout (JSONL). Heard speech always prints to stderr.
-- `path` (TEXT:FILE) - Input audio file (WAV, MP3, or other decodeable).
-- `--text` (TEXT) - Deterministic transcript injection (does not require STT/model).
+- `--route` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">trigger</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trigger</span> <span data-cli="choice">agent</span></span></span>) - Route: trigger emits a mapping envelope; agent starts realtime voice.
+- `--wake-phrase` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Spoken prefix. Empty = no prefix; the whole utterance is the command.
+- `--filter` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">off</span> <span data-cli="choice">deepfilter</span> <span data-cli="choice">gtcrn</span></span></span>) - Utterance enhancement: auto, off, deepfilter, or gtcrn.
+- `--filter-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Enhancement model override.
+- `--post-filter` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - DeepFilterNet aggressive post-filter for very noisy audio.
+- `--filter-blend` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Wet/dry mix for utterance enhancement: 0 = original, 1 = full filter. Default: 1.
+- `--provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">whisper</span> <span data-cli="choice">tanit</span> <span data-cli="choice">pixlwiz</span> <span data-cli="choice">elevenlabs</span></span></span>) - STT provider: whisper, tanit/pixlwiz, or elevenlabs.
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - STT model override.
+- `--language` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">auto</span></span></span>) - Whisper language: auto, ISO code (de), or name (german).
+- `--backend` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">gpu</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">cpu</span> <span data-cli="choice">gpu</span></span></span>) - Local whisper.cpp only: cpu or gpu. Default: gpu (falls back to cpu).
+- `--gpu-device` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Local whisper.cpp only: GPU device index (with --backend gpu).
+- `--flash-attn` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">on</span> <span data-cli="choice">off</span></span></span>) - Local whisper.cpp only: flash attention auto, on, or off.
+- `--threads` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Local whisper.cpp only: CPU threads; 0 = auto.
+- `--jsonl,--json` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Emit versioned envelopes on stdout (JSONL). Heard speech always prints to stderr.
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span></span>) - Input audio file (WAV, MP3, or other decodeable).
+- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Deterministic transcript injection (does not require STT/model).
 
 **Example**
 
@@ -3731,30 +3740,30 @@ AI text-to-video / image-to-video (Tanit LiteLLM /v1/videos, or Replicate).
 Options:
 
 **Output**
-- `output` (TEXT) - Output path (omit = video_<slug>.mp4 in the implicit output folder)
+- `output` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output path (omit = video_<slug>.mp4 in the implicit output folder)
 
 **Prompt**
-- `-p,--prompt` (TEXT, required) - Generation prompt
+- `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Generation prompt
 
 **Provider**
-- `--provider` (TEXT) - AI provider (tanit, replicate); omit = from --preset / app Chat video_provider
-- `--model` (TEXT) - Model id (video-fast, video-deep, or a Replicate slug); omit = from --preset / app Chat video_model
-- `--preset` (TEXT) - Chat settings preset name or id; loads that preset's video_provider/video_model. explicit --provider/--model override
-- `--api-key` (TEXT) - API key (optional; default from app provider settings)
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - AI provider (tanit, replicate); omit = from --preset / app Chat video_provider
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model id (video-fast, video-deep, or a Replicate slug); omit = from --preset / app Chat video_model
+- `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id; loads that preset's video_provider/video_model. explicit --provider/--model override
+- `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key (optional; default from app provider settings)
 
 **Clip**
-- `--duration` (INT, default `0`) - Seconds (Veo: 4 / 6 / 8). 0 = model default (4 fast / 8 deep)
-- `--resolution` (TEXT, default `720p`) - 720p, 1080p, or 4K (deep only)
-- `--aspect-ratio` (TEXT, default `16:9`) - 16:9 or 9:16
-- `--generate-audio` - Request native audio (higher cost)
+- `--duration` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Seconds (Veo: 4 / 6 / 8). 0 = model default (4 fast / 8 deep)
+- `--resolution` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">720p</span></span></span>) - 720p, 1080p, or 4K (deep only)
+- `--aspect-ratio` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">16:9</span></span></span>) - 16:9 or 9:16
+- `--generate-audio` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Request native audio (higher cost)
 
 **Source**
-- `--src` (TEXT, default `{}`) - Input still (repeatable: first = start frame, second = end frame). Do not mix with --start-frame/--last-frame.
-- `--start-frame,--image` (TEXT) - Start-frame still (alias of a single --src). --image is a legacy alias.
-- `--last-frame` (TEXT) - Last-frame still
+- `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Input still (repeatable: first = start frame, second = end frame). Do not mix with --start-frame/--last-frame.
+- `--start-frame,--image` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Start-frame still (alias of a single --src). --image is a legacy alias.
+- `--last-frame` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Last-frame still
 
 **References**
-- `-r,--reference` (TEXT, default `{}`) - Style / brand reference image (not a keyframe). Repeat as needed. Sent as OpenRouter input_references.
+- `-r,--reference` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Style / brand reference image (not a keyframe). Repeat as needed. Sent as OpenRouter input_references.
 
 **Example**
 
@@ -3899,9 +3908,9 @@ List capture sources usable by `video image` / `video record` / `video detect`: 
 
 Options:
 
-- `-m,--modes` - Enumerate supported capture modes (resolution, fps, format) for each device.
-- `-s,--screens` - List ONLY display monitors and visible application windows (capture devices are also shown without this flag). Use the printed spec as --input for both `video record` and `video detect` (e.g. screen:0:wintitle=Notepad*).
-- `--input` (TEXT) - Filter to a specific device (case-insensitive substring match on name). With --modes, enumerate modes for this device only.
+- `-m,--modes` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enumerate supported capture modes (resolution, fps, format) for each device.
+- `-s,--screens` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List ONLY display monitors and visible application windows (capture devices are also shown without this flag). Use the printed spec as --input for both `video record` and `video detect` (e.g. screen:0:wintitle=Notepad*).
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Filter to a specific device (case-insensitive substring match on name). With --modes, enumerate modes for this device only.
 
 **Example**
 
@@ -3923,11 +3932,11 @@ Capture a single still frame from a webcam and save it as an image file.
 
 Options:
 
-- `--dst` (TEXT, required) - Destination image file (.jpg / .jpeg / .png / .bmp). Relative paths are resolved from the current working directory.
-- `--input` (TEXT) - Capture source: webcam name (case-insensitive substring) OR a screen spec "screen:N" / "screen:0:wintitle=GLOB" to grab a monitor or app window (Win32). Omit to use the first/default device. Run `video info` to list devices, screens, and applications.
-- `--mode` (INT, default `-1`) - Mode index from `video info --modes` (0-based). Overrides --width/--height when set.
-- `--width` (INT, default `0`) - Preferred capture width in pixels (0 = device default).
-- `--height` (INT, default `0`) - Preferred capture height in pixels (0 = device default).
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Destination image file (.jpg / .jpeg / .png / .bmp). Relative paths are resolved from the current working directory.
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Capture source: webcam name (case-insensitive substring) OR a screen spec "screen:N" / "screen:0:wintitle=GLOB" to grab a monitor or app window (Win32). Omit to use the first/default device. Run `video info` to list devices, screens, and applications.
+- `--mode` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">-1</span></span></span>) - Mode index from `video info --modes` (0-based). Overrides --width/--height when set.
+- `--width` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Preferred capture width in pixels (0 = device default).
+- `--height` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Preferred capture height in pixels (0 = device default).
 
 **Example**
 
@@ -3950,140 +3959,140 @@ Record video from a webcam OR a screen/window. Windows .mp4 uses H.264 + optiona
 Options:
 
 **Output**
-- `--dst` (TEXT) - Destination file (.avi MJPEG, or .mp4/.mov H.264). Relative paths are resolved from the current working directory.
-- `--duration-ms` (INT:NONNEGATIVE, default `0`) - Stop recording after this many milliseconds (0 = run until Ctrl+C).
-- `--quality` (INT:INT bounded to [1 - 100], default `85`) - JPEG quality for MJPEG frames (1-100; default: 85).
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Destination file (.avi MJPEG, or .mp4/.mov H.264). Relative paths are resolved from the current working directory.
+- `--duration-ms` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Stop recording after this many milliseconds (0 = run until Ctrl+C).
+- `--quality` (<span data-cli="meta"><span data-cli="type">INT:INT bounded to [1 - 100]</span>, <span data-cli="default">default <span data-cli="value">85</span></span></span>) - JPEG quality for MJPEG frames (1-100; default: 85).
 
 **Source**
-- `--input` (TEXT) - Capture source: webcam name (case-insensitive substring) OR a screen spec "screen:N" / "screen:0:wintitle=GLOB" to record a monitor or app window (Win32, same grammar as `video detect`). Omit to use the first/default device. Run `video info` to list devices, screens, and applications.
-- `--mode` (INT, default `-1`) - Mode index from `video info --modes` (0-based). Overrides --width/--height/--fps when set.
-- `--width` (INT, default `0`) - Preferred capture width in pixels (0 = device default).
-- `--height` (INT, default `0`) - Preferred capture height in pixels (0 = device default).
-- `--fps` (INT:POSITIVE, default `30`) - Frame rate for capture and AVI header (default: 30).
-- `--preview` - Live window at the captured frame size (same pixels as --width/--height/--mode; scaled down only if it will not fit the screen). Close the window to stop.
-- `--capture-engine` (TEXT:{auto,fast,compat}, default `auto`) - Screen/window backend: auto prefers fast Windows Graphics Capture, fast requires it, compat uses the frame-pump recorder.
-- `--no-cursor,--cursor{false}` (default `1`) - Exclude the pointer from screen/window capture.
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Capture source: webcam name (case-insensitive substring) OR a screen spec "screen:N" / "screen:0:wintitle=GLOB" to record a monitor or app window (Win32, same grammar as `video detect`). Omit to use the first/default device. Run `video info` to list devices, screens, and applications.
+- `--mode` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">-1</span></span></span>) - Mode index from `video info --modes` (0-based). Overrides --width/--height/--fps when set.
+- `--width` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Preferred capture width in pixels (0 = device default).
+- `--height` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Preferred capture height in pixels (0 = device default).
+- `--fps` (<span data-cli="meta"><span data-cli="type">INT:POSITIVE</span>, <span data-cli="default">default <span data-cli="value">30</span></span></span>) - Frame rate for capture and AVI header (default: 30).
+- `--preview` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Live window at the captured frame size (same pixels as --width/--height/--mode; scaled down only if it will not fit the screen). Close the window to stop.
+- `--capture-engine` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">fast</span> <span data-cli="choice">compat</span></span></span>) - Screen/window backend: auto prefers fast Windows Graphics Capture, fast requires it, compat uses the frame-pump recorder.
+- `--no-cursor,--cursor{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Exclude the pointer from screen/window capture.
 
 **Encode**
-- `--encoder` (TEXT:{auto,nvenc,mediaFoundation}, default `auto`) - Fast Windows H.264 encoder: auto tries the optional NVENC plugin then Media Foundation; nvenc requires NVIDIA; mediaFoundation forces Windows.
-- `--bitrate-kbps` (INT:INT bounded to [0 - 100000], default `0`) - Fast Windows H.264 bitrate in Kbps (0 = automatic from size and fps).
+- `--encoder` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">nvenc</span> <span data-cli="choice">mediaFoundation</span></span></span>) - Fast Windows H.264 encoder: auto tries the optional NVENC plugin then Media Foundation; nvenc requires NVIDIA; mediaFoundation forces Windows.
+- `--bitrate-kbps` (<span data-cli="meta"><span data-cli="type">INT:INT bounded to [0 - 100000]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Fast Windows H.264 bitrate in Kbps (0 = automatic from size and fps).
 
 **Zoom**
-- `--size-mode` (TEXT:{native,pad,fit,fill}, default `native`) - Fast fixed-canvas layout: native, pad, fit, or fill.
-- `--zoom` (FLOAT:FLOAT bounded to [1 - 32], default `1`) - Initial fast-recorder viewport zoom multiplier.
-- `--follow` (TEXT:{none,anchor,cursor}, default `none`) - Fast-recorder viewport tracking: none, anchor, or cursor.
-- `--follow-speed` (FLOAT:FLOAT bounded to [0.01 - 1], default `0.2`) - Cursor-follow interpolation factor.
-- `--follow-deadzone` (INT:INT bounded to [0 - 1000], default `3`) - Cursor-follow deadzone in source pixels.
-- `--transition-ms` (INT:INT bounded to [0 - 10000], default `300`) - Zoom transition duration.
-- `--interactive-zoom` - Change zoom with Shift+mouse-wheel while recording.
-- `--zoom-step` (FLOAT:FLOAT bounded to [0.01 - 2], default `0.15`) - Interactive zoom increment per wheel notch.
-- `--zoom-min` (FLOAT:FLOAT bounded to [1 - 32], default `1`)
-- `--zoom-max` (FLOAT:FLOAT bounded to [1 - 32], default `4`)
-- `--pass-zoom-input,--consume-zoom-input{false}` (default `1`) - Let Shift+wheel also reach the application under the cursor.
-- `--no-zoom-status,--zoom-status{false}` (default `1`) - Hide the interactive recording zoom HUD.
-- `--hud-capture` (TEXT:{auto,exclude,visible}, default `auto`) - HUD/frame capture policy: auto, exclude, or visible. visible allows OBS and other screen recorders to capture overlays.
-- `--pause-key` (TEXT) - Global shortcut that toggles recording pause/resume, e.g. F9 or Ctrl+Shift+P. Empty disables it.
-- `--stop-key` (TEXT) - Global shortcut that stops and finalizes recording, e.g. F10 or Ctrl+Shift+S. Empty disables it.
+- `--size-mode` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">native</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">native</span> <span data-cli="choice">pad</span> <span data-cli="choice">fit</span> <span data-cli="choice">fill</span></span></span>) - Fast fixed-canvas layout: native, pad, fit, or fill.
+- `--zoom` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT bounded to [1 - 32]</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Initial fast-recorder viewport zoom multiplier.
+- `--follow` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">none</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">none</span> <span data-cli="choice">anchor</span> <span data-cli="choice">cursor</span></span></span>) - Fast-recorder viewport tracking: none, anchor, or cursor.
+- `--follow-speed` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT bounded to [0.01 - 1]</span>, <span data-cli="default">default <span data-cli="value">0.2</span></span></span>) - Cursor-follow interpolation factor.
+- `--follow-deadzone` (<span data-cli="meta"><span data-cli="type">INT:INT bounded to [0 - 1000]</span>, <span data-cli="default">default <span data-cli="value">3</span></span></span>) - Cursor-follow deadzone in source pixels.
+- `--transition-ms` (<span data-cli="meta"><span data-cli="type">INT:INT bounded to [0 - 10000]</span>, <span data-cli="default">default <span data-cli="value">300</span></span></span>) - Zoom transition duration.
+- `--interactive-zoom` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Change zoom with Shift+mouse-wheel while recording.
+- `--zoom-step` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT bounded to [0.01 - 2]</span>, <span data-cli="default">default <span data-cli="value">0.15</span></span></span>) - Interactive zoom increment per wheel notch.
+- `--zoom-min` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT bounded to [1 - 32]</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>)
+- `--zoom-max` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT bounded to [1 - 32]</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>)
+- `--pass-zoom-input,--consume-zoom-input{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Let Shift+wheel also reach the application under the cursor.
+- `--no-zoom-status,--zoom-status{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Hide the interactive recording zoom HUD.
+- `--hud-capture` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">exclude</span> <span data-cli="choice">visible</span></span></span>) - HUD/frame capture policy: auto, exclude, or visible. visible allows OBS and other screen recorders to capture overlays.
+- `--pause-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Global shortcut that toggles recording pause/resume, e.g. F9 or Ctrl+Shift+P. Empty disables it.
+- `--stop-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Global shortcut that stops and finalizes recording, e.g. F10 or Ctrl+Shift+S. Empty disables it.
 
 **Key Overlay**
-- `--key-overlay` - Show typed / shortcut keystrokes as an on-screen overlay (fast WGC).
-- `--key-overlay-burn-in` - Also burn keystrokes into the encoded MP4 (reserved; not yet composited).
-- `--key-overlay-align` (TEXT:{center,left,right,top,bottom,top-left,top-right,bottom-left,bottom-right}, default `bottom`) - VLC-style position: center, left, right, top, bottom, top-left, top-right, bottom-left, bottom-right.
-- `--key-overlay-margin-x` (INT:INT bounded to [0 - 500], default `0`) - Horizontal margin px (0 = auto from short edge).
-- `--key-overlay-margin-y` (INT:INT bounded to [0 - 500], default `0`) - Vertical margin px (0 = auto from short edge).
-- `--key-overlay-font-size` (INT:INT bounded to [0 - 96], default `0`) - Chip font size px (0 = auto ~2.2% of short edge).
-- `--key-overlay-color` (TEXT, default `#F8F9FB`) - Key label text color (#RRGGBB).
-- `--key-overlay-bg-color` (TEXT, default `#181B21`) - Chip background color (#RRGGBB).
-- `--key-overlay-accent-color` (TEXT, default `#EB445A`) - Chip accent bar color (#RRGGBB).
-- `--key-overlay-opacity` (FLOAT:FLOAT bounded to [0 - 1], default `0.9`) - Overlay opacity 0–1.
-- `--key-overlay-hold-ms` (INT:INT bounded to [100 - 10000], default `1200`) - Fully-visible duration per keychip before fade.
-- `--key-overlay-fade-ms` (INT:INT bounded to [0 - 5000], default `450`) - Fade-out duration after hold.
-- `--key-overlay-max-entries` (INT:INT bounded to [1 - 16], default `5`) - Max stacked recent keychips.
-- `--key-overlay-filter` (TEXT:{all,printable,shortcuts}, default `all`) - all (default), printable, or shortcuts (modifier chords only).
-- `--key-overlay-stack` (TEXT:{auto,up,down}, default `auto`) - Chip stack growth: auto (bottom→up, else down), up, or down.
-- `--no-key-overlay-modifiers,--key-overlay-modifiers{false}` (default `1`) - Omit Ctrl/Alt/Shift/Win prefixes on displayed chords.
-- `--key-overlay-capture` (TEXT:{inherit,auto,exclude,visible}, default `visible`) - Key overlay capture policy: visible (default, in MP4), inherit (use --hud-capture), auto, or exclude.
+- `--key-overlay` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Show typed / shortcut keystrokes as an on-screen overlay (fast WGC).
+- `--key-overlay-burn-in` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also burn keystrokes into the encoded MP4 (reserved; not yet composited).
+- `--key-overlay-align` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">bottom</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">center</span> <span data-cli="choice">left</span> <span data-cli="choice">right</span> <span data-cli="choice">top</span> <span data-cli="choice">bottom</span> <span data-cli="choice">top-left</span> <span data-cli="choice">top-right</span> <span data-cli="choice">bottom-left</span> <span data-cli="choice">bottom-right</span></span></span>) - VLC-style position: center, left, right, top, bottom, top-left, top-right, bottom-left, bottom-right.
+- `--key-overlay-margin-x` (<span data-cli="meta"><span data-cli="type">INT:INT bounded to [0 - 500]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Horizontal margin px (0 = auto from short edge).
+- `--key-overlay-margin-y` (<span data-cli="meta"><span data-cli="type">INT:INT bounded to [0 - 500]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Vertical margin px (0 = auto from short edge).
+- `--key-overlay-font-size` (<span data-cli="meta"><span data-cli="type">INT:INT bounded to [0 - 96]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Chip font size px (0 = auto ~2.2% of short edge).
+- `--key-overlay-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#F8F9FB</span></span></span>) - Key label text color (#RRGGBB).
+- `--key-overlay-bg-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#181B21</span></span></span>) - Chip background color (#RRGGBB).
+- `--key-overlay-accent-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#EB445A</span></span></span>) - Chip accent bar color (#RRGGBB).
+- `--key-overlay-opacity` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT bounded to [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0.9</span></span></span>) - Overlay opacity 0–1.
+- `--key-overlay-hold-ms` (<span data-cli="meta"><span data-cli="type">INT:INT bounded to [100 - 10000]</span>, <span data-cli="default">default <span data-cli="value">1200</span></span></span>) - Fully-visible duration per keychip before fade.
+- `--key-overlay-fade-ms` (<span data-cli="meta"><span data-cli="type">INT:INT bounded to [0 - 5000]</span>, <span data-cli="default">default <span data-cli="value">450</span></span></span>) - Fade-out duration after hold.
+- `--key-overlay-max-entries` (<span data-cli="meta"><span data-cli="type">INT:INT bounded to [1 - 16]</span>, <span data-cli="default">default <span data-cli="value">5</span></span></span>) - Max stacked recent keychips.
+- `--key-overlay-filter` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">all</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">all</span> <span data-cli="choice">printable</span> <span data-cli="choice">shortcuts</span></span></span>) - all (default), printable, or shortcuts (modifier chords only).
+- `--key-overlay-stack` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">up</span> <span data-cli="choice">down</span></span></span>) - Chip stack growth: auto (bottom→up, else down), up, or down.
+- `--no-key-overlay-modifiers,--key-overlay-modifiers{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Omit Ctrl/Alt/Shift/Win prefixes on displayed chords.
+- `--key-overlay-capture` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">visible</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">inherit</span> <span data-cli="choice">auto</span> <span data-cli="choice">exclude</span> <span data-cli="choice">visible</span></span></span>) - Key overlay capture policy: visible (default, in MP4), inherit (use --hud-capture), auto, or exclude.
 
 **Cursor**
-- `--cursor-highlight` - Soft highlight ring around the pointer (fast WGC).
-- `--cursor-highlight-color` (TEXT, default `#F5C542`) - Cursor highlight color (#RRGGBB).
-- `--cursor-highlight-size` (INT:INT bounded to [0 - 256], default `0`) - Highlight diameter px (0 = auto).
-- `--cursor-clicks` - Click ripple animations (fast WGC).
-- `--cursor-click-color` (TEXT, default `#EB445A`) - Click ripple color (#RRGGBB).
-- `--cursor-trail` - Short motion trail behind the pointer (fast WGC).
-- `--hide-cursor-when-typing` - Hide the OS cursor while typing (fast WGC).
+- `--cursor-highlight` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Soft highlight ring around the pointer (fast WGC).
+- `--cursor-highlight-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#F5C542</span></span></span>) - Cursor highlight color (#RRGGBB).
+- `--cursor-highlight-size` (<span data-cli="meta"><span data-cli="type">INT:INT bounded to [0 - 256]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Highlight diameter px (0 = auto).
+- `--cursor-clicks` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Click ripple animations (fast WGC).
+- `--cursor-click-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#EB445A</span></span></span>) - Click ripple color (#RRGGBB).
+- `--cursor-trail` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Short motion trail behind the pointer (fast WGC).
+- `--hide-cursor-when-typing` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Hide the OS cursor while typing (fast WGC).
 
 **Camera**
-- `--camera-overlay` - Picture-in-picture webcam over the recording (fast WGC path). Face / background flags (--skin, --blur, --mirror, …) apply to this PiP camera only; the screen stays on the fast recorder.
-- `--camera-input` (TEXT) - PiP camera device name substring (empty = default).
-- `--camera-position` (TEXT:{top-left,top-right,bottom-left,bottom-right}, default `bottom-right`) - PiP corner: top-left, top-right, bottom-left, bottom-right.
-- `--camera-size` (FLOAT:FLOAT bounded to [4 - 80], default `22`) - PiP size as percent of short output edge (4–80).
-- `--camera-resolution` (TEXT, default `auto`) - Webcam capture mode: auto (PiP-sized), max (highest native), or WxH[@fps] / 720p / 1080p / 4k (nearest native mode).
-- `--camera-shape` (TEXT:{circle,rounded,square}, default `circle`) - PiP mask: circle, rounded, or square.
-- `--no-camera-border,--camera-border{false}` (default `1`) - Disable PiP border.
-- `--camera-border-color` (TEXT, default `#FFFFFF`) - PiP border color (#RRGGBB).
-- `--no-camera-shadow,--camera-shadow{false}` (default `1`) - Disable PiP drop shadow.
-- `--camera-audio` - Include the webcam microphone in the recording mix (matched from --camera-input; works with --audio-source none/mic/desktop/mix).
-- `--camera-audio-gain` (FLOAT:FLOAT bounded to [0 - 4], default `1`) - Linear gain for the webcam mic (0 = mute, 1 = unity).
+- `--camera-overlay` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Picture-in-picture webcam over the recording (fast WGC path). Face / background flags (--skin, --blur, --mirror, …) apply to this PiP camera only; the screen stays on the fast recorder.
+- `--camera-input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - PiP camera device name substring (empty = default).
+- `--camera-position` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">bottom-right</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">top-left</span> <span data-cli="choice">top-right</span> <span data-cli="choice">bottom-left</span> <span data-cli="choice">bottom-right</span></span></span>) - PiP corner: top-left, top-right, bottom-left, bottom-right.
+- `--camera-size` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT bounded to [4 - 80]</span>, <span data-cli="default">default <span data-cli="value">22</span></span></span>) - PiP size as percent of short output edge (4–80).
+- `--camera-resolution` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">auto</span></span></span>) - Webcam capture mode: auto (PiP-sized), max (highest native), or WxH[@fps] / 720p / 1080p / 4k (nearest native mode).
+- `--camera-shape` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">circle</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">circle</span> <span data-cli="choice">rounded</span> <span data-cli="choice">square</span></span></span>) - PiP mask: circle, rounded, or square.
+- `--no-camera-border,--camera-border{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Disable PiP border.
+- `--camera-border-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#FFFFFF</span></span></span>) - PiP border color (#RRGGBB).
+- `--no-camera-shadow,--camera-shadow{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Disable PiP drop shadow.
+- `--camera-audio` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include the webcam microphone in the recording mix (matched from --camera-input; works with --audio-source none/mic/desktop/mix).
+- `--camera-audio-gain` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT bounded to [0 - 4]</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Linear gain for the webcam mic (0 = mute, 1 = unity).
 
 **Audio**
-- `--audio-source` (TEXT:{none,mic,desktop,mix}, default `none`) - Mux audio into MP4: none (default), mic, desktop (system loopback), or mix.
-- `--audio-device` (TEXT) - Mic device name substring for --audio-source mic/mix. Omit to use the system default input device.
-- `--desktop` (TEXT) - Loopback device name substring for --audio-source desktop/mix (empty = default render device). Implies desktop when --audio-source is omitted.
-- `--mic-gain` (FLOAT:NONNEGATIVE, default `1`) - Mic level multiplier (linear; 0 = mute, 1 = unity). Used with mix.
-- `--desktop-gain` (FLOAT:NONNEGATIVE, default `1`) - Desktop/loopback level multiplier (linear). Used with desktop or mix.
-- `--audio-normalize` - Reserved: normalize mixed audio level before AAC encode.
-- `--audio-auto-gain` - Reserved: gentle automatic gain on the microphone path.
+- `--audio-source` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">none</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">none</span> <span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - Mux audio into MP4: none (default), mic, desktop (system loopback), or mix.
+- `--audio-device` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Mic device name substring for --audio-source mic/mix. Omit to use the system default input device.
+- `--desktop` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Loopback device name substring for --audio-source desktop/mix (empty = default render device). Implies desktop when --audio-source is omitted.
+- `--mic-gain` (<span data-cli="meta"><span data-cli="type">FLOAT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Mic level multiplier (linear; 0 = mute, 1 = unity). Used with mix.
+- `--desktop-gain` (<span data-cli="meta"><span data-cli="type">FLOAT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Desktop/loopback level multiplier (linear). Used with desktop or mix.
+- `--audio-normalize` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Reserved: normalize mixed audio level before AAC encode.
+- `--audio-auto-gain` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Reserved: gentle automatic gain on the microphone path.
 
 **Idle**
-- `--auto-pause` (TEXT:{off,visual,audio,both}, default `off`) - Skip dead air in the MP4: off (default), visual, audio, or both. WGC/WASAPI stay running; encoder writes pause.
-- `--auto-pause-idle-ms` (INT:INT bounded to [0 - 60000], default `3000`) - Overall idle timer before PauseIdle (0 with auto-pause off).
-- `--auto-pause-grid` (TEXT, default `32x18`) - Logical tile grid WxH (default 32x18).
-- `--no-auto-pause-mic-wake,--auto-pause-mic-wake{false}` (default `1`) - Disable speech-mic RMS/peak as idle activity (audio|both).
-- `--auto-pause-mic-activity-db` (FLOAT:FLOAT bounded to [-90 - 0], default `-40`) - Mic activity threshold in dBFS (not VAD). Default -40.
-- `--auto-pause-preroll-ms` (INT:INT bounded to [0 - 2000], default `500`) - Video frames kept while auto-paused and flushed on resume.
-- `--no-auto-pause-wake-key,--auto-pause-wake-key{false}` (default `1`) - Ignore keyboard/click/wheel as activity.
-- `--no-auto-pause-wake-mouse,--auto-pause-wake-mouse{false}` (default `1`) - Ignore mouse movement as activity.
+- `--auto-pause` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">off</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">visual</span> <span data-cli="choice">audio</span> <span data-cli="choice">both</span></span></span>) - Skip dead air in the MP4: off (default), visual, audio, or both. WGC/WASAPI stay running; encoder writes pause.
+- `--auto-pause-idle-ms` (<span data-cli="meta"><span data-cli="type">INT:INT bounded to [0 - 60000]</span>, <span data-cli="default">default <span data-cli="value">3000</span></span></span>) - Overall idle timer before PauseIdle (0 with auto-pause off).
+- `--auto-pause-grid` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">32x18</span></span></span>) - Logical tile grid WxH (default 32x18).
+- `--no-auto-pause-mic-wake,--auto-pause-mic-wake{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Disable speech-mic RMS/peak as idle activity (audio|both).
+- `--auto-pause-mic-activity-db` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT bounded to [-90 - 0]</span>, <span data-cli="default">default <span data-cli="value">-40</span></span></span>) - Mic activity threshold in dBFS (not VAD). Default -40.
+- `--auto-pause-preroll-ms` (<span data-cli="meta"><span data-cli="type">INT:INT bounded to [0 - 2000]</span>, <span data-cli="default">default <span data-cli="value">500</span></span></span>) - Video frames kept while auto-paused and flushed on resume.
+- `--no-auto-pause-wake-key,--auto-pause-wake-key{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Ignore keyboard/click/wheel as activity.
+- `--no-auto-pause-wake-mouse,--auto-pause-wake-mouse{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Ignore mouse movement as activity.
 
 **Captions**
-- `--captions` (TEXT:{off,sidecar,srt,vtt,sbv,all}, default `off`) - After finalize, transcribe the encoded-timeline dump: off or sidecar.
-- `--caption-format` (TEXT:{srt,vtt,sbv,all}, default `srt`) - Sidecar format: srt (default), vtt, sbv, or all.
-- `--stt-preset` (TEXT) - Chat preset whose STT provider/model captionStt inherits.
-- `--stt-provider` (TEXT) - Caption STT provider override (empty = App Settings).
-- `--stt-model` (TEXT) - Caption STT model override (empty = App Settings).
+- `--captions` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">off</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">sidecar</span> <span data-cli="choice">srt</span> <span data-cli="choice">vtt</span> <span data-cli="choice">sbv</span> <span data-cli="choice">all</span></span></span>) - After finalize, transcribe the encoded-timeline dump: off or sidecar.
+- `--caption-format` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">srt</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">srt</span> <span data-cli="choice">vtt</span> <span data-cli="choice">sbv</span> <span data-cli="choice">all</span></span></span>) - Sidecar format: srt (default), vtt, sbv, or all.
+- `--stt-preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat preset whose STT provider/model captionStt inherits.
+- `--stt-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Caption STT provider override (empty = App Settings).
+- `--stt-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Caption STT model override (empty = App Settings).
 
 **Beauty**
-- `--face,--no-face{false}` (default `false`) - Run FaceLandmarker (off unless set; implied by --skin/--lips/--teeth and the other face filters).
-- `--skin,--no-skin{false}` - Smooth skin (face oval minus eyes/lips). Slow at 1080p.
-- `--skin-strength` (FLOAT, default `0.5`) - Skin smoothing strength 0..1.
-- `--lips,--no-lips{false}` - Tint lips (Lab a/b toward --lips-color).
-- `--lips-color` (TEXT, default `#C45C6A`) - Lip tint as #RRGGBB (quote it in PowerShell: "#C41E3A").
-- `--lips-alpha` (FLOAT, default `0.35`) - Lip tint alpha 0..1.
-- `--teeth,--no-teeth{false}` - Whiten teeth (inner-lip mask, Lab b* toward neutral).
-- `--teeth-strength` (FLOAT, default `0.4`) - Teeth whitening strength 0..1.
-- `--model-face` (TEXT) - FaceLandmarker .task path. Empty = bundled models/vision/face_landmarker_v2.task.
-- `--dll` (TEXT) - Diagnostic override for pixlwiz_face_landmarker.dll.
-- `--show-landmarks` - Draw landmark overlay (debug).
-- `--face-gain` (FLOAT, default `0`) - Lift crushed face exposure (Lab L* toward a meeting target). 0 = off, 1 = full. Same oval as --skin.
-- `--warmth` (FLOAT, default `0`) - Warm the face oval (Lab b*). 0 = off, 1 = full.
-- `--undereye,--no-undereye{false}` - Lighten under-eye bands (dark circles).
-- `--undereye-blend` (FLOAT, default `0.45`) - Under-eye mix 0..1.
-- `--redness,--no-redness{false}` - Mute flush / acne (pull Lab a* toward neutral on the face oval).
-- `--redness-blend` (FLOAT, default `0.4`) - Redness mute mix 0..1.
-- `--eye-sharpen,--no-eye-sharpen{false}` - Unsharp the eye polys (restores focus after --skin).
-- `--eye-sharpen-blend` (FLOAT, default `0.35`) - Eye sharpen mix 0..1.
+- `--face,--no-face{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Run FaceLandmarker (off unless set; implied by --skin/--lips/--teeth and the other face filters).
+- `--skin,--no-skin{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Smooth skin (face oval minus eyes/lips). Slow at 1080p.
+- `--skin-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.5</span></span></span>) - Skin smoothing strength 0..1.
+- `--lips,--no-lips{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Tint lips (Lab a/b toward --lips-color).
+- `--lips-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#C45C6A</span></span></span>) - Lip tint as #RRGGBB (quote it in PowerShell: "#C41E3A").
+- `--lips-alpha` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Lip tint alpha 0..1.
+- `--teeth,--no-teeth{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whiten teeth (inner-lip mask, Lab b* toward neutral).
+- `--teeth-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Teeth whitening strength 0..1.
+- `--model-face` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - FaceLandmarker .task path. Empty = bundled models/vision/face_landmarker_v2.task.
+- `--dll` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Diagnostic override for pixlwiz_face_landmarker.dll.
+- `--show-landmarks` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Draw landmark overlay (debug).
+- `--face-gain` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Lift crushed face exposure (Lab L* toward a meeting target). 0 = off, 1 = full. Same oval as --skin.
+- `--warmth` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Warm the face oval (Lab b*). 0 = off, 1 = full.
+- `--undereye,--no-undereye{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Lighten under-eye bands (dark circles).
+- `--undereye-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.45</span></span></span>) - Under-eye mix 0..1.
+- `--redness,--no-redness{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Mute flush / acne (pull Lab a* toward neutral on the face oval).
+- `--redness-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Redness mute mix 0..1.
+- `--eye-sharpen,--no-eye-sharpen{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Unsharp the eye polys (restores focus after --skin).
+- `--eye-sharpen-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Eye sharpen mix 0..1.
 
 **Frame**
-- `--mirror,--no-mirror{false}` - Horizontal flip (webcam mirror). No model.
+- `--mirror,--no-mirror{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Horizontal flip (webcam mirror). No model.
 
 **Background**
-- `--blur,--no-blur{false}` - Blur the non-person background (ImageSegmenter).
-- `--background,--no-background{false}` - Replace the non-person background with --bg-color / --bg-image.
-- `--blur-strength` (FLOAT, default `0.65`) - Background blur mix 0..1.
-- `--feather-px` (INT, default `8`) - Person-mask feather in pixels.
-- `--bg-color` (TEXT, default `#1A1A1A`) - Solid replacement color (#RRGGBB). Quote it in PowerShell.
-- `--bg-image` (TEXT) - Replacement background image (scaled to the frame).
-- `--model-seg` (TEXT) - ImageSegmenter .task path. Empty = bundled models/vision/selfie_segmenter.task.
+- `--blur,--no-blur{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Blur the non-person background (ImageSegmenter).
+- `--background,--no-background{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Replace the non-person background with --bg-color / --bg-image.
+- `--blur-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.65</span></span></span>) - Background blur mix 0..1.
+- `--feather-px` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Person-mask feather in pixels.
+- `--bg-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#1A1A1A</span></span></span>) - Solid replacement color (#RRGGBB). Quote it in PowerShell.
+- `--bg-image` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement background image (scaled to the frame).
+- `--model-seg` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ImageSegmenter .task path. Empty = bundled models/vision/selfie_segmenter.task.
 
 **Example**
 
@@ -4258,44 +4267,44 @@ Real-time YOLO-format object detection from a webcam. Outputs NDJSON frames to s
 
 Options:
 
-- `-m,--model` (TEXT, required) - YOLO ONNX model (e.g. yolov8n.onnx).
-- `-i,--input` (TEXT) - Capture source: camera device name (case-insensitive substring; default = first device), a monitor "screen:N", or a window "screen:0:wintitle=GLOB". GLOB is a full-title match (*, ?), so wrap with stars: screen:0:wintitle=*Chrome*. See `video info --screens` for available screens/windows.
-- `--width` (INT, default `0`) - Preferred capture width  (0 = device default).
-- `--height` (INT, default `0`) - Preferred capture height (0 = device default).
-- `--fps` (INT:POSITIVE, default `30`) - Preferred capture frame rate (default 30).
-- `--conf` (FLOAT:FLOAT in [0 - 1], default `0.25`) - Confidence threshold (default 0.25).
-- `--nms` (FLOAT:FLOAT in [0 - 1], default `0.45`) - NMS IoU threshold (default 0.45).
-- `--input-size` (INT:INT in [32 - 4096], default `640`) - Model input size in pixels (default 640).
-- `--every-n` (INT:POSITIVE, default `1`) - Run YOLO every N captured frames — drop intermediate frames (default 1).
-- `-j,--threads` (INT:INT in [1 - 256], default `4`) - ONNX intra-op thread count (default 4).
-- `--duration-ms` (INT:NONNEGATIVE, default `0`) - Stop after N milliseconds (0 = run until Ctrl+C).
-- `--task` (TEXT:{auto,detect,classify,cls,obb,pose,segment,seg}) - YOLO head to decode: auto|detect|classify|obb|pose|segment. auto (default) infers detect/classify/segment from the model; obb/pose must be requested explicitly. segment emits a mask polygon (contour) per box (no OpenCV).
-- `--top-k` (INT:POSITIVE, default `5`) - classify task: number of top predictions to emit per frame (default 5).
-- `--classes` (TEXT) - Comma-separated class label list matching model output class indices (e.g. 'person,bicycle,car,...'). Overridden by --labels-yaml.
-- `--labels-yaml` (TEXT:FILE) - Path to a YOLO data.yaml; reads the 'names:' block as class labels. Takes precedence over --classes.
-- `--save-frames` (TEXT) - Directory to save every captured frame as JPEG (useful for building a training dataset).
-- `--filter-classes,--only` (TEXT, default `{}`) - Only emit NDJSON lines for frames that contain at least one box whose label matches (case-insensitive substring). Frames with no matching detections are silently skipped. Can be specified multiple times or as a comma-separated list (e.g. --filter-classes cat --filter-classes car).
-- `-q,--quiet` - Suppress the per-frame NDJSON stream on stdout (the final summary line still prints). Handy for --visualize-only runs. Combine with --no-summary for total silence, or redirect stdout (1>$null).
-- `--no-summary` - Also suppress the end-of-run summary line on stdout.
-- `--max-objects,--max-det` (INT:NONNEGATIVE, default `0`) - Keep only the top-N detections per frame (0 = unlimited). Selection is sticky across frames (follows the same object by position) so a single box doesn't hop between similar objects. Applies after --filter-classes, to both the NDJSON output and the overlay. E.g. --max-objects 1 = single object.
-- `--max-by` (TEXT:{conf,area}, default `conf`) - Priority when picking which object(s) to keep for --max-objects: 'conf' (default, highest confidence) or 'area' (largest extent — the biggest / closest object).
-- `--smooth-alpha` (FLOAT:FLOAT in [0 - 1], default `0.35`) - EMA smoothing factor for overlay bounding boxes (0=maximum smooth, 1=raw/no smoothing, default 0.35). Only affects visualization.
-- `--smooth-age` (INT:NONNEGATIVE, default `4`) - Frames a detection persists in the overlay after it disappears (prevents flashing, default 4). Set 0 to disable persistence.
-- `-V,--visualize` - Open an on-screen visualization window with bounding boxes. Mode is auto-selected: transparent overlay for screen: inputs, preview window for webcam. Override with --visualize-mode.
-- `--visualize-mode` (TEXT:{auto,overlay,preview}) - Visualization mode: auto (default), overlay (transparent topmost window over source rect), or preview (windowed frame + boxes).
-- `--no-stats,--stats{false}` (default `1`) - Hide the stats bar (frame / infer_ms / fps / box count) from the visualization window.
-- `--no-labels,--labels{false}` (default `1`) - Hide class label + confidence text above each bounding box.
-- `--fill-alpha` (INT:INT in [0 - 255], default `40`) - Box fill opacity 0–255 (0 = border-only, default 40).
-- `--smooth-min-hits` (INT:NONNEGATIVE, default `0`) - Frames a track must be seen before it is shown (confirmation / "min age"; default 0 = show immediately). Suppresses one-frame false positives in the overlay.
-- `--track-ids` - Assign a stable track id per object and show it (#id) with a per-track color in the overlay.
-- `--track-two-stage` - ByteTrack-style association: match high-confidence detections first, then recover lost tracks with leftover low-confidence ones (fewer id switches through occlusion).
-- `--track-conf-high` (FLOAT:FLOAT in [0 - 1], default `0.5`) - High/low confidence split for --track-two-stage (default 0.50).
-- `--no-track-center,--track-center{false}` (default `1`) - Center-distance fallback: match by nearest predicted center when IoU=0 (recovers fast movers). On by default.
-- `--track-center-dist` (FLOAT:NONNEGATIVE, default `1.2`) - Center-distance gate as a multiple of the box mean side (w+h)/2 (default 1.2). Larger = match farther jumps.
-- `--track-vel-blend` (FLOAT:FLOAT in [0 - 1], default `0.7`) - Velocity EMA factor for prediction during dropouts (higher = steadier but laggier, default 0.7).
-- `--kpt-min-score` (FLOAT:FLOAT in [0 - 1], default `0.3`) - Min pose keypoint score to update a joint; weaker joints freeze at their last good position (default 0.30). Reduces off-body joint snapping.
-- `--provider` (TEXT:{auto,cpu,cuda}, default `auto`) - ONNX execution provider: auto (default, try CUDA then CPU), cpu, or cuda (hard-require NVIDIA CUDA EP). Requires FEATURE_ONNX_CUDA=ON for CUDA.
-- `--gpu-stats,--vram` - Include best-effort NVIDIA VRAM telemetry in the final summary (requires nvidia-smi; ignored if unavailable).
+- `-m,--model` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - YOLO ONNX model (e.g. yolov8n.onnx).
+- `-i,--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Capture source: camera device name (case-insensitive substring; default = first device), a monitor "screen:N", or a window "screen:0:wintitle=GLOB". GLOB is a full-title match (*, ?), so wrap with stars: screen:0:wintitle=*Chrome*. See `video info --screens` for available screens/windows.
+- `--width` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Preferred capture width  (0 = device default).
+- `--height` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Preferred capture height (0 = device default).
+- `--fps` (<span data-cli="meta"><span data-cli="type">INT:POSITIVE</span>, <span data-cli="default">default <span data-cli="value">30</span></span></span>) - Preferred capture frame rate (default 30).
+- `--conf` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0.25</span></span></span>) - Confidence threshold (default 0.25).
+- `--nms` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0.45</span></span></span>) - NMS IoU threshold (default 0.45).
+- `--input-size` (<span data-cli="meta"><span data-cli="type">INT:INT in [32 - 4096]</span>, <span data-cli="default">default <span data-cli="value">640</span></span></span>) - Model input size in pixels (default 640).
+- `--every-n` (<span data-cli="meta"><span data-cli="type">INT:POSITIVE</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Run YOLO every N captured frames — drop intermediate frames (default 1).
+- `-j,--threads` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 256]</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - ONNX intra-op thread count (default 4).
+- `--duration-ms` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Stop after N milliseconds (0 = run until Ctrl+C).
+- `--task` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">detect</span> <span data-cli="choice">classify</span> <span data-cli="choice">cls</span> <span data-cli="choice">obb</span> <span data-cli="choice">pose</span> <span data-cli="choice">segment</span> <span data-cli="choice">seg</span></span></span>) - YOLO head to decode: auto|detect|classify|obb|pose|segment. auto (default) infers detect/classify/segment from the model; obb/pose must be requested explicitly. segment emits a mask polygon (contour) per box (no OpenCV).
+- `--top-k` (<span data-cli="meta"><span data-cli="type">INT:POSITIVE</span>, <span data-cli="default">default <span data-cli="value">5</span></span></span>) - classify task: number of top predictions to emit per frame (default 5).
+- `--classes` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma-separated class label list matching model output class indices (e.g. 'person,bicycle,car,...'). Overridden by --labels-yaml.
+- `--labels-yaml` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span></span>) - Path to a YOLO data.yaml; reads the 'names:' block as class labels. Takes precedence over --classes.
+- `--save-frames` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Directory to save every captured frame as JPEG (useful for building a training dataset).
+- `--filter-classes,--only` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Only emit NDJSON lines for frames that contain at least one box whose label matches (case-insensitive substring). Frames with no matching detections are silently skipped. Can be specified multiple times or as a comma-separated list (e.g. --filter-classes cat --filter-classes car).
+- `-q,--quiet` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Suppress the per-frame NDJSON stream on stdout (the final summary line still prints). Handy for --visualize-only runs. Combine with --no-summary for total silence, or redirect stdout (1>$null).
+- `--no-summary` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also suppress the end-of-run summary line on stdout.
+- `--max-objects,--max-det` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span></span>) - Keep only the top-N detections per frame (0 = unlimited). Selection is sticky across frames (follows the same object by position) so a single box doesn't hop between similar objects. Applies after --filter-classes, to both the NDJSON output and the overlay. E.g. --max-objects 1 = single object.
+- `--max-by` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">conf</span> <span data-cli="choice">area</span></span></span>) - Priority when picking which object(s) to keep for --max-objects: 'conf' (default, highest confidence) or 'area' (largest extent — the biggest / closest object).
+- `--smooth-alpha` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span></span>) - EMA smoothing factor for overlay bounding boxes (0=maximum smooth, 1=raw/no smoothing, default 0.35). Only affects visualization.
+- `--smooth-age` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span></span>) - Frames a detection persists in the overlay after it disappears (prevents flashing, default 4). Set 0 to disable persistence.
+- `-V,--visualize` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Open an on-screen visualization window with bounding boxes. Mode is auto-selected: transparent overlay for screen: inputs, preview window for webcam. Override with --visualize-mode.
+- `--visualize-mode` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">overlay</span> <span data-cli="choice">preview</span></span></span>) - Visualization mode: auto (default), overlay (transparent topmost window over source rect), or preview (windowed frame + boxes).
+- `--no-stats,--stats{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Hide the stats bar (frame / infer_ms / fps / box count) from the visualization window.
+- `--no-labels,--labels{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Hide class label + confidence text above each bounding box.
+- `--fill-alpha` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 255]</span></span>) - Box fill opacity 0–255 (0 = border-only, default 40).
+- `--smooth-min-hits` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span></span>) - Frames a track must be seen before it is shown (confirmation / "min age"; default 0 = show immediately). Suppresses one-frame false positives in the overlay.
+- `--track-ids` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Assign a stable track id per object and show it (#id) with a per-track color in the overlay.
+- `--track-two-stage` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - ByteTrack-style association: match high-confidence detections first, then recover lost tracks with leftover low-confidence ones (fewer id switches through occlusion).
+- `--track-conf-high` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span></span>) - High/low confidence split for --track-two-stage (default 0.50).
+- `--no-track-center,--track-center{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Center-distance fallback: match by nearest predicted center when IoU=0 (recovers fast movers). On by default.
+- `--track-center-dist` (<span data-cli="meta"><span data-cli="type">FLOAT:NONNEGATIVE</span></span>) - Center-distance gate as a multiple of the box mean side (w+h)/2 (default 1.2). Larger = match farther jumps.
+- `--track-vel-blend` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span></span>) - Velocity EMA factor for prediction during dropouts (higher = steadier but laggier, default 0.7).
+- `--kpt-min-score` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span></span>) - Min pose keypoint score to update a joint; weaker joints freeze at their last good position (default 0.30). Reduces off-body joint snapping.
+- `--provider` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">cpu</span> <span data-cli="choice">cuda</span></span></span>) - ONNX execution provider: auto (default, try CUDA then CPU), cpu, or cuda (hard-require NVIDIA CUDA EP). Requires FEATURE_ONNX_CUDA=ON for CUDA.
+- `--gpu-stats,--vram` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include best-effort NVIDIA VRAM telemetry in the final summary (requires nvidia-smi; ignored if unavailable).
 
 **Example**
 
@@ -4317,44 +4326,44 @@ Test harness: file/still in → face beauty → file out. Product capture path i
 
 Options:
 
-- `--input,--src` (TEXT) - Input video or still image path.
-- `--dst` (TEXT) - Output video or still image path.
-- `--status` - Print MediaPipe bridge / model capability and exit.
-- `--preview` - Show a live window of the processed frames (same pixels as the output). Close the window to stop. Stills stay open until you close them.
-- `--running-mode` (TEXT:{image,video}, default `video`) - image | video. video uses DetectForVideo timestamps. Default: image for stills, video for clips.
+- `--input,--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Input video or still image path.
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output video or still image path.
+- `--status` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print MediaPipe bridge / model capability and exit.
+- `--preview` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Show a live window of the processed frames (same pixels as the output). Close the window to stop. Stills stay open until you close them.
+- `--running-mode` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">video</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">image</span> <span data-cli="choice">video</span></span></span>) - image | video. video uses DetectForVideo timestamps. Default: image for stills, video for clips.
 
 **Beauty**
-- `--face,--no-face{false}` (default `true`) - Run FaceLandmarker (default on for this command).
-- `--skin,--no-skin{false}` - Smooth skin (face oval minus eyes/lips). Slow at 1080p.
-- `--skin-strength` (FLOAT, default `0.5`) - Skin smoothing strength 0..1.
-- `--lips,--no-lips{false}` - Tint lips (Lab a/b toward --lips-color).
-- `--lips-color` (TEXT, default `#C45C6A`) - Lip tint as #RRGGBB (quote it in PowerShell: "#C41E3A").
-- `--lips-alpha` (FLOAT, default `0.35`) - Lip tint alpha 0..1.
-- `--teeth,--no-teeth{false}` - Whiten teeth (inner-lip mask, Lab b* toward neutral).
-- `--teeth-strength` (FLOAT, default `0.4`) - Teeth whitening strength 0..1.
-- `--model-face` (TEXT) - FaceLandmarker .task path. Empty = bundled models/vision/face_landmarker_v2.task.
-- `--dll` (TEXT) - Diagnostic override for pixlwiz_face_landmarker.dll.
-- `--show-landmarks` - Draw landmark overlay (debug).
-- `--face-gain` (FLOAT, default `0`) - Lift crushed face exposure (Lab L* toward a meeting target). 0 = off, 1 = full. Same oval as --skin.
-- `--warmth` (FLOAT, default `0`) - Warm the face oval (Lab b*). 0 = off, 1 = full.
-- `--undereye,--no-undereye{false}` - Lighten under-eye bands (dark circles).
-- `--undereye-blend` (FLOAT, default `0.45`) - Under-eye mix 0..1.
-- `--redness,--no-redness{false}` - Mute flush / acne (pull Lab a* toward neutral on the face oval).
-- `--redness-blend` (FLOAT, default `0.4`) - Redness mute mix 0..1.
-- `--eye-sharpen,--no-eye-sharpen{false}` - Unsharp the eye polys (restores focus after --skin).
-- `--eye-sharpen-blend` (FLOAT, default `0.35`) - Eye sharpen mix 0..1.
+- `--face,--no-face{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Run FaceLandmarker (default on for this command).
+- `--skin,--no-skin{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Smooth skin (face oval minus eyes/lips). Slow at 1080p.
+- `--skin-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.5</span></span></span>) - Skin smoothing strength 0..1.
+- `--lips,--no-lips{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Tint lips (Lab a/b toward --lips-color).
+- `--lips-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#C45C6A</span></span></span>) - Lip tint as #RRGGBB (quote it in PowerShell: "#C41E3A").
+- `--lips-alpha` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Lip tint alpha 0..1.
+- `--teeth,--no-teeth{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whiten teeth (inner-lip mask, Lab b* toward neutral).
+- `--teeth-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Teeth whitening strength 0..1.
+- `--model-face` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - FaceLandmarker .task path. Empty = bundled models/vision/face_landmarker_v2.task.
+- `--dll` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Diagnostic override for pixlwiz_face_landmarker.dll.
+- `--show-landmarks` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Draw landmark overlay (debug).
+- `--face-gain` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Lift crushed face exposure (Lab L* toward a meeting target). 0 = off, 1 = full. Same oval as --skin.
+- `--warmth` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Warm the face oval (Lab b*). 0 = off, 1 = full.
+- `--undereye,--no-undereye{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Lighten under-eye bands (dark circles).
+- `--undereye-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.45</span></span></span>) - Under-eye mix 0..1.
+- `--redness,--no-redness{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Mute flush / acne (pull Lab a* toward neutral on the face oval).
+- `--redness-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Redness mute mix 0..1.
+- `--eye-sharpen,--no-eye-sharpen{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Unsharp the eye polys (restores focus after --skin).
+- `--eye-sharpen-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Eye sharpen mix 0..1.
 
 **Frame**
-- `--mirror,--no-mirror{false}` - Horizontal flip (webcam mirror). No model.
+- `--mirror,--no-mirror{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Horizontal flip (webcam mirror). No model.
 
 **Background**
-- `--blur,--no-blur{false}` - Blur the non-person background (ImageSegmenter).
-- `--background,--no-background{false}` - Replace the non-person background with --bg-color / --bg-image.
-- `--blur-strength` (FLOAT, default `0.65`) - Background blur mix 0..1.
-- `--feather-px` (INT, default `8`) - Person-mask feather in pixels.
-- `--bg-color` (TEXT, default `#1A1A1A`) - Solid replacement color (#RRGGBB). Quote it in PowerShell.
-- `--bg-image` (TEXT) - Replacement background image (scaled to the frame).
-- `--model-seg` (TEXT) - ImageSegmenter .task path. Empty = bundled models/vision/selfie_segmenter.task.
+- `--blur,--no-blur{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Blur the non-person background (ImageSegmenter).
+- `--background,--no-background{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Replace the non-person background with --bg-color / --bg-image.
+- `--blur-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.65</span></span></span>) - Background blur mix 0..1.
+- `--feather-px` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Person-mask feather in pixels.
+- `--bg-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#1A1A1A</span></span></span>) - Solid replacement color (#RRGGBB). Quote it in PowerShell.
+- `--bg-image` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement background image (scaled to the frame).
+- `--model-seg` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ImageSegmenter .task path. Empty = bundled models/vision/selfie_segmenter.task.
 
 **Example**
 
@@ -4390,9 +4399,9 @@ List paired/connected Bluetooth devices (and optionally audio endpoints). Implic
 
 Options:
 
-- `--nearby` - Also issue an inquiry for nearby discoverable devices (slow).
-- `--endpoints` - Also list playback audio endpoints.
-- `--no-switch` - Do not implicitly change the default playback endpoint.
+- `--nearby` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also issue an inquiry for nearby discoverable devices (slow).
+- `--endpoints` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also list playback audio endpoints.
+- `--no-switch` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not implicitly change the default playback endpoint.
 
 **Example**
 
@@ -4414,7 +4423,7 @@ List MMDevice audio endpoints (playback by default).
 
 Options:
 
-- `--capture` - List recording (capture) endpoints instead of playback.
+- `--capture` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List recording (capture) endpoints instead of playback.
 
 **Example**
 
@@ -4436,9 +4445,9 @@ Connect a Bluetooth audio device (pairs if needed) and route audio to it.
 
 Options:
 
-- `id,--id,--name` (TEXT, required) - Device address (AA:BB:CC:DD:EE:FF) or name substring.
-- `--no-switch` - Connect only; do not change the default playback endpoint.
-- `--timeout-ms` (INT, default `6000`) - How long to wait for the audio endpoint to appear (default 6000).
+- `id,--id,--name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Device address (AA:BB:CC:DD:EE:FF) or name substring.
+- `--no-switch` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Connect only; do not change the default playback endpoint.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">6000</span></span></span>) - How long to wait for the audio endpoint to appear (default 6000).
 
 **Example**
 
@@ -4460,7 +4469,7 @@ Disconnect a Bluetooth audio device (best-effort).
 
 Options:
 
-- `id,--id,--name` (TEXT, required) - Device address or name substring.
+- `id,--id,--name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Device address or name substring.
 
 **Example**
 
@@ -4482,7 +4491,7 @@ Pair a Bluetooth device.
 
 Options:
 
-- `id,--id,--name` (TEXT, required) - Device address or name substring.
+- `id,--id,--name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Device address or name substring.
 
 **Example**
 
@@ -4504,7 +4513,7 @@ Remove (unpair) a Bluetooth device.
 
 Options:
 
-- `id,--id,--name` (TEXT, required) - Device address or name substring.
+- `id,--id,--name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Device address or name substring.
 
 **Example**
 
@@ -4526,7 +4535,7 @@ Set an audio endpoint as the default device for all roles.
 
 Options:
 
-- `id,--id` (TEXT, required) - MMDevice endpoint id (from `bluetooth endpoints`).
+- `id,--id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - MMDevice endpoint id (from `bluetooth endpoints`).
 
 **Example**
 
@@ -4548,7 +4557,7 @@ Run XBlox block-tree command flows.
 
 Options:
 
-- `--log-level` (TEXT:{trace,debug,info,warn,warning,error,err,critical,off,none}, default `info`) - Alias for the global --log-level option when using `xblox --log-level ... run`.
+- `--log-level` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">warning</span> <span data-cli="choice">error</span> <span data-cli="choice">err</span> <span data-cli="choice">critical</span> <span data-cli="choice">off</span> <span data-cli="choice">none</span></span></span>) - Alias for the global --log-level option when using `xblox --log-level ... run`.
 
 **Example**
 
@@ -4568,7 +4577,7 @@ Print XBlox block/command metadata for builders and LLM composition.
 
 Options:
 
-- `--commands` (TEXT) - Optional commands.json override for custom command metadata.
+- `--commands` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional commands.json override for custom command metadata.
 
 **Example**
 
@@ -4588,9 +4597,9 @@ Resolve a provider options schema via the block_params_ui resolver. Exits 0 when
 
 Options:
 
-- `--schema-path` (TEXT) - Resolver routing key, e.g. providers.whisper or providers.replicate.image.
-- `-p,--provider` (TEXT) - Provider name shorthand; used as providers.<name> when --schema-path is omitted.
-- `-m,--model` (TEXT) - Model slug forwarded to the resolver (e.g. base.en or stability-ai/sdxl).
+- `--schema-path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Resolver routing key, e.g. providers.whisper or providers.replicate.image.
+- `-p,--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Provider name shorthand; used as providers.<name> when --schema-path is omitted.
+- `-m,--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model slug forwarded to the resolver (e.g. base.en or stability-ai/sdxl).
 
 **Example**
 
@@ -4612,7 +4621,7 @@ Resolve a block-param options list (array of {value,label}) via block_params_ui 
 
 Options:
 
-- `-p,--path` (TEXT, required) - Options path, e.g. providers.replicate.collections or providers.replicate.models.official.
+- `-p,--path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Options path, e.g. providers.replicate.collections or providers.replicate.models.official.
 
 **Example**
 
@@ -4646,52 +4655,52 @@ Run a blocks-file JSON document emitted by the XBlox web app.
 
 Options:
 
-- `--src` (TEXT, required) - Path to a blocks-file JSON document: { version: 1, context?: {}, roots: [...] }.
-- `--commands` (TEXT) - Optional commands.json override for resolving host.runCustomCommand({ id }).
-- `--event-mode` (TEXT:{full,errors,count}, default `errors`) - Event retention: full stores every event, errors stores only failures, count stores no events. Default: errors (full with --json).
-- `--dry-run` - Stage CLI/external commands but do not spawn child processes.
-- `--simulate` - Simulate execution: resolve inputs and run pure dataflow/control blocks, but suppress side-effecting blocks (fs writes, shell, network, capture, external commands), emitting predicted 'simulated' events instead.
-- `--md` - Print the document as brief pseudo-code markdown (context bullets + script tree) and exit without running it.
-- `--md-numbered` - Use numeric bullets (1. / 2.) instead of dashes in --md output.
-- `--md-filter` (TEXT, default `{}`) - Block kinds excluded from --md output, with their subtrees (repeatable or comma-separated). Default: stdout. Pass 'none' to include everything.
-- `--mermaid` - Render the script section as a fenced mermaid flowchart instead of the bullet tree. Context variables stay as markdown bullets above the diagram. Requires --md.
-- `--mermaid-type` (TEXT:{flow,sequence}, default `flow`) - Diagram type: flow (default; flowchart with decision diamonds) or sequence (registry groups as participants, control flow as alt/loop fragments).
-- `--mermaid-direction` (TEXT:{TD,LR,BT,RL}, default `TD`) - Flowchart direction: TD (default, vertical), LR, BT, or RL. Applies to --mermaid and --diagram.
-- `--mermaid-color` (TEXT:{edges,groups,both,none}, default `both`) - Colouring: edges (yes/no/loop/case link tints), groups (node strokes per registry group + flow diamonds), both (default), or none.
-- `--expand-parameters` - Include set block parameters in diagram node labels (default: compact labels — group/kind, set <name>, conditions on diamonds).
-- `--diagram` - Render the script as a Tanit-style SVG flowchart and exit without running it. Default: raw SVG on stdout. Use --diagram-dst / --diagram-png for files. Combine with --md to embed the diagram in markdown output instead.
-- `--styles` (TEXT) - Diagram styling constants JSON. Default: ${TANIT_SHARED}/xblox-diagram-constants.json. Supports command_variables in the path. Palettes live under JSON "themes".
-- `--theme` (TEXT:{light,dark}, default `light`) - Diagram color palette: light (default) or dark. Selects themes.<name> in the styles JSON (defaultTheme when omitted).
-- `--diagram-type` (TEXT:{flow,sequence}, default `flow`) - Diagram layout: flow (default; flowchart with decision diamonds and param cards) or sequence (participants, lifelines, Script messages).
-- `--diagram-png` (TEXT) - Rasterize the diagram to this PNG path (libvips svgload). Supports command_variables in the path.
-- `--diagram-dst` (TEXT) - Write a standalone .svg file (raw SVG, not markdown). Supports command_variables in the path.
-- `--show-arrows` (BOOLEAN, default `1`) - Draw arrowheads on flow edges when --show-links is true (default: true; styles JSON render.showArrows).
-- `--show-links` (BOOLEAN, default `1`) - Draw connector lines between blocks. When false, nodes are laid out compactly in script order without edges (default: true; styles JSON render.showLinks).
-- `--show-disabled` (BOOLEAN, default `0`) - Include disabled blocks in the diagram (default: false; styles JSON render.showDisabled).
-- `--show-variables` (BOOLEAN, default `1`) - Show storeAs targets and referenced variables on node labels (default: true; styles JSON render.showVariables).
-- `--show-groups` (BOOLEAN, default `1`) - Prefix registry block labels with their group, e.g. audio/audioRecord (default: true; styles JSON render.showGroups).
-- `--humanize-node-names` (BOOLEAN, default `0`) - Humanize registry block labels, e.g. shell/openPath -> Shell / Open Path (default: false; styles JSON render.humanizeNodeNames).
-- `--show-variable-delimiters` (BOOLEAN, default `0`) - Wrap referenced variables as ${name}; when false show plain names (default: false; styles JSON render.showVariableDelimiters).
-- `--variable-link-style` (TEXT, default `unicode`) - Separator before storeAs targets: arrow, unicode (→), colon, dot, equals, none (default: unicode; styles JSON render.variableLinkStyle).
-- `--variable-input-style` (TEXT, default `at`) - Format for referenced inputs: at (@name), parens, bracket, none (default: at; styles JSON render.variableInputStyle).
-- `--link-style` (TEXT:{straight,bezier,waypoints}, default `straight`) - Edge routing style: straight (orthogonal), bezier (smooth curves), waypoints (obstacle-aware routing ported from nodehub pathfinding; default: straight; styles JSON render.linkStyle).
-- `--show-parameters` (TEXT:{none,set,all}, default `none`) - Block parameter visibility on node labels: none (compact), set (wired/set params only, like wiring 'Wired params'), all (full param list, like wiring 'All params'). Styles JSON render.showParameters. --expand-parameters is equivalent to --show-parameters all.
-- `--show-parameters-grouped` (BOOLEAN, default `0`) - Prefix each parameter with its ParamDef group (input/, options/, …). Matches wiring toolbar 'Show group'.
-- `--show-parameter-values` (BOOLEAN, default `0`) - Include parameter values in node labels when --show-parameters is set or all (matches wiring toolbar 'Show set values').
-- `--no-wait` - Skip sleeping for wait blocks.
-- `--max-loop-iterations` (INT:INT in [0 - 1000000], default `10000`) - Maximum iterations per for/while loop block.
-- `--loop` - Re-run the whole document until cancelled (Ctrl+C). Overrides the document's stored loop setting.
-- `--no-loop` - Force a single pass even if the document enables looping.
-- `--loop-interval-ms` (INT:INT in [0 - 86400000], default `100`) - Gap in milliseconds between loop passes (0 = as fast as possible, yielding each pass). Clamped to [0, 86400000] (1 day).
-- `--loop-reset` - Reset scope/state each loop pass (clean restart). Default persists state across passes (variables carry over).
-- `--loop-limit` (INT:INT in [0 - 9223372036854775807], default `0`) - Stop after exactly N document-level loop passes (0 = unlimited). Counted at the runtime level before each inter-pass yield.
-- `--quiet` - Suppress stdout block output (message is still resolved and the event is still emitted). Useful for benchmarking and CI runs.
-- `--profile` - Print a per-category timing breakdown to stderr after the run (jq VM, converters, emit, set-ctx).
-- `--arg` (TEXT, default `{}`) - Extra argument appended to cliCommand/external argv command invocations; repeatable.
+- `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to a blocks-file JSON document: { version: 1, context?: {}, roots: [...] }.
+- `--commands` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional commands.json override for resolving host.runCustomCommand({ id }).
+- `--event-mode` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">full</span> <span data-cli="choice">errors</span> <span data-cli="choice">count</span></span></span>) - Event retention: full stores every event, errors stores only failures, count stores no events. Default: errors (full with --json).
+- `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Stage CLI/external commands but do not spawn child processes.
+- `--simulate` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Simulate execution: resolve inputs and run pure dataflow/control blocks, but suppress side-effecting blocks (fs writes, shell, network, capture, external commands), emitting predicted 'simulated' events instead.
+- `--md` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print the document as brief pseudo-code markdown (context bullets + script tree) and exit without running it.
+- `--md-numbered` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Use numeric bullets (1. / 2.) instead of dashes in --md output.
+- `--md-filter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Block kinds excluded from --md output, with their subtrees (repeatable or comma-separated). Default: stdout. Pass 'none' to include everything.
+- `--mermaid` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Render the script section as a fenced mermaid flowchart instead of the bullet tree. Context variables stay as markdown bullets above the diagram. Requires --md.
+- `--mermaid-type` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">flow</span> <span data-cli="choice">sequence</span></span></span>) - Diagram type: flow (default; flowchart with decision diamonds) or sequence (registry groups as participants, control flow as alt/loop fragments).
+- `--mermaid-direction` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">TD</span> <span data-cli="choice">LR</span> <span data-cli="choice">BT</span> <span data-cli="choice">RL</span></span></span>) - Flowchart direction: TD (default, vertical), LR, BT, or RL. Applies to --mermaid and --diagram.
+- `--mermaid-color` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">edges</span> <span data-cli="choice">groups</span> <span data-cli="choice">both</span> <span data-cli="choice">none</span></span></span>) - Colouring: edges (yes/no/loop/case link tints), groups (node strokes per registry group + flow diamonds), both (default), or none.
+- `--expand-parameters` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include set block parameters in diagram node labels (default: compact labels — group/kind, set <name>, conditions on diamonds).
+- `--diagram` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Render the script as a Tanit-style SVG flowchart and exit without running it. Default: raw SVG on stdout. Use --diagram-dst / --diagram-png for files. Combine with --md to embed the diagram in markdown output instead.
+- `--styles` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Diagram styling constants JSON. Default: ${TANIT_SHARED}/xblox-diagram-constants.json. Supports command_variables in the path. Palettes live under JSON "themes".
+- `--theme` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">light</span> <span data-cli="choice">dark</span></span></span>) - Diagram color palette: light (default) or dark. Selects themes.<name> in the styles JSON (defaultTheme when omitted).
+- `--diagram-type` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">flow</span> <span data-cli="choice">sequence</span></span></span>) - Diagram layout: flow (default; flowchart with decision diamonds and param cards) or sequence (participants, lifelines, Script messages).
+- `--diagram-png` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Rasterize the diagram to this PNG path (libvips svgload). Supports command_variables in the path.
+- `--diagram-dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write a standalone .svg file (raw SVG, not markdown). Supports command_variables in the path.
+- `--show-arrows` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Draw arrowheads on flow edges when --show-links is true (default: true; styles JSON render.showArrows).
+- `--show-links` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Draw connector lines between blocks. When false, nodes are laid out compactly in script order without edges (default: true; styles JSON render.showLinks).
+- `--show-disabled` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Include disabled blocks in the diagram (default: false; styles JSON render.showDisabled).
+- `--show-variables` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Show storeAs targets and referenced variables on node labels (default: true; styles JSON render.showVariables).
+- `--show-groups` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Prefix registry block labels with their group, e.g. audio/audioRecord (default: true; styles JSON render.showGroups).
+- `--humanize-node-names` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Humanize registry block labels, e.g. shell/openPath -> Shell / Open Path (default: false; styles JSON render.humanizeNodeNames).
+- `--show-variable-delimiters` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Wrap referenced variables as ${name}; when false show plain names (default: false; styles JSON render.showVariableDelimiters).
+- `--variable-link-style` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Separator before storeAs targets: arrow, unicode (→), colon, dot, equals, none (default: unicode; styles JSON render.variableLinkStyle).
+- `--variable-input-style` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Format for referenced inputs: at (@name), parens, bracket, none (default: at; styles JSON render.variableInputStyle).
+- `--link-style` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">straight</span> <span data-cli="choice">bezier</span> <span data-cli="choice">waypoints</span></span></span>) - Edge routing style: straight (orthogonal), bezier (smooth curves), waypoints (obstacle-aware routing ported from nodehub pathfinding; default: straight; styles JSON render.linkStyle).
+- `--show-parameters` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">none</span> <span data-cli="choice">set</span> <span data-cli="choice">all</span></span></span>) - Block parameter visibility on node labels: none (compact), set (wired/set params only, like wiring 'Wired params'), all (full param list, like wiring 'All params'). Styles JSON render.showParameters. --expand-parameters is equivalent to --show-parameters all.
+- `--show-parameters-grouped` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Prefix each parameter with its ParamDef group (input/, options/, …). Matches wiring toolbar 'Show group'.
+- `--show-parameter-values` (<span data-cli="meta"><span data-cli="type">BOOLEAN</span></span>) - Include parameter values in node labels when --show-parameters is set or all (matches wiring toolbar 'Show set values').
+- `--no-wait` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip sleeping for wait blocks.
+- `--max-loop-iterations` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 1000000]</span>, <span data-cli="default">default <span data-cli="value">10000</span></span></span>) - Maximum iterations per for/while loop block.
+- `--loop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Re-run the whole document until cancelled (Ctrl+C). Overrides the document's stored loop setting.
+- `--no-loop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Force a single pass even if the document enables looping.
+- `--loop-interval-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 86400000]</span></span>) - Gap in milliseconds between loop passes (0 = as fast as possible, yielding each pass). Clamped to [0, 86400000] (1 day).
+- `--loop-reset` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Reset scope/state each loop pass (clean restart). Default persists state across passes (variables carry over).
+- `--loop-limit` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 9223372036854775807]</span></span>) - Stop after exactly N document-level loop passes (0 = unlimited). Counted at the runtime level before each inter-pass yield.
+- `--quiet` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Suppress stdout block output (message is still resolved and the event is still emitted). Useful for benchmarking and CI runs.
+- `--profile` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print a per-category timing breakdown to stderr after the run (jq VM, converters, emit, set-ctx).
+- `--arg` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Extra argument appended to cliCommand/external argv command invocations; repeatable.
 
 **Security**
-- `--consent-ui` (TEXT) - Consent surface for security-gated tools in this run: win32 (default, native dialog) | auto | cli | auto-deny | auto-allow | preset. An llmAgent block's consentUi param overrides this per turn.
-- `--consent-owner` (TEXT) - Target descriptor (ipc id) for --consent-ui owner routing. Reserved.
+- `--consent-ui` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Consent surface for security-gated tools in this run: win32 (default, native dialog) | auto | cli | auto-deny | auto-allow | preset. An llmAgent block's consentUi param overrides this per turn.
+- `--consent-owner` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target descriptor (ipc id) for --consent-ui owner routing. Reserved.
 
 **Example**
 
@@ -4781,8 +4790,8 @@ Host a bare session and block until stopped (Ctrl+C or `session stop`).
 
 Options:
 
-- `--key` (TEXT) - Session name/key (default: auto host-<ms>).
-- `--label` (TEXT) - Human-friendly label.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Session name/key (default: auto host-<ms>).
+- `--label` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Human-friendly label.
 
 **Example**
 
@@ -4804,8 +4813,8 @@ Signal a session (or --all) to stop.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--all` - Target every live session.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--all` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Target every live session.
 
 **Example**
 
@@ -4827,8 +4836,8 @@ Send a ping to a session (or --all); prints the pong reply.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--all` - Target every live session.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--all` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Target every live session.
 
 **Example**
 
@@ -4850,8 +4859,8 @@ Send a pong to a session (or --all); prints the ping reply.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--all` - Target every live session.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--all` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Target every live session.
 
 **Example**
 
@@ -4873,7 +4882,7 @@ Show a session's details (xblox file, cwd, pid, uptime) and live vars.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
 
 **Example**
 
@@ -4895,8 +4904,8 @@ Read a variable from a session's published scope.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--name` (TEXT, required) - Variable name.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Variable name.
 
 **Example**
 
@@ -4918,9 +4927,9 @@ Set a variable on a session (applied at the next loop pass).
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--name` (TEXT, required) - Variable name.
-- `--value` (TEXT) - Value (parsed as JSON when possible, else a string).
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Variable name.
+- `--value` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Value (parsed as JSON when possible, else a string).
 
 **Example**
 
@@ -4942,7 +4951,7 @@ List a session's published variables.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
 
 **Example**
 
@@ -4964,9 +4973,9 @@ Send a directed message to a session's inbox.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--message` (TEXT) - Message text.
-- `--from` (TEXT) - Sender identity (default: cli).
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--message` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Message text.
+- `--from` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sender identity (default: cli).
 
 **Example**
 
@@ -4988,8 +4997,8 @@ Send a message to every live session's inbox.
 
 Options:
 
-- `--message` (TEXT) - Message text.
-- `--from` (TEXT) - Sender identity (default: cli).
+- `--message` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Message text.
+- `--from` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sender identity (default: cli).
 
 **Example**
 
@@ -5011,8 +5020,8 @@ Drain (or --peek) a session's message inbox.
 
 Options:
 
-- `--key` (TEXT) - Target session key, stem, or unambiguous prefix.
-- `--peek` - Read without consuming.
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target session key, stem, or unambiguous prefix.
+- `--peek` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Read without consuming.
 
 **Example**
 
@@ -5066,9 +5075,9 @@ Apply a registered text sanitizer profile to --input.
 
 Options:
 
-- `--profile` (TEXT:{common,html,markdown,skill,strip-bom,repair-utf8,ascii,html-comments,html-dangerous}, default `common`) - common, html, markdown, skill, strip-bom, repair-utf8, ascii, html-comments, html-dangerous
-- `--input` (TEXT) - Input text
-- `--input-file` (TEXT) - UTF-8/binary input file to sanitize
+- `--profile` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">common</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">common</span> <span data-cli="choice">html</span> <span data-cli="choice">markdown</span> <span data-cli="choice">skill</span> <span data-cli="choice">strip-bom</span> <span data-cli="choice">repair-utf8</span> <span data-cli="choice">ascii</span> <span data-cli="choice">html-comments</span> <span data-cli="choice">html-dangerous</span></span></span>) - common, html, markdown, skill, strip-bom, repair-utf8, ascii, html-comments, html-dangerous
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Input text
+- `--input-file` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - UTF-8/binary input file to sanitize
 
 **Example**
 
@@ -5090,7 +5099,7 @@ Run string path cleanup helpers against --input.
 
 Options:
 
-- `--input` (TEXT, required) - Input path
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Input path
 
 **Example**
 
@@ -5112,8 +5121,8 @@ Run UUID/id/group/permission cleanup helpers against --input.
 
 Options:
 
-- `--kind` (TEXT:{uuid,id,group,permission,permissions}, required) - uuid, id, group, permission, permissions
-- `--input` (TEXT, required) - Input value
+- `--kind` (<span data-cli="meta"><span data-cli="tag" data-variant="required">required</span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">uuid</span> <span data-cli="choice">id</span> <span data-cli="choice">group</span> <span data-cli="choice">permission</span> <span data-cli="choice">permissions</span></span></span>) - uuid, id, group, permission, permissions
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Input value
 
 **Example**
 
@@ -5147,8 +5156,8 @@ Run LLM filesystem guard policy against --path.
 
 Options:
 
-- `--mode` (TEXT:{read,sensitive,write}, default `read`) - read, sensitive, or write
-- `--path` (TEXT, required) - Path to check
+- `--mode` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">read</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">read</span> <span data-cli="choice">sensitive</span> <span data-cli="choice">write</span></span></span>) - read, sensitive, or write
+- `--path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to check
 
 **Example**
 
@@ -5186,7 +5195,7 @@ Validate and parse a tanit:// URI, including fragment/locate data.
 
 Options:
 
-- `--uri` (TEXT, required) - tanit:// URI to parse and validate
+- `--uri` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - tanit:// URI to parse and validate
 
 **Example**
 
@@ -5208,7 +5217,7 @@ Expand ${VAR} templates using the URI-safe restricted VariableMap (no ENV:, no s
 
 Options:
 
-- `--input` (TEXT, required) - Template string to expand
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Template string to expand
 
 **Example**
 
@@ -5230,17 +5239,17 @@ Async JSON field iterator: jq path selection + pluggable transformer (upper/pref
 
 Options:
 
-- `--input` (TEXT) - JSON text
-- `--input-file` (TEXT) - JSON file
-- `--path` (TEXT, default `.items[].name`) - jq filter selecting string leaves (JSONPath-ish $./[*] accepted)
-- `--target-path` (TEXT) - Write result to sibling key instead of in-place (e.g. label_de). Ignored with --merge-json.
-- `--merge-json` - Expect JSON object from transformer; hard-overwrite-merge onto parent (existing keys replaced).
-- `--transform` (TEXT:{upper,prefix,identity,llm,json-stub}, default `upper`) - upper, prefix, identity, llm, json-stub
-- `--prefix` (TEXT, default `x`) - Prefix string when --transform prefix
-- `--prompt` (TEXT) - Prompt template when --transform llm (echo stub for now)
-- `--out` (TEXT) - Optional path to write transformed JSON
-- `--concurrency` (INT:INT in [1 - 64], default `1`) - Max concurrent transforms
-- `--throttle-ms` (INT:INT in [0 - 60000], default `0`) - Min delay between transform starts
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON text
+- `--input-file` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON file
+- `--path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">.items[].name</span></span></span>) - jq filter selecting string leaves (JSONPath-ish $./[*] accepted)
+- `--target-path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write result to sibling key instead of in-place (e.g. label_de). Ignored with --merge-json.
+- `--merge-json` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Expect JSON object from transformer; hard-overwrite-merge onto parent (existing keys replaced).
+- `--transform` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">upper</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">upper</span> <span data-cli="choice">prefix</span> <span data-cli="choice">identity</span> <span data-cli="choice">llm</span> <span data-cli="choice">json-stub</span></span></span>) - upper, prefix, identity, llm, json-stub
+- `--prefix` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">x</span></span></span>) - Prefix string when --transform prefix
+- `--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Prompt template when --transform llm (echo stub for now)
+- `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional path to write transformed JSON
+- `--concurrency` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 64]</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Max concurrent transforms
+- `--throttle-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 60000]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Min delay between transform starts
 
 **Example**
 
@@ -5262,9 +5271,9 @@ ModernBERT byte-level BPE parity probe: dump [CLS]+subtokens+[SEP] ids and word_
 
 Options:
 
-- `--vocab` (TEXT, required) - Path to vocab-only ModernBERT GGUF
-- `--input` (TEXT, required) - Text to tokenize (split on ASCII whitespace)
-- `--max-len` (INT:INT in [2 - 8192], default `512`) - Max sequence length incl. [CLS]/[SEP] (default 512)
+- `--vocab` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to vocab-only ModernBERT GGUF
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to tokenize (split on ASCII whitespace)
+- `--max-len` (<span data-cli="meta"><span data-cli="type">INT:INT in [2 - 8192]</span>, <span data-cli="default">default <span data-cli="value">512</span></span></span>) - Max sequence length incl. [CLS]/[SEP] (default 512)
 
 **Example**
 
@@ -5286,13 +5295,13 @@ Run the Kompress ONNX text scorer over --input/--input-file: keep important word
 
 Options:
 
-- `--onnx` (TEXT) - kompress-int8-wo.onnx (default: shipped, then ${MODELS_DIR})
-- `--vocab` (TEXT) - modernbert-vocab.gguf (default: shipped, then ${MODELS_DIR})
-- `--input` (TEXT) - Text to compress
-- `--input-file` (TEXT) - File alternative to --input
-- `--ratio` (FLOAT:FLOAT in [-1 - 1], default `-1`) - Keep ratio per chunk (0-1). <=0 (default): score-threshold mode.
-- `--chunk` (INT:INT in [1 - 4096], default `350`) - Words per chunk (default 350)
-- `--scores` - Also dump per-word max scores
+- `--onnx` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - kompress-int8-wo.onnx (default: shipped, then ${MODELS_DIR})
+- `--vocab` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - modernbert-vocab.gguf (default: shipped, then ${MODELS_DIR})
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Text to compress
+- `--input-file` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - File alternative to --input
+- `--ratio` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [-1 - 1]</span>, <span data-cli="default">default <span data-cli="value">-1</span></span></span>) - Keep ratio per chunk (0-1). <=0 (default): score-threshold mode.
+- `--chunk` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 4096]</span>, <span data-cli="default">default <span data-cli="value">350</span></span></span>) - Words per chunk (default 350)
+- `--scores` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also dump per-word max scores
 
 **Example**
 
@@ -5308,14 +5317,58 @@ tanit-cli test core kompress --onnx 'foo' --vocab 'foo' --input 'foo' --input-fi
 
 ---
 
+#### test core context
+
+Windows OS context-store acceptance scenarios (synthetic Explorer/Desktop/drag).
+
+Options:
+
+- `--scenario` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">all</span></span></span>) - A, B, C, D, E, F, policy, mru, apps, signals, or all
+
+**Example**
+
+```sh
+tanit-cli test core context
+```
+
+**Full example**
+
+```sh
+tanit-cli test core context --scenario 'all'
+```
+
+---
+
+#### test core file-handlers
+
+Windows file-association resolver (SHAssocEnumHandlers + Installed Apps identity).
+
+Options:
+
+- `--scenario` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">all</span></span></span>) - normalize, png, unknown, identity, context, path, open-apps, or all
+
+**Example**
+
+```sh
+tanit-cli test core file-handlers
+```
+
+**Full example**
+
+```sh
+tanit-cli test core file-handlers --scenario 'all'
+```
+
+---
+
 #### test screenshot
 
 Start the main window, wait, capture it to a PNG, then exit.
 
 Options:
 
-- `-o,--output` (TEXT, required) - PNG output path
-- `--wait-ms` (INT, default `2000`) - Milliseconds to wait after UI init before capture (default: 2000)
+- `-o,--output` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - PNG output path
+- `--wait-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">2000</span></span></span>) - Milliseconds to wait after UI init before capture (default: 2000)
 
 **Example**
 
@@ -5349,7 +5402,7 @@ Global shortcut daemon: hotkeys, UI presets, app commands, STT, and voice sessio
 
 Options:
 
-- `--config` (TEXT) - Daemon JSON config path. Default: the app roaming profile daemon.json next to settings.json.
+- `--config` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Daemon JSON config path. Default: the app roaming profile daemon.json next to settings.json.
 
 **Example**
 
@@ -5369,7 +5422,7 @@ Run the foreground hotkey daemon (default action).
 
 Options:
 
-- `--tray` - Run with a notification-area tray icon.
+- `--tray` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Run with a notification-area tray icon.
 
 **Example**
 
@@ -5450,10 +5503,10 @@ With no subcommand: starts the assistant toolbar/global shortcut host.
 
 Options:
 
-- `--ui,--no-ui{false}` (default `1`) - Show the assistant toolbar window (topmost pill, left-edge snap by default).
+- `--ui,--no-ui{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Show the assistant toolbar window (topmost pill, left-edge snap by default).
 Default: on when no subcommand is given.
-- `--realtime` - Toggle a live voice session (start if idle, stop if running) and exit.
-- `--stop` - Signal a detached assistant toolbar (started via `pm-image assistant` or `app togglelauncher`) to close cooperatively.
+- `--realtime` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Toggle a live voice session (start if idle, stop if running) and exit.
+- `--stop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Signal a detached assistant toolbar (started via `pm-image assistant` or `app togglelauncher`) to close cooperatively.
 
 **Example**
 
@@ -5489,16 +5542,16 @@ Dump visible windows and useful UIA elements with screen coordinates.
 
 Options:
 
-- `--md` - Print a compact Markdown tree for humans and LLMs.
-- `--probe-cells` - Probe visible virtualized cells with ElementFromPoint (slower; auto-enabled for spreadsheet-looking --md targets).
-- `--foreground` - Inspect only the foreground window.
-- `--pid` (INT, default `0`) - Inspect windows for a process id.
-- `--hwnd` (INT, default `0`) - Inspect a specific window handle (decimal).
-- `--process` (TEXT) - Case-insensitive process-name substring filter, e.g. notepad.exe.
-- `--title` (TEXT) - Case-insensitive title substring filter.
-- `--controls` (TEXT) - Markdown control filter, e.g. button,menuitem,edit,input,text.
-- `--limit` (INT:INT in [1 - 10000], default `500`) - Maximum useful elements per window.
-- `--text-max-chars` (INT:INT in [20 - 200000], default `4096`) - Maximum characters per Markdown text/value field.
+- `--md` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print a compact Markdown tree for humans and LLMs.
+- `--probe-cells` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Probe visible virtualized cells with ElementFromPoint (slower; auto-enabled for spreadsheet-looking --md targets).
+- `--foreground` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Inspect only the foreground window.
+- `--pid` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Inspect windows for a process id.
+- `--hwnd` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Inspect a specific window handle (decimal).
+- `--process` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Case-insensitive process-name substring filter, e.g. notepad.exe.
+- `--title` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Case-insensitive title substring filter.
+- `--controls` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Markdown control filter, e.g. button,menuitem,edit,input,text.
+- `--limit` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 10000]</span>, <span data-cli="default">default <span data-cli="value">500</span></span></span>) - Maximum useful elements per window.
+- `--text-max-chars` (<span data-cli="meta"><span data-cli="type">INT:INT in [20 - 200000]</span>, <span data-cli="default">default <span data-cli="value">4096</span></span></span>) - Maximum characters per Markdown text/value field.
 
 **Example**
 
@@ -5520,16 +5573,16 @@ Save a window (or screen crop) as JPEG. Prefer --pid + --title (exact title wins
 
 Options:
 
-- `--foreground` - Resolve --element in the foreground window.
-- `--pid` (INT, default `0`) - Resolve windows for a process id (combine with --title).
-- `--hwnd` (INT, default `0`) - Capture a specific window handle (decimal).
-- `--process` (TEXT) - Resolve window/element by process-name substring.
-- `--title` (TEXT) - Title filter (substring). When several windows match, an exact (ci) title is preferred.
-- `--element` (INT, default `-1`) - Element index from app-inspect dump.
-- `--rect` (TEXT) - Screen rectangle x,y,w,h.
-- `-o,--output` (TEXT, required) - Destination .jpg path.
-- `--quality` (INT:INT in [1 - 100], default `85`) - JPEG quality 1..100.
-- `--no-activate` - Skip bringing the target window to foreground before capture. Default: when a window is resolved by --title/--process/--pid/--hwnd/--foreground, it is activated first so the capture matches what the user sees.
+- `--foreground` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Resolve --element in the foreground window.
+- `--pid` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Resolve windows for a process id (combine with --title).
+- `--hwnd` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Capture a specific window handle (decimal).
+- `--process` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Resolve window/element by process-name substring.
+- `--title` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Title filter (substring). When several windows match, an exact (ci) title is preferred.
+- `--element` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Element index from app-inspect dump.
+- `--rect` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Screen rectangle x,y,w,h.
+- `-o,--output` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Destination .jpg path.
+- `--quality` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 100]</span>, <span data-cli="default">default <span data-cli="value">85</span></span></span>) - JPEG quality 1..100.
+- `--no-activate` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip bringing the target window to foreground before capture. Default: when a window is resolved by --title/--process/--pid/--hwnd/--foreground, it is activated first so the capture matches what the user sees.
 
 **Example**
 
@@ -5541,6 +5594,41 @@ tanit-cli assistant app-inspect screenshot -o <value>
 
 ```sh
 tanit-cli assistant app-inspect screenshot --foreground --pid 0 --hwnd 0 --process 'foo' --title 'foo' --element -1 --rect 'foo' -o 'foo' --quality 85 --no-activate
+```
+
+---
+
+#### assistant context-dump
+
+One-shot Windows OS context snapshot (Explorer/Desktop/drag/invocation, optional MRU,
+open apps, per-app Shell Recent/Frequent). Does not auto-resolve file operations.
+Lazy providers run only when their --allow-* flags are set.
+
+Options:
+
+- `--md` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print Markdown only (no JSON envelope).
+- `--allow-mru` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include session MRU as eligible candidates. Never implicit input for ResolveContext.
+- `--allow-open-apps` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enumerate bounded open-app / taskbar-candidate windows (EnumWindows, dirty/on-demand).
+- `--allow-app-recent` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Lazy IApplicationDocumentLists Recent/Frequent for --app-id (default: foreground AppUserModelID).
+- `--historical,--no-historical{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Include last-non-empty Explorer/Desktop selections (default: on).
+- `--clipboard` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Consent to include clipboard payload and event-preview metadata.
+- `--internal` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include internal fields (hwnd, confidence) in JSON.
+- `--track` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Install WinEvent hooks for this process for the duration of the dump (usually unnecessary).
+- `--capabilities` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">files,folders,text,url</span></span></span>) - Comma-separated capabilities: files,folders,text,image,url,window,uielement.
+- `--app-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - AppUserModelID for --allow-app-recent. Empty = current foreground app.
+- `--max-age-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 86400000]</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>) - Max age for live/historical sources (0 = policy default).
+- `--mru-max-age-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 86400000]</span>, <span data-cli="default">default <span data-cli="value">1800000</span></span></span>) - Max age for session MRU / app-recent candidates.
+
+**Example**
+
+```sh
+tanit-cli assistant context-dump
+```
+
+**Full example**
+
+```sh
+tanit-cli assistant context-dump --md --allow-mru --allow-open-apps --allow-app-recent --historical --clipboard --internal --track --capabilities 'files,folders,text,url' --app-id 'foo' --max-age-ms 30000 --mru-max-age-ms 1800000
 ```
 
 ---
@@ -5567,14 +5655,14 @@ Launch an app with optional args/cwd and place its first visible window.
 
 Options:
 
-- `--exe` (TEXT, required) - Executable path or name.
-- `--args` (TEXT) - Raw command-line args passed after --exe.
-- `--cwd` (TEXT) - Working directory.
-- `--x` (INT, default `0`) - Window left coordinate.
-- `--y` (INT, default `0`) - Window top coordinate.
-- `--width` (INT, default `0`) - Window width.
-- `--height` (INT, default `0`) - Window height.
-- `--wait-ms` (INT:INT in [0 - 60000], default `1000`) - Milliseconds to wait for first visible window.
+- `--exe` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Executable path or name.
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Raw command-line args passed after --exe.
+- `--cwd` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Working directory.
+- `--x` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Window left coordinate.
+- `--y` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Window top coordinate.
+- `--width` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Window width.
+- `--height` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Window height.
+- `--wait-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 60000]</span>, <span data-cli="default">default <span data-cli="value">1000</span></span></span>) - Milliseconds to wait for first visible window.
 
 **Example**
 
@@ -5596,10 +5684,10 @@ Move the cursor to a screen coordinate. Use --api-width/--api-height for scaled 
 
 Options:
 
-- `--x` (INT, required, default `0`) - X coordinate.
-- `--y` (INT, required, default `0`) - Y coordinate.
-- `--api-width` (INT, default `0`) - Coordinate-space width from an LLM computer-use API.
-- `--api-height` (INT, default `0`) - Coordinate-space height from an LLM computer-use API.
+- `--x` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - X coordinate.
+- `--y` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Y coordinate.
+- `--api-width` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Coordinate-space width from an LLM computer-use API.
+- `--api-height` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Coordinate-space height from an LLM computer-use API.
 
 **Example**
 
@@ -5621,13 +5709,13 @@ Click a screen coordinate. Supports --button, --count, scaled API coords, and --
 
 Options:
 
-- `--virtual` - Do not move the physical cursor; post mouse messages.
-- `--x` (INT, required, default `0`) - Screen x coordinate.
-- `--y` (INT, required, default `0`) - Screen y coordinate.
-- `--button` (TEXT, default `left`) - Mouse button: left, right, or middle.
-- `--count` (INT:INT in [1 - 10], default `1`) - Click count (2 = double click).
-- `--api-width` (INT, default `0`) - Coordinate-space width from an LLM computer-use API.
-- `--api-height` (INT, default `0`) - Coordinate-space height from an LLM computer-use API.
+- `--virtual` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not move the physical cursor; post mouse messages.
+- `--x` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Screen x coordinate.
+- `--y` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Screen y coordinate.
+- `--button` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">left</span></span></span>) - Mouse button: left, right, or middle.
+- `--count` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 10]</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Click count (2 = double click).
+- `--api-width` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Coordinate-space width from an LLM computer-use API.
+- `--api-height` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Coordinate-space height from an LLM computer-use API.
 
 **Example**
 
@@ -5649,7 +5737,7 @@ Type UTF-8 text into the currently focused control via Unicode SendInput.
 
 Options:
 
-- `--text` (TEXT, required) - Text to type.
+- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to type.
 
 **Example**
 
@@ -5671,7 +5759,7 @@ Send a hotkey sequence such as ctrl+s, alt+f, or f5.
 
 Options:
 
-- `--keys` (TEXT, required) - Keys separated by +, comma, or spaces.
+- `--keys` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Keys separated by +, comma, or spaces.
 
 **Example**
 
@@ -5693,9 +5781,9 @@ Press a single key, hold for --hold-ms, release. Use this when key DURATION matt
 
 Options:
 
-- `--key` (TEXT, required) - Single key name (a-z, 0-9, f1..f12, enter, space, left, up, ...).
-- `--hold-ms` (INT:INT in [0 - 30000], default `50`) - How long to hold the key down (ms). FreePiano / similar apps treat this as note sustain.
-- `--modifiers` (TEXT) - Optional modifiers held during the press, separated by +/,/space (e.g. "ctrl" or "ctrl+shift").
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Single key name (a-z, 0-9, f1..f12, enter, space, left, up, ...).
+- `--hold-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 30000]</span>, <span data-cli="default">default <span data-cli="value">50</span></span></span>) - How long to hold the key down (ms). FreePiano / similar apps treat this as note sustain.
+- `--modifiers` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional modifiers held during the press, separated by +/,/space (e.g. "ctrl" or "ctrl+shift").
 
 **Example**
 
@@ -5717,8 +5805,8 @@ Report cursor position and virtual-screen dimensions; optionally include scaled 
 
 Options:
 
-- `--api-width` (INT, default `0`) - Coordinate-space width from an LLM computer-use API.
-- `--api-height` (INT, default `0`) - Coordinate-space height from an LLM computer-use API.
+- `--api-width` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Coordinate-space width from an LLM computer-use API.
+- `--api-height` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Coordinate-space height from an LLM computer-use API.
 
 **Example**
 
@@ -5740,10 +5828,10 @@ Run a JSON app-use action sequence in one process, with per-step delays and wait
 
 Options:
 
-- `--continue-on-error` - Continue running later steps after a step fails.
-- `--file` (TEXT, required) - Batch JSON file: an array or {"steps":[...]} document.
-- `--default-delay-ms` (INT:INT in [0 - 60000], default `50`) - Default delay after each step (ms).
-- `--speed` (FLOAT:FLOAT in [0.05 - 20], default `1`) - Replay speed multiplier: 1.0=normal, 0.5=half speed (delays×2), 2.0=double speed. Also settable as top-level JSON key "speed" in the batch file.
+- `--continue-on-error` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Continue running later steps after a step fails.
+- `--file` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Batch JSON file: an array or {"steps":[...]} document.
+- `--default-delay-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 60000]</span>, <span data-cli="default">default <span data-cli="value">50</span></span></span>) - Default delay after each step (ms).
+- `--speed` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0.05 - 20]</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Replay speed multiplier: 1.0=normal, 0.5=half speed (delays×2), 2.0=double speed. Also settable as top-level JSON key "speed" in the batch file.
 
 **Example**
 
@@ -5765,11 +5853,11 @@ Close a window gracefully (WM_CLOSE) and wait for the process to exit. Pass --fo
 
 Options:
 
-- `--pid` (INT, default `0`) - Target process id.
-- `--hwnd` (INT, default `0`) - Target window handle (decimal).
-- `--title` (TEXT) - Find window by title substring.
-- `--force` - TerminateProcess if graceful close times out.
-- `--wait-ms` (INT:INT in [0 - 30000], default `2000`) - Wait for process exit (default 2000 ms).
+- `--pid` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Target process id.
+- `--hwnd` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Target window handle (decimal).
+- `--title` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Find window by title substring.
+- `--force` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - TerminateProcess if graceful close times out.
+- `--wait-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 30000]</span>, <span data-cli="default">default <span data-cli="value">2000</span></span></span>) - Wait for process exit (default 2000 ms).
 
 **Example**
 
@@ -5795,15 +5883,15 @@ exe + command line, and the precise rectangle (coords fallback).
 
 Options:
 
-- `--target` (TEXT:{auto,follow,element,window,monitor}, default `auto`) - Which selector to make canonical: auto|follow|element|window|monitor.
+- `--target` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">follow</span> <span data-cli="choice">element</span> <span data-cli="choice">window</span> <span data-cli="choice">monitor</span></span></span>) - Which selector to make canonical: auto|follow|element|window|monitor.
 auto   = follow when a sub-window element is picked, else window.
 follow = hwnd=<root>:rrect=dx,dy,w,h — sub-rect that tracks window moves.
 element= fixed screen rect (does not track moves).
 window = whole window (hwnd=).  monitor = whole monitor.
-- `--no-highlight` - Do not draw the translucent highlight that follows the cursor.
-- `--no-uia` - Skip UIA ElementFromPoint (no AutomationId/Name/precise element rect).
-- `--visible-only` - Disable descent into hidden child windows (WinSpy fShowHidden). Default off: hidden descent is needed to land on Chrome render widgets.
-- `--no-cmdline` - Skip reading the target process command line (args).
+- `--no-highlight` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not draw the translucent highlight that follows the cursor.
+- `--no-uia` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip UIA ElementFromPoint (no AutomationId/Name/precise element rect).
+- `--visible-only` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable descent into hidden child windows (WinSpy fShowHidden). Default off: hidden descent is needed to land on Chrome render widgets.
+- `--no-cmdline` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip reading the target process command line (args).
 
 **Example**
 
@@ -5841,7 +5929,7 @@ Ping the Tanit Chrome extension bridge.
 
 Options:
 
-- `--timeout-ms` (INT:INT in [1000 - 120000], default `15000`) - Bridge timeout in milliseconds.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [1000 - 120000]</span>, <span data-cli="default">default <span data-cli="value">15000</span></span></span>) - Bridge timeout in milliseconds.
 
 **Example**
 
@@ -5863,7 +5951,7 @@ Report Tanit Chrome extension and native host connection state.
 
 Options:
 
-- `--timeout-ms` (INT:INT in [1000 - 120000], default `15000`) - Bridge timeout in milliseconds.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [1000 - 120000]</span>, <span data-cli="default">default <span data-cli="value">15000</span></span></span>) - Bridge timeout in milliseconds.
 
 **Example**
 
@@ -5885,11 +5973,11 @@ Inspect the DOM element at viewport coordinates in a matching Chrome tab.
 
 Options:
 
-- `--x` (INT, required, default `0`) - Viewport X coordinate.
-- `--y` (INT, required, default `0`) - Viewport Y coordinate.
-- `--tab-title` (TEXT) - Case-insensitive Chrome tab title substring filter.
-- `--format` (TEXT:{json,md,html}, default `json`) - Output format: json, md, or html.
-- `--timeout-ms` (INT:INT in [1000 - 120000], default `15000`) - Bridge timeout in milliseconds.
+- `--x` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Viewport X coordinate.
+- `--y` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Viewport Y coordinate.
+- `--tab-title` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Case-insensitive Chrome tab title substring filter.
+- `--format` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">json</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">json</span> <span data-cli="choice">md</span> <span data-cli="choice">html</span></span></span>) - Output format: json, md, or html.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [1000 - 120000]</span>, <span data-cli="default">default <span data-cli="value">15000</span></span></span>) - Bridge timeout in milliseconds.
 
 **Example**
 
@@ -5911,10 +5999,10 @@ Inspect the first matching DOM node in a Chrome tab.
 
 Options:
 
-- `--selector` (TEXT, required) - CSS selector to inspect.
-- `--tab-title` (TEXT) - Case-insensitive Chrome tab title substring filter.
-- `--format` (TEXT:{json,md,html}, default `json`) - Output format: json, md, or html.
-- `--timeout-ms` (INT:INT in [1000 - 120000], default `15000`) - Bridge timeout in milliseconds.
+- `--selector` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - CSS selector to inspect.
+- `--tab-title` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Case-insensitive Chrome tab title substring filter.
+- `--format` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">json</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">json</span> <span data-cli="choice">md</span> <span data-cli="choice">html</span></span></span>) - Output format: json, md, or html.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [1000 - 120000]</span>, <span data-cli="default">default <span data-cli="value">15000</span></span></span>) - Bridge timeout in milliseconds.
 
 **Example**
 
@@ -5943,22 +6031,22 @@ Targets with special handling in src/win/assistant/:
 
 Options:
 
-- `--interval-ms` (INT:INT in [50 - 60000], default `500`) - Poll interval in milliseconds (default 500; minimum 50).
-- `--no-value` - Skip IUIAutomationValuePattern (edit fields, cells, address bars).
-- `--no-selection` - Skip IUIAutomationTextPattern selection ranges.
-- `--no-text` - Skip IUIAutomationTextPattern document range (full buffer).
-- `--all` - Log every poll tick even when nothing changed (very verbose).
-- `-v,--verbose` - Print the full text content of each snapshot (up to 50 lines / --text-max-chars).
-- `--text-max-chars` (INT, default `4096`) - Maximum characters to extract from the TextPattern document range (default 4096; -1 = no cap — caution: can be very large).
-- `--stt` - Enable live STT dictation: microphone → ElevenLabs Scribe v2 Realtime →
+- `--interval-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [50 - 60000]</span>, <span data-cli="default">default <span data-cli="value">500</span></span></span>) - Poll interval in milliseconds (default 500; minimum 50).
+- `--no-value` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip IUIAutomationValuePattern (edit fields, cells, address bars).
+- `--no-selection` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip IUIAutomationTextPattern selection ranges.
+- `--no-text` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip IUIAutomationTextPattern document range (full buffer).
+- `--all` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Log every poll tick even when nothing changed (very verbose).
+- `-v,--verbose` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print the full text content of each snapshot (up to 50 lines / --text-max-chars).
+- `--text-max-chars` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">4096</span></span></span>) - Maximum characters to extract from the TextPattern document range (default 4096; -1 = no cap — caution: can be very large).
+- `--stt` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable live STT dictation: microphone → ElevenLabs Scribe v2 Realtime →
 write-back to the currently focused UI element via SendInput (KEYEVENTF_UNICODE).
 Ctrl+C stops both spy and STT. In --stt mode, spy output shows focus changes only.
-- `--stt-live,--no-stt-live{false}` (default `1`) - Stream audio to the STT server as each chunk is captured (default: on).
+- `--stt-live,--no-stt-live{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Stream audio to the STT server as each chunk is captured (default: on).
 With --no-stt-live, PCM is buffered per utterance and sent in one shot on VAD commit
 (no partial transcript feedback; may improve accuracy for short phrases).
-- `--stt-provider` (TEXT) - STT provider name (default: chat settings stt_provider, e.g. "elevenlabs").
-- `--stt-api-key` (TEXT) - API key for the STT provider (default: from app provider settings).
-- `--stt-silence-ms` (INT:INT in [300 - 10000], default `1200`) - VAD silence threshold in ms before auto-committing an utterance (default 1200).
+- `--stt-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - STT provider name (default: chat settings stt_provider, e.g. "elevenlabs").
+- `--stt-api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key for the STT provider (default: from app provider settings).
+- `--stt-silence-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [300 - 10000]</span>, <span data-cli="default">default <span data-cli="value">1200</span></span></span>) - VAD silence threshold in ms before auto-committing an utterance (default 1200).
 
 **Example**
 
@@ -5996,10 +6084,10 @@ Generate a CLI + custom command reference. Plain md: commands.md in cwd. --skill
 
 Options:
 
-- `--dst` (TEXT, default `releases/web-docs/cli/cli.md`) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
-- `--stdout` - Print to stdout instead of writing --dst.
-- `--skill` - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
-- `--author` (TEXT) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">releases/web-docs/cli/cli.md</span></span></span>) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
+- `--stdout` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print to stdout instead of writing --dst.
+- `--skill` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
+- `--author` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
 
 **Example**
 
@@ -6021,10 +6109,10 @@ Generate an XBlox block-flow reference. Plain md: xblox.md in cwd. --skill: <pro
 
 Options:
 
-- `--dst` (TEXT, default `releases/web-docs/cli/cli.md`) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
-- `--stdout` - Print to stdout instead of writing --dst.
-- `--skill` - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
-- `--author` (TEXT) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
+- `--stdout` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print to stdout instead of writing --dst.
+- `--skill` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
+- `--author` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
 
 **Example**
 
@@ -6046,10 +6134,10 @@ Generate a Tanit app/UI command verb reference (togglechat, takescreenshot, etc.
 
 Options:
 
-- `--dst` (TEXT, default `releases/web-docs/cli/cli.md`) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
-- `--stdout` - Print to stdout instead of writing --dst.
-- `--skill` - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
-- `--author` (TEXT) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
+- `--stdout` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print to stdout instead of writing --dst.
+- `--skill` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
+- `--author` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
 
 **Example**
 
@@ -6071,10 +6159,10 @@ Generate an end-user keyboard shortcut reference: built-in app-command defaults 
 
 Options:
 
-- `--dst` (TEXT, default `releases/web-docs/cli/cli.md`) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
-- `--stdout` - Print to stdout instead of writing --dst.
-- `--skill` - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
-- `--author` (TEXT) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
+- `--stdout` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print to stdout instead of writing --dst.
+- `--skill` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
+- `--author` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
 
 **Example**
 
@@ -6096,10 +6184,10 @@ Generate a Tanit UI launch flag reference (--ui-preset, --size, --src paths/URLs
 
 Options:
 
-- `--dst` (TEXT, default `releases/web-docs/cli/cli.md`) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
-- `--stdout` - Print to stdout instead of writing --dst.
-- `--skill` - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
-- `--author` (TEXT) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
+- `--stdout` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print to stdout instead of writing --dst.
+- `--skill` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
+- `--author` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
 
 **Example**
 
@@ -6121,10 +6209,10 @@ Generate an LLM agent path-tool reference with parameters and descriptions. Plai
 
 Options:
 
-- `--dst` (TEXT, default `releases/web-docs/cli/cli.md`) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
-- `--stdout` - Print to stdout instead of writing --dst.
-- `--skill` - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
-- `--author` (TEXT) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
+- `--stdout` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print to stdout instead of writing --dst.
+- `--skill` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
+- `--author` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
 
 **Example**
 
@@ -6162,11 +6250,11 @@ Embed one or more texts and print JSON with dim, ok, and optionally the full vec
 
 Options:
 
-- `-m,--model` (TEXT, required) - Path to GGUF embedding model (e.g. ${MODELS_DIR}/all-MiniLM-L6-v2.Q5_K_M.gguf).
-- `-j,--threads` (INT:INT in [1 - 256], default `4`) - CPU threads for inference (default 4).
-- `--ctx` (INT:INT in [32 - 8192], default `512`) - Context length for the embedding model (default 512).
-- `-t,--text` (TEXT, required, default `{}`) - Text to embed (repeat for multiple).
-- `--full-vec` - Include the full float32 embedding array in the JSON output.
+- `-m,--model` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to GGUF embedding model (e.g. ${MODELS_DIR}/all-MiniLM-L6-v2.Q5_K_M.gguf).
+- `-j,--threads` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 256]</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - CPU threads for inference (default 4).
+- `--ctx` (<span data-cli="meta"><span data-cli="type">INT:INT in [32 - 8192]</span>, <span data-cli="default">default <span data-cli="value">512</span></span></span>) - Context length for the embedding model (default 512).
+- `-t,--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Text to embed (repeat for multiple).
+- `--full-vec` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include the full float32 embedding array in the JSON output.
 
 **Example**
 
@@ -6188,12 +6276,12 @@ Rank candidates by cosine similarity to a query, output JSON.
 
 Options:
 
-- `-m,--model` (TEXT, required) - Path to GGUF embedding model (e.g. ${MODELS_DIR}/all-MiniLM-L6-v2.Q5_K_M.gguf).
-- `-j,--threads` (INT:INT in [1 - 256], default `4`) - CPU threads for inference (default 4).
-- `--ctx` (INT:INT in [32 - 8192], default `512`) - Context length for the embedding model (default 512).
-- `-q,--query` (TEXT, required) - Query text.
-- `-c,--candidate` (TEXT, required, default `{}`) - Candidate text(s) to rank (repeat for each).
-- `-n,--top` (INT, default `0`) - Return only the top N results (0 = all).
+- `-m,--model` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to GGUF embedding model (e.g. ${MODELS_DIR}/all-MiniLM-L6-v2.Q5_K_M.gguf).
+- `-j,--threads` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 256]</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - CPU threads for inference (default 4).
+- `--ctx` (<span data-cli="meta"><span data-cli="type">INT:INT in [32 - 8192]</span>, <span data-cli="default">default <span data-cli="value">512</span></span></span>) - Context length for the embedding model (default 512).
+- `-q,--query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Query text.
+- `-c,--candidate` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Candidate text(s) to rank (repeat for each).
+- `-n,--top` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Return only the top N results (0 = all).
 
 **Example**
 
@@ -6215,9 +6303,9 @@ Run built-in string-utils parity cases and report pass/fail.
 
 Options:
 
-- `-m,--model` (TEXT, required) - Path to GGUF embedding model (e.g. ${MODELS_DIR}/all-MiniLM-L6-v2.Q5_K_M.gguf).
-- `-j,--threads` (INT:INT in [1 - 256], default `4`) - CPU threads for inference (default 4).
-- `--ctx` (INT:INT in [32 - 8192], default `512`) - Context length for the embedding model (default 512).
+- `-m,--model` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to GGUF embedding model (e.g. ${MODELS_DIR}/all-MiniLM-L6-v2.Q5_K_M.gguf).
+- `-j,--threads` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 256]</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - CPU threads for inference (default 4).
+- `--ctx` (<span data-cli="meta"><span data-cli="type">INT:INT in [32 - 8192]</span>, <span data-cli="default">default <span data-cli="value">512</span></span></span>) - Context length for the embedding model (default 512).
 
 **Example**
 
@@ -6239,15 +6327,15 @@ Multimodal VLM inference: encode an image and generate text (OCR, captions, ...)
 
 Options:
 
-- `-m,--model` (TEXT, required) - Path to the language-model GGUF (e.g. PaddleOCR-VL-1.5.gguf).
-- `--mmproj` (TEXT, required) - Path to the vision projector GGUF (e.g. PaddleOCR-VL-1.5-mmproj.gguf).
-- `-i,--image` (TEXT, required) - Path to the input image (JPEG / PNG).
-- `-p,--prompt` (TEXT, default `OCR:`) - Text prompt appended after the image tokens (default: "OCR:").
-- `-j,--threads` (INT:INT in [1 - 256], default `4`) - CPU threads for inference (default 4).
-- `--ctx` (INT:INT in [512 - 65536], default `8192`) - KV context length (default 8192).
-- `-n,--n-predict` (INT:INT in [1 - 16384], default `2048`) - Maximum tokens to generate (default 2048).
-- `--ngl,--gpu-layers` (INT:INT in [-1 - 1000], default `-1`) - Number of model layers to offload to GPU (-1 = all, 0 = CPU-only; default -1).
-- `--frame` (TEXT, default `{}`) - Additional image path(s) for multi-frame / video inference. Repeat for each frame: --image frame0.png --frame frame1.png --frame frame2.png. All frames are passed to the model simultaneously; --image is always frame 0.
+- `-m,--model` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to the language-model GGUF (e.g. PaddleOCR-VL-1.5.gguf).
+- `--mmproj` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to the vision projector GGUF (e.g. PaddleOCR-VL-1.5-mmproj.gguf).
+- `-i,--image` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to the input image (JPEG / PNG).
+- `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">OCR:</span></span></span>) - Text prompt appended after the image tokens (default: "OCR:").
+- `-j,--threads` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 256]</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - CPU threads for inference (default 4).
+- `--ctx` (<span data-cli="meta"><span data-cli="type">INT:INT in [512 - 65536]</span>, <span data-cli="default">default <span data-cli="value">8192</span></span></span>) - KV context length (default 8192).
+- `-n,--n-predict` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 16384]</span>, <span data-cli="default">default <span data-cli="value">2048</span></span></span>) - Maximum tokens to generate (default 2048).
+- `--ngl,--gpu-layers` (<span data-cli="meta"><span data-cli="type">INT:INT in [-1 - 1000]</span>, <span data-cli="default">default <span data-cli="value">-1</span></span></span>) - Number of model layers to offload to GPU (-1 = all, 0 = CPU-only; default -1).
+- `--frame` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Additional image path(s) for multi-frame / video inference. Repeat for each frame: --image frame0.png --frame frame1.png --frame frame2.png. All frames are passed to the model simultaneously; --image is always frame 0.
 
 **Example**
 
@@ -6267,7 +6355,7 @@ Hugging Face / catalog models: list, inspect, probe, and download into ${MODELS_
 
 Options:
 
-- `--token` (TEXT) - HF API token (default: settings variable HF_TOKEN, else Providers → Hugging Face, else HF_TOKEN env).
+- `--token` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - HF API token (default: settings variable HF_TOKEN, else Providers → Hugging Face, else HF_TOKEN env).
 
 **Example**
 
@@ -6293,9 +6381,9 @@ Search Hugging Face models by free text (not just org or owner/repo slugs).
 
 Options:
 
-- `query` (TEXT, required) - Search text (e.g. qwen, mini lm, embedding).
-- `-n,--limit` (INT:INT in [1 - 100], default `20`) - Max models to return (default 20).
-- `--all` - Do not restrict results to GGUF-tagged models.
+- `query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Search text (e.g. qwen, mini lm, embedding).
+- `-n,--limit` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 100]</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Max models to return (default 20).
+- `--all` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not restrict results to GGUF-tagged models.
 
 **Example**
 
@@ -6317,8 +6405,8 @@ List models published by a Hugging Face organization or user.
 
 Options:
 
-- `org` (TEXT, required) - Org slug or URL (e.g. sentence-transformers or https://huggingface.co/sentence-transformers).
-- `-n,--limit` (INT:INT in [1 - 500], default `100`) - Max models to return (default 100).
+- `org` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Org slug or URL (e.g. sentence-transformers or https://huggingface.co/sentence-transformers).
+- `-n,--limit` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 500]</span>, <span data-cli="default">default <span data-cli="value">100</span></span></span>) - Max models to return (default 100).
 
 **Example**
 
@@ -6340,7 +6428,7 @@ List GGUF quantization variants for a catalog alias or repo id.
 
 Options:
 
-- `model` (TEXT, required) - Catalog alias, org/repo id, or HF model URL.
+- `model` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Catalog alias, org/repo id, or HF model URL.
 
 **Example**
 
@@ -6362,7 +6450,7 @@ Fetch Hugging Face model card JSON for a catalog alias or repo id.
 
 Options:
 
-- `model` (TEXT, required) - Catalog alias, org/repo id, or HF model URL.
+- `model` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Catalog alias, org/repo id, or HF model URL.
 
 **Example**
 
@@ -6384,8 +6472,8 @@ Resolve variant files and sizes without downloading.
 
 Options:
 
-- `model` (TEXT, required) - Catalog alias, org/repo id, or HF model URL.
-- `-v,--variant` (TEXT) - Optional quant label filter.
+- `model` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Catalog alias, org/repo id, or HF model URL.
+- `-v,--variant` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional quant label filter.
 
 **Example**
 
@@ -6407,8 +6495,8 @@ Rebuild model.local.json sidecar from a downloaded variant directory.
 
 Options:
 
-- `path` (TEXT, required) - Variant directory containing .gguf files.
-- `-v,--variant` (TEXT) - Quant label override (default: directory name).
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Variant directory containing .gguf files.
+- `-v,--variant` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Quant label override (default: directory name).
 
 **Example**
 
@@ -6430,12 +6518,12 @@ Download one catalog variant into ${MODELS_DIR} (GGUF + sidecar, or a named file
 
 Options:
 
-- `model` (TEXT, required) - Catalog alias, org/repo id, or HF model URL.
-- `-v,--variant` (TEXT) - Quant label (default: catalog default_variant).
-- `-o,--output` (TEXT) - Output root (default: ${MODELS_DIR} / settings_store models).
-- `--overwrite` - Re-download even when files exist.
-- `--remanifest-only` - Rebuild tanit-manifest.json and model.local.json without downloading.
-- `-q,--quiet` - Suppress stderr progress lines.
+- `model` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Catalog alias, org/repo id, or HF model URL.
+- `-v,--variant` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Quant label (default: catalog default_variant).
+- `-o,--output` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output root (default: ${MODELS_DIR} / settings_store models).
+- `--overwrite` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Re-download even when files exist.
+- `--remanifest-only` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Rebuild tanit-manifest.json and model.local.json without downloading.
+- `-q,--quiet` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Suppress stderr progress lines.
 
 **Example**
 
@@ -6479,7 +6567,7 @@ Show composed details for an IPC descriptor, including child registries.
 
 Options:
 
-- `target` (TEXT, required) - Instance id ("pid:<n>") or bare pid.
+- `target` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Instance id ("pid:<n>") or bare pid.
 
 **Example**
 
@@ -6501,7 +6589,7 @@ Render the IPC registry as a plain tree, or a navigable FTXUI tree with --intera
 
 Options:
 
-- `--interactive` - Open the navigable FTXUI tree view (requires an interactive terminal).
+- `--interactive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Open the navigable FTXUI tree view (requires an interactive terminal).
 
 **Example**
 
@@ -6535,7 +6623,7 @@ Send a ping to a live instance and print the pong reply.
 
 Options:
 
-- `target` (TEXT, required) - Instance id ("pid:<n>") or bare pid.
+- `target` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Instance id ("pid:<n>") or bare pid.
 
 **Example**
 
@@ -6557,7 +6645,7 @@ Query the status (descriptor + process info) of a live instance.
 
 Options:
 
-- `target` (TEXT, required) - Instance id or bare pid.
+- `target` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Instance id or bare pid.
 
 **Example**
 
@@ -6579,7 +6667,7 @@ List active command-runner run IDs on a live instance.
 
 Options:
 
-- `target` (TEXT, required) - Instance id or bare pid.
+- `target` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Instance id or bare pid.
 
 **Example**
 
@@ -6601,8 +6689,8 @@ Cancel a command-runner run on a live instance by its run ID.
 
 Options:
 
-- `target` (TEXT, required) - Instance id or bare pid.
-- `run_id` (UINT, required, default `0`) - Numeric run ID to cancel (from run-ids).
+- `target` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Instance id or bare pid.
+- `run_id` (<span data-cli="meta"><span data-cli="type">UINT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Numeric run ID to cancel (from run-ids).
 
 **Example**
 
@@ -6624,10 +6712,10 @@ Send an arbitrary action frame to a live instance and print the reply.
 
 Options:
 
-- `target` (TEXT, required) - Instance id or bare pid.
-- `action` (TEXT, required) - Action name (e.g. ping, status, run_ids, cancel, app_cmd, stop, …).
-- `-d,--json` (TEXT) - Extra JSON object to merge into the request (e.g. '{"run_id":42}').
-- `--timeout-ms` (INT, default `3000`) - Socket timeout in milliseconds (default: 3000).
+- `target` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Instance id or bare pid.
+- `action` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Action name (e.g. ping, status, run_ids, cancel, app_cmd, stop, …).
+- `-d,--json` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Extra JSON object to merge into the request (e.g. '{"run_id":42}').
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">3000</span></span></span>) - Socket timeout in milliseconds (default: 3000).
 
 **Example**
 
@@ -6649,8 +6737,8 @@ Spawn a bare IPC server host (registers in instances dir, serves until stopped).
 
 Options:
 
-- `--cwd` (TEXT) - Working directory to advertise (default: current directory).
-- `--register-agent` - Also publish a live entry in the agent registry (test fixture for `run-ipc agents`).
+- `--cwd` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Working directory to advertise (default: current directory).
+- `--register-agent` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also publish a live entry in the agent registry (test fixture for `run-ipc agents`).
 
 **Example**
 
@@ -6672,7 +6760,7 @@ List ongoing agents (regular + realtime) from the cross-process registry, with c
 
 Options:
 
-- `target` (TEXT) - Optional instance id or bare pid to query over the bus (default: local registry).
+- `target` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional instance id or bare pid to query over the bus (default: local registry).
 
 **Example**
 
@@ -6694,8 +6782,8 @@ List app commands accepted by a live UI instance over `run-ipc app-cmd`, includi
 
 Options:
 
-- `target` (TEXT, required) - Instance id or bare pid.
-- `--timeout-ms` (INT, default `3000`) - Socket timeout in milliseconds (default: 3000).
+- `target` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Instance id or bare pid.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">3000</span></span></span>) - Socket timeout in milliseconds (default: 3000).
 
 **Example**
 
@@ -6717,10 +6805,10 @@ Send an app command to a live UI instance (e.g. replay, takescreenshot, togglequ
 
 Options:
 
-- `target` (TEXT, required) - Instance id or bare pid.
-- `command` (TEXT, required) - App command name (e.g. replay, takescreenshot, browse, togglequeue, …).
-- `-d,--json` (TEXT) - Extra JSON args for the command (e.g. '{"path":"session.json"}' for replay, '{"query":"cats"}' for showsearchnative / togglesearchnative).
-- `--timeout-ms` (INT, default `3000`) - Socket timeout in milliseconds (default: 3000).
+- `target` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Instance id or bare pid.
+- `command` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - App command name (e.g. replay, takescreenshot, browse, togglequeue, …).
+- `-d,--json` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Extra JSON args for the command (e.g. '{"path":"session.json"}' for replay, '{"query":"cats"}' for showsearchnative / togglesearchnative).
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">3000</span></span></span>) - Socket timeout in milliseconds (default: 3000).
 
 **Example**
 
@@ -6758,8 +6846,8 @@ Probe file MIME type, likely extensions, and Tanit media kind.
 
 Options:
 
-- `path` (TEXT, required, default `{}`) - File path(s) to probe
-- `--magic-db` (TEXT) - Explicit magic.mgc database path.
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - File path(s) to probe
+- `--magic-db` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Explicit magic.mgc database path.
 
 **Example**
 
@@ -6781,10 +6869,10 @@ List MIME types and extensions from file(1) Magdir annotations; supports wildcar
 
 Options:
 
-- `pattern` (TEXT, default `*`) - MIME/kind/extension wildcard pattern.
-- `--kind` (TEXT) - Filter by kind: image, video, document, code, script, binary, ...
-- `--ext` (TEXT) - Filter by extension, e.g. .pdf or jpg.
-- `--source-dir` (TEXT) - Explicit packages/file/magic/Magdir directory.
+- `pattern` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">*</span></span></span>) - MIME/kind/extension wildcard pattern.
+- `--kind` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Filter by kind: image, video, document, code, script, binary, ...
+- `--ext` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Filter by extension, e.g. .pdf or jpg.
+- `--source-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Explicit packages/file/magic/Magdir directory.
 
 **Example**
 
@@ -6806,8 +6894,8 @@ Search raw file(1) Magdir source lines with wildcards; useful when a type has no
 
 Options:
 
-- `pattern` (TEXT, required, default `*`) - Wildcard pattern to match against source lines or filenames.
-- `--source-dir` (TEXT) - Explicit packages/file/magic/Magdir directory.
+- `pattern` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Wildcard pattern to match against source lines or filenames.
+- `--source-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Explicit packages/file/magic/Magdir directory.
 
 **Example**
 
@@ -6829,10 +6917,10 @@ MCP utilities: run a foreground agent-tool server, or inspect/call external MCP 
 
 Options:
 
-- `--preset` (TEXT) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
-- `--bind` (TEXT, default `127.0.0.1`) - Interface/address for MCP HTTP. Default: 127.0.0.1 (loopback only).
-- `--port` (INT:INT in [1 - 65535], default `4444`) - First TCP port to try for MCP HTTP (default 4444; next free port if busy)
-- `--disable-tools` (TEXT) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
+- `--bind` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Interface/address for MCP HTTP. Default: 127.0.0.1 (loopback only).
+- `--port` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 65535]</span>, <span data-cli="default">default <span data-cli="value">4444</span></span></span>) - First TCP port to try for MCP HTTP (default 4444; next free port if busy)
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 
 **Example**
 
@@ -6852,8 +6940,8 @@ Inspect and call external MCP servers configured in mcp.json.
 
 Options:
 
-- `--no-probe` - Use cached tools/list only; skip live MCP handshakes.
-- `--probe` - Allow live MCP handshakes when cache is missing or stale (default).
+- `--no-probe` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Use cached tools/list only; skip live MCP handshakes.
+- `--probe` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Allow live MCP handshakes when cache is missing or stale (default).
 
 **Example**
 
@@ -6879,7 +6967,7 @@ List tools on an MCP server (name and description).
 
 Options:
 
-- `--server` (TEXT, required) - MCP server name from mcp.json.
+- `--server` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - MCP server name from mcp.json.
 
 **Example**
 
@@ -6901,8 +6989,8 @@ Show a tool's inputSchema from tools/list.
 
 Options:
 
-- `--server` (TEXT, required) - MCP server name from mcp.json.
-- `--tool` (TEXT, required) - Remote tool name.
+- `--server` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - MCP server name from mcp.json.
+- `--tool` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Remote tool name.
 
 **Example**
 
@@ -6924,10 +7012,10 @@ Call a tool on an MCP server (fresh session per invocation).
 
 Options:
 
-- `--server` (TEXT, required) - MCP server name from mcp.json.
-- `--tool` (TEXT, required) - Remote tool name.
-- `--args` (TEXT, default `{}`) - JSON object of tool arguments.
-- `--timeout-ms` (INT, default `0`) - MCP request timeout in milliseconds.
+- `--server` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - MCP server name from mcp.json.
+- `--tool` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Remote tool name.
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object of tool arguments.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
 
 **Example**
 
@@ -6949,20 +7037,15 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `file.prev` | Previous | Navigation | `app:previousfile` |  |
 | `custom.command-mtlnivuv-4aae3` | Explorer | Navigation | `app:togglefiletree` |  |
 | `file.next` | Next | Navigation | `app:nextfile` |  |
-| `custom.command-mpx9r1ur-8c6df` | Assistant | Home | `cli:llm` | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime` |
+| `custom.command-mpx9r1ur-8c6df` | Assistant | Home | `cli:llm` | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | Home | `app:togglelauncher` |  |
-| `custom.command-mq6i351x-bdb01` | Edit | Home | `app:edit` |  |
-| `custom.command-ms1sb66o-f4ae7` | Commands | Home | `app:togglecommandpalette` |  |
-| `custom.native-search` | Search | Home | `app:togglesearchnative` |  |
-| `custom.command-mr87jv7l-cbcd4` | Edit Home | Home | `app:edit` |  |
-| `custom.command-mu1mbvt3-ecf83` | Commands | Home | `app:togglecommandpalette` |  |
+| `custom.command-mtox7vvr-093fc` | Voice Commands | Home | `app:togglevoicecommand` |  |
 | `custom.dropdown-msx1rszr-19148` | New | New | `metadata` |  |
 | `custom.command-msx1rszr-32ae1` | XBlox Script | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |
 | `custom.command-msx1xf70-ed2f7` | Text File | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
 | `custom.command-mtfnk3hu-47302` | Markdown File | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
 | `custom.command-mtczu1xa-c605f` | File Tab | New | `app:newfiletab` |  |
 | `custom.command-mtfpcfxj-e1333` | Screen Recording | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-recorder-16-9.xblox` |
-| `custom.command-mtox7vvr-093fc` | Voice Commands | New | `app:togglevoicecommand` |  |
 | `custom.dropdown-mset8bmm-ad9d3` | Installer | Installer | `metadata` |  |
 | `custom.command-mqj3lo3h-fed59` | Register | Installer | `cli:register-explorer` |  |
 | `custom.command-mr90wbc8-2bf79` | Installer | Installer | `cli:installer` | `--no-seed` |
@@ -7091,6 +7174,16 @@ Unresolved tokens are left as-is so downstream steps can still see them.
 | `${SRC_NAME}` | Filename stem without extension (`photo`) |
 | `${SRC_EXT}` | Extension without leading dot (`jpg`) |
 | `${SRC_FILE_EXT}` | Extension with leading dot (`.jpg`) |
+
+### Context (window / taskbar)
+
+| Token | Value |
+|:---|:---|
+| `${CURRENT_HWND}` | Decimal HWND of the selected taskbar app (launcher Apps pill) |
+| `${CURRENT_PID}` | Process id of that window |
+| `${CURRENT_WINTITLE}` | Window title |
+| `${CURRENT_PROCESS}` | Process image name (`soffice.bin`) |
+| `${CURRENT_SCREEN_SPEC}` | xblox capture/record spec `screen:0:hwnd=<CURRENT_HWND>` |
 
 ### Date / time
 
