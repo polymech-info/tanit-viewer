@@ -2,6 +2,11 @@
 
 Use this reference when composing `tanit-security.exe` invocations for gateway probes and security tests.
 
+For **settings encryption, `.pmbackup` cloud sync, and profile backup** (end users / admins),
+see [Security: settings encryption, signing, and backup](../features/feature-security.md).
+That layer is mostly driven from Settings → Advanced and `tanit-cli settings …`;
+this CLI covers `storage` / `*-store` ops and agent-policy probes.
+
 ## Invocation Rules
 
 - Prefer `tanit-security <command> ...` for shell automation and JSON probe output.

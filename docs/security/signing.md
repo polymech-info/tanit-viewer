@@ -180,18 +180,19 @@ profile key, and signed for the local profile.
 
 ## Cloud / Machine Sync
 
-Tanit CMS/VFS can be used as remote storage without trusting it with local
-profile keys. The sync boundary should be an exported plaintext file or a future
-signed/encrypted package, not raw local secure storage files.
+Tanit CMS/VFS can relay backups without holding local profile keys. The supported
+portable package is an encrypted **`.pmbackup`** (optional passphrase, or the
+profile `.cloud_storage_key`). Settings → Advanced and
+`tanit-cli settings cloud|export --pmbackup` use that path.
 
 Correct model:
 
 ```text
 Machine A secure documents
-  -> export plaintext/package
-  -> Tanit CMS/VFS
+  -> .pmbackup (encrypted) or plaintext export
+  -> Tanit CMS/VFS (or USB / file share)
   -> Machine B import
-  -> Machine B secure documents
+  -> Machine B secure documents (re-keyed locally)
 ```
 
 Avoid:
@@ -205,19 +206,21 @@ Machine A resources\documents\*.doc
 The second model copies local encryption/signing state between machines and
 breaks the intended trust boundary.
 
+End-user guide: [Security: settings encryption, signing, and backup](./features/feature-security.md).
+Migration recipes: [Settings And Commands Migration](./settings.md).
+
 ## What CMS Can And Cannot See
 
-With the current cloud backup flow, CMS/VFS stores the exported files that the
-app uploads. If the app uploads plaintext JSON or Markdown, CMS can store and
-serve those bytes like any other file.
+With the current cloud backup flow, CMS/VFS stores the `.pmbackup` (or, if you
+deliberately use plaintext `service settings` sync, exported JSON). Opaque
+`.pmbackup` bytes are not decryptable without the passphrase or
+`.cloud_storage_key`. CMS does not hold private signing or encryption keys from
+the local profile.
 
-The intended next step is package-based sync:
-
-- CMS stores opaque encrypted packages.
-- CMS does not hold private keys.
-- CMS cannot decrypt user or organization content.
-- Clients verify package signatures and decrypt locally.
-- Clients reject unexpected signer keys or downgraded trust.
+Signed peer-share packages (multi-recipient, `PeerSigned` trust) remain a
+separate roadmap item; `.pmbackup` is profile backup, not a general resource
+share format. Clients still reject unexpected signer keys or downgraded trust
+when verifying `pm://` documents locally.
 
 ## Organization And User-Owned Keys
 

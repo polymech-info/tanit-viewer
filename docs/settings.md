@@ -163,52 +163,55 @@ session TTL, signing, and encryption in secure storage/native host code.
 
 ## Cloud Backup / Machine Sync
 
-The Backup/Restore tab also has a cloud upload/download flow for moving settings
-between machines signed into the same Tanit account. This is not a direct
-machine-to-machine transfer. It uses the Tanit VFS `home` mount as the relay.
+The Settings → **Advanced** tab can upload and download an **encrypted**
+`.pmbackup` through the Tanit VFS `home` mount (same Tanit account on both
+machines). This is the supported cloud path for settings exchange.
 
 Current flow:
 
-1. Machine A signs in to Tanit .
-2. In Settings -> Backup/Restore, choose a remote directory, default `settings`.
-3. Click Upload.
-4. The app exports local settings to a temporary plaintext JSON file and uploads
-   selected files to Tanit VFS.
-5. Machine B signs in to the same Tanit account.
-6. Use the same remote directory and click Download.
-7. The app downloads the files and imports them into Machine B's local profile.
+1. Machine A signs in to Tanit.
+2. Open Settings → Advanced. Optionally set a passphrase, or rely on
+   `.cloud_storage_key` (created on first encrypted export/upload).
+3. Choose a remote directory (default `settings`) and what to include
+   (commands / MCP / prompts).
+4. Click **Upload** — the app writes a temporary `.pmbackup` and stores it as
+   `home/<dir>/yyyy-mm-dd-hh.pmbackup`.
+5. Machine B signs in to the same account, uses the same remote directory, and
+   clicks **Download** — the newest backup is fetched with `/api/vfs/get` and
+   imported into Machine B's local profile (re-encrypted/signed for that
+   machine's secure documents).
 
-Current VFS paths:
-
-```text
-home:/settings/settings.json
-home:/settings/commands.json        optional
-home:/settings/mcp.json             optional
-home:/settings/mcp-servers.json     optional
-home:/settings/mcps/...             optional recursive
-```
-
-For secure storage, the portable sync boundary is plaintext import/export (or a
-future signed package), not the local secure document blobs. Do not copy
-`resources\documents\*.doc` between machines. Those files are encrypted and
-signed for the local profile/machine context.
-
-The intended secure sync model is:
+VFS layout (example):
 
 ```text
-Machine A secure documents
-  -> export plaintext/package
-  -> Tanit VFS
-  -> Machine B import
-  -> Machine B secure documents
+home:/settings/2026-09-17-14.pmbackup
 ```
 
-The Secure assets section in Backup/Restore exposes this model per asset:
+Key / passphrase notes:
 
-- Edit opens the active `pm://config/...` document.
-- Import reads a plaintext file and re-encrypts/re-signs it for this machine.
-- Export writes a plaintext copy suitable for transfer or inspection.
+- Passphrase (v2): destination only needs the passphrase.
+- Key file (v1): copy `.cloud_storage_key` from the source profile (Advanced →
+  Save key, or `tanit-cli settings key export`), then Import key on Machine B
+  before download — or pass `--cloud-storage-key`.
+- Do **not** copy `resources\documents\*.doc` between machines.
 
-The older Cloud Upload/Download buttons currently cover the settings profile,
-optional commands, and optional MCP files. Prompt sync through
-`pm://config/prompts/*.md` still needs to be added to the cloud flow.
+End-user walkthrough: [Security: settings encryption, signing, and backup](./features/feature-security.md).
+Cryptography model: [Encryption And Signing](./signing.md).
+
+CLI:
+
+```text
+tanit-cli settings cloud upload
+tanit-cli settings cloud download --passphrase "…"
+tanit-cli settings export --pmbackup
+tanit-cli settings key export
+```
+
+There is a separate, older **plaintext** sync via `tanit-cli service settings
+upload|import` (JSON on VFS). Prefer `.pmbackup` / Settings cloud for anything
+that should stay opaque to the server.
+
+The Secure assets section in Advanced still exposes per-document Edit / Import /
+Export for `pm://config/...` (plaintext at the portable boundary, then
+re-encrypt on import). Prompt templates follow the same secure-document model;
+include them in `.pmbackup` when the include-prompts option is on.

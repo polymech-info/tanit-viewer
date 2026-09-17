@@ -142,6 +142,12 @@ By default, session documents are:
 Plaintext storage is reserved for test builds and controlled developer probes.
 Production policy does not expose plaintext session storage as a managed option.
 
+For the day-to-day **settings** story (Advanced tab, encrypted `.pmbackup`,
+cloud upload/download, and moving a profile between machines), see
+[Settings encryption, signing, and backup](../features/feature-security.md).
+For **MSP / integrator / OEM** rollouts on many machines, see
+[Deploy AI as an application](../features/feature-integration.md).
+
 ## Built-In Hard Protections
 
 Tanit also has lower-level protections that run before or alongside the AI
@@ -319,6 +325,11 @@ session memory, and explain which policy layer made a decision.
 
 ## Resources
 
+- [Settings encryption, signing, and backup](../features/feature-security.md) —
+  end-user / admin guide for secure profile storage and `.pmbackup` cloud sync
+- [Encryption And Signing](../signing.md)
+- [Settings And Commands Migration](../settings.md)
+- [Tanit Security CLI](./cli.md)
 - [Group Policy Administration](../gpo-setup.md)
 - [OWASP Top 10 for Agentic Applications](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/owasp-top-10-for-agentic)
 

@@ -10,29 +10,17 @@ _Each change is dated DD-MM from the commit day. Newest first._
 
 ### New
 
-- 16-09 CLI adds a --scenario option to the test-core file-handlers subcommand.
-- 16-09 Open an item from the launcher popup menu.
-- 16-09 Choose an application to open an item.
-- 16-09 Select an available command for an item.
-- 16-09 Reveal an item in its containing folder.
-- 16-09 Copy an item's path to the clipboard.
-- 16-09 CLI adds new options for configuring image registration.
-- 16-09 CLI adds a core file-handlers test command with a --scenario option.
-- 16-09 Policy adds Privacy.EnableClipboardContext to control clipboard context.
-- 16-09 Launcher popup menu opens the selected item.
-- 16-09 Launcher popup menu opens the selected item with a chosen application.
-- 16-09 Launcher popup menu runs an available command for the selected item.
-- 16-09 Launcher popup menu shows the selected item in its containing folder.
-- 16-09 Launcher popup menu copies the selected item's path.
-- 16-09 Capture screenshots with the new imageScreenshot block.
-- 16-09 Configure image registration with additional command-line options.
-- 16-09 Run context and file-handler core tests with a selected scenario.
-- 16-09 policy adds the Privacy.EnableClipboardContext setting under PM_Security, enabled by default.
-- 16-09 win-ui adds an Open option to launcher item menus.
-- 16-09 win-ui adds an Open with submenu to launcher item menus.
-- 16-09 win-ui adds available commands to launcher item menus.
-- 16-09 win-ui adds a Show in folder option to launcher item menus.
-- 16-09 win-ui adds a Copy path option to launcher item menus.
+- 16-09 Launcher file selections open a side pane with matching Tanit commands and registered Open with applications; item menus also provide Open, Show in folder, and Copy path.
+- 16-09 Launcher adds a Clipboard tab with recent text, files, images, and audio that can be restored to the system clipboard or used as command input.
+- 16-09 Launcher file, clipboard, and Tanit context refreshes while the menu stays open; files without a registered default application fall back to Tanit's built-in viewer.
+- 16-09 Launcher navigation now covers command tiles, context chips, tabs, matching commands, and Open with applications from the keyboard.
+- 16-09 Open the launcher by hovering over Commands or pressing Alt+Win, then pin it open or switch its light and dark appearance.
+- 16-09 Drag files from Explorer onto the assistant toolbar or a launcher command to use them as that run's selection.
+- 16-09 Running launcher commands pulse and can be stopped from their right-click menu.
+- 16-09 File Viewer adds interactive image cropping with draggable edges and corners, in-memory apply, and Save As.
+- 16-09 The XBlox Picker block and CLI `assistant pick` add free-rectangle selection, target-stack navigation, an 8x pixel loupe, sampled colors, and richer Chrome, selection, foreground-window, and context outputs.
+- 16-09 The new XBlox `imageScreenshot` block captures a monitor, window, webcam, or interactively selected region to a file or the clipboard, with optional picker overlays.
+- 16-09 The `Privacy.EnableClipboardContext` policy controls whether clipboard files, text, and images can enter assistant context; clipboard previews remain unavailable without consent.
 - 15-09 CLI adds an assistant context dump command with explicit consent for clipboard payload and event-preview metadata, plus capability, app ID, context age, and MRU age options.
 - 15-09 CLI adds a core-context test command with scenario selection.
 - 14-09 CLI adds options for creating and updating service pages and listing service posts and categories.

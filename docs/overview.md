@@ -27,6 +27,9 @@ This knowledge base covers the pieces you compose every day: one-click **command
 | Topic | Guide |
 |:------|:------|
 | Security overview | [Tanit Security](./tanit-security) |
+| Partner / MSP / OEM deployment | [feature-integration](./features/feature-integration.md) — managed Windows AI workstation, GPO, customer rollouts |
+| Settings encryption & backup | [feature-security](./features/feature-security.md) — secure storage, `.pmbackup`, cloud sync |
+| Encryption & signing | [signing](./signing.md) |
 | OWASP alignment | [Tanit OWASP](./tanit-owasp) |
 | Group Policy | [Tanit GPO Policies](./tanit-gpo) |
 | Security CLI | [Tanit Security CLI](./tanit-security-cli) |
