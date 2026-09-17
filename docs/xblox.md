@@ -1,4 +1,4 @@
-# Tanit XBlox
+# Tanit Chat XBlox
 
 Use this skill when composing `.xblox` block-tree command flows.
 
@@ -6342,36 +6342,6 @@ Params:
 - `subtitleMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">8-120</span>, <span data-cli="default">default <span data-cli="value">42</span></span></span>) - Cue wrap width (writer, not viewport).
 - `subtitleMaxLines` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-4</span>, <span data-cli="default">default <span data-cli="value">2</span></span></span>) - Cue wrap line count.
 
-**beauty**
-- `skin` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Smooth skin (face oval minus eyes/lips). Forces the compatibility CPU recorder.
-- `skinBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.5</span></span></span>) - Skin mix 0..1 (0 dry / 1 wet). Same as CLI --skin-blend / --skin-strength.
-- `lips` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Tint lips from the face mesh. Forces the compatibility CPU recorder.
-- `lipsColor` (<span data-cli="meta"><span data-cli="type">color</span>, <span data-cli="default">default <span data-cli="value">&quot;#C45C6A&quot;</span></span></span>) - Lip tint color.
-- `lipsBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Lip tint mix 0..1. Same as CLI --lips-blend / --lips-alpha.
-- `teeth` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Whiten teeth from the face mesh. Forces the compatibility CPU recorder.
-- `teethBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Teeth mix 0..1. Same as CLI --teeth-blend / --teeth-strength.
-- `landmarks` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Draw face-mesh landmarks on the frame (debug).
-- `faceGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.0</span></span></span>) - Lift crushed face exposure (Lab L*). 0 = off. Same oval as skin. Same as CLI --face-gain.
-- `warmth` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.0</span></span></span>) - Warm the face oval (Lab b*). 0 = off. Same as CLI --warmth.
-- `undereye` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Lighten under-eye bands (dark circles). Forces the compatibility CPU recorder.
-- `undereyeBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.45</span></span></span>) - Under-eye mix 0..1. Same as CLI --undereye-blend.
-- `redness` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Mute flush / acne (Lab a* toward neutral). Forces the compatibility CPU recorder.
-- `rednessBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Redness mute mix 0..1. Same as CLI --redness-blend.
-- `eyeSharpen` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Unsharp the eye polys after skin. Forces the compatibility CPU recorder.
-- `eyeSharpenBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Eye sharpen mix 0..1. Same as CLI --eye-sharpen-blend.
-
-**frame**
-- `mirror` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Horizontal flip (webcam mirror). No model.
-- `preview` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Live window at the captured frame size. Close the window to stop. Forces the compatibility CPU recorder. Same as CLI --preview.
-
-**background**
-- `blur` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Blur the non-person region (ImageSegmenter). Forces the compatibility CPU recorder.
-- `blurBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.65</span></span></span>) - Background blur mix 0..1. Same as CLI --blur-strength.
-- `background` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Replace the non-person region with bgColor / bgImage.
-- `bgColor` (<span data-cli="meta"><span data-cli="type">color</span>, <span data-cli="default">default <span data-cli="value">&quot;#1A1A1A&quot;</span></span></span>) - Solid replacement color.
-- `bgImage` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Replacement image, scaled to the frame.
-- `featherPx` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Person-mask feather in pixels.
-
 Features: cancellable
 
 Default block:
@@ -6408,12 +6378,7 @@ Default block:
   "autoPauseTilePercent": 8,
   "autoPauseWakeKey": true,
   "autoPauseWakeMouse": true,
-  "background": false,
-  "bgColor": "#1A1A1A",
-  "bgImage": "",
   "bitrateKbps": 0,
-  "blur": false,
-  "blurBlend": 0.65,
   "cameraAudio": false,
   "cameraAudioGain": 1.0,
   "cameraBorder": true,
@@ -6442,10 +6407,6 @@ Default block:
   "device": "",
   "durationMs": 0,
   "encoder": "auto",
-  "eyeSharpen": false,
-  "eyeSharpenBlend": 0.35,
-  "faceGain": 0.0,
-  "featherPx": 8,
   "filter": "off",
   "filterModel": "",
   "focusX": -1.0,
@@ -6481,34 +6442,19 @@ Default block:
   "keyOverlayOpacity": 0.9,
   "keyOverlayStack": "auto",
   "kind": "videoCapture",
-  "landmarks": false,
-  "lips": false,
-  "lipsBlend": 0.35,
-  "lipsColor": "#C45C6A",
   "micGain": 1.0,
-  "mirror": false,
   "outputPath": "",
   "pauseKey": "",
   "postFilter": false,
-  "preview": false,
-  "redness": false,
-  "rednessBlend": 0.4,
   "showZoomStatus": true,
   "sizeMode": "native",
-  "skin": false,
-  "skinBlend": 0.5,
   "stopKey": "",
   "storeAs": "capturePath",
   "subtitleMaxChars": 42,
   "subtitleMaxLines": 2,
-  "teeth": false,
-  "teethBlend": 0.4,
   "timeoutMs": 5000,
   "transitionMs": 300,
-  "undereye": false,
-  "undereyeBlend": 0.45,
   "updateIntervalMs": 16,
-  "warmth": 0.0,
   "width": 0,
   "zoom": 1.0,
   "zoomMax": 4.0,
@@ -7516,8 +7462,9 @@ Default block:
 | `custom.image-compress` | Compress | `cli:compress` | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui`<br>`--compressor`<br>`mozjpeg`<br>`--quality`<br>`92` |
 | `custom.command-mszwq2g6-780cb` | To Markdown | `cli:llm` | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--no-skills` |
 | `custom.command-mtun9312-7d0e1` | Share Post | `cli:service` | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`listed` |
-| `custom.command-mpxzouxv-ab189` | App | `app:takescreenshot` |  |
 | `custom.command-mrcja3yb-306c8` | Region | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/screenshot.xblox` |
+| `custom.command-mpxzouxv-ab189` | App | `app:takescreenshot` |  |
+| `custom.command-mu4l7dsk-4b406` | Fullscreen Screenshot | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/screenshot-full.xblox` |
 | `custom.command-mre4dk8y-7a985` | To Markdown | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/screenshot-vision-md.xblox` |
 | `custom.command-mtlh4sop-a7c1b` | New | `app:togglechat` |  |
 | `custom.command-mpohnfaf-26b0c` | TTS | `app:setVariable` |  |
@@ -7594,7 +7541,6 @@ Default block:
 | `custom.help-xblox` | XBlox | `app:open` |  |
 | `custom.command-msakytc7-dd084` | Online Help | `app:openurl` |  |
 | `custom.youtube` | Youtube | `app:openurl` |  |
-| `custom.command-mt4iq9cc-46e06` | test-screen | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/webcam-scheduled.xblox` |
 | `custom.command-mt4msl99-55414` | Start | `app:schedulerstart` |  |
 | `custom.command-mt4munur-873bb` | Stop | `app:schedulerstop` |  |
 | `custom.command-mt7672eh-b7786` | To Images | `cli:pdf` | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |

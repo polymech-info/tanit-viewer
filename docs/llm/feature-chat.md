@@ -253,6 +253,7 @@ command for the next file.
 
 | Topic | Page |
 | :-- | :-- |
+| AI capabilities (public) | [feature-ai](../features/feature-ai.md) |
 | Chat settings | [tanit-chat-settings](tanit-chat-settings) |
 | Agent memory | [tanit-agent-memory](tanit-agent-memory) |
 | LLM tools and MCP | [tanit-llm-tools](tanit-llm-tools) |

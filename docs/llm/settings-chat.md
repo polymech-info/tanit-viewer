@@ -258,6 +258,7 @@ shortcut editor.
 - **Workbench** — choose which panes are visible and where chat sits beside the
   file manager and [Viewer](tanit-viewer).
 
+For the public capabilities overview, see [Tanit AI](../features/feature-ai.md).
 For the end-user feature overview, see [Tanit Chat](tanit-chat).
 
 ## Illustration checklist

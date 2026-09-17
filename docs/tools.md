@@ -1,4 +1,4 @@
-# Tanit Agent Tools
+# Tanit Chat Agent Tools
 
 These are the path-mode LLM agent tools available in this build. They are offered to the model during `tanit-cli.exe llm agent` runs and via the embedded MCP server.
 

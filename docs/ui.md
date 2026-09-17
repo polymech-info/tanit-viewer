@@ -1,4 +1,4 @@
-# Tanit UI Launch
+# Tanit Chat UI Launch
 
 Top-level flags for `tanit.exe` with **no subcommand**. `--ui-preset` picks `main` / `chat` / `viewer` for this run (else saved `ui.workbench`). `--src` seeds local paths or URLs (`http(s)://`, `//host/…`, CMS `/…`). `--size WxH` overrides the outer frame for this launch only. `--show-panel` / `--hide-panel` accept comma-separated panel ids; `--show-components` / `--hide-components` accept ribbon and statusbar — all for this process only.
 

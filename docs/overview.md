@@ -27,6 +27,10 @@ This knowledge base covers the pieces you compose every day: one-click **command
 | Topic | Guide |
 |:------|:------|
 | Security overview | [Tanit Security](./tanit-security) |
+| AI / LLM capabilities | [feature-ai](./features/feature-ai.md) — local and cloud models, planner, MCP, skills, vision, audio, sensors, GPO |
+| Audio | [feature-audio](./features/feature-audio.md) — record, STT/TTS, voice commands, realtime, clean |
+| Video | [feature-video](./features/feature-video.md) — screen/window/camera, skin, generate, detect |
+| Images | [feature-images](./features/feature-images.md) — junk, duplicates, catalog, create, transform |
 | Partner / MSP / OEM deployment | [feature-integration](./features/feature-integration.md) — managed Windows AI workstation, GPO, customer rollouts |
 | Settings encryption & backup | [feature-security](./features/feature-security.md) — secure storage, `.pmbackup`, cloud sync |
 | Encryption & signing | [signing](./signing.md) |
@@ -40,6 +44,10 @@ This knowledge base covers the pieces you compose every day: one-click **command
 
 | Title | Slug |
 |:------|:-----|
+| Tanit AI | [tanit-ai](./features/feature-ai.md) |
+| Tanit Audio | [tanit-audio](./features/feature-audio.md) |
+| Tanit Video | [tanit-video](./features/feature-video.md) |
+| Tanit Images | [tanit-images](./features/feature-images.md) |
 | Tanit Commands | [tanit-commands](./tanit-commands) |
 | Tanit CLI Documentation | [tanit-cli](./tanit-cli) |
 | Tanit UI Launch | [tanit-ui](./tanit-ui) |

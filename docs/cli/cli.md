@@ -1,6 +1,6 @@
-# Tanit Commands
+# Tanit Chat Commands
 
-Use this skill when composing Tanit CLI invocations or calling user custom commands.
+Use this skill when composing Tanit Chat CLI invocations or calling user custom commands.
 
 ## Invocation Rules
 
@@ -872,7 +872,7 @@ tanit-cli search action input '{}' --log-level 'info' --mode '{}' --content '{}'
 
 #### settings
 
-Import / export the app settings profile (UTF-8 JSON). Use `settings path` to locate the file.
+Import / export the app settings profile (UTF-8 JSON), manage .cloud_storage_key, or sync encrypted .pmbackup via cloud VFS. Use `settings path` to locate settings.json.
 
 **Example**
 
@@ -901,11 +901,11 @@ Options:
 - `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Source file (relative paths are from cwd)
 - `--archive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Read a profile ZIP exported by `settings export --archive`. Skips web* folders and never imports .settings-key.dat.
 - `--pmbackup` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Read an encrypted .pmbackup file (requires config_dir/.cloud_storage_key from the source machine).
-- `--cloud-storage-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Key file for --pmbackup (32-byte secret; default: config_dir/.cloud_storage_key).
-- `--passphrase` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Passphrase for --pmbackup (v2 encryption; required to decrypt passphrase-protected backups).
-- `--no-include-commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit commands.json from --pmbackup export/import.
-- `--no-include-mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit MCP config from --pmbackup export/import.
-- `--no-include-prompts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit agent prompts from --pmbackup export/import.
+- `--cloud-storage-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Key file for encrypted backup (32-byte secret; default: config_dir/.cloud_storage_key).
+- `--passphrase` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Passphrase for pmbackup v2 (instead of the key file).
+- `--no-include-commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit commands.json from the encrypted backup.
+- `--no-include-mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit MCP config from the encrypted backup.
+- `--no-include-prompts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit agent prompts from the encrypted backup.
 
 **Example**
 
@@ -931,11 +931,11 @@ Options:
 - `--encrypted` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write PME1 binary (DPAPI-bound key on this profile) instead of UTF-8 JSON.
 - `--archive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write a ZIP of the app profile. Skips web* WebView folders; Windows settings.json is portable JSON; .settings-key.dat is omitted.
 - `--pmbackup` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write an encrypted portable .pmbackup (auto-creates config_dir/.cloud_storage_key when missing).
-- `--cloud-storage-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Key file for --pmbackup (32-byte secret; default: config_dir/.cloud_storage_key).
-- `--passphrase` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Passphrase for --pmbackup (v2 encryption instead of the key file).
-- `--no-include-commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit commands.json from --pmbackup export.
-- `--no-include-mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit MCP config from --pmbackup export.
-- `--no-include-prompts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit agent prompts from --pmbackup export.
+- `--cloud-storage-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Key file for encrypted backup (32-byte secret; default: config_dir/.cloud_storage_key).
+- `--passphrase` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Passphrase for pmbackup v2 (instead of the key file).
+- `--no-include-commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit commands.json from the encrypted backup.
+- `--no-include-mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit MCP config from the encrypted backup.
+- `--no-include-prompts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit agent prompts from the encrypted backup.
 
 **Example**
 
@@ -947,6 +947,156 @@ tanit-cli settings export
 
 ```sh
 tanit-cli settings export path 'settings.json' --encrypted --archive --pmbackup --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts
+```
+
+---
+
+#### settings key
+
+Manage the portable cloud storage key (.cloud_storage_key) used by --pmbackup and cloud sync.
+
+**Example**
+
+```sh
+tanit-cli settings key path
+```
+
+#### settings key path
+
+Print the profile .cloud_storage_key path (no file I/O) and exit.
+
+**Example**
+
+```sh
+tanit-cli settings key path
+```
+
+---
+
+#### settings key export
+
+Copy the profile key to a file for another machine (creates the key if missing).
+
+Options:
+
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Destination path (default: .cloud_storage_key in cwd).
+
+**Example**
+
+```sh
+tanit-cli settings key export
+```
+
+**Full example**
+
+```sh
+tanit-cli settings key export path 'foo'
+```
+
+---
+
+#### settings key import
+
+Install a 32-byte key file as this profile's .cloud_storage_key.
+
+Options:
+
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Source key file
+
+**Example**
+
+```sh
+tanit-cli settings key import path <path>
+```
+
+**Full example**
+
+```sh
+tanit-cli settings key import path 'foo'
+```
+
+---
+
+#### settings key generate
+
+Replace the profile key with a fresh random 32-byte key (old keyfile backups will not decrypt).
+
+**Example**
+
+```sh
+tanit-cli settings key generate
+```
+
+---
+
+#### settings cloud
+
+Encrypted settings sync via VFS home mount (same .pmbackup flow as the Settings UI). Requires SERVER_URL / login token. Distinct from `service settings` (plaintext JSON).
+
+**Example**
+
+```sh
+tanit-cli settings cloud upload
+```
+
+**Full example**
+
+```sh
+tanit-cli settings cloud upload --remote-dir 'settings' --server-url 'foo' --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts
+```
+
+#### settings cloud upload
+
+Export an encrypted .pmbackup and upload it to home/<remote-dir>/yyyy-mm-dd-hh.pmbackup.
+
+Options:
+
+- `--remote-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">settings</span></span></span>) - Remote VFS directory under the home mount (default: settings).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL).
+- `--cloud-storage-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Key file for encrypted backup (32-byte secret; default: config_dir/.cloud_storage_key).
+- `--passphrase` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Passphrase for pmbackup v2 (instead of the key file).
+- `--no-include-commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit commands.json from the encrypted backup.
+- `--no-include-mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit MCP config from the encrypted backup.
+- `--no-include-prompts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit agent prompts from the encrypted backup.
+
+**Example**
+
+```sh
+tanit-cli settings cloud upload
+```
+
+**Full example**
+
+```sh
+tanit-cli settings cloud upload --remote-dir 'settings' --server-url 'foo' --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts
+```
+
+---
+
+#### settings cloud download
+
+Download the newest .pmbackup under home/<remote-dir> via /api/vfs/get and restore the profile.
+
+Options:
+
+- `--remote-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Remote VFS directory under the home mount (default: settings).
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL).
+- `--cloud-storage-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Key file for encrypted backup (32-byte secret; default: config_dir/.cloud_storage_key).
+- `--passphrase` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Passphrase for pmbackup v2 (instead of the key file).
+- `--no-include-commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit commands.json from the encrypted backup.
+- `--no-include-mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit MCP config from the encrypted backup.
+- `--no-include-prompts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit agent prompts from the encrypted backup.
+
+**Example**
+
+```sh
+tanit-cli settings cloud download
+```
+
+**Full example**
+
+```sh
+tanit-cli settings cloud download --remote-dir 'settings' --server-url 'foo' --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts
 ```
 
 ### LLM & Agents
@@ -1618,7 +1768,7 @@ Register Windows Explorer menus: resize / convert / meta + Workbench + Viewer + 
 
 Options:
 
-- `--group` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">Tanit</span></span></span>)
+- `--group` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">Tanit Chat</span></span></span>)
 - `--unregister` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
 - `--dry` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
 - `--no-refresh-shell` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
@@ -1634,7 +1784,7 @@ tanit-cli register-explorer
 **Full example**
 
 ```sh
-tanit-cli register-explorer --group 'Tanit' --unregister --dry --no-refresh-shell --media-bin 'foo' --widths '1980,1200'
+tanit-cli register-explorer --group 'Tanit Chat' --unregister --dry --no-refresh-shell --media-bin 'foo' --widths '1980,1200'
 ```
 
 #### register-startmenu
@@ -2761,186 +2911,6 @@ tanit-cli service categories remove ids {}
 tanit-cli service categories remove ids '{}' --server-url 'foo'
 ```
 
----
-
-#### service store
-
-Microsoft Store billing (pm-pics billing-ms). Requires login + MS_STORE_MOCK on dev server.
-
-**Example**
-
-```sh
-tanit-cli service store app-license
-```
-
-#### service store app-license
-
-Microsoft Store app license (trial/full). PM_STORE_LICENSE_MOCK defaults to full; trial|expired|inactive override.
-
-**Example**
-
-```sh
-tanit-cli service store app-license
-```
-
----
-
-#### service store health
-
-GET /api/billing/ms/health (public; shows mock flag and product ids).
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base (default: PM_SERVICE_LICENSE_SERVER_BASE or SERVER_URL).
-
-**Example**
-
-```sh
-tanit-cli service store health
-```
-
-**Full example**
-
-```sh
-tanit-cli service store health --license-server-url 'foo'
-```
-
----
-
-#### service store link
-
-POST /api/billing/ms/link — associate UserCollectionsId with your account.
-
-Options:
-
-- `--collections-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - UserCollectionsId (default: cached or dev-mock-collections-* for MS_STORE_MOCK).
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store link
-```
-
-**Full example**
-
-```sh
-tanit-cli service store link --collections-id 'foo' --license-server-url 'foo'
-```
-
----
-
-#### service store reconcile
-
-POST /api/billing/ms/reconcile — grant credits and Pro entitlements.
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store reconcile
-```
-
-**Full example**
-
-```sh
-tanit-cli service store reconcile --license-server-url 'foo'
-```
-
----
-
-#### service store ms-balance
-
-GET /api/billing/balance — credit_ledger sum (not AI gateway balance).
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store ms-balance
-```
-
-**Full example**
-
-```sh
-tanit-cli service store ms-balance --license-server-url 'foo'
-```
-
----
-
-#### service store entitlements
-
-GET /api/billing/ms/entitlements — durable/subscription rows.
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store entitlements
-```
-
-**Full example**
-
-```sh
-tanit-cli service store entitlements --license-server-url 'foo'
-```
-
----
-
-#### service store mock-enqueue
-
-POST /api/billing/ms/mock/enqueue — seed a pending purchase (server MS_STORE_MOCK=1 only).
-
-Options:
-
-- `--product-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Store product id (e.g. STORE_PRODUCT_ID_100K).
-- `--kind` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - consumable | durable | subscription (default: consumable).
-- `--microsoft-item-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional stable item id for idempotency tests.
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store mock-enqueue --product-id <id>
-```
-
-**Full example**
-
-```sh
-tanit-cli service store mock-enqueue --product-id 'foo' --kind 'consumable' --microsoft-item-id 'foo' --license-server-url 'foo'
-```
-
----
-
-#### service store mock-reset
-
-POST /api/billing/ms/mock/reset — delete billing rows for the logged-in user.
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store mock-reset
-```
-
-**Full example**
-
-```sh
-tanit-cli service store mock-reset --license-server-url 'foo'
-```
-
 ### Automation
 
 #### batch
@@ -4061,39 +4031,6 @@ Options:
 - `--stt-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Caption STT provider override (empty = App Settings).
 - `--stt-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Caption STT model override (empty = App Settings).
 
-**Beauty**
-- `--face,--no-face{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Run FaceLandmarker (off unless set; implied by --skin/--lips/--teeth and the other face filters).
-- `--skin,--no-skin{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Smooth skin (face oval minus eyes/lips). Slow at 1080p.
-- `--skin-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.5</span></span></span>) - Skin smoothing strength 0..1.
-- `--lips,--no-lips{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Tint lips (Lab a/b toward --lips-color).
-- `--lips-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#C45C6A</span></span></span>) - Lip tint as #RRGGBB (quote it in PowerShell: "#C41E3A").
-- `--lips-alpha` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Lip tint alpha 0..1.
-- `--teeth,--no-teeth{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whiten teeth (inner-lip mask, Lab b* toward neutral).
-- `--teeth-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Teeth whitening strength 0..1.
-- `--model-face` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - FaceLandmarker .task path. Empty = bundled models/vision/face_landmarker_v2.task.
-- `--dll` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Diagnostic override for pixlwiz_face_landmarker.dll.
-- `--show-landmarks` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Draw landmark overlay (debug).
-- `--face-gain` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Lift crushed face exposure (Lab L* toward a meeting target). 0 = off, 1 = full. Same oval as --skin.
-- `--warmth` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Warm the face oval (Lab b*). 0 = off, 1 = full.
-- `--undereye,--no-undereye{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Lighten under-eye bands (dark circles).
-- `--undereye-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.45</span></span></span>) - Under-eye mix 0..1.
-- `--redness,--no-redness{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Mute flush / acne (pull Lab a* toward neutral on the face oval).
-- `--redness-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Redness mute mix 0..1.
-- `--eye-sharpen,--no-eye-sharpen{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Unsharp the eye polys (restores focus after --skin).
-- `--eye-sharpen-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Eye sharpen mix 0..1.
-
-**Frame**
-- `--mirror,--no-mirror{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Horizontal flip (webcam mirror). No model.
-
-**Background**
-- `--blur,--no-blur{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Blur the non-person background (ImageSegmenter).
-- `--background,--no-background{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Replace the non-person background with --bg-color / --bg-image.
-- `--blur-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.65</span></span></span>) - Background blur mix 0..1.
-- `--feather-px` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Person-mask feather in pixels.
-- `--bg-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#1A1A1A</span></span></span>) - Solid replacement color (#RRGGBB). Quote it in PowerShell.
-- `--bg-image` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement background image (scaled to the frame).
-- `--model-seg` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ImageSegmenter .task path. Empty = bundled models/vision/selfie_segmenter.task.
-
 **Example**
 
 ```sh
@@ -4103,7 +4040,7 @@ tanit-cli video record
 **Full example**
 
 ```sh
-tanit-cli video record --dst 'foo' --input 'foo' --mode -1 --width 0 --height 0 --fps 30 --preview --capture-engine 'auto' --encoder 'auto' --bitrate-kbps 0 --no-cursor --size-mode 'native' --zoom '1' --follow 'none' --follow-speed '0.2' --follow-deadzone 3 --transition-ms 300 --interactive-zoom --zoom-step '0.15' --zoom-min '1' --zoom-max '4' --pass-zoom-input --no-zoom-status --hud-capture 'auto' --pause-key 'foo' --stop-key 'foo' --key-overlay --key-overlay-burn-in --key-overlay-align 'bottom' --key-overlay-margin-x 0 --key-overlay-margin-y 0 --key-overlay-font-size 0 --key-overlay-color '#F8F9FB' --key-overlay-bg-color '#181B21' --key-overlay-accent-color '#EB445A' --key-overlay-opacity '0.9' --key-overlay-hold-ms 1200 --key-overlay-fade-ms 450 --key-overlay-max-entries 5 --key-overlay-filter 'all' --key-overlay-stack 'auto' --no-key-overlay-modifiers --key-overlay-capture 'visible' --cursor-highlight --cursor-highlight-color '#F5C542' --cursor-highlight-size 0 --cursor-clicks --cursor-click-color '#EB445A' --cursor-trail --hide-cursor-when-typing --camera-overlay --camera-input 'foo' --camera-position 'bottom-right' --camera-size '22' --camera-resolution 'auto' --camera-shape 'circle' --no-camera-border --camera-border-color '#FFFFFF' --no-camera-shadow --camera-audio --camera-audio-gain '1' --duration-ms 0 --quality 85 --audio-source 'none' --audio-device 'foo' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --audio-normalize --audio-auto-gain --auto-pause 'off' --auto-pause-idle-ms 3000 --auto-pause-grid '32x18' --no-auto-pause-mic-wake --auto-pause-mic-activity-db '-40' --auto-pause-preroll-ms 500 --no-auto-pause-wake-key --no-auto-pause-wake-mouse --captions 'off' --caption-format 'srt' --stt-preset 'foo' --stt-provider 'foo' --stt-model 'foo' --face --skin --skin-strength '0.5' --lips --lips-color '#C45C6A' --lips-alpha '0.35' --teeth --teeth-strength '0.4' --model-face 'foo' --dll 'foo' --show-landmarks --mirror --face-gain '0' --warmth '0' --undereye --undereye-blend '0.45' --redness --redness-blend '0.4' --eye-sharpen --eye-sharpen-blend '0.35' --blur --background --blur-strength '0.65' --feather-px 8 --bg-color '#1A1A1A' --bg-image 'foo' --model-seg 'foo'
+tanit-cli video record --dst 'foo' --input 'foo' --mode -1 --width 0 --height 0 --fps 30 --preview --capture-engine 'auto' --encoder 'auto' --bitrate-kbps 0 --no-cursor --size-mode 'native' --zoom '1' --follow 'none' --follow-speed '0.2' --follow-deadzone 3 --transition-ms 300 --interactive-zoom --zoom-step '0.15' --zoom-min '1' --zoom-max '4' --pass-zoom-input --no-zoom-status --hud-capture 'auto' --pause-key 'foo' --stop-key 'foo' --key-overlay --key-overlay-burn-in --key-overlay-align 'bottom' --key-overlay-margin-x 0 --key-overlay-margin-y 0 --key-overlay-font-size 0 --key-overlay-color '#F8F9FB' --key-overlay-bg-color '#181B21' --key-overlay-accent-color '#EB445A' --key-overlay-opacity '0.9' --key-overlay-hold-ms 1200 --key-overlay-fade-ms 450 --key-overlay-max-entries 5 --key-overlay-filter 'all' --key-overlay-stack 'auto' --no-key-overlay-modifiers --key-overlay-capture 'visible' --cursor-highlight --cursor-highlight-color '#F5C542' --cursor-highlight-size 0 --cursor-clicks --cursor-click-color '#EB445A' --cursor-trail --hide-cursor-when-typing --camera-overlay --camera-input 'foo' --camera-position 'bottom-right' --camera-size '22' --camera-resolution 'auto' --camera-shape 'circle' --no-camera-border --camera-border-color '#FFFFFF' --no-camera-shadow --camera-audio --camera-audio-gain '1' --duration-ms 0 --quality 85 --audio-source 'none' --audio-device 'foo' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --audio-normalize --audio-auto-gain --auto-pause 'off' --auto-pause-idle-ms 3000 --auto-pause-grid '32x18' --no-auto-pause-mic-wake --auto-pause-mic-activity-db '-40' --auto-pause-preroll-ms 500 --no-auto-pause-wake-key --no-auto-pause-wake-mouse --captions 'off' --caption-format 'srt' --stt-preset 'foo' --stt-provider 'foo' --stt-model 'foo'
 ```
 
 ##### Examples
@@ -4316,65 +4253,6 @@ tanit-cli video detect -m <value>
 
 ```sh
 tanit-cli video detect -m 'foo' -i 'foo' --width 0 --height 0 --fps 30 --conf '0.25' --nms '0.45' --input-size 640 --every-n 1 -j 4 --duration-ms 0 --task 'auto' --top-k 5 --classes 'foo' --labels-yaml 'foo' --save-frames 'foo' --filter-classes '{}' -q --no-summary --max-objects 0 --max-by 'conf' --smooth-alpha '0.35' --smooth-age 4 -V --visualize-mode 'auto' --no-stats --no-labels --fill-alpha 40 --smooth-min-hits 0 --track-ids --track-two-stage --track-conf-high '0.5' --no-track-center --track-center-dist '1.2' --track-vel-blend '0.7' --kpt-min-score '0.3' --provider 'auto' --gpu-stats
-```
-
----
-
-#### video filter
-
-Test harness: file/still in → face beauty → file out. Product capture path is `video record` (same flags).
-
-Options:
-
-- `--input,--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Input video or still image path.
-- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output video or still image path.
-- `--status` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print MediaPipe bridge / model capability and exit.
-- `--preview` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Show a live window of the processed frames (same pixels as the output). Close the window to stop. Stills stay open until you close them.
-- `--running-mode` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">video</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">image</span> <span data-cli="choice">video</span></span></span>) - image | video. video uses DetectForVideo timestamps. Default: image for stills, video for clips.
-
-**Beauty**
-- `--face,--no-face{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Run FaceLandmarker (default on for this command).
-- `--skin,--no-skin{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Smooth skin (face oval minus eyes/lips). Slow at 1080p.
-- `--skin-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.5</span></span></span>) - Skin smoothing strength 0..1.
-- `--lips,--no-lips{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Tint lips (Lab a/b toward --lips-color).
-- `--lips-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#C45C6A</span></span></span>) - Lip tint as #RRGGBB (quote it in PowerShell: "#C41E3A").
-- `--lips-alpha` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Lip tint alpha 0..1.
-- `--teeth,--no-teeth{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whiten teeth (inner-lip mask, Lab b* toward neutral).
-- `--teeth-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Teeth whitening strength 0..1.
-- `--model-face` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - FaceLandmarker .task path. Empty = bundled models/vision/face_landmarker_v2.task.
-- `--dll` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Diagnostic override for pixlwiz_face_landmarker.dll.
-- `--show-landmarks` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Draw landmark overlay (debug).
-- `--face-gain` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Lift crushed face exposure (Lab L* toward a meeting target). 0 = off, 1 = full. Same oval as --skin.
-- `--warmth` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Warm the face oval (Lab b*). 0 = off, 1 = full.
-- `--undereye,--no-undereye{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Lighten under-eye bands (dark circles).
-- `--undereye-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.45</span></span></span>) - Under-eye mix 0..1.
-- `--redness,--no-redness{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Mute flush / acne (pull Lab a* toward neutral on the face oval).
-- `--redness-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Redness mute mix 0..1.
-- `--eye-sharpen,--no-eye-sharpen{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Unsharp the eye polys (restores focus after --skin).
-- `--eye-sharpen-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Eye sharpen mix 0..1.
-
-**Frame**
-- `--mirror,--no-mirror{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Horizontal flip (webcam mirror). No model.
-
-**Background**
-- `--blur,--no-blur{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Blur the non-person background (ImageSegmenter).
-- `--background,--no-background{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Replace the non-person background with --bg-color / --bg-image.
-- `--blur-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.65</span></span></span>) - Background blur mix 0..1.
-- `--feather-px` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Person-mask feather in pixels.
-- `--bg-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#1A1A1A</span></span></span>) - Solid replacement color (#RRGGBB). Quote it in PowerShell.
-- `--bg-image` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement background image (scaled to the frame).
-- `--model-seg` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ImageSegmenter .task path. Empty = bundled models/vision/selfie_segmenter.task.
-
-**Example**
-
-```sh
-tanit-cli video filter
-```
-
-**Full example**
-
-```sh
-tanit-cli video filter --input 'foo' --dst 'foo' --status --preview --face --skin --skin-strength '0.5' --lips --lips-color '#C45C6A' --lips-alpha '0.35' --teeth --teeth-strength '0.4' --model-face 'foo' --dll 'foo' --show-landmarks --mirror --face-gain '0' --warmth '0' --undereye --undereye-blend '0.45' --redness --redness-blend '0.4' --eye-sharpen --eye-sharpen-blend '0.35' --blur --background --blur-strength '0.65' --feather-px 8 --bg-color '#1A1A1A' --bg-image 'foo' --model-seg 'foo' --running-mode 'video'
 ```
 
 #### bluetooth
@@ -5382,6 +5260,29 @@ tanit-cli test screenshot -o <value>
 tanit-cli test screenshot -o 'foo' --wait-ms 2000
 ```
 
+### Service
+
+#### status
+
+Show Tanit credits and license status.
+
+Options:
+
+- `--log` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Show recent Tanit spend log entries.
+- `--log-days` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 365]</span></span>) - Number of days to look back for --log (default 7).
+
+**Example**
+
+```sh
+tanit-cli status
+```
+
+**Full example**
+
+```sh
+tanit-cli status --log --log-days 7
+```
+
 ### Reference
 
 #### commands
@@ -6064,7 +5965,7 @@ tanit-cli assistant spy --interval-ms 500 --no-value --no-selection --no-text --
 
 #### info
 
-Generate reference docs for Tanit: CLI commands, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
+Generate reference docs for Tanit Chat: CLI commands, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
 
 **Example**
 
@@ -6130,7 +6031,7 @@ tanit-cli info xblox --dst 'releases/web-docs/cli/cli.md' --stdout --skill --aut
 
 #### info app-commands
 
-Generate a Tanit app/UI command verb reference (togglechat, takescreenshot, etc.) grouped by category. Plain md: app-commands.md in cwd. --skill: <profile>/skills/app-commands/SKILL.md.
+Generate a Tanit Chat app/UI command verb reference (togglechat, takescreenshot, etc.) grouped by category. Plain md: app-commands.md in cwd. --skill: <profile>/skills/app-commands/SKILL.md.
 
 Options:
 
@@ -6180,7 +6081,7 @@ tanit-cli info keyboard-shortcuts --dst 'releases/web-docs/cli/cli.md' --stdout 
 
 #### info ui
 
-Generate a Tanit UI launch flag reference (--ui-preset, --size, --src paths/URLs, --show-panel, chat seed options). Plain md: ui.md in cwd. --skill: <profile>/skills/ui/SKILL.md.
+Generate a Tanit Chat UI launch flag reference (--ui-preset, --size, --src paths/URLs, --show-panel, chat seed options). Plain md: ui.md in cwd. --skill: <profile>/skills/ui/SKILL.md.
 
 Options:
 
@@ -7059,8 +6960,9 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `custom.image-compress` | Compress | Images | `cli:compress` | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui`<br>`--compressor`<br>`mozjpeg`<br>`--quality`<br>`92` |
 | `custom.command-mszwq2g6-780cb` | To Markdown | Images | `cli:llm` | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--no-skills` |
 | `custom.command-mtun9312-7d0e1` | Share Post | Images | `cli:service` | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`listed` |
-| `custom.command-mpxzouxv-ab189` | App | Screenshots | `app:takescreenshot` |  |
 | `custom.command-mrcja3yb-306c8` | Region | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/screenshot.xblox` |
+| `custom.command-mpxzouxv-ab189` | App | Screenshots | `app:takescreenshot` |  |
+| `custom.command-mu4l7dsk-4b406` | Fullscreen Screenshot | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/screenshot-full.xblox` |
 | `custom.command-mre4dk8y-7a985` | To Markdown | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/screenshot-vision-md.xblox` |
 | `custom.command-mtlh4sop-a7c1b` | New | AI | `app:togglechat` |  |
 | `custom.command-mpohnfaf-26b0c` | TTS | AI | `app:setVariable` |  |
@@ -7137,7 +7039,6 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `custom.help-xblox` | XBlox | Help | `app:open` |  |
 | `custom.command-msakytc7-dd084` | Online Help | Help | `app:openurl` |  |
 | `custom.youtube` | Youtube | Help | `app:openurl` |  |
-| `custom.command-mt4iq9cc-46e06` | test-screen | Scheduler | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/webcam-scheduled.xblox` |
 | `custom.command-mt4msl99-55414` | Start | Scheduler | `app:schedulerstart` |  |
 | `custom.command-mt4munur-873bb` | Stop | Scheduler | `app:schedulerstop` |  |
 | `custom.command-mt7672eh-b7786` | To Images | PDF | `cli:pdf` | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
