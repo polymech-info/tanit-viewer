@@ -1,4 +1,4 @@
-# Tanit Chat XBlox
+# Tanit XBlox
 
 Use this skill when composing `.xblox` block-tree command flows.
 
@@ -472,7 +472,7 @@ Params:
 - `systemPrompt` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Full system-prompt override (CLI --system-prompt). Supports literal text, null/none, @path, or file:path.
 - `system` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Optional extra system text appended after the resolved system prompt.
 - `plannerPrompt` (<span data-cli="meta"><span data-cli="type">prompt</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Planner system-prompt override (CLI --planner-prompt). Same grammar as systemPrompt.
-- `runner` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice"></span> <span data-cli="choice">native</span> <span data-cli="choice">claude-code</span> <span data-cli="choice">codex</span> <span data-cli="choice">cursor</span></span></span>) - Agent backend (CLI --runner). Empty = chat preset, then native. Also reads PM_LLM_AGENT_RUNNER when unset.
+- `runner` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice"></span> <span data-cli="choice">native</span> <span data-cli="choice">claude-code</span> <span data-cli="choice">codex</span></span></span>) - Agent backend (CLI --runner). Empty = chat preset, then native. Also reads PM_LLM_AGENT_RUNNER when unset.
 - `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - Model override. Empty = from App Settings.
 - `router` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Provider router override. Empty = from App Settings.
 - `type` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;completion&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">completion</span> <span data-cli="choice">responses</span> <span data-cli="choice">realtime</span></span></span>) - LLM API type.
@@ -1287,7 +1287,7 @@ Params:
 
 **lifecycle**
 - `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;List&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">List</span> <span data-cli="choice">Unload</span></span></span>) - List loaded models in this xBlox process, or unload one by key.
-- `key` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;moss:tts&quot;</span></span></span>) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
+- `key` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;vibevoice:tts&quot;</span></span></span>) - Loaded model key to unload, e.g. llama:vlm, llama:text, vibevoice:tts, moss:tts, onnx:*, or * to unload every stoppable model in this process. Empty aliases use their group default.
 
 **output**
 - `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;modelKey&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
@@ -1297,7 +1297,7 @@ Default block:
 ```json
 {
   "action": "Unload",
-  "key": "moss:tts",
+  "key": "vibevoice:tts",
   "kind": "audioModelControl",
   "storeAs": "modelKey"
 }
@@ -2233,213 +2233,6 @@ Default block:
   "id": "",
   "kind": "bluetoothUnpair",
   "storeAs": "bluetooth"
-}
-```
-
-### Browser
-
-#### Browser Batch
-
-Run multiple WebView actions in one call.
-
-Params:
-
-**input**
-- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional page epoch from Browser Read.
-- `steps` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - Ordered step objects with action/type plus step fields.
-
-**options**
-- `defaultDelayMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-5000</span>, <span data-cli="default">default <span data-cli="value">50</span></span></span>)
-- `continueOnError` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>)
-
-**output**
-- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
-
-Default block:
-
-```json
-{
-  "continueOnError": false,
-  "defaultDelayMs": 50,
-  "epoch": "",
-  "kind": "browserBatch",
-  "steps": [],
-  "storeAs": ""
-}
-```
-
----
-
-#### Browser Click
-
-Click a WebView element by ref or selector.
-
-Params:
-
-**input**
-- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
-- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
-- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
-- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
-
-**output**
-- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
-
-Default block:
-
-```json
-{
-  "epoch": "",
-  "kind": "browserClick",
-  "ref": "",
-  "selector": "",
-  "storeAs": ""
-}
-```
-
----
-
-#### Browser Find
-
-Find WebView elements by selector, role, or name.
-
-Params:
-
-**input**
-- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
-- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
-- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
-- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
-- `role` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>)
-- `name` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>)
-
-**options**
-- `limit` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-100</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>)
-
-**output**
-- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
-
-Default block:
-
-```json
-{
-  "epoch": "",
-  "kind": "browserFind",
-  "limit": 20,
-  "name": "",
-  "ref": "",
-  "role": "",
-  "selector": "",
-  "storeAs": ""
-}
-```
-
----
-
-#### Browser Read
-
-Read a compact index or focused DOM snapshot.
-
-Params:
-
-**input**
-- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
-- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
-- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
-- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
-
-**options**
-- `limit` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-500</span>, <span data-cli="default">default <span data-cli="value">120</span></span></span>)
-- `viewportOnly` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>)
-
-**advanced**
-- `textMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100000</span>, <span data-cli="default">default <span data-cli="value">12000</span></span></span>)
-
-**output**
-- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
-
-Default block:
-
-```json
-{
-  "epoch": "",
-  "kind": "browserRead",
-  "limit": 120,
-  "ref": "",
-  "selector": "",
-  "storeAs": "",
-  "viewportOnly": false
-}
-```
-
----
-
-#### Browser Select
-
-Choose a WebView select option.
-
-Params:
-
-**input**
-- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
-- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
-- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
-- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
-- `value` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>)
-- `label` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>)
-- `index` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Zero-based option index alternative.
-
-**output**
-- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
-
-Default block:
-
-```json
-{
-  "epoch": "",
-  "kind": "browserSelect",
-  "label": "",
-  "ref": "",
-  "selector": "",
-  "storeAs": "",
-  "value": ""
-}
-```
-
----
-
-#### Browser Type
-
-Enter text into a WebView form control.
-
-Params:
-
-**input**
-- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
-- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
-- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
-- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
-- `text` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Text to enter.
-
-**options**
-- `clear` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>)
-- `submit` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>)
-
-**output**
-- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
-
-Default block:
-
-```json
-{
-  "clear": true,
-  "epoch": "",
-  "kind": "browserType",
-  "ref": "",
-  "selector": "",
-  "storeAs": "",
-  "submit": false,
-  "text": ""
 }
 ```
 
@@ -6342,6 +6135,36 @@ Params:
 - `subtitleMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">8-120</span>, <span data-cli="default">default <span data-cli="value">42</span></span></span>) - Cue wrap width (writer, not viewport).
 - `subtitleMaxLines` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-4</span>, <span data-cli="default">default <span data-cli="value">2</span></span></span>) - Cue wrap line count.
 
+**beauty**
+- `skin` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Smooth skin (face oval minus eyes/lips). Forces the compatibility CPU recorder.
+- `skinBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.5</span></span></span>) - Skin mix 0..1 (0 dry / 1 wet). Same as CLI --skin-blend / --skin-strength.
+- `lips` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Tint lips from the face mesh. Forces the compatibility CPU recorder.
+- `lipsColor` (<span data-cli="meta"><span data-cli="type">color</span>, <span data-cli="default">default <span data-cli="value">&quot;#C45C6A&quot;</span></span></span>) - Lip tint color.
+- `lipsBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Lip tint mix 0..1. Same as CLI --lips-blend / --lips-alpha.
+- `teeth` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Whiten teeth from the face mesh. Forces the compatibility CPU recorder.
+- `teethBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Teeth mix 0..1. Same as CLI --teeth-blend / --teeth-strength.
+- `landmarks` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Draw face-mesh landmarks on the frame (debug).
+- `faceGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.0</span></span></span>) - Lift crushed face exposure (Lab L*). 0 = off. Same oval as skin. Same as CLI --face-gain.
+- `warmth` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.0</span></span></span>) - Warm the face oval (Lab b*). 0 = off. Same as CLI --warmth.
+- `undereye` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Lighten under-eye bands (dark circles). Forces the compatibility CPU recorder.
+- `undereyeBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.45</span></span></span>) - Under-eye mix 0..1. Same as CLI --undereye-blend.
+- `redness` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Mute flush / acne (Lab a* toward neutral). Forces the compatibility CPU recorder.
+- `rednessBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Redness mute mix 0..1. Same as CLI --redness-blend.
+- `eyeSharpen` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Unsharp the eye polys after skin. Forces the compatibility CPU recorder.
+- `eyeSharpenBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Eye sharpen mix 0..1. Same as CLI --eye-sharpen-blend.
+
+**frame**
+- `mirror` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Horizontal flip (webcam mirror). No model.
+- `preview` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Live window at the captured frame size. Close the window to stop. Forces the compatibility CPU recorder. Same as CLI --preview.
+
+**background**
+- `blur` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Blur the non-person region (ImageSegmenter). Forces the compatibility CPU recorder.
+- `blurBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="type">0-1</span>, <span data-cli="default">default <span data-cli="value">0.65</span></span></span>) - Background blur mix 0..1. Same as CLI --blur-strength.
+- `background` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Replace the non-person region with bgColor / bgImage.
+- `bgColor` (<span data-cli="meta"><span data-cli="type">color</span>, <span data-cli="default">default <span data-cli="value">&quot;#1A1A1A&quot;</span></span></span>) - Solid replacement color.
+- `bgImage` (<span data-cli="meta"><span data-cli="type">image_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Replacement image, scaled to the frame.
+- `featherPx` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Person-mask feather in pixels.
+
 Features: cancellable
 
 Default block:
@@ -6378,7 +6201,12 @@ Default block:
   "autoPauseTilePercent": 8,
   "autoPauseWakeKey": true,
   "autoPauseWakeMouse": true,
+  "background": false,
+  "bgColor": "#1A1A1A",
+  "bgImage": "",
   "bitrateKbps": 0,
+  "blur": false,
+  "blurBlend": 0.65,
   "cameraAudio": false,
   "cameraAudioGain": 1.0,
   "cameraBorder": true,
@@ -6407,6 +6235,10 @@ Default block:
   "device": "",
   "durationMs": 0,
   "encoder": "auto",
+  "eyeSharpen": false,
+  "eyeSharpenBlend": 0.35,
+  "faceGain": 0.0,
+  "featherPx": 8,
   "filter": "off",
   "filterModel": "",
   "focusX": -1.0,
@@ -6442,19 +6274,34 @@ Default block:
   "keyOverlayOpacity": 0.9,
   "keyOverlayStack": "auto",
   "kind": "videoCapture",
+  "landmarks": false,
+  "lips": false,
+  "lipsBlend": 0.35,
+  "lipsColor": "#C45C6A",
   "micGain": 1.0,
+  "mirror": false,
   "outputPath": "",
   "pauseKey": "",
   "postFilter": false,
+  "preview": false,
+  "redness": false,
+  "rednessBlend": 0.4,
   "showZoomStatus": true,
   "sizeMode": "native",
+  "skin": false,
+  "skinBlend": 0.5,
   "stopKey": "",
   "storeAs": "capturePath",
   "subtitleMaxChars": 42,
   "subtitleMaxLines": 2,
+  "teeth": false,
+  "teethBlend": 0.4,
   "timeoutMs": 5000,
   "transitionMs": 300,
+  "undereye": false,
+  "undereyeBlend": 0.45,
   "updateIntervalMs": 16,
+  "warmth": 0.0,
   "width": 0,
   "zoom": 1.0,
   "zoomMax": 4.0,
@@ -7440,32 +7287,25 @@ Default block:
 | `file.prev` | Previous | `app:previousfile` |  |
 | `custom.command-mtlnivuv-4aae3` | Explorer | `app:togglefiletree` |  |
 | `file.next` | Next | `app:nextfile` |  |
+| `custom.dropdown-msx1rszr-19148` | New | `metadata` |  |
+| `custom.command-msx1rszr-32ae1` | XBlox Script | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |
+| `custom.command-msx1xf70-ed2f7` | Text File | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
+| `custom.command-mtfnk3hu-47302` | Markdown File | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
+| `custom.command-mtczu1xa-c605f` | File Tab | `app:newfiletab` |  |
+| `custom.command-mtfpcfxj-e1333` | Screen Recording | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
 | `custom.command-mpx9r1ur-8c6df` | Assistant | `cli:llm` | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | `app:togglelauncher` |  |
 | `custom.command-mtox7vvr-093fc` | Voice Commands | `app:togglevoicecommand` |  |
-| `custom.dropdown-msx1rszr-19148` | New | `metadata` |  |
-| `custom.command-msx1rszr-32ae1` | XBlox Script | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |
-| `custom.command-msx1xf70-ed2f7` | Text File | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
-| `custom.command-mtfnk3hu-47302` | Markdown File | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
-| `custom.command-mtczu1xa-c605f` | File Tab | `app:newfiletab` |  |
-| `custom.command-mtfpcfxj-e1333` | Screen Recording | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-recorder-16-9.xblox` |
-| `custom.dropdown-mset8bmm-ad9d3` | Installer | `metadata` |  |
-| `custom.command-mqj3lo3h-fed59` | Register | `cli:register-explorer` |  |
-| `custom.command-mr90wbc8-2bf79` | Installer | `cli:installer` | `--no-seed` |
-| `custom.command-mqj4ixcu-3a87a` | Unregister | `cli:register-explorer` | `--unregister` |
 | `custom.command-712fbd00-f9ac4` | Product | `cli:transform` | `--prompt`<br>`render this as product shooting, white background, studio`<br>`--json`<br>`${CURRENT_SELECTION}` |
 | `custom.command-mpch9gdx-44982` | Illustration | `cli:transform` | `--src`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`as technical illustration`<br>`--model`<br>`image-generation-deep` |
-| `custom.command-mq97rchy-5fcbf` | IllustrationX | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/image-pipe-blocks.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.image-understand-speak` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.command-mq9b2upm-93cf4` | Excel | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/vision-pipe.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.image-understand-speak` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-mqj3feqz-72a1a` | Resize-HD | `cli:resize` | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui` |
-| `custom.image-compress` | Compress | `cli:compress` | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui`<br>`--compressor`<br>`mozjpeg`<br>`--quality`<br>`92` |
-| `custom.command-mszwq2g6-780cb` | To Markdown | `cli:llm` | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--no-skills` |
+| `custom.command-mszwq2g6-780cb` | To Markdown | `cli:llm` | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--no-skills`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mtun9312-7d0e1` | Share Post | `cli:service` | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`listed` |
-| `custom.command-mrcja3yb-306c8` | Region | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/screenshot.xblox` |
+| `custom.command-mrcja3yb-306c8` | Region | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot.xblox` |
 | `custom.command-mpxzouxv-ab189` | App | `app:takescreenshot` |  |
-| `custom.command-mu4l7dsk-4b406` | Fullscreen Screenshot | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/screenshot-full.xblox` |
-| `custom.command-mre4dk8y-7a985` | To Markdown | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/screenshot-vision-md.xblox` |
+| `custom.command-mu4l7dsk-4b406` | Fullscreen Screenshot | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-full.xblox` |
+| `custom.command-mre4dk8y-7a985` | To Markdown | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-vision-md.xblox` |
 | `custom.command-mtlh4sop-a7c1b` | New | `app:togglechat` |  |
 | `custom.command-mpohnfaf-26b0c` | TTS | `app:setVariable` |  |
 | `custom.command-mpokt0hv-41237` | Funny | `app:setVariable` |  |
@@ -7482,50 +7322,35 @@ Default block:
 | `custom.command-mqkneqp7-3fcb0` | Console | `app:toggleconsole` |  |
 | `custom.command-mr5ebav3-ec35c` | Search | `app:togglesearchnative` |  |
 | `custom.command-mt8msflf-fe3b7` | Tabbed | `app:viewtabbed` |  |
-| `custom.command-mt8sceaa-06010` | New File Tab | `app:newfiletab` |  |
-| `custom.view-half` | 800x600 | `app:setframesize` |  |
-| `custom.command-mtlnui5r-42237` | 720x1080 | `app:setframesize` |  |
-| `custom.command-mtw1hthj-f17ee` | 1080x720 | `app:setframesize` |  |
+| `custom.command-msqfoqej-85fb5` | Performance | `app:toggleperf` |  |
 | `custom.command-mtwl51se-b7440` | 1269x846 | `app:setframesize` |  |
 | `custom.view-maximize` | Fullscreen | `app:togglefullscreen` |  |
 | `custom.command-mtoxzgrv-1f644` | Maximize | `app:setframesize` |  |
 | `custom.command-mtv9cd7k-7a458` | Reset | `app:resetlayout` |  |
-| `custom.command-msqfoqej-85fb5` | Performance | `app:toggleperf` |  |
 | `custom.command-70eabea6-957e6` | Spanish | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`Translate to Spanish`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_es.${SRC_EXT}`<br>`--hud` |
 | `custom.command-msyzmkcu-9b027` | English | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_en.${SRC_EXT}`<br>`--prompt`<br>`Translate to English`<br>`--no-tools`<br>`--preset`<br>`Tanit-Fast`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-msyznegr-9190e` | German | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_de.${SRC_EXT}`<br>`--prompt`<br>`Translate to German` |
 | `custom.command-mt0dfzrn-665b0` | French | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--prompt`<br>`Translate to French`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_fr.${SRC_EXT}` |
 | `text.md2pdf` | MD->PDF | `external` | `--headless`<br>`--convert-to pdf`<br>`--outdir`<br>`${CWD}`<br>`${CURRENT_FILE}` |
-| `custom.command-ms0phpqj-d1ca3` | Chrome | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-chrome.xblox` |
-| `custom.command-ms33shnl-97127` | App | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-win32.xblox` |
-| `custom.color-picker` | Color | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-color.xblox` |
-| `custom.text-speak` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-text-speak.xblox` |
-| `custom.distance` | Distance | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-distance.xblox` |
-| `custom.picker-chrome-selector` | Color | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-chrome-selector.xblox` |
-| `custom.command-mqauenwv-74ac8` | Mic-Journal | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/stt-journal-ex.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--journal`<br>`${KNOWNFOLDER:Documents}\journal.txt`<br>`--journalPath`<br>`C:\Users\zx/Documents/journal.txt`<br>`--recording`<br>`false`<br>`--started`<br>`false` |
+| `custom.command-ms0phpqj-d1ca3` | Chrome | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-chrome.xblox` |
+| `custom.command-ms33shnl-97127` | App | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-win32.xblox` |
+| `custom.color-picker` | Color | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-color.xblox` |
+| `custom.text-speak` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
 | `custom.voice-cloner` | Voice Cloner | `cli:audio` | `voice-change`<br>`--remove-background-noise`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_cloned.wav`<br>`--style`<br>`0.5`<br>`--stability`<br>`1` |
-| `custom.command-mrckqhx7-38b2d` | Mic-Journal | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/stt-paste.xblox` |
 | `custom.command-mpxzk7g4-67590` | Voice Recorder | `cli:audio` | `record`<br>`--dst`<br>`${CONFIG_DIR}/recordings/tanit-${DD}-${HH}-${mm}.wav`<br>`--hud`<br>`--filter`<br>`deepfilter` |
-| `custom.command-mtk0rcb2-f401a` | Speech to Text | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/stt-paste-whisper.xblox` |
-| `custom.command-ms0q0j9j-92441` | Yamaha | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/bluetooth-yamaha.xblox` |
-| `custom.mic-start` | Mic Capture Start | `cli:audio` | `record`<br>`--text-out`<br>`${KNOWNFOLDER:Config}/last.md` |
-| `custom.mic-stop` | Mic Capture Stop | `cli:audio` | `record`<br>`stop` |
+| `custom.command-mtk0rcb2-f401a` | Speech to Text | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/stt-paste-whisper.xblox` |
+| `custom.command-ms0q0j9j-92441` | Yamaha | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/bluetooth-yamaha.xblox` |
 | `custom.command-mtn0t1b3-722de` | Voice Commands | `app:togglevoicecommand` |  |
-| `custom.command-mrf5dhi8-76608` | 1:1 | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-recorder-ex.xblox` |
-| `custom.command-mssrlhcu-5aa17` | 1:1-ex | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-recorder-ex.xblox` |
-| `custom.command-ms4vl4ur-4569d` | 16:9 | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-recorder-16-9.xblox` |
-| `custom.command-msghb0e2-e8c47` | Fixed | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-recorder-fixed.xblox` |
-| `custom.video-start` | WebCam | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/webcam.xblox` |
-| `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/webcam.xblox` |
-| `custom.command-d204eb95-8101e` | To Step | `external` | `<placeholder>` |
-| `custom.command-msg3o7ti-d4db9` | To HTML | `external` | `<placeholder>` |
-| `custom.command-msg3opko-d2e18` | BOM | `external` | `<placeholder>` |
-| `custom.command-msg3p48b-0db60` | Print | `external` | `<placeholder>` |
-| `custom.command-msg3pbh4-64134` | FreeCAD | `external` | `<placeholder>` |
-| `custom.command-msafwmdu-b9a48` | Pose | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-detect-yolo26-pose.xblox` |
-| `custom.command-msajhop7-a071b` | Segments | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-detect-yolo26-seg.xblox` |
-| `custom.handbrake-hq` | Handbrake | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.command-video-social-hq` | Social Video HQ | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.command-mrf5dhi8-76608` | 1:1 | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
+| `custom.command-mssrlhcu-5aa17` | 1:1-ex | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
+| `custom.command-ms4vl4ur-4569d` | 16:9 | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
+| `custom.command-msghb0e2-e8c47` | Fixed | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed.xblox` |
+| `custom.video-start` | WebCam | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
+| `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
+| `custom.command-msafwmdu-b9a48` | Pose | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-detect-yolo26-pose.xblox` |
+| `custom.command-msajhop7-a071b` | Segments | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-detect-yolo26-seg.xblox` |
+| `custom.handbrake-hq` | Handbrake | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.command-video-social-hq` | Social Video HQ | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-mr51514h-c34ec` | System | `app:edit` |  |
 | `custom.command-mr50fk3n-1a7d7` | Realtime | `app:edit` |  |
 | `custom.command-mppft700-137e9` | Planner | `app:edit` |  |
@@ -7540,16 +7365,12 @@ Default block:
 | `custom.help-cli` | CLI-Manual | `app:open` |  |
 | `custom.help-xblox` | XBlox | `app:open` |  |
 | `custom.command-msakytc7-dd084` | Online Help | `app:openurl` |  |
-| `custom.youtube` | Youtube | `app:openurl` |  |
 | `custom.command-mt4msl99-55414` | Start | `app:schedulerstart` |  |
 | `custom.command-mt4munur-873bb` | Stop | `app:schedulerstop` |  |
 | `custom.command-mt7672eh-b7786` | To Images | `cli:pdf` | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
 | `custom.pdf-to-md` | To Markdown | `cli:pdf` | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md` |
-| `custom.command-mq9a0i3l-576f4` | OCR - MD | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/ocr-pipe.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.command-mq9azo3w-5b894` | OCR - CSV | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/ocr-pipe-csv.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.fs-copy` | Copy | `app:fscopy` |  |
 | `custom.fs-move` | Move | `app:fsmove` |  |
-| `custom.command-mtvbj8xw-2ef0a` | Info | `app:fsmove` |  |
 | `custom.command-mu114s8q-17bff` | Share | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--if-newer`<br>`--remote-dir`<br>`public` |
-| `custom.command-mu1w66c6-5b959` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-text-speak.xblox` |
+| `custom.command-mu1w66c6-5b959` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
 | `custom.command-mtum9djk-a760d` | Share as Article | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |

@@ -1,4 +1,4 @@
-# Tanit Chat UI Launch
+# Tanit UI Launch
 
 Top-level flags for `tanit.exe` with **no subcommand**. `--ui-preset` picks `main` / `chat` / `viewer` for this run (else saved `ui.workbench`). `--src` seeds local paths or URLs (`http(s)://`, `//host/…`, CMS `/…`). `--size WxH` overrides the outer frame for this launch only. `--show-panel` / `--hide-panel` accept comma-separated panel ids; `--show-components` / `--hide-components` accept ribbon and statusbar — all for this process only.
 
@@ -7,7 +7,7 @@ Top-level flags for `tanit.exe` with **no subcommand**. `--ui-preset` picks `mai
 - `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Seed the UI with file(s) or URL(s). Local paths open in the workbench; `http(s)://…`, `//host/…`, and CMS-relative `/…` open in the centre browser. Uses saved default workbench unless --ui-preset is set. Repeat or separate with `;`.
 - `--view-locate` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Viewer locate fragment without '#', used by protocol startup.
 - `--ui-preset` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">main</span> <span data-cli="choice">chat</span> <span data-cli="choice">viewer</span></span></span>) - Open the UI: `main`, `chat`, or `viewer` (one-shot; overrides saved default `ui.workbench`).
-- `--ui-open` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Open a lightweight UI surface without constructing MainFrame. Usage: --ui-open command-settings [--ui-command-id ID | ID]. Reserved surfaces: fileviewer, webapp.
+- `--ui-open` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Open a lightweight UI surface without constructing MainFrame. Usage: --ui-open command-settings [--ui-command-id ID | ID] | --ui-open assistant. Reserved surfaces: fileviewer, webapp.
 - `--ui-command-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Stable commands.json id for --ui-open command-settings.
 - `--ui-web-app` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Web application id for --ui-open webapp.
 - `--ui-owner-hwnd` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional decimal owner HWND for lightweight UI placement.

@@ -1,6 +1,6 @@
-# Tanit Chat Commands
+# Tanit Commands
 
-Use this skill when composing Tanit Chat CLI invocations or calling user custom commands.
+Use this skill when composing Tanit CLI invocations or calling user custom commands.
 
 ## Invocation Rules
 
@@ -22,7 +22,7 @@ UI launch (main window). Launch `tanit.exe` with **no subcommand** (full referen
 - `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Seed the UI with file(s) or URL(s). Local paths open in the workbench; `http(s)://…`, `//host/…`, and CMS-relative `/…` open in the centre browser. Uses saved default workbench unless --ui-preset is set. Repeat or separate with `;`.
 - `--view-locate` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Viewer locate fragment without '#', used by protocol startup.
 - `--ui-preset` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">main</span> <span data-cli="choice">chat</span> <span data-cli="choice">viewer</span></span></span>) - Open the UI: `main`, `chat`, or `viewer` (one-shot; overrides saved default `ui.workbench`).
-- `--ui-open` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Open a lightweight UI surface without constructing MainFrame. Usage: --ui-open command-settings [--ui-command-id ID | ID]. Reserved surfaces: fileviewer, webapp.
+- `--ui-open` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Open a lightweight UI surface without constructing MainFrame. Usage: --ui-open command-settings [--ui-command-id ID | ID] | --ui-open assistant. Reserved surfaces: fileviewer, webapp.
 - `--ui-command-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Stable commands.json id for --ui-open command-settings.
 - `--ui-web-app` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Web application id for --ui-open webapp.
 - `--ui-owner-hwnd` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional decimal owner HWND for lightweight UI placement.
@@ -1355,7 +1355,7 @@ Options:
 
 **Provider**
 - `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. Loads saved router/model/max-iter/planner defaults; explicit CLI flags override it.
-- `--runner` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Agent backend: native (default) | claude-code | codex | cursor. Also reads PM_LLM_AGENT_RUNNER when unset.
+- `--runner` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Agent backend: native (default) | claude-code | codex. Also reads PM_LLM_AGENT_RUNNER when unset.
 - `--save-preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Save the resolved chat/tool/MCP/skill settings as a preset name. With --preset, clones/updates from that base; without --prompt, saves and exits.
 - `--router` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - LLM router (llama|openrouter|openai|deepseek|gemini|ollama|fireworks|xai|huggingface). Default: from Chat Provider Settings in app.
 - `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model id (router-specific, e.g. openai/gpt-4o-mini). Default: from Chat Provider Settings in app.
@@ -1391,8 +1391,8 @@ Options:
 - `--planner-budget` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Maximum tool schemas the planner may pre-expand before falling back to the full catalog.
 - `--no-parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable concurrent tool dispatch and fall back to serial execution. Parallel dispatch (P6) is on by default; use this flag to opt out.
 - `--parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dispatch all tool calls in a single LLM response concurrently (std::async). On by default — this flag is accepted for compatibility but is a no-op unless --no-parallel-tools was previously applied.
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
-- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_command. Ineffective with --no-tools.
 
 **Session**
 - `--multi-turn` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable session memory across turns (default: on).
@@ -1667,7 +1667,12 @@ Options:
 
 **Codex**
 - `-s,--sandbox` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">read-only</span> <span data-cli="choice">workspace-write</span> <span data-cli="choice">danger-full-access</span></span></span>) - Codex sandbox: read-only | workspace-write | danger-full-access (default read-only).
-- `-a,--ask-for-approval` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">untrusted</span> <span data-cli="choice">on-request</span> <span data-cli="choice">never</span></span></span>) - Ignored for Codex (use -s/--sandbox). Kept for CLI parity with other agents.
+- `-a,--ask-for-approval` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">on-request</span> <span data-cli="choice">never</span></span></span>) - Codex approval policy: on-request | never (default never).
+- `--profile` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Codex profile from $CODEX_HOME/<name>.config.toml.
+- `-c,--config` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Trusted Codex TOML override in key=value form. Repeatable.
+- `--add-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Additional writable directory for Codex. Repeatable.
+- `--ignore-user-config` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not load the user's Codex config.toml (authentication is still loaded).
+- `--ignore-rules` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not load user or project Codex execpolicy rule files.
 - `--skip-git-repo-check` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Allow Codex outside a git repository (default on).
 
 **Example**
@@ -1679,7 +1684,7 @@ tanit-cli llm codex
 **Full example**
 
 ```sh
-tanit-cli llm codex -p 'foo' --include '{}' --embed '{}' --cwd '.' -m 'foo' --resume 'foo' --timeout-ms 0 --executable 'foo' --ephemeral -s 'read-only' -a 'never' --skip-git-repo-check
+tanit-cli llm codex -p 'foo' --include '{}' --embed '{}' --cwd '.' -m 'foo' --resume 'foo' --timeout-ms 0 --executable 'foo' --ephemeral -s 'read-only' -a 'never' --profile 'foo' -c '{}' --add-dir '{}' --ignore-user-config --ignore-rules --skip-git-repo-check
 ```
 
 ---
@@ -1719,47 +1724,6 @@ tanit-cli llm claude
 tanit-cli llm claude -p 'foo' --include '{}' --embed '{}' --cwd '.' -m 'foo' --resume 'foo' --timeout-ms 0 --executable 'foo' --ephemeral
 ```
 
----
-
-#### llm cursor
-
-Run one turn via Cursor Agent (`agent -p --output-format stream-json`). Build flag: FEATURE_AGENT_CURSOR.
-
-Options:
-
-**Input**
-- `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - User prompt (required). Supports the same path grammar as `llm agent --prompt`.
-- `--include` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - File paths to inject as Pixlwiz selection context. Repeatable.
-- `--embed` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Text files whose contents are appended to the prompt (same as `llm agent --embed`). Repeatable. Max 1 MiB per file.
-- `--cwd` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Working directory / workspace root for the external agent.
-
-**Provider**
-- `-m,--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - External CLI model override.
-
-**Session**
-- `--resume` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Resume a prior external session (Codex thread id; Claude/Cursor session id).
-- `--ephemeral` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not persist the external session to disk (Codex --ephemeral).
-
-**Runtime**
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Max wait for the external CLI process (default 600000).
-- `--executable` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override CLI executable name/path (default: codex | claude | agent).
-
-**Cursor**
-- `--trust` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Trust workspace without prompting (Cursor --trust; headless only).
-- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Cursor mode: plan | ask (empty = default agent).
-
-**Example**
-
-```sh
-tanit-cli llm cursor
-```
-
-**Full example**
-
-```sh
-tanit-cli llm cursor -p 'foo' --include '{}' --embed '{}' --cwd '.' -m 'foo' --resume 'foo' --timeout-ms 0 --executable 'foo' --ephemeral --trust --mode 'foo'
-```
-
 ### Setup
 
 #### register-explorer
@@ -1768,7 +1732,7 @@ Register Windows Explorer menus: resize / convert / meta + Workbench + Viewer + 
 
 Options:
 
-- `--group` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">Tanit Chat</span></span></span>)
+- `--group` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">Tanit</span></span></span>)
 - `--unregister` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
 - `--dry` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
 - `--no-refresh-shell` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
@@ -1784,7 +1748,7 @@ tanit-cli register-explorer
 **Full example**
 
 ```sh
-tanit-cli register-explorer --group 'Tanit Chat' --unregister --dry --no-refresh-shell --media-bin 'foo' --widths '1980,1200'
+tanit-cli register-explorer --group 'Tanit' --unregister --dry --no-refresh-shell --media-bin 'foo' --widths '1980,1200'
 ```
 
 #### register-startmenu
@@ -2911,6 +2875,186 @@ tanit-cli service categories remove ids {}
 tanit-cli service categories remove ids '{}' --server-url 'foo'
 ```
 
+---
+
+#### service store
+
+Microsoft Store billing (pm-pics billing-ms). Requires login + MS_STORE_MOCK on dev server.
+
+**Example**
+
+```sh
+tanit-cli service store app-license
+```
+
+#### service store app-license
+
+Microsoft Store app license (trial/full). PM_STORE_LICENSE_MOCK defaults to full; trial|expired|inactive override.
+
+**Example**
+
+```sh
+tanit-cli service store app-license
+```
+
+---
+
+#### service store health
+
+GET /api/billing/ms/health (public; shows mock flag and product ids).
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base (default: PM_SERVICE_LICENSE_SERVER_BASE or SERVER_URL).
+
+**Example**
+
+```sh
+tanit-cli service store health
+```
+
+**Full example**
+
+```sh
+tanit-cli service store health --license-server-url 'foo'
+```
+
+---
+
+#### service store link
+
+POST /api/billing/ms/link — associate UserCollectionsId with your account.
+
+Options:
+
+- `--collections-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - UserCollectionsId (default: cached or dev-mock-collections-* for MS_STORE_MOCK).
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store link
+```
+
+**Full example**
+
+```sh
+tanit-cli service store link --collections-id 'foo' --license-server-url 'foo'
+```
+
+---
+
+#### service store reconcile
+
+POST /api/billing/ms/reconcile — grant credits and Pro entitlements.
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store reconcile
+```
+
+**Full example**
+
+```sh
+tanit-cli service store reconcile --license-server-url 'foo'
+```
+
+---
+
+#### service store ms-balance
+
+GET /api/billing/balance — credit_ledger sum (not AI gateway balance).
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store ms-balance
+```
+
+**Full example**
+
+```sh
+tanit-cli service store ms-balance --license-server-url 'foo'
+```
+
+---
+
+#### service store entitlements
+
+GET /api/billing/ms/entitlements — durable/subscription rows.
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store entitlements
+```
+
+**Full example**
+
+```sh
+tanit-cli service store entitlements --license-server-url 'foo'
+```
+
+---
+
+#### service store mock-enqueue
+
+POST /api/billing/ms/mock/enqueue — seed a pending purchase (server MS_STORE_MOCK=1 only).
+
+Options:
+
+- `--product-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Store product id (e.g. STORE_PRODUCT_ID_100K).
+- `--kind` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - consumable | durable | subscription (default: consumable).
+- `--microsoft-item-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional stable item id for idempotency tests.
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store mock-enqueue --product-id <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli service store mock-enqueue --product-id 'foo' --kind 'consumable' --microsoft-item-id 'foo' --license-server-url 'foo'
+```
+
+---
+
+#### service store mock-reset
+
+POST /api/billing/ms/mock/reset — delete billing rows for the logged-in user.
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store mock-reset
+```
+
+**Full example**
+
+```sh
+tanit-cli service store mock-reset --license-server-url 'foo'
+```
+
 ### Automation
 
 #### batch
@@ -4031,6 +4175,39 @@ Options:
 - `--stt-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Caption STT provider override (empty = App Settings).
 - `--stt-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Caption STT model override (empty = App Settings).
 
+**Beauty**
+- `--face,--no-face{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Run FaceLandmarker (off unless set; implied by --skin/--lips/--teeth and the other face filters).
+- `--skin,--no-skin{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Smooth skin (face oval minus eyes/lips). Slow at 1080p.
+- `--skin-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.5</span></span></span>) - Skin smoothing strength 0..1.
+- `--lips,--no-lips{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Tint lips (Lab a/b toward --lips-color).
+- `--lips-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#C45C6A</span></span></span>) - Lip tint as #RRGGBB (quote it in PowerShell: "#C41E3A").
+- `--lips-alpha` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Lip tint alpha 0..1.
+- `--teeth,--no-teeth{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whiten teeth (inner-lip mask, Lab b* toward neutral).
+- `--teeth-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Teeth whitening strength 0..1.
+- `--model-face` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - FaceLandmarker .task path. Empty = bundled models/vision/face_landmarker_v2.task.
+- `--dll` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Diagnostic override for pixlwiz_face_landmarker.dll.
+- `--show-landmarks` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Draw landmark overlay (debug).
+- `--face-gain` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Lift crushed face exposure (Lab L* toward a meeting target). 0 = off, 1 = full. Same oval as --skin.
+- `--warmth` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Warm the face oval (Lab b*). 0 = off, 1 = full.
+- `--undereye,--no-undereye{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Lighten under-eye bands (dark circles).
+- `--undereye-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.45</span></span></span>) - Under-eye mix 0..1.
+- `--redness,--no-redness{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Mute flush / acne (pull Lab a* toward neutral on the face oval).
+- `--redness-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Redness mute mix 0..1.
+- `--eye-sharpen,--no-eye-sharpen{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Unsharp the eye polys (restores focus after --skin).
+- `--eye-sharpen-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Eye sharpen mix 0..1.
+
+**Frame**
+- `--mirror,--no-mirror{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Horizontal flip (webcam mirror). No model.
+
+**Background**
+- `--blur,--no-blur{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Blur the non-person background (ImageSegmenter).
+- `--background,--no-background{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Replace the non-person background with --bg-color / --bg-image.
+- `--blur-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.65</span></span></span>) - Background blur mix 0..1.
+- `--feather-px` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Person-mask feather in pixels.
+- `--bg-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#1A1A1A</span></span></span>) - Solid replacement color (#RRGGBB). Quote it in PowerShell.
+- `--bg-image` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement background image (scaled to the frame).
+- `--model-seg` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ImageSegmenter .task path. Empty = bundled models/vision/selfie_segmenter.task.
+
 **Example**
 
 ```sh
@@ -4040,7 +4217,7 @@ tanit-cli video record
 **Full example**
 
 ```sh
-tanit-cli video record --dst 'foo' --input 'foo' --mode -1 --width 0 --height 0 --fps 30 --preview --capture-engine 'auto' --encoder 'auto' --bitrate-kbps 0 --no-cursor --size-mode 'native' --zoom '1' --follow 'none' --follow-speed '0.2' --follow-deadzone 3 --transition-ms 300 --interactive-zoom --zoom-step '0.15' --zoom-min '1' --zoom-max '4' --pass-zoom-input --no-zoom-status --hud-capture 'auto' --pause-key 'foo' --stop-key 'foo' --key-overlay --key-overlay-burn-in --key-overlay-align 'bottom' --key-overlay-margin-x 0 --key-overlay-margin-y 0 --key-overlay-font-size 0 --key-overlay-color '#F8F9FB' --key-overlay-bg-color '#181B21' --key-overlay-accent-color '#EB445A' --key-overlay-opacity '0.9' --key-overlay-hold-ms 1200 --key-overlay-fade-ms 450 --key-overlay-max-entries 5 --key-overlay-filter 'all' --key-overlay-stack 'auto' --no-key-overlay-modifiers --key-overlay-capture 'visible' --cursor-highlight --cursor-highlight-color '#F5C542' --cursor-highlight-size 0 --cursor-clicks --cursor-click-color '#EB445A' --cursor-trail --hide-cursor-when-typing --camera-overlay --camera-input 'foo' --camera-position 'bottom-right' --camera-size '22' --camera-resolution 'auto' --camera-shape 'circle' --no-camera-border --camera-border-color '#FFFFFF' --no-camera-shadow --camera-audio --camera-audio-gain '1' --duration-ms 0 --quality 85 --audio-source 'none' --audio-device 'foo' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --audio-normalize --audio-auto-gain --auto-pause 'off' --auto-pause-idle-ms 3000 --auto-pause-grid '32x18' --no-auto-pause-mic-wake --auto-pause-mic-activity-db '-40' --auto-pause-preroll-ms 500 --no-auto-pause-wake-key --no-auto-pause-wake-mouse --captions 'off' --caption-format 'srt' --stt-preset 'foo' --stt-provider 'foo' --stt-model 'foo'
+tanit-cli video record --dst 'foo' --input 'foo' --mode -1 --width 0 --height 0 --fps 30 --preview --capture-engine 'auto' --encoder 'auto' --bitrate-kbps 0 --no-cursor --size-mode 'native' --zoom '1' --follow 'none' --follow-speed '0.2' --follow-deadzone 3 --transition-ms 300 --interactive-zoom --zoom-step '0.15' --zoom-min '1' --zoom-max '4' --pass-zoom-input --no-zoom-status --hud-capture 'auto' --pause-key 'foo' --stop-key 'foo' --key-overlay --key-overlay-burn-in --key-overlay-align 'bottom' --key-overlay-margin-x 0 --key-overlay-margin-y 0 --key-overlay-font-size 0 --key-overlay-color '#F8F9FB' --key-overlay-bg-color '#181B21' --key-overlay-accent-color '#EB445A' --key-overlay-opacity '0.9' --key-overlay-hold-ms 1200 --key-overlay-fade-ms 450 --key-overlay-max-entries 5 --key-overlay-filter 'all' --key-overlay-stack 'auto' --no-key-overlay-modifiers --key-overlay-capture 'visible' --cursor-highlight --cursor-highlight-color '#F5C542' --cursor-highlight-size 0 --cursor-clicks --cursor-click-color '#EB445A' --cursor-trail --hide-cursor-when-typing --camera-overlay --camera-input 'foo' --camera-position 'bottom-right' --camera-size '22' --camera-resolution 'auto' --camera-shape 'circle' --no-camera-border --camera-border-color '#FFFFFF' --no-camera-shadow --camera-audio --camera-audio-gain '1' --duration-ms 0 --quality 85 --audio-source 'none' --audio-device 'foo' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --audio-normalize --audio-auto-gain --auto-pause 'off' --auto-pause-idle-ms 3000 --auto-pause-grid '32x18' --no-auto-pause-mic-wake --auto-pause-mic-activity-db '-40' --auto-pause-preroll-ms 500 --no-auto-pause-wake-key --no-auto-pause-wake-mouse --captions 'off' --caption-format 'srt' --stt-preset 'foo' --stt-provider 'foo' --stt-model 'foo' --face --skin --skin-strength '0.5' --lips --lips-color '#C45C6A' --lips-alpha '0.35' --teeth --teeth-strength '0.4' --model-face 'foo' --dll 'foo' --show-landmarks --mirror --face-gain '0' --warmth '0' --undereye --undereye-blend '0.45' --redness --redness-blend '0.4' --eye-sharpen --eye-sharpen-blend '0.35' --blur --background --blur-strength '0.65' --feather-px 8 --bg-color '#1A1A1A' --bg-image 'foo' --model-seg 'foo'
 ```
 
 ##### Examples
@@ -4253,6 +4430,65 @@ tanit-cli video detect -m <value>
 
 ```sh
 tanit-cli video detect -m 'foo' -i 'foo' --width 0 --height 0 --fps 30 --conf '0.25' --nms '0.45' --input-size 640 --every-n 1 -j 4 --duration-ms 0 --task 'auto' --top-k 5 --classes 'foo' --labels-yaml 'foo' --save-frames 'foo' --filter-classes '{}' -q --no-summary --max-objects 0 --max-by 'conf' --smooth-alpha '0.35' --smooth-age 4 -V --visualize-mode 'auto' --no-stats --no-labels --fill-alpha 40 --smooth-min-hits 0 --track-ids --track-two-stage --track-conf-high '0.5' --no-track-center --track-center-dist '1.2' --track-vel-blend '0.7' --kpt-min-score '0.3' --provider 'auto' --gpu-stats
+```
+
+---
+
+#### video filter
+
+Test harness: file/still in → face beauty → file out. Product capture path is `video record` (same flags).
+
+Options:
+
+- `--input,--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Input video or still image path.
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output video or still image path.
+- `--status` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print MediaPipe bridge / model capability and exit.
+- `--preview` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Show a live window of the processed frames (same pixels as the output). Close the window to stop. Stills stay open until you close them.
+- `--running-mode` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">video</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">image</span> <span data-cli="choice">video</span></span></span>) - image | video. video uses DetectForVideo timestamps. Default: image for stills, video for clips.
+
+**Beauty**
+- `--face,--no-face{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Run FaceLandmarker (default on for this command).
+- `--skin,--no-skin{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Smooth skin (face oval minus eyes/lips). Slow at 1080p.
+- `--skin-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.5</span></span></span>) - Skin smoothing strength 0..1.
+- `--lips,--no-lips{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Tint lips (Lab a/b toward --lips-color).
+- `--lips-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#C45C6A</span></span></span>) - Lip tint as #RRGGBB (quote it in PowerShell: "#C41E3A").
+- `--lips-alpha` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Lip tint alpha 0..1.
+- `--teeth,--no-teeth{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whiten teeth (inner-lip mask, Lab b* toward neutral).
+- `--teeth-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Teeth whitening strength 0..1.
+- `--model-face` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - FaceLandmarker .task path. Empty = bundled models/vision/face_landmarker_v2.task.
+- `--dll` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Diagnostic override for pixlwiz_face_landmarker.dll.
+- `--show-landmarks` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Draw landmark overlay (debug).
+- `--face-gain` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Lift crushed face exposure (Lab L* toward a meeting target). 0 = off, 1 = full. Same oval as --skin.
+- `--warmth` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Warm the face oval (Lab b*). 0 = off, 1 = full.
+- `--undereye,--no-undereye{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Lighten under-eye bands (dark circles).
+- `--undereye-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.45</span></span></span>) - Under-eye mix 0..1.
+- `--redness,--no-redness{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Mute flush / acne (pull Lab a* toward neutral on the face oval).
+- `--redness-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.4</span></span></span>) - Redness mute mix 0..1.
+- `--eye-sharpen,--no-eye-sharpen{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Unsharp the eye polys (restores focus after --skin).
+- `--eye-sharpen-blend` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.35</span></span></span>) - Eye sharpen mix 0..1.
+
+**Frame**
+- `--mirror,--no-mirror{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Horizontal flip (webcam mirror). No model.
+
+**Background**
+- `--blur,--no-blur{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Blur the non-person background (ImageSegmenter).
+- `--background,--no-background{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Replace the non-person background with --bg-color / --bg-image.
+- `--blur-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">0.65</span></span></span>) - Background blur mix 0..1.
+- `--feather-px` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Person-mask feather in pixels.
+- `--bg-color` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">#1A1A1A</span></span></span>) - Solid replacement color (#RRGGBB). Quote it in PowerShell.
+- `--bg-image` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement background image (scaled to the frame).
+- `--model-seg` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ImageSegmenter .task path. Empty = bundled models/vision/selfie_segmenter.task.
+
+**Example**
+
+```sh
+tanit-cli video filter
+```
+
+**Full example**
+
+```sh
+tanit-cli video filter --input 'foo' --dst 'foo' --status --preview --face --skin --skin-strength '0.5' --lips --lips-color '#C45C6A' --lips-alpha '0.35' --teeth --teeth-strength '0.4' --model-face 'foo' --dll 'foo' --show-landmarks --mirror --face-gain '0' --warmth '0' --undereye --undereye-blend '0.45' --redness --redness-blend '0.4' --eye-sharpen --eye-sharpen-blend '0.35' --blur --background --blur-strength '0.65' --feather-px 8 --bg-color '#1A1A1A' --bg-image 'foo' --model-seg 'foo' --running-mode 'video'
 ```
 
 #### bluetooth
@@ -5400,14 +5636,14 @@ tanit-cli daemon path
 #### assistant
 
 AI assistant: toolbar, global shortcuts, realtime voice, and UIA spy.
-With no subcommand: starts the assistant toolbar/global shortcut host.
+With no subcommand: starts the assistant toolbar/global shortcut host (GUI: same as --ui-open assistant).
 
 Options:
 
 - `--ui,--no-ui{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Show the assistant toolbar window (topmost pill, left-edge snap by default).
 Default: on when no subcommand is given.
 - `--realtime` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Toggle a live voice session (start if idle, stop if running) and exit.
-- `--stop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Signal a detached assistant toolbar (started via `pm-image assistant` or `app togglelauncher`) to close cooperatively.
+- `--stop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Signal a detached assistant toolbar (started via `--ui-open assistant` or `app togglelauncher`) to close cooperatively.
 
 **Example**
 
@@ -5530,6 +5766,31 @@ tanit-cli assistant context-dump
 
 ```sh
 tanit-cli assistant context-dump --md --allow-mru --allow-open-apps --allow-app-recent --historical --clipboard --internal --track --capabilities 'files,folders,text,url' --app-id 'foo' --max-age-ms 30000 --mru-max-age-ms 1800000
+```
+
+---
+
+#### assistant app-find
+
+Find an installed program and its folder (same lookup as Settings → Directories).
+
+Options:
+
+- `query,--query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Name or path, e.g. solidworks, git, chatgpt.
+- `--intent` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">application</span></span></span>) - command (PATH/App Paths only), application (default, includes installed-app index), or installRoot.
+- `--all,--first{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Show every candidate (default). --first keeps the top hit.
+- `--limit` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 50]</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Maximum results.
+
+**Example**
+
+```sh
+tanit-cli assistant app-find query,--query <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli assistant app-find query,--query 'foo' --intent 'application' --all --limit 8
 ```
 
 ---
@@ -5965,7 +6226,7 @@ tanit-cli assistant spy --interval-ms 500 --no-value --no-selection --no-text --
 
 #### info
 
-Generate reference docs for Tanit Chat: CLI commands, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
+Generate reference docs for Tanit: CLI commands, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
 
 **Example**
 
@@ -6031,7 +6292,7 @@ tanit-cli info xblox --dst 'releases/web-docs/cli/cli.md' --stdout --skill --aut
 
 #### info app-commands
 
-Generate a Tanit Chat app/UI command verb reference (togglechat, takescreenshot, etc.) grouped by category. Plain md: app-commands.md in cwd. --skill: <profile>/skills/app-commands/SKILL.md.
+Generate a Tanit app/UI command verb reference (togglechat, takescreenshot, etc.) grouped by category. Plain md: app-commands.md in cwd. --skill: <profile>/skills/app-commands/SKILL.md.
 
 Options:
 
@@ -6081,7 +6342,7 @@ tanit-cli info keyboard-shortcuts --dst 'releases/web-docs/cli/cli.md' --stdout 
 
 #### info ui
 
-Generate a Tanit Chat UI launch flag reference (--ui-preset, --size, --src paths/URLs, --show-panel, chat seed options). Plain md: ui.md in cwd. --skill: <profile>/skills/ui/SKILL.md.
+Generate a Tanit UI launch flag reference (--ui-preset, --size, --src paths/URLs, --show-panel, chat seed options). Plain md: ui.md in cwd. --skill: <profile>/skills/ui/SKILL.md.
 
 Options:
 
@@ -6821,7 +7082,7 @@ Options:
 - `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
 - `--bind` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Interface/address for MCP HTTP. Default: 127.0.0.1 (loopback only).
 - `--port` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 65535]</span>, <span data-cli="default">default <span data-cli="value">4444</span></span></span>) - First TCP port to try for MCP HTTP (default 4444; next free port if busy)
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 
 **Example**
 
@@ -6938,32 +7199,25 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `file.prev` | Previous | Navigation | `app:previousfile` |  |
 | `custom.command-mtlnivuv-4aae3` | Explorer | Navigation | `app:togglefiletree` |  |
 | `file.next` | Next | Navigation | `app:nextfile` |  |
+| `custom.dropdown-msx1rszr-19148` | New | New | `metadata` |  |
+| `custom.command-msx1rszr-32ae1` | XBlox Script | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |
+| `custom.command-msx1xf70-ed2f7` | Text File | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
+| `custom.command-mtfnk3hu-47302` | Markdown File | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
+| `custom.command-mtczu1xa-c605f` | File Tab | New | `app:newfiletab` |  |
+| `custom.command-mtfpcfxj-e1333` | Screen Recording | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
 | `custom.command-mpx9r1ur-8c6df` | Assistant | Home | `cli:llm` | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | Home | `app:togglelauncher` |  |
 | `custom.command-mtox7vvr-093fc` | Voice Commands | Home | `app:togglevoicecommand` |  |
-| `custom.dropdown-msx1rszr-19148` | New | New | `metadata` |  |
-| `custom.command-msx1rszr-32ae1` | XBlox Script | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |
-| `custom.command-msx1xf70-ed2f7` | Text File | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
-| `custom.command-mtfnk3hu-47302` | Markdown File | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
-| `custom.command-mtczu1xa-c605f` | File Tab | New | `app:newfiletab` |  |
-| `custom.command-mtfpcfxj-e1333` | Screen Recording | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-recorder-16-9.xblox` |
-| `custom.dropdown-mset8bmm-ad9d3` | Installer | Installer | `metadata` |  |
-| `custom.command-mqj3lo3h-fed59` | Register | Installer | `cli:register-explorer` |  |
-| `custom.command-mr90wbc8-2bf79` | Installer | Installer | `cli:installer` | `--no-seed` |
-| `custom.command-mqj4ixcu-3a87a` | Unregister | Installer | `cli:register-explorer` | `--unregister` |
 | `custom.command-712fbd00-f9ac4` | Product | Images | `cli:transform` | `--prompt`<br>`render this as product shooting, white background, studio`<br>`--json`<br>`${CURRENT_SELECTION}` |
 | `custom.command-mpch9gdx-44982` | Illustration | Images | `cli:transform` | `--src`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`as technical illustration`<br>`--model`<br>`image-generation-deep` |
-| `custom.command-mq97rchy-5fcbf` | IllustrationX | Images | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/image-pipe-blocks.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.image-understand-speak` | Speak | Images | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.command-mq9b2upm-93cf4` | Excel | Images | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/vision-pipe.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.image-understand-speak` | Speak | Images | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-mqj3feqz-72a1a` | Resize-HD | Images | `cli:resize` | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui` |
-| `custom.image-compress` | Compress | Images | `cli:compress` | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui`<br>`--compressor`<br>`mozjpeg`<br>`--quality`<br>`92` |
-| `custom.command-mszwq2g6-780cb` | To Markdown | Images | `cli:llm` | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--no-skills` |
+| `custom.command-mszwq2g6-780cb` | To Markdown | Images | `cli:llm` | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--no-skills`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mtun9312-7d0e1` | Share Post | Images | `cli:service` | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`listed` |
-| `custom.command-mrcja3yb-306c8` | Region | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/screenshot.xblox` |
+| `custom.command-mrcja3yb-306c8` | Region | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot.xblox` |
 | `custom.command-mpxzouxv-ab189` | App | Screenshots | `app:takescreenshot` |  |
-| `custom.command-mu4l7dsk-4b406` | Fullscreen Screenshot | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/screenshot-full.xblox` |
-| `custom.command-mre4dk8y-7a985` | To Markdown | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/screenshot-vision-md.xblox` |
+| `custom.command-mu4l7dsk-4b406` | Fullscreen Screenshot | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-full.xblox` |
+| `custom.command-mre4dk8y-7a985` | To Markdown | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-vision-md.xblox` |
 | `custom.command-mtlh4sop-a7c1b` | New | AI | `app:togglechat` |  |
 | `custom.command-mpohnfaf-26b0c` | TTS | AI | `app:setVariable` |  |
 | `custom.command-mpokt0hv-41237` | Funny | AI | `app:setVariable` |  |
@@ -6980,50 +7234,35 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `custom.command-mqkneqp7-3fcb0` | Console | View | `app:toggleconsole` |  |
 | `custom.command-mr5ebav3-ec35c` | Search | View | `app:togglesearchnative` |  |
 | `custom.command-mt8msflf-fe3b7` | Tabbed | View | `app:viewtabbed` |  |
-| `custom.command-mt8sceaa-06010` | New File Tab | View | `app:newfiletab` |  |
-| `custom.view-half` | 800x600 | View | `app:setframesize` |  |
-| `custom.command-mtlnui5r-42237` | 720x1080 | View | `app:setframesize` |  |
-| `custom.command-mtw1hthj-f17ee` | 1080x720 | View | `app:setframesize` |  |
+| `custom.command-msqfoqej-85fb5` | Performance | View | `app:toggleperf` |  |
 | `custom.command-mtwl51se-b7440` | 1269x846 | View | `app:setframesize` |  |
 | `custom.view-maximize` | Fullscreen | View | `app:togglefullscreen` |  |
 | `custom.command-mtoxzgrv-1f644` | Maximize | View | `app:setframesize` |  |
 | `custom.command-mtv9cd7k-7a458` | Reset | View | `app:resetlayout` |  |
-| `custom.command-msqfoqej-85fb5` | Performance | View | `app:toggleperf` |  |
 | `custom.command-70eabea6-957e6` | Spanish | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`Translate to Spanish`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_es.${SRC_EXT}`<br>`--hud` |
 | `custom.command-msyzmkcu-9b027` | English | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_en.${SRC_EXT}`<br>`--prompt`<br>`Translate to English`<br>`--no-tools`<br>`--preset`<br>`Tanit-Fast`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-msyznegr-9190e` | German | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_de.${SRC_EXT}`<br>`--prompt`<br>`Translate to German` |
 | `custom.command-mt0dfzrn-665b0` | French | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--prompt`<br>`Translate to French`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_fr.${SRC_EXT}` |
 | `text.md2pdf` | MD->PDF | Translate | `external` | `--headless`<br>`--convert-to pdf`<br>`--outdir`<br>`${CWD}`<br>`${CURRENT_FILE}` |
-| `custom.command-ms0phpqj-d1ca3` | Chrome | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-chrome.xblox` |
-| `custom.command-ms33shnl-97127` | App | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-win32.xblox` |
-| `custom.color-picker` | Color | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-color.xblox` |
-| `custom.text-speak` | Speak | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-text-speak.xblox` |
-| `custom.distance` | Distance | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-distance.xblox` |
-| `custom.picker-chrome-selector` | Color | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-chrome-selector.xblox` |
-| `custom.command-mqauenwv-74ac8` | Mic-Journal | Audio | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/stt-journal-ex.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--journal`<br>`${KNOWNFOLDER:Documents}\journal.txt`<br>`--journalPath`<br>`C:\Users\zx/Documents/journal.txt`<br>`--recording`<br>`false`<br>`--started`<br>`false` |
+| `custom.command-ms0phpqj-d1ca3` | Chrome | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-chrome.xblox` |
+| `custom.command-ms33shnl-97127` | App | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-win32.xblox` |
+| `custom.color-picker` | Color | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-color.xblox` |
+| `custom.text-speak` | Speak | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
 | `custom.voice-cloner` | Voice Cloner | Audio | `cli:audio` | `voice-change`<br>`--remove-background-noise`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_cloned.wav`<br>`--style`<br>`0.5`<br>`--stability`<br>`1` |
-| `custom.command-mrckqhx7-38b2d` | Mic-Journal | Audio | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/stt-paste.xblox` |
 | `custom.command-mpxzk7g4-67590` | Voice Recorder | Audio | `cli:audio` | `record`<br>`--dst`<br>`${CONFIG_DIR}/recordings/tanit-${DD}-${HH}-${mm}.wav`<br>`--hud`<br>`--filter`<br>`deepfilter` |
-| `custom.command-mtk0rcb2-f401a` | Speech to Text | Audio | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/stt-paste-whisper.xblox` |
-| `custom.command-ms0q0j9j-92441` | Yamaha | Audio | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/bluetooth-yamaha.xblox` |
-| `custom.mic-start` | Mic Capture Start | Audio | `cli:audio` | `record`<br>`--text-out`<br>`${KNOWNFOLDER:Config}/last.md` |
-| `custom.mic-stop` | Mic Capture Stop | Audio | `cli:audio` | `record`<br>`stop` |
+| `custom.command-mtk0rcb2-f401a` | Speech to Text | Audio | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/stt-paste-whisper.xblox` |
+| `custom.command-ms0q0j9j-92441` | Yamaha | Audio | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/bluetooth-yamaha.xblox` |
 | `custom.command-mtn0t1b3-722de` | Voice Commands | Audio | `app:togglevoicecommand` |  |
-| `custom.command-mrf5dhi8-76608` | 1:1 | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-recorder-ex.xblox` |
-| `custom.command-mssrlhcu-5aa17` | 1:1-ex | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-recorder-ex.xblox` |
-| `custom.command-ms4vl4ur-4569d` | 16:9 | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-recorder-16-9.xblox` |
-| `custom.command-msghb0e2-e8c47` | Fixed | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-recorder-fixed.xblox` |
-| `custom.video-start` | WebCam | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/webcam.xblox` |
-| `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/webcam.xblox` |
-| `custom.command-d204eb95-8101e` | To Step | 3D | `external` | `<placeholder>` |
-| `custom.command-msg3o7ti-d4db9` | To HTML | 3D | `external` | `<placeholder>` |
-| `custom.command-msg3opko-d2e18` | BOM | 3D | `external` | `<placeholder>` |
-| `custom.command-msg3p48b-0db60` | Print | 3D | `external` | `<placeholder>` |
-| `custom.command-msg3pbh4-64134` | FreeCAD | 3D | `external` | `<placeholder>` |
-| `custom.command-msafwmdu-b9a48` | Pose | Video-Detect | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-detect-yolo26-pose.xblox` |
-| `custom.command-msajhop7-a071b` | Segments | Video-Detect | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-detect-yolo26-seg.xblox` |
-| `custom.handbrake-hq` | Handbrake | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.command-video-social-hq` | Social Video HQ | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.command-mrf5dhi8-76608` | 1:1 | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
+| `custom.command-mssrlhcu-5aa17` | 1:1-ex | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
+| `custom.command-ms4vl4ur-4569d` | 16:9 | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
+| `custom.command-msghb0e2-e8c47` | Fixed | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed.xblox` |
+| `custom.video-start` | WebCam | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
+| `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
+| `custom.command-msafwmdu-b9a48` | Pose | Video-Detect | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-detect-yolo26-pose.xblox` |
+| `custom.command-msajhop7-a071b` | Segments | Video-Detect | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-detect-yolo26-seg.xblox` |
+| `custom.handbrake-hq` | Handbrake | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.command-video-social-hq` | Social Video HQ | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-mr51514h-c34ec` | System | Default Prompts | `app:edit` |  |
 | `custom.command-mr50fk3n-1a7d7` | Realtime | Default Prompts | `app:edit` |  |
 | `custom.command-mppft700-137e9` | Planner | Default Prompts | `app:edit` |  |
@@ -7038,18 +7277,14 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `custom.help-cli` | CLI-Manual | Help | `app:open` |  |
 | `custom.help-xblox` | XBlox | Help | `app:open` |  |
 | `custom.command-msakytc7-dd084` | Online Help | Help | `app:openurl` |  |
-| `custom.youtube` | Youtube | Help | `app:openurl` |  |
 | `custom.command-mt4msl99-55414` | Start | Scheduler | `app:schedulerstart` |  |
 | `custom.command-mt4munur-873bb` | Stop | Scheduler | `app:schedulerstop` |  |
 | `custom.command-mt7672eh-b7786` | To Images | PDF | `cli:pdf` | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
 | `custom.pdf-to-md` | To Markdown | PDF | `cli:pdf` | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md` |
-| `custom.command-mq9a0i3l-576f4` | OCR - MD | OCR | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/ocr-pipe.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.command-mq9azo3w-5b894` | OCR - CSV | OCR | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/ocr-pipe-csv.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.fs-copy` | Copy | Files | `app:fscopy` |  |
 | `custom.fs-move` | Move | Files | `app:fsmove` |  |
-| `custom.command-mtvbj8xw-2ef0a` | Info | Files | `app:fsmove` |  |
 | `custom.command-mu114s8q-17bff` | Share | Files | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--if-newer`<br>`--remote-dir`<br>`public` |
-| `custom.command-mu1w66c6-5b959` | Speak | Text | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SHARED}/xblox/inspect-text-speak.xblox` |
+| `custom.command-mu1w66c6-5b959` | Speak | Text | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
 | `custom.command-mtum9djk-a760d` | Share as Article | Text | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
 
 Call custom commands with the exact dotted ID shown above, e.g. `tanit-cli.exe custom.mic-start`.

@@ -4,14 +4,19 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
-## 1.0.55 - 16-09
+## 1.0.56 - 18-09
 
 _Each change is dated DD-MM from the commit day. Newest first._
 
 ### New
 
+- 18-09 Added a terminal subcommand to the image registration CLI.
+- 18-09 Added query, intent, and result-limit options for finding assistant applications by name or path.
+- 18-09 Added profile, configuration override, and additional-directory options for external Codex agents.
+- 18-09 Added settings commands for key paths, key export, import and generation, plus cloud upload and download.
 - 16-09 Added a --scenario option to the core file handlers test command.
 - 16-09 Added the Privacy.EnableClipboardContext policy under PM_Security, mapped to privacy.clipboardContext and enabled by default.
+- 16-09 Added the privacy.clipboardContext security policy with a default value of true.
 - 15-09 Added a context dump command with --capabilities, --app-id, --max-age-ms, and --mru-max-age-ms options.
 - 15-09 Added a core context test command with a --scenario option.
 - 15-09 Added the Privacy.EnableClipboardContext security policy, mapped to privacy.clipboardContext and disabled by default.
@@ -20,6 +25,10 @@ _Each change is dated DD-MM from the commit day. Newest first._
 - 15-09 Added --capabilities, --app-id, --max-age-ms, and --mru-max-age-ms options to the assistant context dump command.
 - 15-09 Added a --scenario option to the test core context command.
 - 15-09 Added the Privacy.EnableClipboardContext policy under PM_Security, mapped to privacy.clipboardContext and disabled by default.
+- 15-09 Added launcher command selection and a multiline arguments field with variable support.
+- 15-09 Added the cmdLblLauncherCommand localization string type.
+- 15-09 Supports --capabilities, --app-id, --max-age-ms, and --mru-max-age-ms options.
+- 15-09 Supports selecting a test scenario with --scenario.
 - 14-09 Added options to the pages create and update, posts list, and categories list commands.
 - 13-09 OpenDesign can save a screenshot of the whole editor from the top toolbar to docs/assets/screenshot_n.png.
 - 13-09 OpenDesign can drop a file on a photo to replace it (clip and zoom stay; the new aspect fits the old frame), or on the canvas to add a new image.
@@ -120,12 +129,16 @@ _Each change is dated DD-MM from the commit day. Newest first._
 
 ### Improved
 
+- 18-09 Added custom tab styling to the group editor field row.
+- 18-09 Added accessible labels to the Add Tanit MCP Server and backup settings controls.
 - 15-09 Added launcher command and argument fields, with contextual placeholders and help for repeat-path options.
 - 15-09 Command picker labels now distinguish custom, app, and launcher commands.
 - 15-09 Display repeat-path-specific placeholders and help text when configuring repeated command options.
 - 15-09 Label custom, app, and launcher commands according to the selected command kind.
+- 15-09 Updated command picker labels and contextual placeholder/help text based on the selected command type and repeat-path options.
 - 14-09 Added command-line options for creating and updating pages and listing posts and categories.
 - 14-09 Added options for service page creation and updates, post listing, and category listing commands.
+- 14-09 Added command options for creating and updating service pages and listing service posts and categories.
 - 13-09 OpenDesign Maximize leaves a margin so resize handles stay inside the canvas.
 - 13-09 OpenDesign property sliders keep the knob on the track.
 - 13-09 Uses the localized pastSessionsDeleteTip translation for the delete action's aria-label.
