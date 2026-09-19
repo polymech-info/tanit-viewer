@@ -7347,8 +7347,6 @@ Default block:
 | `custom.command-msghb0e2-e8c47` | Fixed | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed.xblox` |
 | `custom.video-start` | WebCam | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
 | `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
-| `custom.command-msafwmdu-b9a48` | Pose | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-detect-yolo26-pose.xblox` |
-| `custom.command-msajhop7-a071b` | Segments | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-detect-yolo26-seg.xblox` |
 | `custom.handbrake-hq` | Handbrake | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-video-social-hq` | Social Video HQ | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-mr51514h-c34ec` | System | `app:edit` |  |
@@ -7361,10 +7359,6 @@ Default block:
 | `custom.view-snap-down` | Snap Down | `app:snapdown` |  |
 | `custom.view-snap-left` | Snap Left | `app:snapleft` |  |
 | `custom.view-snap-right` | Snap Right | `app:snapright` |  |
-| `custom.dropdown-msaj5qk5-78a6b` | Help | `metadata` |  |
-| `custom.help-cli` | CLI-Manual | `app:open` |  |
-| `custom.help-xblox` | XBlox | `app:open` |  |
-| `custom.command-msakytc7-dd084` | Online Help | `app:openurl` |  |
 | `custom.command-mt4msl99-55414` | Start | `app:schedulerstart` |  |
 | `custom.command-mt4munur-873bb` | Stop | `app:schedulerstop` |  |
 | `custom.command-mt7672eh-b7786` | To Images | `cli:pdf` | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
@@ -7372,5 +7366,9 @@ Default block:
 | `custom.fs-copy` | Copy | `app:fscopy` |  |
 | `custom.fs-move` | Move | `app:fsmove` |  |
 | `custom.command-mu114s8q-17bff` | Share | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--if-newer`<br>`--remote-dir`<br>`public` |
+| `custom.dropdown-msaj5qk5-78a6b` | Help | `metadata` |  |
+| `custom.help-cli` | CLI-Manual | `app:open` |  |
+| `custom.help-xblox` | XBlox | `app:open` |  |
+| `custom.command-msakytc7-dd084` | Online Help | `app:openurl` |  |
 | `custom.command-mu1w66c6-5b959` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
 | `custom.command-mtum9djk-a760d` | Share as Article | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |

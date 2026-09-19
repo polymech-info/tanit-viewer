@@ -1,0 +1,62 @@
+{
+  "page": {
+    "id": "3941a4c2-ff86-4948-b220-83acd6245492",
+    "title": "___ (Copy)",
+    "slug": "nodehub-copy-bf7xb3",
+    "is_public": true,
+    "visible": true,
+    "updated_at": "2026-09-19T11:42:37.275Z",
+    "created_at": "2026-07-06T07:36:50.218Z",
+    "tags": [],
+    "content": {
+      "pages": {
+        "page-3941a4c2-ff86-4948-b220-83acd6245492": {
+          "id": "page-505e9711-9241-4709-b3f5-5d2109f9cf12",
+          "name": "PolyMech CAD Tools (pm-cad) — Command-Line SolidWorks Automation for Batch CAD Conversion, BOM Export & HTML Webviews",
+          "createdAt": 1773511418986,
+          "updatedAt": 1789818044355,
+          "containers": [
+            {
+              "id": "container-1783332865660-y0it5nvzr",
+              "type": "container",
+              "columns": 1,
+              "gap": 16,
+              "widgets": [
+                {
+                  "id": "widget-1789818044355-dg7pps5e3",
+                  "widgetId": "photo-card",
+                  "props": {
+                    "pictureId": null,
+                    "postId": null,
+                    "showHeader": true,
+                    "showFooter": true,
+                    "showAuthor": true,
+                    "showActions": true,
+                    "showTitle": true,
+                    "showDescription": true,
+                    "contentDisplay": "below",
+                    "imageFit": "contain",
+                    "variables": {}
+                  },
+                  "order": 0
+                }
+              ],
+              "children": [],
+              "order": 0
+            }
+          ]
+        }
+      },
+      "version": "1.0.0",
+      "lastUpdated": 1789818157275
+    },
+    "meta": {
+      "tags": [],
+      "thumbnail": "https://service.polymech.info/api/vfs/get/images/3bb4cfbf-318b-44d3-a9d3-35680e738421/b4aaf5bb-072b-4ecc-8eb5-85f6611d9228.png",
+      "categoryId": null,
+      "categoryIds": []
+    }
+  },
+  "userProfile": null,
+  "childPages": []
+}

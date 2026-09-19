@@ -205,3 +205,4 @@ These are real entries in a home storage:
   rules for that page, category, or file.
 - Links inside content **pulled in from another page** (e.g. embedded/nested
   pages) are resolved based on that other page, not the one embedding it.
+

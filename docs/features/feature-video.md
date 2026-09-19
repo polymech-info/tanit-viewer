@@ -1,8 +1,8 @@
 ---
 title: Tanit Video
 slug: tanit-video
-description: Record the screen, a window, or a camera — with cursor, PiP, skin, captions, and skip-dead-air — in the app, CLI, and XBlox.
-tags: [tanit, video, capture, screen-record, webcam, skin, tutorial]
+description: Record the screen, a window, or a camera — then play the file in the centre viewer. Cursor, PiP, skin, captions, skip-dead-air, native mpv playback.
+tags: [tanit, video, capture, playback, mpv, screen-record, webcam, skin, tutorial]
 category-id: [knowlede-base]
 private: false
 hidden: false
@@ -10,16 +10,18 @@ hidden: false
 
 <!-- markdownlint-disable MD025 -->
 
-# Video: capture exactly what matters
+# Video: capture it, then play it
 
 Tanit records a monitor, one application, a precise region, or a webcam —
 without making you crop the desktop afterward. On top of that: tutorial-grade
 cursor, a picture-in-picture camera with skin, captions after you stop, and
 skip-dead-air so the MP4 does not keep the coffee pause.
 
-The same recording runs in the app, the CLI, and XBlox. Full flag lists live
-in the [CLI](../cli/cli.md) and [XBlox](../xblox.md) references; the patterns
-below are what people actually type.
+Open the file in the centre viewer and it plays there — native on-screen
+controls by default, or the web player if that plugin is off. The same
+recording runs in the app, the CLI, and XBlox. Full flag lists live in the
+[CLI](../cli/cli.md) and [XBlox](../xblox.md) references; the patterns below
+are what people actually type.
 
 > Available capabilities can vary by edition and organization policy.
 
@@ -31,6 +33,66 @@ below are what people actually type.
 - A vertical clip that follows the pointer.
 - A meeting take: you on camera, skin and light, or a circle on the screen.
 - A long capture that should omit idle and come with an SRT for YouTube.
+- Anyone opening a clip from the file panel who wants pause, seek, volume,
+  and the next file in the folder — without leaving Tanit.
+
+---
+
+## Play a file
+
+Select a video in the file panel. The centre viewer opens it. Typical
+extensions: `.mp4`, `.m4v`, `.mkv`, `.webm`, `.mov`, `.avi`, `.wmv`, `.ogv`,
+`.mpg` / `.mpeg`, `.ts` / `.m2ts` / `.mts`, `.3gp` / `.3g2`. Direct `https://`
+files play too (a `.mp4` URL). YouTube pages and other site URLs do not —
+youtube-dl is off.
+
+### Native player (default)
+
+When **Settings → General → Use mpv player** is on and the plugin is
+installed, playback is an embedded native surface with mpv's on-screen
+controller (OSC): play/pause, seek bar, volume, fullscreen, and folder
+prev/next.
+
+The bar shows on load and on mouse move, then hides after about a second.
+Move the mouse over the video to bring it back. **Delete** cycles OSC
+visibility: never, auto (mouse), always.
+
+| OSC control | Left click | Middle click | Right click / other |
+|:---|:---|:---|:---|
+| Play / pause | Pause | Loop playlist | Loop this file |
+| Playlist arrows | Previous / next **video in the folder** | Toggle **auto-play** (prev) or **auto-next** (next) | Track / playlist picker |
+| Seek bar | Jump | — | — |
+| Skip back / forward | -5 s / +10 s | Frame step | -30 s / +60 s |
+| Volume | Mute | — | Wheel over the bar +/- 5 |
+| Fullscreen | Cover the monitor | — | — |
+
+Folder prev/next is Tanit walking sibling videos in the current folder —
+the same list as the web viewer's prev/next. It is **not** mpv's own
+playlist. Keyboard `Left` / `Right` seek inside the clip; they do not
+change files. Use the OSC arrows (or the web toolbar, in fallback).
+
+**Auto-play** starts the file when it opens (on by default). **Auto-next**
+opens the next sibling when the current file ends (off by default). Both
+persist in appearance settings. Mid-click the OSC arrows to toggle them;
+the player shows a short OSD.
+
+**Fullscreen** is Tanit's immersive cover — workbench chrome hidden, or
+the lightbox covering the monitor — not a separate exclusive mpv window.
+`f`, double-click the picture, or the OSC fullscreen button. Leave with
+`Esc` (while fullscreen) or the same toggle. Window shortcuts `F11` and
+`Alt+F` still belong to the Tanit frame; see
+[keyboard shortcuts](../keyboard-shortcuts.md#video-viewer) for the full
+player map (seek, speed, volume, tracks, picture).
+
+The cursor on the video hides on the same idle timeout as the OSC.
+
+### Web player (fallback)
+
+If the mpv setting is off, or the plugin is missing, the centre pane uses
+the web video viewer. Auto-play, auto-next, playback rate, zoom/pan, and
+subtitle browse live on that toolbar. Space / seek / mute follow the
+in-pane player chrome. Codecs then depend on the installed WebView
+runtime — the same caveat as [embedded Markdown video](./feature-markdown.md).
 
 ---
 
@@ -241,6 +303,7 @@ Worked examples: [video record](../cli/video_record_examples.md) ·
 
 ## Related docs
 
+- [Keyboard shortcuts](../keyboard-shortcuts.md#video-viewer) — native player keys, OSC clicks, folder prev/next
 - [Audio](./feature-audio.md) — mic / desktop / mix, DeepFilter on the mux
 - [Tanit AI](./feature-ai.md) — models, vision, generate
 - [Images](./feature-images.md) — stills, junk, create, transform

@@ -117,7 +117,7 @@ Params:
 - `reference` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Single-path alias of reference_images.
 - `reference_images` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Style / brand reference images (not keyframes).
 - `references` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Alias of reference_images.
-- `resolution` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">720p</span> <span data-cli="choice">1080p</span></span></span>)  -  Output resolution (720p default).
+- `resolution` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">720p</span> <span data-cli="choice">1080p</span> <span data-cli="choice">4K</span></span></span>)  -  Output resolution (720p default).
 - `src` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Keyframe stills (host paths).
 - `start_frame` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional start-frame still (host path or data URL).
 
@@ -129,14 +129,6 @@ Params:
 - `options` (<span data-cli="meta"><span data-cli="type">object</span></span>)
 - `paths` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Host file paths (absolute, or relative to the current Explorer folder in-app; else process cwd).
 - `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Required.
-
-#### ocr_text
-
-Extract text from one or more images using the configured OCR model (local VLM or cloud).
-
-Params:
-- `paths` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Host file paths (absolute, or relative to the current Explorer folder in-app; else process cwd).
-- `prompt` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional.
 
 #### image_from_camera
 
@@ -252,58 +244,6 @@ Params:
 - `max_bytes` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Maximum body bytes when materializing a resource.
 - `max_results` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Maximum matches to return.
 - `query` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Name or keyword, e.g.
-
----
-
-### Scheduler
-
-#### schedule_at
-
-Schedule a one-shot agent task to run at an exact UTC time.
-
-Params:
-- `folder_hint` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional folder context for the scheduled turn.
-- `initial_state` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  Optional initial memory_state JSON.
-- `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  The full prompt to run at fire time.
-- `run_at` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  ISO 8601 UTC datetime, e.g.
-- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Short human-readable name for the task.
-
-#### schedule_in
-
-Schedule a one-shot agent task to run after a delay.
-
-Params:
-- `delay_seconds` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Seconds from now until the task fires.
-- `folder_hint` (<span data-cli="meta"><span data-cli="type">string</span></span>)
-- `initial_state` (<span data-cli="meta"><span data-cli="type">object</span></span>)
-- `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
-- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
-
-#### schedule_every
-
-Schedule a recurring agent task on a fixed interval.
-
-Params:
-- `folder_hint` (<span data-cli="meta"><span data-cli="type">string</span></span>)
-- `initial_state` (<span data-cli="meta"><span data-cli="type">object</span></span>)
-- `interval_seconds` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Seconds between ticks.
-- `max_runs` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Optional cap on total runs; omit for unlimited.
-- `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
-- `start_at` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional ISO 8601 UTC start time.
-- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
-
-#### schedule_cancel
-
-Cancel (disable) a scheduled task by its id.
-
-Params:
-- `task_id` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  The task id returned by schedule_at / schedule_in / schedule_every.
-
-#### schedule_list
-
-List all scheduled tasks (id, title, schedule, enabled, next_run_at, run_count).
-
-Params:
 
 ---
 

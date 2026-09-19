@@ -22,7 +22,7 @@ UI launch (main window). Launch `tanit.exe` with **no subcommand** (full referen
 - `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Seed the UI with file(s) or URL(s). Local paths open in the workbench; `http(s)://…`, `//host/…`, and CMS-relative `/…` open in the centre browser. Uses saved default workbench unless --ui-preset is set. Repeat or separate with `;`.
 - `--view-locate` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Viewer locate fragment without '#', used by protocol startup.
 - `--ui-preset` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">main</span> <span data-cli="choice">chat</span> <span data-cli="choice">viewer</span></span></span>) - Open the UI: `main`, `chat`, or `viewer` (one-shot; overrides saved default `ui.workbench`).
-- `--ui-open` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Open a lightweight UI surface without constructing MainFrame. Usage: --ui-open command-settings [--ui-command-id ID | ID] | --ui-open assistant. Reserved surfaces: fileviewer, webapp.
+- `--ui-open` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Open a lightweight UI surface without constructing MainFrame. Usage: --ui-open settings [section] | --ui-open command-settings [--ui-command-id ID | ID] | --ui-open assistant. Reserved surfaces: fileviewer, webapp.
 - `--ui-command-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Stable commands.json id for --ui-open command-settings.
 - `--ui-web-app` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Web application id for --ui-open webapp.
 - `--ui-owner-hwnd` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional decimal owner HWND for lightweight UI placement.
@@ -1392,7 +1392,7 @@ Options:
 - `--no-parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable concurrent tool dispatch and fall back to serial execution. Parallel dispatch (P6) is on by default; use this flag to opt out.
 - `--parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dispatch all tool calls in a single LLM response concurrently (std::async). On by default — this flag is accepted for compatibility but is a no-op unless --no-parallel-tools was previously applied.
 - `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
-- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_command. Ineffective with --no-tools.
+- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_command. Ineffective with --no-tools.
 
 **Session**
 - `--multi-turn` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable session memory across turns (default: on).
@@ -7259,8 +7259,6 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `custom.command-msghb0e2-e8c47` | Fixed | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed.xblox` |
 | `custom.video-start` | WebCam | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
 | `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
-| `custom.command-msafwmdu-b9a48` | Pose | Video-Detect | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-detect-yolo26-pose.xblox` |
-| `custom.command-msajhop7-a071b` | Segments | Video-Detect | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-detect-yolo26-seg.xblox` |
 | `custom.handbrake-hq` | Handbrake | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-video-social-hq` | Social Video HQ | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-mr51514h-c34ec` | System | Default Prompts | `app:edit` |  |
@@ -7273,10 +7271,6 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `custom.view-snap-down` | Snap Down | View Snap | `app:snapdown` |  |
 | `custom.view-snap-left` | Snap Left | View Snap | `app:snapleft` |  |
 | `custom.view-snap-right` | Snap Right | View Snap | `app:snapright` |  |
-| `custom.dropdown-msaj5qk5-78a6b` | Help | Help | `metadata` |  |
-| `custom.help-cli` | CLI-Manual | Help | `app:open` |  |
-| `custom.help-xblox` | XBlox | Help | `app:open` |  |
-| `custom.command-msakytc7-dd084` | Online Help | Help | `app:openurl` |  |
 | `custom.command-mt4msl99-55414` | Start | Scheduler | `app:schedulerstart` |  |
 | `custom.command-mt4munur-873bb` | Stop | Scheduler | `app:schedulerstop` |  |
 | `custom.command-mt7672eh-b7786` | To Images | PDF | `cli:pdf` | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
@@ -7284,6 +7278,10 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `custom.fs-copy` | Copy | Files | `app:fscopy` |  |
 | `custom.fs-move` | Move | Files | `app:fsmove` |  |
 | `custom.command-mu114s8q-17bff` | Share | Files | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--if-newer`<br>`--remote-dir`<br>`public` |
+| `custom.dropdown-msaj5qk5-78a6b` | Help | Files | `metadata` |  |
+| `custom.help-cli` | CLI-Manual | Files | `app:open` |  |
+| `custom.help-xblox` | XBlox | Files | `app:open` |  |
+| `custom.command-msakytc7-dd084` | Online Help | Files | `app:openurl` |  |
 | `custom.command-mu1w66c6-5b959` | Speak | Text | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
 | `custom.command-mtum9djk-a760d` | Share as Article | Text | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
 
