@@ -43,7 +43,8 @@ are what people actually type.
 Select a video in the file panel. The centre viewer opens it. Typical
 extensions: `.mp4`, `.m4v`, `.mkv`, `.webm`, `.mov`, `.avi`, `.wmv`, `.ogv`,
 `.mpg` / `.mpeg`, `.ts` / `.m2ts` / `.mts`, `.3gp` / `.3g2`. Direct `https://`
-files play too (a `.mp4` URL). YouTube pages and other site URLs do not —
+files play too — from the file panel, or `tanit --src "https://host/clip.mp4"`
+(HLS `.m3u8` as well). YouTube pages and other site URLs stay in the browser —
 youtube-dl is off.
 
 ### Native player (default)
@@ -85,6 +86,38 @@ the lightbox covering the monitor — not a separate exclusive mpv window.
 player map (seek, speed, volume, tracks, picture).
 
 The cursor on the video hides on the same idle timeout as the OSC.
+
+### Scripts and key bindings
+
+Tanit does **not** load a user `mpv.conf`, `input.conf`, or Lua from the
+standalone mpv folders (`%APPDATA%\mpv\` on Windows, `~/.config/mpv/`
+elsewhere). There is no “drop a script in `scripts/`” path, and no way to
+rebind keys with a config file. That is the embed: one Store-safe Lua
+(PUC-Rio 5.2) and a fixed option set.
+
+What does run:
+
+- Builtin OSC (`@osc.lua` compiled into the player) — the on-screen bar.
+- Builtin `select` — OSC track / playlist pickers, and the `g` then letter
+  menus (`g` `a` audio, `g` `s` subtitle, `g` `p` playlist).
+- mpv’s **compiled-in default key bindings**, injected from the embed
+  window. Space, seek arrows, `f`, `m`, `[` / `]`, and the rest of that
+  map work as in stock mpv, except as noted below.
+
+What does not:
+
+- Your own `.lua` under `scripts/`.
+- A custom `input.conf` or `mpv.conf`.
+- Stats overlay (`i` / `I`), console (`` ` ``), auto-profiles, youtube-dl /
+  yt-dlp, and the positioning script (Ctrl+wheel zoom, drag-to-pan).
+  Those bindings exist in the default map but have nothing to call.
+
+Tanit remaps only the OSC playlist arrows (folder siblings, auto-play /
+auto-next). Keyboard `<` / `>` / Enter still mean mpv playlist, which is
+a single file here — use the OSC arrows (or the web toolbar) to change
+files. `F11` and `Alt+F` stay Tanit window chrome, not the player.
+
+The full key table is in [keyboard shortcuts](../keyboard-shortcuts.md#video-viewer).
 
 ### Web player (fallback)
 

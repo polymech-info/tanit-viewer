@@ -52,6 +52,9 @@ Computer-scope (`HKLM`) wins over user-scope (`HKCU`). Policies marked HKLM-only
 | Verification Level: Import MCP Config | `Security\Verification\McpConfigImport` | REG_SZ | not configured (compiled default) | HKLM-only |
 | Verification Level: Update Prompts | `Security\Verification\PromptUpdate` | REG_SZ | not configured (compiled default) | HKLM-only |
 | Verification Level: Import Prompts | `Security\Verification\PromptImport` | REG_SZ | not configured (compiled default) | HKLM-only |
+| Verification Level: Update Home Page | `Security\Verification\HomePageUpdate` | REG_SZ | not configured (compiled default) | HKLM-only |
+| Verification Level: Import Home Page | `Security\Verification\HomePageImport` | REG_SZ | not configured (compiled default) | HKLM-only |
+| Verification Level: Export Home Page | `Security\Verification\HomePageExport` | REG_SZ | not configured (compiled default) | HKLM-only |
 | Verification Level: Import Signed Assets | `Security\Verification\AssetImport` | REG_SZ | not configured (compiled default) | HKLM-only |
 | Verification Level: Save OAuth Credentials | `Security\Verification\OAuthCredentialsSave` | REG_SZ | not configured (compiled default) | HKLM-only |
 | Verification Level: Clear OAuth Credentials | `Security\Verification\OAuthCredentialsClear` | REG_SZ | not configured (compiled default) | HKLM-only |
@@ -70,6 +73,7 @@ Computer-scope (`HKLM`) wins over user-scope (`HKCU`). Policies marked HKLM-only
 | Enable Prompt Editor | `UI\Editors\EnablePrompt` | DWORD | `1` (enabled) | HKCU/HKLM |
 | Enable Command Editor | `UI\Editors\EnableCommand` | DWORD | `1` (enabled) | HKCU/HKLM |
 | Enable MCP Config Editor | `UI\Editors\EnableMcp` | DWORD | `1` (enabled) | HKCU/HKLM |
+| Enable Home Page Editor | `UI\Editors\EnablePage` | DWORD | `1` (enabled) | HKCU/HKLM |
 | Enable search CLI Command | `CLI\EnableSearch` | DWORD | `1` (enabled) | HKCU/HKLM |
 | Enable Audio CLI Commands | `CLI\EnableAudio` | DWORD | `1` (enabled) | HKCU/HKLM |
 | Enable Video CLI Commands | `CLI\EnableVideo` | DWORD | `1` (enabled) | HKCU/HKLM |
@@ -898,6 +902,57 @@ Compiled default: local_unlock.
 
 ---
 
+### Verification Level: Update Home Page
+
+| Field | Value |
+| --- | --- |
+| Policy key | `Security.Verification.HomePageUpdate` |
+| Registry value | `Security\Verification\HomePageUpdate` |
+| Type | REG_SZ |
+| Default | not configured (compiled default) |
+| Scope | HKLM-only |
+| Allowed values | `none`, `presence`, `local_unlock`, `strong` |
+
+Minimum verification required to save the signed home.page dashboard in-app.
+
+Compiled default: presence.
+
+---
+
+### Verification Level: Import Home Page
+
+| Field | Value |
+| --- | --- |
+| Policy key | `Security.Verification.HomePageImport` |
+| Registry value | `Security\Verification\HomePageImport` |
+| Type | REG_SZ |
+| Default | not configured (compiled default) |
+| Scope | HKLM-only |
+| Allowed values | `none`, `presence`, `local_unlock`, `strong` |
+
+Minimum verification required to import home.page from a plain file.
+
+Compiled default: local_unlock.
+
+---
+
+### Verification Level: Export Home Page
+
+| Field | Value |
+| --- | --- |
+| Policy key | `Security.Verification.HomePageExport` |
+| Registry value | `Security\Verification\HomePageExport` |
+| Type | REG_SZ |
+| Default | not configured (compiled default) |
+| Scope | HKLM-only |
+| Allowed values | `none`, `presence`, `local_unlock`, `strong` |
+
+Minimum verification required to export home.page as a plain file.
+
+Compiled default: local_unlock.
+
+---
+
 ### Verification Level: Import Signed Assets
 
 | Field | Value |
@@ -1170,6 +1225,20 @@ Allow users to edit custom ribbon commands. Disable to lock the command editor.
 | Scope | HKCU or HKLM; HKLM wins |
 
 Allow users to edit MCP server configuration. Disable to lock the MCP editor.
+
+---
+
+### Enable Home Page Editor
+
+| Field | Value |
+| --- | --- |
+| Policy key | `UI.Editors.EnablePage` |
+| Registry value | `UI\Editors\EnablePage` |
+| Type | DWORD |
+| Default | `1` (enabled) |
+| Scope | HKCU or HKLM; HKLM wins |
+
+Allow users to edit the signed home.page dashboard. Disable to lock Home page saves.
 
 ---
 

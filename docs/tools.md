@@ -1,4 +1,4 @@
-# Tanit Agent Tools
+# Tanit Chat Agent Tools
 
 These are the path-mode LLM agent tools available in this build. They are offered to the model during `tanit-cli.exe llm agent` runs and via the embedded MCP server.
 
@@ -117,7 +117,7 @@ Params:
 - `reference` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Single-path alias of reference_images.
 - `reference_images` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Style / brand reference images (not keyframes).
 - `references` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Alias of reference_images.
-- `resolution` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">720p</span> <span data-cli="choice">1080p</span> <span data-cli="choice">4K</span></span></span>)  -  Output resolution (720p default).
+- `resolution` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">720p</span> <span data-cli="choice">1080p</span></span></span>)  -  Output resolution (720p default).
 - `src` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Keyframe stills (host paths).
 - `start_frame` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional start-frame still (host path or data URL).
 

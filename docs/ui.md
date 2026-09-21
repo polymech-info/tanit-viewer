@@ -1,12 +1,12 @@
-# Tanit UI Launch
+# Tanit Chat UI Launch
 
-Top-level flags for `tanit.exe` with **no subcommand**. `--ui-preset` picks `main` / `chat` / `viewer` for this run (else saved `ui.workbench`). `--src` seeds local paths or URLs (`http(s)://`, `//host/…`, CMS `/…`). `--size WxH` overrides the outer frame for this launch only. `--show-panel` / `--hide-panel` accept comma-separated panel ids; `--show-components` / `--hide-components` accept ribbon and statusbar — all for this process only.
+Top-level flags for `tanit.exe` with **no subcommand**. `--ui-preset` picks `main` / `chat` / `viewer` for this run (else saved `ui.workbench`). `--src` seeds local paths, direct https video URLs (centre viewer), or other URLs (`http(s)://`, `//host/…`, CMS `/…`) in the centre browser. `--size WxH` overrides the outer frame for this launch only. `--show-panel` / `--hide-panel` accept comma-separated panel ids; `--show-components` / `--hide-components` accept ribbon and statusbar — all for this process only.
 
 ## Flags
 
-- `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Seed the UI with file(s) or URL(s). Local paths open in the workbench; `http(s)://…`, `//host/…`, and CMS-relative `/…` open in the centre browser. Uses saved default workbench unless --ui-preset is set. Repeat or separate with `;`.
+- `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Seed the UI with file(s) or URL(s). Local paths open in the workbench. Direct https video URLs (`.mp4`, HLS `.m3u8`, …) open in the centre viewer. Other `http(s)://…`, `//host/…`, and CMS-relative `/…` open in the centre browser. Uses saved default workbench unless --ui-preset is set. Repeat or separate with `;`.
 - `--view-locate` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Viewer locate fragment without '#', used by protocol startup.
-- `--ui-preset` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">main</span> <span data-cli="choice">chat</span> <span data-cli="choice">viewer</span></span></span>) - Open the UI: `main`, `chat`, or `viewer` (one-shot; overrides saved default `ui.workbench`).
+- `--ui-preset` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">main</span> <span data-cli="choice">chat</span> <span data-cli="choice">viewer</span></span></span>) - Open the UI: `main`, `chat`, or `viewer` (one-shot; overrides saved default `ui.workbench`). Ignored when a subcommand is present. The Store `tanit` alias prepends `--ui-preset=chat`.
 - `--ui-open` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Open a lightweight UI surface without constructing MainFrame. Usage: --ui-open settings [section] | --ui-open command-settings [--ui-command-id ID | ID] | --ui-open assistant. Reserved surfaces: fileviewer, webapp.
 - `--ui-command-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Stable commands.json id for --ui-open command-settings.
 - `--ui-web-app` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Web application id for --ui-open webapp.
@@ -27,7 +27,7 @@ Top-level flags for `tanit.exe` with **no subcommand**. `--ui-preset` picks `mai
 - `--attach-realtime` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Move an active background realtime voice session into the chat panel.
 - `--viewer-dev` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dev mode: navigate the viewer WebView2 to the rspack dev server (http://localhost:5180).
 Use --viewer-dev-url=URL to override the default address.
-Equivalent to setting PM_VIEWER_DEV_URL before launch; zero production impact.
+Equivalent to setting PM_VIEWER_DEV_URL before launch. FEATURE_COMMAND_TEST builds only.
 - `--viewer-dev-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the rspack dev server URL used by --viewer-dev (default: http://localhost:5180).
 - `--xblox-dev` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dev mode: navigate xblox WebView2 to the rspack dev server (http://127.0.0.1:5173).
 Use --xblox-dev-url=URL to override the default address.

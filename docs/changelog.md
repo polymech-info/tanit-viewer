@@ -4,7 +4,7 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
-## 1.0.56 - 18-09
+## 1.0.58 - 19-09
 
 _Each change is dated DD-MM from the commit day. Newest first._
 
@@ -14,9 +14,13 @@ _Each change is dated DD-MM from the commit day. Newest first._
 - 18-09 Added query, intent, and result-limit options for finding assistant applications by name or path.
 - 18-09 Added profile, configuration override, and additional-directory options for external Codex agents.
 - 18-09 Added settings commands for key paths, key export, import and generation, plus cloud upload and download.
+- 18-09 Added application lookup with a name or path query, --intent, and --limit options.
+- 18-09 Added key subcommands for path, export, import, and generation.
+- 18-09 Added cloud upload and download subcommands.
 - 16-09 Added a --scenario option to the core file handlers test command.
 - 16-09 Added the Privacy.EnableClipboardContext policy under PM_Security, mapped to privacy.clipboardContext and enabled by default.
 - 16-09 Added the privacy.clipboardContext security policy with a default value of true.
+- 16-09 Added a core file-handler test subcommand with a --scenario option.
 - 15-09 Added a context dump command with --capabilities, --app-id, --max-age-ms, and --mru-max-age-ms options.
 - 15-09 Added a core context test command with a --scenario option.
 - 15-09 Added the Privacy.EnableClipboardContext security policy, mapped to privacy.clipboardContext and disabled by default.
@@ -29,6 +33,9 @@ _Each change is dated DD-MM from the commit day. Newest first._
 - 15-09 Added the cmdLblLauncherCommand localization string type.
 - 15-09 Supports --capabilities, --app-id, --max-age-ms, and --mru-max-age-ms options.
 - 15-09 Supports selecting a test scenario with --scenario.
+- 15-09 Added cmdLblLauncherCommand as a string field in the shared i18n types.
+- 15-09 Supports a --scenario option.
+- 15-09 Added Privacy.EnableClipboardContext under PM_Security, mapped to privacy.clipboardContext with a false value.
 - 14-09 Added options to the pages create and update, posts list, and categories list commands.
 - 13-09 OpenDesign can save a screenshot of the whole editor from the top toolbar to docs/assets/screenshot_n.png.
 - 13-09 OpenDesign can drop a file on a photo to replace it (clip and zoom stay; the new aspect fits the old frame), or on the canvas to add a new image.
@@ -129,13 +136,19 @@ _Each change is dated DD-MM from the commit day. Newest first._
 
 ### Improved
 
+- 19-09 Added an accessible label indicating whether the theme toggle will switch to light or dark mode.
 - 18-09 Added custom tab styling to the group editor field row.
 - 18-09 Added accessible labels to the Add Tanit MCP Server and backup settings controls.
+- 18-09 Added an accessible label for adding a Tanit MCP server.
+- 18-09 Added --profile, -c/--config, and --add-dir options.
 - 15-09 Added launcher command and argument fields, with contextual placeholders and help for repeat-path options.
 - 15-09 Command picker labels now distinguish custom, app, and launcher commands.
 - 15-09 Display repeat-path-specific placeholders and help text when configuring repeated command options.
 - 15-09 Label custom, app, and launcher commands according to the selected command kind.
 - 15-09 Updated command picker labels and contextual placeholder/help text based on the selected command type and repeat-path options.
+- 15-09 Repeat-path options now show dedicated placeholder and help text.
+- 15-09 Command labels distinguish app, custom, and launcher commands.
+- 15-09 Arguments use a three-row variable-aware text field with an arguments placeholder.
 - 14-09 Added command-line options for creating and updating pages and listing posts and categories.
 - 14-09 Added options for service page creation and updates, post listing, and category listing commands.
 - 14-09 Added command options for creating and updating service pages and listing service posts and categories.

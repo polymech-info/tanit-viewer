@@ -1,4 +1,4 @@
-# Tanit XBlox
+# Tanit Chat XBlox
 
 Use this skill when composing `.xblox` block-tree command flows.
 

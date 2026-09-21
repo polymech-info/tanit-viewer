@@ -1,6 +1,6 @@
-# Tanit Commands
+# Tanit Chat Commands
 
-Use this skill when composing Tanit CLI invocations or calling user custom commands.
+Use this skill when composing Tanit Chat CLI invocations or calling user custom commands.
 
 ## Invocation Rules
 
@@ -19,9 +19,9 @@ Use this skill when composing Tanit CLI invocations or calling user custom comma
 
 UI launch (main window). Launch `tanit.exe` with **no subcommand** (full reference: `info ui`).
 
-- `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Seed the UI with file(s) or URL(s). Local paths open in the workbench; `http(s)://…`, `//host/…`, and CMS-relative `/…` open in the centre browser. Uses saved default workbench unless --ui-preset is set. Repeat or separate with `;`.
+- `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Seed the UI with file(s) or URL(s). Local paths open in the workbench. Direct https video URLs (`.mp4`, HLS `.m3u8`, …) open in the centre viewer. Other `http(s)://…`, `//host/…`, and CMS-relative `/…` open in the centre browser. Uses saved default workbench unless --ui-preset is set. Repeat or separate with `;`.
 - `--view-locate` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Viewer locate fragment without '#', used by protocol startup.
-- `--ui-preset` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">main</span> <span data-cli="choice">chat</span> <span data-cli="choice">viewer</span></span></span>) - Open the UI: `main`, `chat`, or `viewer` (one-shot; overrides saved default `ui.workbench`).
+- `--ui-preset` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">main</span> <span data-cli="choice">chat</span> <span data-cli="choice">viewer</span></span></span>) - Open the UI: `main`, `chat`, or `viewer` (one-shot; overrides saved default `ui.workbench`). Ignored when a subcommand is present. The Store `tanit` alias prepends `--ui-preset=chat`.
 - `--ui-open` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Open a lightweight UI surface without constructing MainFrame. Usage: --ui-open settings [section] | --ui-open command-settings [--ui-command-id ID | ID] | --ui-open assistant. Reserved surfaces: fileviewer, webapp.
 - `--ui-command-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Stable commands.json id for --ui-open command-settings.
 - `--ui-web-app` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Web application id for --ui-open webapp.
@@ -42,7 +42,7 @@ UI launch (main window). Launch `tanit.exe` with **no subcommand** (full referen
 - `--attach-realtime` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Move an active background realtime voice session into the chat panel.
 - `--viewer-dev` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dev mode: navigate the viewer WebView2 to the rspack dev server (http://localhost:5180).
 Use --viewer-dev-url=URL to override the default address.
-Equivalent to setting PM_VIEWER_DEV_URL before launch; zero production impact.
+Equivalent to setting PM_VIEWER_DEV_URL before launch. FEATURE_COMMAND_TEST builds only.
 - `--viewer-dev-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the rspack dev server URL used by --viewer-dev (default: http://localhost:5180).
 - `--xblox-dev` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dev mode: navigate xblox WebView2 to the rspack dev server (http://127.0.0.1:5173).
 Use --xblox-dev-url=URL to override the default address.
@@ -1484,6 +1484,7 @@ Options:
 - `--selector,--path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - jq filter selecting string leaves to transform (JSONPath-ish accepted: $.a[*].b -> .a[].b). Example: .ribbon.groups[].items[].label
 - `--target,--as` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional sibling field name for the transformed value on the parent object. Omit to overwrite the selected leaf in place. Ignored when --merge-json is set. Example: --selector '.items[].label' --target label_de -> writes items[i].label_de
 - `--merge-json` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Expect a JSON object from the transformer/LLM (checked; optional ```json fences ok). Merge object keys onto the selected leaf's parent. HARD OVERWRITE: existing keys with the same name are replaced (dev-tool semantics). Use for multi-language replies in one shot, e.g. {"label_de":"…","label_fr":"…"}. Incompatible with --target.
+- `--merge-keys` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - With --merge-json: require these object keys as non-empty strings before merge. Missing or empty keys retry the leaf (--max-retries). Comma list, e.g. label_de,label_es,label_it,label_fr. Omit to accept any non-empty object.
 - `-o,--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output path for the full mutated JSON document (not a single field). Required unless --json (stdout payload includes output).
 - `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Prompt applied to each selected value (shaped as: <prompt>\n\nText to transform: "…"). Required unless --dry-run. With --merge-json, ask for a JSON object only.
 - `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip live LLM; use --transform (default upper) for offline/fixture runs.
@@ -1511,7 +1512,7 @@ tanit-cli llm agent each -i <value> --selector <value>
 **Full example**
 
 ```sh
-tanit-cli llm agent each -i 'foo' --selector 'foo' --target 'foo' --merge-json -o 'foo' -p 'foo' --dry-run --transform 'upper' --prefix 'x' --concurrency 0 --max-retries 0 --throttle-ms 0 --no-cache --preset 'foo' --router 'foo' --model 'foo' --api-key 'foo' --base-url 'foo' --timeout-ms 0
+tanit-cli llm agent each -i 'foo' --selector 'foo' --target 'foo' --merge-json --merge-keys '{}' -o 'foo' -p 'foo' --dry-run --transform 'upper' --prefix 'x' --concurrency 0 --max-retries 0 --throttle-ms 0 --no-cache --preset 'foo' --router 'foo' --model 'foo' --api-key 'foo' --base-url 'foo' --timeout-ms 0
 ```
 
 ##### Examples
@@ -1728,16 +1729,15 @@ tanit-cli llm claude -p 'foo' --include '{}' --embed '{}' --cwd '.' -m 'foo' --r
 
 #### register-explorer
 
-Register Windows Explorer menus: resize / convert / meta + Workbench + Viewer + Chat + Presets
+Register Windows Explorer menus: convert / meta + Workbench + Viewer + Chat + Presets
 
 Options:
 
-- `--group` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">Tanit</span></span></span>)
+- `--group` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">Tanit Chat</span></span></span>)
 - `--unregister` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
 - `--dry` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
 - `--no-refresh-shell` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
 - `--media-bin` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path to tanit.exe (default: GUI sibling when this is tanit-cli.exe)
-- `--widths` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">1980,1200</span></span></span>)
 
 **Example**
 
@@ -1748,7 +1748,7 @@ tanit-cli register-explorer
 **Full example**
 
 ```sh
-tanit-cli register-explorer --group 'Tanit' --unregister --dry --no-refresh-shell --media-bin 'foo' --widths '1980,1200'
+tanit-cli register-explorer --group 'Tanit Chat' --unregister --dry --no-refresh-shell --media-bin 'foo'
 ```
 
 #### register-startmenu
@@ -2875,186 +2875,6 @@ tanit-cli service categories remove ids {}
 tanit-cli service categories remove ids '{}' --server-url 'foo'
 ```
 
----
-
-#### service store
-
-Microsoft Store billing (pm-pics billing-ms). Requires login + MS_STORE_MOCK on dev server.
-
-**Example**
-
-```sh
-tanit-cli service store app-license
-```
-
-#### service store app-license
-
-Microsoft Store app license (trial/full). PM_STORE_LICENSE_MOCK defaults to full; trial|expired|inactive override.
-
-**Example**
-
-```sh
-tanit-cli service store app-license
-```
-
----
-
-#### service store health
-
-GET /api/billing/ms/health (public; shows mock flag and product ids).
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base (default: PM_SERVICE_LICENSE_SERVER_BASE or SERVER_URL).
-
-**Example**
-
-```sh
-tanit-cli service store health
-```
-
-**Full example**
-
-```sh
-tanit-cli service store health --license-server-url 'foo'
-```
-
----
-
-#### service store link
-
-POST /api/billing/ms/link — associate UserCollectionsId with your account.
-
-Options:
-
-- `--collections-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - UserCollectionsId (default: cached or dev-mock-collections-* for MS_STORE_MOCK).
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store link
-```
-
-**Full example**
-
-```sh
-tanit-cli service store link --collections-id 'foo' --license-server-url 'foo'
-```
-
----
-
-#### service store reconcile
-
-POST /api/billing/ms/reconcile — grant credits and Pro entitlements.
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store reconcile
-```
-
-**Full example**
-
-```sh
-tanit-cli service store reconcile --license-server-url 'foo'
-```
-
----
-
-#### service store ms-balance
-
-GET /api/billing/balance — credit_ledger sum (not AI gateway balance).
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store ms-balance
-```
-
-**Full example**
-
-```sh
-tanit-cli service store ms-balance --license-server-url 'foo'
-```
-
----
-
-#### service store entitlements
-
-GET /api/billing/ms/entitlements — durable/subscription rows.
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store entitlements
-```
-
-**Full example**
-
-```sh
-tanit-cli service store entitlements --license-server-url 'foo'
-```
-
----
-
-#### service store mock-enqueue
-
-POST /api/billing/ms/mock/enqueue — seed a pending purchase (server MS_STORE_MOCK=1 only).
-
-Options:
-
-- `--product-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Store product id (e.g. STORE_PRODUCT_ID_100K).
-- `--kind` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - consumable | durable | subscription (default: consumable).
-- `--microsoft-item-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional stable item id for idempotency tests.
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store mock-enqueue --product-id <id>
-```
-
-**Full example**
-
-```sh
-tanit-cli service store mock-enqueue --product-id 'foo' --kind 'consumable' --microsoft-item-id 'foo' --license-server-url 'foo'
-```
-
----
-
-#### service store mock-reset
-
-POST /api/billing/ms/mock/reset — delete billing rows for the logged-in user.
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store mock-reset
-```
-
-**Full example**
-
-```sh
-tanit-cli service store mock-reset --license-server-url 'foo'
-```
-
 ### Automation
 
 #### batch
@@ -3217,7 +3037,7 @@ Options:
 
 **Filter**
 - `--filter` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">deepfilter</span> <span data-cli="choice">dfn</span> <span data-cli="choice">deepfilternet</span> <span data-cli="choice">gtcrn</span></span></span>) - Enhance after capture (same lib as `audio filter`). deepfilter = DeepFilterNet @ 48 kHz mono WAV. gtcrn = reserved. Omit to keep the dry recording. Not applied on the capture callback.
-- `--filter-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - DeepFilterNet tar.gz. Default: ${MODELS_DIR}/deepfilter/DeepFilterNet3_onnx.tar.gz. Use this instead of --model (that flag is STT).
+- `--filter-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - DeepFilterNet tar.gz or unpacked ONNX directory. Default: ${MODELS_DIR}/deepfilter (extracted) or DeepFilterNet3_onnx.tar.gz. Use this instead of --model (that flag is STT).
 - `--atten` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 100]</span></span>) - Attenuation limit in dB (in-process libDF only). Default: 100.
 - `--post-filter,--pf` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Over-attenuate very noisy sections. Implies --filter deepfilter.
 - `--no-delay` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not compensate STFT / model lookahead. Implies --filter deepfilter.
@@ -3410,7 +3230,7 @@ Options:
 
 **Filter**
 - `--filter` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">deepfilter</span> <span data-cli="choice">dfn</span> <span data-cli="choice">deepfilternet</span> <span data-cli="choice">gtcrn</span></span></span>) - Enhancer: deepfilter (DeepFilterNet, default) or gtcrn (reserved).
-- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - DeepFilterNet tar.gz. Default: ${MODELS_DIR}/deepfilter/DeepFilterNet3_onnx.tar.gz (same catalog as embeddings; `hg download deepfilternet3` / `hg download gtcrn`).
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - DeepFilterNet tar.gz or unpacked ONNX directory. Default: ${MODELS_DIR}/deepfilter (same catalog as embeddings; `hg download deepfilternet3` / `hg download gtcrn`).
 - `--atten` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 100]</span></span>) - Attenuation limit in dB (in-process libDF only). Default: 100.
 - `--post-filter,--pf` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Over-attenuate very noisy sections.
 - `--no-delay` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not compensate STFT / model lookahead.
@@ -6226,7 +6046,7 @@ tanit-cli assistant spy --interval-ms 500 --no-value --no-selection --no-text --
 
 #### info
 
-Generate reference docs for Tanit: CLI commands, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
+Generate reference docs for Tanit Chat: CLI commands, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
 
 **Example**
 
@@ -6292,7 +6112,7 @@ tanit-cli info xblox --dst 'releases/web-docs/cli/cli.md' --stdout --skill --aut
 
 #### info app-commands
 
-Generate a Tanit app/UI command verb reference (togglechat, takescreenshot, etc.) grouped by category. Plain md: app-commands.md in cwd. --skill: <profile>/skills/app-commands/SKILL.md.
+Generate a Tanit Chat app/UI command verb reference (togglechat, takescreenshot, etc.) grouped by category. Plain md: app-commands.md in cwd. --skill: <profile>/skills/app-commands/SKILL.md.
 
 Options:
 
@@ -6342,7 +6162,7 @@ tanit-cli info keyboard-shortcuts --dst 'releases/web-docs/cli/cli.md' --stdout 
 
 #### info ui
 
-Generate a Tanit UI launch flag reference (--ui-preset, --size, --src paths/URLs, --show-panel, chat seed options). Plain md: ui.md in cwd. --skill: <profile>/skills/ui/SKILL.md.
+Generate a Tanit Chat UI launch flag reference (--ui-preset, --size, --src paths/URLs, --show-panel, chat seed options). Plain md: ui.md in cwd. --skill: <profile>/skills/ui/SKILL.md.
 
 Options:
 

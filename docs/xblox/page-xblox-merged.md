@@ -329,6 +329,10 @@ command or MCP tool once it does the job you need.
 - [XBlox block and CLI reference](./xblox-docs)
 - [Tanit Viewer](./tanit-viewer) — files, Markdown, and live XBlox blocks
 
+## References
+
+- [XBlox Sources](https://github.com/polymech-info/xblox)
+
 ## Keyboard shortcuts
 
 Reference for keyboard shortcuts in the XBlox builder (`apps/xblox`). Shortcuts use **Ctrl** on Windows/Linux and **Cmd (⌘)** on macOS unless noted.
