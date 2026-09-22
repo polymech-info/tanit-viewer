@@ -1,4 +1,4 @@
-# Tanit Chat XBlox
+# Tanit XBlox
 
 Use this skill when composing `.xblox` block-tree command flows.
 
@@ -1694,7 +1694,7 @@ Params:
 - `stt` (<span data-cli="meta"><span data-cli="type">stt_route</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Dictation STT route {preset,provider,model,options}. Empty {} inherits App Settings. Flat provider/model remain aliases.
 - `provider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - STT provider override (alias of stt.provider). Default: empty → App Settings stt_provider (required).
 - `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - STT model override (alias of stt.model). Default: empty → App Settings stt_model when provider matches; whisper → base.en (fallback; prefer large-v3-turbo when installed); pixlwiz → pixlwiz-speech-to-text.
-- `providerOptions` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Whisper-only options object (alias of stt.options). Defaults: backend=cpu, language=auto, threads=0 (auto), flashAttn=auto. Whisper models resolve under ${MODELS_DIR} then exe/../models.
+- `providerOptions` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Whisper-only options object (alias of stt.options). Defaults: backend=gpu (falls back to cpu), language=auto, threads=0 (auto), flashAttn=auto. Whisper models resolve under ${MODELS_DIR} then exe/../models.
 
 **advanced**
 - `apiKey` (<span data-cli="meta"><span data-cli="type">api_key</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - API key override. Default: empty → App Settings providers map (not used for whisper).

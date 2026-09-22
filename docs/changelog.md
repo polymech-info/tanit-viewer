@@ -4,7 +4,7 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
-## 1.0.58 - 19-09
+## 1.0.60 - 22-09
 
 _Each change is dated DD-MM from the commit day. Newest first._
 
@@ -136,11 +136,21 @@ _Each change is dated DD-MM from the commit day. Newest first._
 
 ### Improved
 
+- 22-09 Improved accessibility by adding descriptive aria-labels to media elements for better screen reader support.
+- 22-09 s.test_core_process_runner_cmd = s.test_core_cmd->add_subcommand()->add_option("--scenario", s.test_core_process_runner_scenario,
+- 21-09 Added new <PropRow> component.
+- 21-09 Added options '--type' for 'put', 'doc_put', and 'doc_import_plain' commands with various value choices.
+- 21-09 Enabled PM_UI_Editors with 'UI.Editors.EnablePage' in policy configuration.
 - 19-09 Added an accessible label indicating whether the theme toggle will switch to light or dark mode.
+- 19-09 A toggle for changing between light and dark themes with an aria-label for accessibility.
 - 18-09 Added custom tab styling to the group editor field row.
 - 18-09 Added accessible labels to the Add Tanit MCP Server and backup settings controls.
 - 18-09 Added an accessible label for adding a Tanit MCP server.
 - 18-09 Added --profile, -c/--config, and --add-dir options.
+- 18-09 <FieldRow label={tr.grpLblTab} className="pm-custom-tab-field">
+- 18-09 s.terminal_cmd = app.add_subcommand("
+- 18-09 Added aria-labels to improve accessibility in ChatProviderSettingsPanel.tsx and BackupSettingsPanel.tsx.
+- 18-09 New options and subcommands have been added to assist with querying, setting configurations, and handling cloud operations.
 - 15-09 Added launcher command and argument fields, with contextual placeholders and help for repeat-path options.
 - 15-09 Command picker labels now distinguish custom, app, and launcher commands.
 - 15-09 Display repeat-path-specific placeholders and help text when configuring repeated command options.

@@ -4,25 +4,28 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog:next`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
-## 1.0.55 - 16-09
+## 1.0.60 - 22-09
 
 _Each change is dated DD-MM from the commit day. Newest first._
 
 ### New
 
+- 22-09 New commands and options added to CLI files in the src/ directory.
+- 22-09 Implement consent_stdin_attached function and initialize delegate_ with a non-json mode CliConsentDelegate.
+- 22-09 Define FEATURE_SECURITY_CONSENT_DELEGATE and include security/web_host_consent.hpp. Manage session grants with pm::security::web_host_consent_detail.
+- 22-09 Highlighting new additions in code for better tracking.
+- 21-09 Added new options and enhancements to policy-related files. Includes changes to UI editors, security features, and CLI options.
+- 21-09 LLM agent and xblox runs support consent UI routing and optional multi-turn session IDs.
+- 20-09 Add a new option '--widths' to the command in 'src/cli/pm_image_cmd_register_explorer.cpp', specifying 'Classic Resize max N verbs (disabled)'.
+- 19-09 If the application display name is empty, assign it the name derived from the executable stem. Afterwards, adjust the tool display name based on its name, ensuring it's not empty.
+- 19-09 Added new line: std::string display_name;
+- 18-09 Added options for assistant and llm codex commands in the CLI.
 - 16-09 Launcher file selections open a side pane with matching Tanit commands and registered Open with applications; item menus also provide Open, Show in folder, and Copy path.
-- 16-09 Launcher adds a Clipboard tab with recent text, files, images, and audio that can be restored to the system clipboard or used as command input.
-- 16-09 Launcher file, clipboard, and Tanit context refreshes while the menu stays open; files without a registered default application fall back to Tanit's built-in viewer.
-- 16-09 Launcher navigation now covers command tiles, context chips, tabs, matching commands, and Open with applications from the keyboard.
 - 16-09 Open the launcher by hovering over Commands or pressing Alt+Win, then pin it open or switch its light and dark appearance.
-- 16-09 Drag files from Explorer onto the assistant toolbar or a launcher command to use them as that run's selection.
 - 16-09 Running launcher commands pulse and can be stopped from their right-click menu.
-- 16-09 File Viewer adds interactive image cropping with draggable edges and corners, in-memory apply, and Save As.
 - 16-09 The XBlox Picker block and CLI `assistant pick` add free-rectangle selection, target-stack navigation, an 8x pixel loupe, sampled colors, and richer Chrome, selection, foreground-window, and context outputs.
-- 16-09 The new XBlox `imageScreenshot` block captures a monitor, window, webcam, or interactively selected region to a file or the clipboard, with optional picker overlays.
 - 16-09 The `Privacy.EnableClipboardContext` policy controls whether clipboard files, text, and images can enter assistant context; clipboard previews remain unavailable without consent.
 - 15-09 CLI adds an assistant context dump command with explicit consent for clipboard payload and event-preview metadata, plus capability, app ID, context age, and MRU age options.
-- 15-09 CLI adds a core-context test command with scenario selection.
 - 14-09 CLI adds options for creating and updating service pages and listing service posts and categories.
 - 14-09 xblox lists available service categories.
 - 14-09 xblox retrieves a specific service category.

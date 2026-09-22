@@ -1,6 +1,6 @@
-# Tanit Chat Commands
+# Tanit Commands
 
-Use this skill when composing Tanit Chat CLI invocations or calling user custom commands.
+Use this skill when composing Tanit CLI invocations or calling user custom commands.
 
 ## Invocation Rules
 
@@ -20,7 +20,7 @@ Use this skill when composing Tanit Chat CLI invocations or calling user custom 
 UI launch (main window). Launch `tanit.exe` with **no subcommand** (full reference: `info ui`).
 
 - `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Seed the UI with file(s) or URL(s). Local paths open in the workbench. Direct https video URLs (`.mp4`, HLS `.m3u8`, …) open in the centre viewer. Other `http(s)://…`, `//host/…`, and CMS-relative `/…` open in the centre browser. Uses saved default workbench unless --ui-preset is set. Repeat or separate with `;`.
-- `--view-locate` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Viewer locate fragment without '#', used by protocol startup.
+- `--view-locate` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Viewer locate fragment without '#': L12, page=3, t=90 / t=1:30 / t=90,120. Also accepted as a `#t=` suffix on --src.
 - `--ui-preset` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">main</span> <span data-cli="choice">chat</span> <span data-cli="choice">viewer</span></span></span>) - Open the UI: `main`, `chat`, or `viewer` (one-shot; overrides saved default `ui.workbench`). Ignored when a subcommand is present. The Store `tanit` alias prepends `--ui-preset=chat`.
 - `--ui-open` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Open a lightweight UI surface without constructing MainFrame. Usage: --ui-open settings [section] | --ui-open command-settings [--ui-command-id ID | ID] | --ui-open assistant. Reserved surfaces: fileviewer, webapp.
 - `--ui-command-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Stable commands.json id for --ui-open command-settings.
@@ -906,6 +906,7 @@ Options:
 - `--no-include-commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit commands.json from the encrypted backup.
 - `--no-include-mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit MCP config from the encrypted backup.
 - `--no-include-prompts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit agent prompts from the encrypted backup.
+- `--no-include-home-page` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit home.page from the encrypted backup.
 
 **Example**
 
@@ -916,7 +917,7 @@ tanit-cli settings import path <path>
 **Full example**
 
 ```sh
-tanit-cli settings import path 'foo' --archive --pmbackup --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts
+tanit-cli settings import path 'foo' --archive --pmbackup --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts --no-include-home-page
 ```
 
 ---
@@ -936,6 +937,7 @@ Options:
 - `--no-include-commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit commands.json from the encrypted backup.
 - `--no-include-mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit MCP config from the encrypted backup.
 - `--no-include-prompts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit agent prompts from the encrypted backup.
+- `--no-include-home-page` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit home.page from the encrypted backup.
 
 **Example**
 
@@ -946,7 +948,7 @@ tanit-cli settings export
 **Full example**
 
 ```sh
-tanit-cli settings export path 'settings.json' --encrypted --archive --pmbackup --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts
+tanit-cli settings export path 'settings.json' --encrypted --archive --pmbackup --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts --no-include-home-page
 ```
 
 ---
@@ -1042,7 +1044,7 @@ tanit-cli settings cloud upload
 **Full example**
 
 ```sh
-tanit-cli settings cloud upload --remote-dir 'settings' --server-url 'foo' --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts
+tanit-cli settings cloud upload --remote-dir 'settings' --server-url 'foo' --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts --no-include-home-page
 ```
 
 #### settings cloud upload
@@ -1058,6 +1060,7 @@ Options:
 - `--no-include-commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit commands.json from the encrypted backup.
 - `--no-include-mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit MCP config from the encrypted backup.
 - `--no-include-prompts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit agent prompts from the encrypted backup.
+- `--no-include-home-page` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit home.page from the encrypted backup.
 
 **Example**
 
@@ -1068,7 +1071,7 @@ tanit-cli settings cloud upload
 **Full example**
 
 ```sh
-tanit-cli settings cloud upload --remote-dir 'settings' --server-url 'foo' --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts
+tanit-cli settings cloud upload --remote-dir 'settings' --server-url 'foo' --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts --no-include-home-page
 ```
 
 ---
@@ -1086,6 +1089,7 @@ Options:
 - `--no-include-commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit commands.json from the encrypted backup.
 - `--no-include-mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit MCP config from the encrypted backup.
 - `--no-include-prompts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit agent prompts from the encrypted backup.
+- `--no-include-home-page` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Omit home.page from the encrypted backup.
 
 **Example**
 
@@ -1096,7 +1100,7 @@ tanit-cli settings cloud download
 **Full example**
 
 ```sh
-tanit-cli settings cloud download --remote-dir 'settings' --server-url 'foo' --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts
+tanit-cli settings cloud download --remote-dir 'settings' --server-url 'foo' --cloud-storage-key 'foo' --passphrase 'foo' --no-include-commands --no-include-mcp --no-include-prompts --no-include-home-page
 ```
 
 ### LLM & Agents
@@ -1367,7 +1371,7 @@ Options:
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - HTTP timeout per LLM round (ms). Default: from Chat Provider Settings (or 60000).
 
 **Security**
-- `--consent-ui` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Consent surface for security-gated tools: cli | win32 | owner | auto-deny | auto-allow | auto | preset. cli = stdio prompt (stderr/stdin); win32 = native modal dialog; auto-deny = deny every Ask (headless); auto-allow (alias: yolo) = allow every Ask with a session grant; owner = route to owning surface (not yet wired -> auto). When omitted: chat preset `consent_ui` (Yolo) if set, else auto (cli when stdin is attached, else win32 on an interactive desktop, else auto-deny).
+- `--consent-ui` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Consent surface for security-gated tools: cli | win32 | owner | auto-deny | auto-allow | auto | preset. cli = stdio prompt (stderr/stdin); win32 = native modal dialog; auto-deny = deny every Ask (headless); auto-allow (alias: yolo) = allow every Ask with a session grant; owner = route to owning surface (not yet wired -> auto). When omitted: chat preset `consent_ui` (Yolo) if set, else win32 (native dialog). Pass cli for a stdio prompt.
 - `--consent-owner` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target descriptor (ipc id) for --consent-ui owner routing. Reserved; owner delegation is not wired yet.
 
 **Tool Overrides**
@@ -1733,7 +1737,7 @@ Register Windows Explorer menus: convert / meta + Workbench + Viewer + Chat + Pr
 
 Options:
 
-- `--group` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">Tanit Chat</span></span></span>)
+- `--group` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">Tanit</span></span></span>)
 - `--unregister` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
 - `--dry` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
 - `--no-refresh-shell` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
@@ -1748,7 +1752,7 @@ tanit-cli register-explorer
 **Full example**
 
 ```sh
-tanit-cli register-explorer --group 'Tanit Chat' --unregister --dry --no-refresh-shell --media-bin 'foo'
+tanit-cli register-explorer --group 'Tanit' --unregister --dry --no-refresh-shell --media-bin 'foo'
 ```
 
 #### register-startmenu
@@ -2875,6 +2879,186 @@ tanit-cli service categories remove ids {}
 tanit-cli service categories remove ids '{}' --server-url 'foo'
 ```
 
+---
+
+#### service store
+
+Microsoft Store billing (pm-pics billing-ms). Requires login + MS_STORE_MOCK on dev server.
+
+**Example**
+
+```sh
+tanit-cli service store app-license
+```
+
+#### service store app-license
+
+Microsoft Store app license (trial/full). PM_STORE_LICENSE_MOCK defaults to full; trial|expired|inactive override.
+
+**Example**
+
+```sh
+tanit-cli service store app-license
+```
+
+---
+
+#### service store health
+
+GET /api/billing/ms/health (public; shows mock flag and product ids).
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base (default: PM_SERVICE_LICENSE_SERVER_BASE or SERVER_URL).
+
+**Example**
+
+```sh
+tanit-cli service store health
+```
+
+**Full example**
+
+```sh
+tanit-cli service store health --license-server-url 'foo'
+```
+
+---
+
+#### service store link
+
+POST /api/billing/ms/link — associate UserCollectionsId with your account.
+
+Options:
+
+- `--collections-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - UserCollectionsId (default: cached or dev-mock-collections-* for MS_STORE_MOCK).
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store link
+```
+
+**Full example**
+
+```sh
+tanit-cli service store link --collections-id 'foo' --license-server-url 'foo'
+```
+
+---
+
+#### service store reconcile
+
+POST /api/billing/ms/reconcile — grant credits and Pro entitlements.
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store reconcile
+```
+
+**Full example**
+
+```sh
+tanit-cli service store reconcile --license-server-url 'foo'
+```
+
+---
+
+#### service store ms-balance
+
+GET /api/billing/balance — credit_ledger sum (not AI gateway balance).
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store ms-balance
+```
+
+**Full example**
+
+```sh
+tanit-cli service store ms-balance --license-server-url 'foo'
+```
+
+---
+
+#### service store entitlements
+
+GET /api/billing/ms/entitlements — durable/subscription rows.
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store entitlements
+```
+
+**Full example**
+
+```sh
+tanit-cli service store entitlements --license-server-url 'foo'
+```
+
+---
+
+#### service store mock-enqueue
+
+POST /api/billing/ms/mock/enqueue — seed a pending purchase (server MS_STORE_MOCK=1 only).
+
+Options:
+
+- `--product-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Store product id (e.g. STORE_PRODUCT_ID_100K).
+- `--kind` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - consumable | durable | subscription (default: consumable).
+- `--microsoft-item-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional stable item id for idempotency tests.
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store mock-enqueue --product-id <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli service store mock-enqueue --product-id 'foo' --kind 'consumable' --microsoft-item-id 'foo' --license-server-url 'foo'
+```
+
+---
+
+#### service store mock-reset
+
+POST /api/billing/ms/mock/reset — delete billing rows for the logged-in user.
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store mock-reset
+```
+
+**Full example**
+
+```sh
+tanit-cli service store mock-reset --license-server-url 'foo'
+```
+
 ### Automation
 
 #### batch
@@ -3061,7 +3245,7 @@ Options:
 - `--subtitle-max-lines` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 4]</span>, <span data-cli="default">default <span data-cli="value">2</span></span></span>) - Cue wrap line count (default 2).
 
 **Whisper**
-- `--backend` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">cpu</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">cpu</span> <span data-cli="choice">gpu</span></span></span>) - Local whisper.cpp only: inference backend policy, cpu or gpu. Default: cpu.
+- `--backend` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">gpu</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">cpu</span> <span data-cli="choice">gpu</span></span></span>) - Local whisper.cpp only: inference backend policy, cpu or gpu. Default: gpu (falls back to cpu).
 - `--gpu-device` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Local whisper.cpp only: GPU device index, only meaningful with --backend gpu.
 - `--flash-attn` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">auto</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">auto</span> <span data-cli="choice">on</span> <span data-cli="choice">off</span></span></span>) - Local whisper.cpp only: flash attention policy, auto/on/off. Default: auto.
 - `--threads` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Local whisper.cpp only: CPU thread count (0 = auto, capped by the wrapper).
@@ -3080,7 +3264,7 @@ tanit-cli audio record
 **Full example**
 
 ```sh
-tanit-cli audio record --dst 'foo' --input 'foo' --input-source 'mic' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --sample-rate 0 --channels 0 --filter 'deepfilter' --filter-model 'foo' --atten '100' --post-filter --no-delay --output 'foo' --connect 'foo' --connect-timeout-ms 30000 --connect-delay-ms 0 --duration 0 --seconds 0 --hud --stt --provider 'elevenlabs' --model 'foo' --backend 'cpu' --gpu-device 0 --flash-attn 'auto' --threads 0 --language 'auto' --api-key 'foo' --from-wav 'foo' --voice-id 'foo' --model-id 'eleven_v3' --silence-ms 1500 --text-out 'foo' --subtitle-format 'none' --subtitle-path 'foo' --subtitle-max-chars 42 --subtitle-max-lines 2
+tanit-cli audio record --dst 'foo' --input 'foo' --input-source 'mic' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --sample-rate 0 --channels 0 --filter 'deepfilter' --filter-model 'foo' --atten '100' --post-filter --no-delay --output 'foo' --connect 'foo' --connect-timeout-ms 30000 --connect-delay-ms 0 --duration 0 --seconds 0 --hud --stt --provider 'elevenlabs' --model 'foo' --backend 'gpu' --gpu-device 0 --flash-attn 'auto' --threads 0 --language 'auto' --api-key 'foo' --from-wav 'foo' --voice-id 'foo' --model-id 'eleven_v3' --silence-ms 1500 --text-out 'foo' --subtitle-format 'none' --subtitle-path 'foo' --subtitle-max-chars 42 --subtitle-max-lines 2
 ```
 
 ##### Examples
@@ -5251,6 +5435,28 @@ tanit-cli test core kompress --onnx 'foo' --vocab 'foo' --input 'foo' --input-fi
 
 ---
 
+#### test core process-runner
+
+Captured process stdio: invalid UTF-8, a code point split across the read buffer, malformed JSON, stderr binary, and embedded NUL.
+
+Options:
+
+- `--scenario` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">all</span></span></span>) - invalid-utf8, split-utf8, malformed-json, stderr, nul, or all
+
+**Example**
+
+```sh
+tanit-cli test core process-runner
+```
+
+**Full example**
+
+```sh
+tanit-cli test core process-runner --scenario 'all'
+```
+
+---
+
 #### test core context
 
 Windows OS context-store acceptance scenarios (synthetic Explorer/Desktop/drag).
@@ -6046,7 +6252,7 @@ tanit-cli assistant spy --interval-ms 500 --no-value --no-selection --no-text --
 
 #### info
 
-Generate reference docs for Tanit Chat: CLI commands, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
+Generate reference docs for Tanit: CLI commands, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
 
 **Example**
 
@@ -6112,7 +6318,7 @@ tanit-cli info xblox --dst 'releases/web-docs/cli/cli.md' --stdout --skill --aut
 
 #### info app-commands
 
-Generate a Tanit Chat app/UI command verb reference (togglechat, takescreenshot, etc.) grouped by category. Plain md: app-commands.md in cwd. --skill: <profile>/skills/app-commands/SKILL.md.
+Generate a Tanit app/UI command verb reference (togglechat, takescreenshot, etc.) grouped by category. Plain md: app-commands.md in cwd. --skill: <profile>/skills/app-commands/SKILL.md.
 
 Options:
 
@@ -6162,7 +6368,7 @@ tanit-cli info keyboard-shortcuts --dst 'releases/web-docs/cli/cli.md' --stdout 
 
 #### info ui
 
-Generate a Tanit Chat UI launch flag reference (--ui-preset, --size, --src paths/URLs, --show-panel, chat seed options). Plain md: ui.md in cwd. --skill: <profile>/skills/ui/SKILL.md.
+Generate a Tanit UI launch flag reference (--ui-preset, --size, --src paths/URLs, --show-panel, chat seed options). Plain md: ui.md in cwd. --skill: <profile>/skills/ui/SKILL.md.
 
 Options:
 
@@ -6933,7 +7139,7 @@ tanit-cli mcp client list
 
 #### mcp client list
 
-List MCP server names, transport, and enabled state from mcp.json.
+List MCP servers from mcp.json and the tools each enabled server exposes.
 
 **Example**
 

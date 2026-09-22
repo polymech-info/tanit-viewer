@@ -361,6 +361,28 @@ Add a caption with the standard image title:
 ![System overview](./system.png "The complete processing pipeline")
 ```
 
+Translate the caption with `pm-caption_<lang>`. The title is the default
+(usually English). Display language selects a matching variant (`de`,
+`de-DE` → `de`). `pm-caption-de` is the same attribute. `pm-caption` replaces
+the title for every language that has no variant.
+
+```markdown
+![Test](./assets/test.mp4 "Introduction"){
+  pm-media="video"
+  pm-caption_de="Einfuehrung"
+}
+```
+
+| Attribute | Purpose |
+| --- | --- |
+| `"title"` | Default caption |
+| `pm-caption` | Default caption, overrides the title |
+| `pm-caption_de` / `pm-caption-de` | Caption for German |
+| `pm-caption_en` / `pm-caption-en` | Caption for English |
+
+Switching Settings display language updates the caption without editing the
+document.
+
 ### Image profiles
 
 Tanit extends image Markdown with a `{pm-*}` attribute block immediately after
@@ -382,6 +404,8 @@ The supported image attributes are:
 | `pm-media` | Explicit media kind | `"image"`, `"animated-webp"`, `"video"` |
 | `pm-fit` | Object fit | `"contain"`, `"cover"` |
 | `pm-fullscreen` | Native lightbox fullscreen | `"none"`, `"frame"`, `"immersive"`, `"full"` |
+| `pm-caption` | Default caption (overrides the title) | `"Main dashboard"` |
+| `pm-caption_<lang>` | Localized caption | `pm-caption_de="Uebersicht"` |
 
 Target values accept compact or key/value syntax:
 
@@ -444,9 +468,54 @@ Relative source in web-hosted Markdown:
 For local documents, keep assets in the Markdown folder or its subfolders.
 Raw Windows paths such as `C:\Videos\demo.mp4` are not portable Markdown URLs.
 
+### Start at a timestamp
+
+Append a W3C media fragment to the source path to open at a time, or between
+two times. Tanit maps `#t=` to the native player (`start` / `end`) and the
+HTML player seeks after metadata loads.
+
+```markdown
+![Chapter](./walkthrough.mp4#t=90){pm-media="video"}
+![Clip](./walkthrough.mp4#t=1:30,2:00){pm-media="video" pm-controls="false"}
+[Jump to 90s](./walkthrough.mp4#t=90)
+```
+
+Accepted forms: `#t=90`, `#t=90.5`, `#t=1:30`, `#t=01:02:03`, `#t=90,120`,
+`#t=,120`. Do not put mpv-only forms (`50%`, `#2`, `-56`) in the Markdown URL.
+
+### Subtitles
+
+Native playback (mpv) uses the app display language as `--slang` and loads
+matching sidecar files next to the video. `sub-auto` defaults to `exact`
+(stock mpv): `demo.de.srt` matches `demo.mp4`. Tanit also attaches the
+underscore form `demo_de.srt` for the UI language, so a German UI opens
+English `test.mp4` with `test_de.srt` on.
+
+```markdown
+![Clip](./test.mp4){pm-media="video" pm-player="native"}
+![German](./test.mp4){pm-media="video" pm-slang="de" pm-sub-auto="fuzzy"}
+![Off](./test.mp4){pm-media="video" pm-sub="off"}
+![File](./test.mp4){pm-media="video" pm-sub-file="./notes.srt"}
+```
+
+| Attribute | Values | Default |
+| --- | --- | --- |
+| `pm-sub` / `pm-subs` | `auto`, `on`, `off` | `auto` (load + pick by language) |
+| `pm-slang` | `app`, `none`, `de`, `de,en` | `app` (Settings display language) |
+| `pm-sub-auto` | `no`, `exact`, `fuzzy`, `all` | `exact` |
+| `pm-sub-file` | Sidecar path | Also try `stem.lang.srt` and `stem_lang.srt` |
+
+`pm-slang="none"` clears the preferred list and lets mpv use the OS language.
+`pm-sub-auto="fuzzy"` loads any sidecar whose name contains the video stem
+(`test_de.srt`, `test.forced.de.srt`). `pm-sub="off"` disables autoload and
+leaves captions off.
+
+The HTML video viewer probes the same sibling names and prefers a track that
+matches the display language.
+
 ### Native video
 
-The native renderer displays browser controls by default:
+The default renderer shows HTML controls and a corner fullscreen control:
 
 ```markdown
 ![Walkthrough](./walkthrough.mp4 "Five-minute walkthrough"){
@@ -465,10 +534,8 @@ is needed:
 ![Walkthrough](./walkthrough.mp4 "Five-minute walkthrough"){pm-media="video" pm-renderer="native" pm-width="1280" pm-fit="contain" pm-preload="metadata"}
 ```
 
-Every embedded video includes a **Play fullscreen** button. Playback defaults
-to `pm-player="native"`, which opens the local file in Tanit's dedicated native
-video player and enters immersive fullscreen. Use `pm-player="web"` to retain
-the HTML video lightbox instead:
+The fullscreen control defaults to `pm-player="native"` (Tanit's dedicated
+player). Use `pm-player="web"` for the HTML lightbox instead:
 
 ```markdown
 ![Native fullscreen](./walkthrough.mp4 "Native player"){pm-media="video" pm-player="native"}
@@ -477,11 +544,55 @@ the HTML video lightbox instead:
 
 HTTPS video URLs also use the native player by default. Use
 `pm-player="web"` when browser cookies, DRM, or browser-only playback behavior
-is required. The Markdown title remains the caption below the inline video.
+is required. The Markdown title is the default caption below the video;
+`pm-caption_<lang>` selects a translation from the display language.
+
+### Large play overlay
+
+`pm-controls="false"` hides HTML chrome and places a large play button over
+the media. The video (or `pm-poster`) stays in the page, dimmed, so the first
+frame is visible. Play-cover preload defaults to `auto`; set `pm-preload`
+explicitly to change that.
+
+```markdown
+![Walkthrough](./walkthrough.mp4 "Five-minute walkthrough"){
+  pm-media="video"
+  pm-controls="false"
+  pm-open="lightbox"
+  pm-player="native"
+  pm-fullscreen="immersive"
+  pm-autoplay="true"
+  pm-width="800"
+  pm-fit="contain"
+  pm-preload="auto"
+}
+```
+
+These options compose independently:
+
+| Concern | Attributes | Default |
+| --- | --- | --- |
+| Chrome | `pm-controls` | HTML controls on; `false` = large play overlay |
+| Preview under the overlay | `pm-preload`, `pm-poster`, `pm-fit` | `auto` on a play overlay; poster until a frame is ready |
+| Dim amount | `pm-overlay` | `medium` (`light` / `dark` / `none`) |
+| Where click plays | `pm-player`, `pm-open`, `pm-fullscreen` | Overlay click plays **inline** unless `pm-open` is `lightbox` / `viewer` or `pm-fullscreen` is not `none` |
+| Play on that click | `pm-autoplay` | Native/lightbox click plays unless `false` |
+
+Ambient looping video is unchanged: `pm-controls="false"` plus inline
+`pm-autoplay` (and no lightbox/fullscreen destination) plays in the page
+without a play overlay.
+
+`pm-open="viewer"` sends the file to the centre viewer. `pm-fullscreen`
+chooses chrome (`none` = in-frame overlay, `frame` / `immersive` / `full` =
+monitor cover). On a play overlay that already opens native, the corner
+fullscreen button is omitted. Pause on an inline overlay (click the video)
+returns the dimmed play button over the frozen frame.
 
 ### Video card
 
-`video-card` initially shows a poster and play button, then starts the player:
+`video-card` uses the same large play overlay, then starts the HTML player
+with controls. `pm-poster` and `pm-preload` decide what sits under the
+button before click:
 
 ```markdown
 ![Feature tour](./tour.mp4 "Feature tour"){
@@ -581,16 +692,24 @@ Overlay values are `light`, `medium`, `dark`, and `none`.
 | `pm-poster` | Image path or URL | Poster/cover image |
 | `pm-mobile-src` | Video path or URL | Used below 768 px |
 | `pm-fit` | `contain`, `cover` | `cover` for banners; otherwise player styling |
-| `pm-autoplay` | Boolean or `inview` | Off |
+| `pm-autoplay` | Boolean or `inview` | Off for inline HTML; on a destination overlay, click plays unless `false` |
 | `pm-muted` | Boolean | On when autoplay is enabled |
 | `pm-loop` | Boolean | Off |
-| `pm-controls` | Boolean | On except background-style banners |
+| `pm-controls` | Boolean | On except banners; `false` shows a large play overlay (not ambient autoplay) |
+| `pm-open` | `default`, `viewer`, `lightbox`, `browser` | Destination for the overlay click / media link |
+| `pm-fullscreen` | `none`, `frame`, `immersive`, `full` | Native chrome when opening mpv or a lightbox |
 | `pm-mode` | `inline`, `banner`, `banner-full` | `inline` |
-| `pm-overlay` | `light`, `medium`, `dark`, `none` | `medium` for a banner |
+| `pm-overlay` | `light`, `medium`, `dark`, `none` | `medium` on banners and play overlays |
 | `pm-min-height` | Positive pixel height | `500` for banners |
-| `pm-preload` | `none`, `metadata`, `auto` | `metadata`, or `none` for in-view autoplay |
+| `pm-preload` | `none`, `metadata`, `auto` | `metadata`; `auto` on a play overlay; `none` for in-view autoplay |
 | `pm-play-toggle` | Boolean | Adds a banner play/pause control |
 | `pm-player` / `player` | `native`, `web` | Fullscreen player; defaults to `native` |
+| `pm-sub` / `pm-subs` | `auto`, `on`, `off` | `auto`: load sidecars and pick by `pm-slang` |
+| `pm-slang` | `app`, `none`, language list | Preferred subtitle language; `app` = display language |
+| `pm-sub-auto` | `no`, `exact`, `fuzzy`, `all` | Sidecar name match; `exact` plus `stem_lang.srt` |
+| `pm-sub-file` | Sidecar path | Explicit subtitle file |
+| `pm-caption` | Default caption | Overrides the Markdown title |
+| `pm-caption_<lang>` | Localized caption | `pm-caption_de`, `pm-caption-de`; title is the fallback |
 | `pm-class` | Safe class names | Added to the media container |
 
 The original example is valid:
@@ -619,6 +738,25 @@ dedicated viewer:
 
 The path is resolved relative to the Markdown document before it is sent to
 the native viewer. Image, video, audio, and PDF extensions are recognized.
+
+`${VAR}` templates use the same expansion as custom commands
+(`command_variables.cpp`). The host expands them with the current document
+as `${CURRENT_FILE}` before opening native playback:
+
+```markdown
+[Play a recording](${KNOWNFOLDER:Videos}/screen-recordings/demo.mp4){
+  pm-open="lightbox"
+  pm-player="native"
+  pm-fullscreen="full"
+}
+![Clip](${USER:clips}/intro.mp4){pm-media="video" pm-controls="false"}
+![Next to this file](${PATH_DIR:CURRENT_FILE}/assets/test.mp4){pm-media="video"}
+```
+
+`KNOWNFOLDER`, `USER:`, `TANIT_ROOT` / `tanit`, `TANIT_SHARED`, dates, and
+path functions work. Unresolved tokens stay closed (the link does not open a
+literal `${…}` path). Variable sources always use the native player; the HTML
+viewer cannot expand OS folders.
 
 Use `pm-open="lightbox"` to keep the document open and display an image or
 video over it:
@@ -660,6 +798,8 @@ Supported link attributes:
 | `pm-viewer` | `image`, `video`, `audio`, `pdf` | Declares the media type |
 | `pm-fullscreen` | `none`, `frame`, `immersive`, `full` | Starts native fullscreen after opening; `full` also fills the lightbox |
 | `pm-player` / `player` | `native`, `web` | Selects native dedicated playback or the HTML lightbox; defaults to `native` |
+| `pm-sub` / `pm-slang` / `pm-sub-auto` / `pm-sub-file` | Same as embedded video | Passed through when the link opens native mpv |
+| `pm-caption` / `pm-caption_<lang>` | Same as embedded video | Localized link title / tooltip |
 
 `default` automatically opens recognized local media in the dedicated viewer.
 Recognized HTTPS video URLs use native mpv playback by default; remote images
@@ -678,8 +818,11 @@ embedded viewer.
 | `assets/image.png` | Relative to the Markdown file or web document |
 | `https://…` | Loaded directly |
 | `data:image/…` | Allowed for inline images |
+| `${KNOWNFOLDER:Videos}/clip.mp4` | Expanded by command variables, then opened natively |
+| `${USER:name}/clip.mp4` | User setting from Settings → Variables |
+| `${PATH_DIR:CURRENT_FILE}/assets/a.mp4` | Folder of the Markdown document |
 | `tanit://…` | Sent to Tanit's registered native protocol handler |
-| `C:\…` | Not a portable media URL; use a relative path |
+| `C:\…` | Not portable; prefer `${KNOWNFOLDER:…}` or a relative path |
 
 Use protocol links to open app resources, VFS files, folders, or commands:
 

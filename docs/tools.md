@@ -1,4 +1,4 @@
-# Tanit Chat Agent Tools
+# Tanit Agent Tools
 
 These are the path-mode LLM agent tools available in this build. They are offered to the model during `tanit-cli.exe llm agent` runs and via the embedded MCP server.
 
@@ -399,4 +399,195 @@ Params:
 - `sizes` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Responsive image widths, e.g.
 - `type` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">all</span> <span data-cli="choice">pages</span> <span data-cli="choice">posts</span> <span data-cli="choice">pictures</span> <span data-cli="choice">files</span> <span data-cli="choice">places</span></span>, <span data-cli="default">default <span data-cli="value">&quot;all&quot;</span></span></span>)
 - `visibility_filter` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">invisible</span> <span data-cli="choice">private</span></span></span>)  -  Authenticated-only filter for invisible or private content.
+
+---
+
+### Other
+
+#### create_command
+
+Add a ribbon or context-menu button.
+
+Params:
+- `args` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Arguments.
+- `command` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  pm-image-cli subcommand slug (resize, transform, llm, audio, video, …), executable name in PATH (vlc, gimp, ffmpeg) or absolute path, or shell name (bash, pow…
+- `cwd_from_selection` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>)  -  When true, sets cwd to ${CURRENT_PATH} so the command runs in the selected folder.
+- `description` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional tooltip / description text for the command.
+- `group` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Ribbon group label to place the button in.
+- `icon` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Lucide icon name for the button (e.g.
+- `label` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Display name shown in the ribbon button or context-menu entry.
+- `surface` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">ribbon</span> <span data-cli="choice">context_menu</span> <span data-cli="choice">both</span></span>, <span data-cli="default">default <span data-cli="value">&quot;ribbon&quot;</span></span></span>)  -  Where to surface the command.
+- `tint` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Accent / tint color in #RRGGBB hex format (e.g.
+
+#### app_inspect_dump
+
+Observe a desktop app and cache a session tree for later app_inspect_find/app_click calls.
+
+Params:
+- `controls` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Advanced raw control filter: buttons,menus,editable,cells,all.
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Backward-compatible alias for target.foreground.
+- `format` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">md</span> <span data-cli="choice">json</span></span></span>)  -  Default md.
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Max elements to inspect/cache.
+- `probe_cells` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Force slower visible-cell probing.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for target.process.
+- `session_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Cache key for this app tree.
+- `target` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  Preferred target selector.
+- `text_max_chars` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Max chars per text/value field.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for target.title.
+- `view` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">actions</span> <span data-cli="choice">editable</span> <span data-cli="choice">cells</span> <span data-cli="choice">all</span></span></span>)  -  What to show.
+
+#### app_inspect_find
+
+Find targetable elements.
+
+Params:
+- `automation_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for query.automation_id.
+- `class_name` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for query.class_name.
+- `controls` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Advanced raw control filter.
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Only used for fresh inspect.
+- `name` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for query.name.
+- `nth` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Optional zero-based match index to return as selected.
+- `probe_cells` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
+- `process` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for target.process.
+- `query` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  Preferred element selector.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for query.ref.
+- `session_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Use cached tree from app_inspect_dump.
+- `target` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  Optional fresh target if not using session.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for target.title.
+- `value` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for query.value.
+- `view` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">actions</span> <span data-cli="choice">editable</span> <span data-cli="choice">cells</span> <span data-cli="choice">all</span></span></span>)  -  Backward-compatible alias for query.view.
+
+#### app_screenshot
+
+Capture a desktop app window, element, or explicit screen rectangle as JPEG.
+
+Params:
+- `activate` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Bring target window to foreground before capture.
+- `element_index` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Element index from a prior dump/find.
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
+- `output_path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Destination .jpg path.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `quality` (<span data-cli="meta"><span data-cli="type">integer</span></span>)
+- `rect` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Screen rectangle x,y,w,h.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+
+#### app_click
+
+Click a screen coordinate, a window-relative coordinate, or find an app element and click its center.
+
+Params:
+- `automation_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for query.automation_id.
+- `button` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">left</span> <span data-cli="choice">right</span> <span data-cli="choice">middle</span></span></span>)
+- `class_name` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for query.class_name.
+- `controls` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Control filter for selector mode.
+- `count` (<span data-cli="meta"><span data-cli="type">integer</span></span>)
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
+- `name` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for query.name.
+- `nth` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Zero-based match index for selector mode.
+- `probe_cells` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
+- `process` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `query` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  Element selector for click-by-element.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for query.ref.
+- `session_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Cached tree id from app_inspect_dump.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `value` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Backward-compatible alias for query.value.
+- `virtual` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Post mouse messages instead of moving the physical cursor.
+- `x` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Screen x (absolute).
+- `xw` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Window-relative x.
+- `y` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Screen y (absolute).
+- `yw` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Window-relative y.
+
+#### app_drag
+
+Press the mouse button, walk along a path, release.
+
+Params:
+- `arc` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  Draw a circular arc as the drag path.
+- `button` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">left</span> <span data-cli="choice">right</span> <span data-cli="choice">middle</span></span></span>)  -  Default 'left'.
+- `duration_ms` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Total drag wall-time in ms.
+- `dx` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Horizontal delta from start.
+- `dy` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Vertical delta from start.
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Activate the foreground window first.
+- `hwnd` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Optional HWND (as integer) to activate first.
+- `pid` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Optional pid to activate first.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional process-name substring.
+- `steps` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Legacy hint - paths are now auto-sampled at one event per ~16 ms frame.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional window-title substring to activate first.
+- `to_x` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  End screen x.
+- `to_y` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  End screen y.
+- `x` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Start screen x (absolute).
+- `xw` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Start window-relative x.
+- `y` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Start screen y (absolute).
+- `yw` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Start window-relative y.
+
+#### app_open
+
+Launch a desktop application and optionally place its window.
+
+Params:
+- `args` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional command-line arguments as a single string.
+- `cwd` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional working directory.
+- `exe` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Executable name on PATH (notepad.exe, calc.exe, soffice.exe) or absolute path.
+- `height` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Optional window height.
+- `wait_ms` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  How long to wait for the main window.
+- `width` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Optional window width.
+- `x` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Optional window x position (screen px).
+- `y` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Optional window y position (screen px).
+
+#### app_type
+
+Type Unicode text into the currently focused control.
+
+Params:
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  If true, activate the current foreground window first.
+- `hwnd` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Optional HWND (as integer) to activate first.
+- `pid` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Optional pid to activate first.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional process-name substring (used when no pid/title).
+- `text` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  The text to type.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional window-title substring to activate first.
+
+#### app_hotkey
+
+Send a hotkey combination to the focused (or activated) window.
+
+Params:
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
+- `hwnd` (<span data-cli="meta"><span data-cli="type">integer</span></span>)
+- `keys` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Hotkey spec like 'ctrl+s' or 'alt+f4'.
+- `pid` (<span data-cli="meta"><span data-cli="type">integer</span></span>)
+- `process` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `title` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+
+#### app_close
+
+Close a desktop window safely.
+
+Params:
+- `force` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  TerminateProcess instead of WM_CLOSE (requires pid).
+- `foreground` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Close the current foreground window.
+- `hwnd` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Window handle (as integer) from a prior dump/find.
+- `pid` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Process id (e.g.
+- `process` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Process-name substring (used when no pid/hwnd).
+- `title` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Window-title substring (used with pid or alone).
+
+#### app_batch
+
+Execute a sequence of UI actions in ONE tool call — use for any multi-step gesture (drawing strokes, menu-open + item-click, activate+select-all+type, playing notes).
+
+Params:
+- `actions` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Alias for steps.
+- `continue_on_error` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  If true, run remaining steps even after one fails.
+- `default_delay_ms` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Sleep added after each step that does not set delayMs.
+- `steps` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Array of step objects, executed in order.
+
+#### app_command
+
+Run a Tanit app command on the running UI instance (same verbs as the command palette).
+
+Params:
+- `command` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  App command id or alias.
+- `extra` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Raw pipe payload appended after command| when none of url/path/paths apply.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  For open, edit, browse, replay.
+- `paths` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Multiple paths for open/edit/browse (semicolon-joined for the app bridge).
+- `url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  For openurl.
 

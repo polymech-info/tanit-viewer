@@ -1,6 +1,6 @@
-# Tanit Chat App Commands
+# Tanit App Commands
 
-App commands are named verbs that control a running Tanit Chat UI instance from outside (keyboard shortcuts, custom commands, IPC, or the `app` CLI subcommand).
+App commands are named verbs that control a running Tanit UI instance from outside (keyboard shortcuts, custom commands, IPC, or the `app` CLI subcommand).
 
 ## Invocation
 
