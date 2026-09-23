@@ -1,8 +1,8 @@
-# Tanit Keyboard Shortcuts
+# Tanit Chat Keyboard Shortcuts
 
-Keyboard shortcuts run commands in a live Tanit window. Built-in shortcuts are grouped the same way as **Settings → Keyboard shortcuts**. Custom command shortcuts come from your Commands list (`commands.json`) and are edited in **Settings → Commands**.
+Keyboard shortcuts run commands in a live Tanit Chat window. Built-in shortcuts are grouped the same way as **Settings → Keyboard shortcuts**. Custom command shortcuts come from your Commands list (`commands.json`) and are edited in **Settings → Commands**.
 
-Window shortcuts fire when Tanit is focused. **Global** custom shortcuts keep working when another app is in front (registered by the assistant or the session daemon).
+Window shortcuts fire when Tanit Chat is focused. **Global** custom shortcuts keep working when another app is in front (registered by the assistant or the session daemon).
 
 Change built-in assignments in Settings → Keyboard shortcuts. Commands with no default shortcut can still be bound there.
 
@@ -312,46 +312,46 @@ Worth knowing when learning the wiring and tree UIs:
 
 These come from the `commands.json` that was loaded when this page was generated (same file as Settings → Commands).
 
-### Start
+### Home
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Befehle | `Ctrl+Alt+P` | Window |
+| Commands | `Ctrl+Alt+P` | Window |
 
-### Schnappschüsse
-
-| Command | Shortcut | Scope |
-|:---|:---|:---|
-| Vollbildaufnahme | `F14` | Global |
-
-### Ansicht
+### Screenshots
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Vollbild | `Alt+F` | Window |
+| Fullscreen Screenshot | `F14` | Global |
 
-### Ton
+### View
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Sprache zu Text | `Shift+F7` | Global |
+| Fullscreen | `Alt+F` | Window |
 
-### Bildschirmaufnahme
+### Audio
+
+| Command | Shortcut | Scope |
+|:---|:---|:---|
+| Speech to Text | `Shift+F7` | Global |
+
+### Screen-Recorder
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
 | 1:1 | `Shift+F8` | Global |
 
-### Planer
+### Scheduler
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Test | `Ctrl+Alt+F8` | Window |
+| test-screen | `Ctrl+Alt+F8` | Window |
 
-### Dateien
+### Files
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Kop. | `F5` | Window |
-| Verschieb | `F6` | Window |
-| Hilfe | `F1` | Window |
+| Copy | `F5` | Window |
+| Move | `F6` | Window |
+| Online Help | `F1` | Window |

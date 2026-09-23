@@ -19,7 +19,10 @@ citations, callouts, image profiles, lightboxes, and embedded video.
 
 Relative image and video paths are resolved from the folder containing the
 Markdown file. Absolute `https://` URLs work directly. For web-hosted Markdown,
-relative media URLs are resolved against the document's web base URL.
+relative media URLs are resolved against the document's web base URL. The same
+`pm-*` image and video attributes apply in tagged pages and other in-app
+Markdown (posts, comments, page widgets). Those surfaces use the HTML player;
+native mpv open and `${KNOWNFOLDER:…}` expansion need the file viewer.
 
 > Media playback still depends on codecs supported by the installed browser or
 > WebView runtime. An attribute such as `pm-format="webm"` describes the media;

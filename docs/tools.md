@@ -1,4 +1,4 @@
-# Tanit Agent Tools
+# Tanit Chat Agent Tools
 
 These are the path-mode LLM agent tools available in this build. They are offered to the model during `tanit-cli.exe llm agent` runs and via the embedded MCP server.
 
@@ -291,133 +291,7 @@ Params:
 
 ---
 
-### Service
-
-#### service_page_create
-
-Create a Tanit CMS page from markdown.
-
-Params:
-- `category_ids` (<span data-cli="meta"><span data-cli="type">array</span></span>)
-- `description` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Meta description.
-- `is_public` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
-- `markdown` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Inline markdown body.
-- `owner` (<span data-cli="meta"><span data-cli="type">string</span></span>)
-- `parent` (<span data-cli="meta"><span data-cli="type">string</span></span>)
-- `path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Local .md file (supports front matter).
-- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
-- `slug` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  URL slug (required for inline markdown unless set in front matter).
-- `tags` (<span data-cli="meta"><span data-cli="type">array</span></span>)
-- `title` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Page title.
-- `visible` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
-
-#### service_page_update
-
-Update an existing Tanit page from markdown.
-
-Params:
-- `category_ids` (<span data-cli="meta"><span data-cli="type">array</span></span>)
-- `description` (<span data-cli="meta"><span data-cli="type">string</span></span>)
-- `is_public` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
-- `markdown` (<span data-cli="meta"><span data-cli="type">string</span></span>)
-- `new_slug` (<span data-cli="meta"><span data-cli="type">string</span></span>)
-- `owner` (<span data-cli="meta"><span data-cli="type">string</span></span>)
-- `page_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Page UUID.
-- `parent` (<span data-cli="meta"><span data-cli="type">string</span></span>)
-- `path` (<span data-cli="meta"><span data-cli="type">string</span></span>)
-- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
-- `slug` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Existing page slug when page_id omitted.
-- `tags` (<span data-cli="meta"><span data-cli="type">array</span></span>)
-- `title` (<span data-cli="meta"><span data-cli="type">string</span></span>)
-- `visible` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
-
-#### service_page_list
-
-List Tanit CMS pages for the logged-in user.
-
-Params:
-- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
-- `user_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Owner user UUID.
-
-#### service_page_get
-
-Fetch a Tanit CMS page by page_id or owner/slug.
-
-Params:
-- `lang` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional page language query parameter.
-- `local_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Save markdown or full page JSON to this local path.
-- `owner` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Owner UUID/username for slug lookup.
-- `page_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Page UUID.
-- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
-- `slug` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Page slug (requires owner unless page_id is owner).
-
-#### service_files_list
-
-List files in the Tanit VFS (remote cloud storage).
-
-Params:
-- `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span></span>)  -  VFS mount name.
-- `path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Directory inside mount.
-- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
-
-#### service_files_get
-
-Read a file from Tanit VFS.
-
-Params:
-- `local_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Download to this local path instead of inline content.
-- `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span></span>)  -  VFS mount name.
-- `overwrite` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Re-download when local_path exists.
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Remote VFS file path (required).
-- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
-
-#### service_files_upload
-
-Upload a local file to Tanit VFS.
-
-Params:
-- `conflict` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">if-newer</span> <span data-cli="choice">skip</span> <span data-cli="choice">overwrite</span></span></span>)  -  Conflict policy.
-- `if_newer` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Overwrite remote only when local is newer (default).
-- `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span></span>)  -  VFS mount name.
-- `overwrite` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Always replace the remote file.
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Local file path (required).
-- `remote_dir` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Remote directory when remote_path omitted.
-- `remote_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Exact remote path; default: filename under remote_dir.
-- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
-- `skip` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Skip when the remote file already exists.
-
-#### service_search
-
-Full-text search Tanit CMS (pages, posts, pictures, VFS files, places).
-
-Params:
-- `formats` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Responsive image formats, e.g.
-- `limit` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Max results (default 20, server cap 50).
-- `public_only` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Anonymous/global search without bearer (public content only).
-- `q` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Search query (required).
-- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
-- `sizes` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Responsive image widths, e.g.
-- `type` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">all</span> <span data-cli="choice">pages</span> <span data-cli="choice">posts</span> <span data-cli="choice">pictures</span> <span data-cli="choice">files</span> <span data-cli="choice">places</span></span>, <span data-cli="default">default <span data-cli="value">&quot;all&quot;</span></span></span>)
-- `visibility_filter` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">invisible</span> <span data-cli="choice">private</span></span></span>)  -  Authenticated-only filter for invisible or private content.
-
----
-
-### Other
-
-#### create_command
-
-Add a ribbon or context-menu button.
-
-Params:
-- `args` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Arguments.
-- `command` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  pm-image-cli subcommand slug (resize, transform, llm, audio, video, …), executable name in PATH (vlc, gimp, ffmpeg) or absolute path, or shell name (bash, pow…
-- `cwd_from_selection` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>)  -  When true, sets cwd to ${CURRENT_PATH} so the command runs in the selected folder.
-- `description` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional tooltip / description text for the command.
-- `group` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Ribbon group label to place the button in.
-- `icon` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Lucide icon name for the button (e.g.
-- `label` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Display name shown in the ribbon button or context-menu entry.
-- `surface` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">ribbon</span> <span data-cli="choice">context_menu</span> <span data-cli="choice">both</span></span>, <span data-cli="default">default <span data-cli="value">&quot;ribbon&quot;</span></span></span>)  -  Where to surface the command.
-- `tint` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Accent / tint color in #RRGGBB hex format (e.g.
+### Computer
 
 #### app_inspect_dump
 
@@ -579,6 +453,227 @@ Params:
 - `continue_on_error` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  If true, run remaining steps even after one fails.
 - `default_delay_ms` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Sleep added after each step that does not set delayMs.
 - `steps` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Array of step objects, executed in order.
+
+---
+
+### Browser
+
+#### browser_read
+
+Read the current (or tab=) in-app browser tab index (ref, role, name).
+
+Params:
+- `compact` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Summary only (omit item arrays).
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional page epoch from browser_read.
+- `highlight` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Show a brief on-page flash (corner brackets) at the target.
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Maximum index rows.
+- `query` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional: BM25-rank model.zones into model.rankedZones (task / zone name).
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Opaque ref from browser_read/browser_find, for example e42.
+- `scope` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">set</span> <span data-cli="choice">clear</span> <span data-cli="choice">full</span></span></span>)  -  set=persist within_ref/within_selector (or ref/selector) as the session zone; clear=drop zone; full=one-shot full-page bypass.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  CSS selector alternative to ref.
+- `tab` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Centre browser tab id from the open-tabs list (dock id, e.g.
+- `viewport_only` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Filter to viewport-near elements (default true).
+- `within_ref` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Limit index/find to descendants of this container ref.
+- `within_selector` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Limit index/find to descendants of this CSS selector root.
+
+#### browser_find
+
+Find by selector or role/name only when you lack a ref from a scoped read.
+
+Params:
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span></span>)
+- `name` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional case-insensitive accessible-name substring.
+- `role` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional role such as button, link, textbox.
+- `scope` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">set</span> <span data-cli="choice">clear</span> <span data-cli="choice">full</span></span></span>)  -  set=persist within_ref/within_selector (or ref/selector) as the session zone; clear=drop zone; full=one-shot full-page bypass.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional CSS selector.
+- `tab` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Centre browser tab id from the open-tabs list (dock id, e.g.
+- `viewport_only` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Default true.
+- `within_ref` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Limit index/find to descendants of this container ref.
+- `within_selector` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Limit index/find to descendants of this CSS selector root.
+
+#### browser_scope
+
+Inspect or clear the session zone.
+
+Params:
+- `action` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">set</span> <span data-cli="choice">clear</span> <span data-cli="choice">status</span></span></span>)  -  Default status.
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional page epoch for ref on action=set; defaults to live page.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Container ref for action=set.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  CSS root for action=set.
+- `tab` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Centre browser tab id from the open-tabs list (dock id, e.g.
+- `within_selector` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Alias for selector on action=set.
+
+#### browser_click
+
+Click an element in the current (or tab=) in-app browser tab by ref (preferred) or CSS selector.
+
+Params:
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional page epoch from browser_read.
+- `highlight` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Show a brief on-page flash (corner brackets) at the target.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Opaque ref from browser_read/browser_find, for example e42.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  CSS selector alternative to ref.
+- `tab` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Centre browser tab id from the open-tabs list (dock id, e.g.
+
+#### browser_type
+
+Enter text into an input, textarea, or contenteditable element by ref or selector.
+
+Params:
+- `clear` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Replace existing text.
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional page epoch from browser_read.
+- `highlight` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Show a brief on-page flash (corner brackets) at the target.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Opaque ref from browser_read/browser_find, for example e42.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  CSS selector alternative to ref.
+- `submit` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Submit the containing form afterwards.
+- `tab` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Centre browser tab id from the open-tabs list (dock id, e.g.
+- `text` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Text to enter.
+
+#### browser_select
+
+Select an option in a select element by ref or selector.
+
+Params:
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional page epoch from browser_read.
+- `highlight` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Show a brief on-page flash (corner brackets) at the target.
+- `index` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Zero-based option index alternative.
+- `label` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Exact option label alternative.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Opaque ref from browser_read/browser_find, for example e42.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  CSS selector alternative to ref.
+- `tab` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Centre browser tab id from the open-tabs list (dock id, e.g.
+- `value` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Option value.
+
+#### browser_navigate
+
+Navigate a centre browser tab: goto/back/reload, list/switch/close tabs, or open a new tab.
+
+Params:
+- `action` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">goto</span> <span data-cli="choice">back</span> <span data-cli="choice">reload</span> <span data-cli="choice">tabs</span> <span data-cli="choice">switch</span> <span data-cli="choice">new</span> <span data-cli="choice">close</span></span></span>)  -  Default goto when url is set.
+- `tab` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Centre browser tab id from the open-tabs list (dock id, e.g.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  For goto/new: absolute http(s) URL or CMS-relative path such as /user/…
+
+#### browser_batch
+
+Execute a sequence of WebView actions in ONE tool call (read, find, click, type, select, wait).
+
+Params:
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional page epoch from browser_read; omit to use the live page.
+- `steps` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Ordered action-specific step objects.
+- `tab` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Centre browser tab id from the open-tabs list (dock id, e.g.
+
+---
+
+### Service
+
+#### service_page_create
+
+Create a Tanit CMS page from markdown.
+
+Params:
+- `category_ids` (<span data-cli="meta"><span data-cli="type">array</span></span>)
+- `description` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Meta description.
+- `is_public` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
+- `markdown` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Inline markdown body.
+- `owner` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `parent` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Local .md file (supports front matter).
+- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
+- `slug` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  URL slug (required for inline markdown unless set in front matter).
+- `tags` (<span data-cli="meta"><span data-cli="type">array</span></span>)
+- `title` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Page title.
+- `visible` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
+
+#### service_page_update
+
+Update an existing Tanit page from markdown.
+
+Params:
+- `category_ids` (<span data-cli="meta"><span data-cli="type">array</span></span>)
+- `description` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `is_public` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
+- `markdown` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `new_slug` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `owner` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `page_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Page UUID.
+- `parent` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `path` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
+- `slug` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Existing page slug when page_id omitted.
+- `tags` (<span data-cli="meta"><span data-cli="type">array</span></span>)
+- `title` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `visible` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
+
+#### service_page_list
+
+List Tanit CMS pages for the logged-in user.
+
+Params:
+- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
+- `user_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Owner user UUID.
+
+#### service_page_get
+
+Fetch a Tanit CMS page by page_id or owner/slug.
+
+Params:
+- `lang` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional page language query parameter.
+- `local_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Save markdown or full page JSON to this local path.
+- `owner` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Owner UUID/username for slug lookup.
+- `page_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Page UUID.
+- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
+- `slug` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Page slug (requires owner unless page_id is owner).
+
+#### service_files_list
+
+List files in the Tanit VFS (remote cloud storage).
+
+Params:
+- `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span></span>)  -  VFS mount name.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Directory inside mount.
+- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
+
+#### service_files_get
+
+Read a file from Tanit VFS.
+
+Params:
+- `local_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Download to this local path instead of inline content.
+- `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span></span>)  -  VFS mount name.
+- `overwrite` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Re-download when local_path exists.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Remote VFS file path (required).
+- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
+
+#### service_files_upload
+
+Upload a local file to Tanit VFS.
+
+Params:
+- `conflict` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">if-newer</span> <span data-cli="choice">skip</span> <span data-cli="choice">overwrite</span></span></span>)  -  Conflict policy.
+- `if_newer` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Overwrite remote only when local is newer (default).
+- `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span></span>)  -  VFS mount name.
+- `overwrite` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Always replace the remote file.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Local file path (required).
+- `remote_dir` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Remote directory when remote_path omitted.
+- `remote_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Exact remote path; default: filename under remote_dir.
+- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
+- `skip` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Skip when the remote file already exists.
+
+#### service_search
+
+Full-text search Tanit CMS (pages, posts, pictures, VFS files, places).
+
+Params:
+- `formats` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Responsive image formats, e.g.
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Max results (default 20, server cap 50).
+- `public_only` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Anonymous/global search without bearer (public content only).
+- `q` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Search query (required).
+- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
+- `sizes` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Responsive image widths, e.g.
+- `type` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">all</span> <span data-cli="choice">pages</span> <span data-cli="choice">posts</span> <span data-cli="choice">pictures</span> <span data-cli="choice">files</span> <span data-cli="choice">places</span></span>, <span data-cli="default">default <span data-cli="value">&quot;all&quot;</span></span></span>)
+- `visibility_filter` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">invisible</span> <span data-cli="choice">private</span></span></span>)  -  Authenticated-only filter for invisible or private content.
+
+---
+
+### Other
 
 #### app_command
 

@@ -1,4 +1,4 @@
-# Tanit XBlox
+# Tanit Chat XBlox
 
 Use this skill when composing `.xblox` block-tree command flows.
 
@@ -2233,6 +2233,213 @@ Default block:
   "id": "",
   "kind": "bluetoothUnpair",
   "storeAs": "bluetooth"
+}
+```
+
+### Browser
+
+#### Browser Batch
+
+Run multiple WebView actions in one call.
+
+Params:
+
+**input**
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Optional page epoch from Browser Read.
+- `steps` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="default">default <span data-cli="value">[]</span></span></span>) - Ordered step objects with action/type plus step fields.
+
+**options**
+- `defaultDelayMs` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-5000</span>, <span data-cli="default">default <span data-cli="value">50</span></span></span>)
+- `continueOnError` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>)
+
+**output**
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
+
+Default block:
+
+```json
+{
+  "continueOnError": false,
+  "defaultDelayMs": 50,
+  "epoch": "",
+  "kind": "browserBatch",
+  "steps": [],
+  "storeAs": ""
+}
+```
+
+---
+
+#### Browser Click
+
+Click a WebView element by ref or selector.
+
+Params:
+
+**input**
+- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
+
+**output**
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
+
+Default block:
+
+```json
+{
+  "epoch": "",
+  "kind": "browserClick",
+  "ref": "",
+  "selector": "",
+  "storeAs": ""
+}
+```
+
+---
+
+#### Browser Find
+
+Find WebView elements by selector, role, or name.
+
+Params:
+
+**input**
+- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
+- `role` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>)
+- `name` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>)
+
+**options**
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-100</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>)
+
+**output**
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
+
+Default block:
+
+```json
+{
+  "epoch": "",
+  "kind": "browserFind",
+  "limit": 20,
+  "name": "",
+  "ref": "",
+  "role": "",
+  "selector": "",
+  "storeAs": ""
+}
+```
+
+---
+
+#### Browser Read
+
+Read a compact index or focused DOM snapshot.
+
+Params:
+
+**input**
+- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
+
+**options**
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-500</span>, <span data-cli="default">default <span data-cli="value">120</span></span></span>)
+- `viewportOnly` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>)
+
+**advanced**
+- `textMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100000</span>, <span data-cli="default">default <span data-cli="value">12000</span></span></span>)
+
+**output**
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
+
+Default block:
+
+```json
+{
+  "epoch": "",
+  "kind": "browserRead",
+  "limit": 120,
+  "ref": "",
+  "selector": "",
+  "storeAs": "",
+  "viewportOnly": false
+}
+```
+
+---
+
+#### Browser Select
+
+Choose a WebView select option.
+
+Params:
+
+**input**
+- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
+- `value` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>)
+- `label` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>)
+- `index` (<span data-cli="meta"><span data-cli="type">integer</span></span>) - Zero-based option index alternative.
+
+**output**
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
+
+Default block:
+
+```json
+{
+  "epoch": "",
+  "kind": "browserSelect",
+  "label": "",
+  "ref": "",
+  "selector": "",
+  "storeAs": "",
+  "value": ""
+}
+```
+
+---
+
+#### Browser Type
+
+Enter text into a WebView form control.
+
+Params:
+
+**input**
+- `target` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="enum">from PREVIOUS</span></span>) - Previous Browser Read/Find result; extracts epoch and the first ref.
+- `ref` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Opaque ref returned by Browser Read/Find.
+- `epoch` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Page epoch returned with the ref.
+- `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - CSS selector alternative to ref.
+- `text` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Text to enter.
+
+**options**
+- `clear` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>)
+- `submit` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>)
+
+**output**
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
+
+Default block:
+
+```json
+{
+  "clear": true,
+  "epoch": "",
+  "kind": "browserType",
+  "ref": "",
+  "selector": "",
+  "storeAs": "",
+  "submit": false,
+  "text": ""
 }
 ```
 

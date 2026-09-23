@@ -56,7 +56,9 @@ prev/next.
 
 The bar shows on load and on mouse move, then hides after about a second.
 Move the mouse over the video to bring it back. **Delete** cycles OSC
-visibility: never, auto (mouse), always.
+visibility: never, auto (mouse), always. On 2K/4K (or HiDPI) the bar is
+drawn larger so the buttons stay clickable; a smaller pane keeps the
+stock size.
 
 | OSC control | Left click | Middle click | Right click / other |
 |:---|:---|:---|:---|

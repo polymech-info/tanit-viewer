@@ -4,12 +4,13 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
-## 1.0.60 - 22-09
+## 1.0.61 - 23-09
 
 _Each change is dated DD-MM from the commit day. Newest first._
 
 ### New
 
+- 22-09 <FieldRow label={tr.grpLblPresentation}>
 - 18-09 Added a terminal subcommand to the image registration CLI.
 - 18-09 Added query, intent, and result-limit options for finding assistant applications by name or path.
 - 18-09 Added profile, configuration override, and additional-directory options for external Codex agents.
@@ -138,11 +139,17 @@ _Each change is dated DD-MM from the commit day. Newest first._
 
 - 22-09 Improved accessibility by adding descriptive aria-labels to media elements for better screen reader support.
 - 22-09 s.test_core_process_runner_cmd = s.test_core_cmd->add_subcommand()->add_option("--scenario", s.test_core_process_runner_scenario,
+- 22-09 Improved the `aria-label` attributes in MarkdownMedia.tsx and MarkdownMediaLink.tsx for enhanced accessibility and user experience.
 - 21-09 Added new <PropRow> component.
 - 21-09 Added options '--type' for 'put', 'doc_put', and 'doc_import_plain' commands with various value choices.
 - 21-09 Enabled PM_UI_Editors with 'UI.Editors.EnablePage' in policy configuration.
+- 21-09 New line of code added to the GrantsPanel.tsx file to include a PropRow component.
+- 21-09 Added a new option 'UI.Editors.EnablePage' in the policy_catalog.cpp to support enabling a page in the PM_UI_Editors.
+- 21-09 Added new options '--type' for various commands in cli.cpp to support multiple resource types such as 'prompt-template', 'command-config', 'mcp-config', 'prompt', 'page', 'settings-profile', and more.
+- 20-09 s.reg_cmd->add_option("--widths", s.reg_widths, "Classic Resize max N verbs (disabled)")
 - 19-09 Added an accessible label indicating whether the theme toggle will switch to light or dark mode.
 - 19-09 A toggle for changing between light and dark themes with an aria-label for accessibility.
+- 19-09 Aria-label is added for theme toggle for better accessibility based on user's theme preference.
 - 18-09 Added custom tab styling to the group editor field row.
 - 18-09 Added accessible labels to the Add Tanit MCP Server and backup settings controls.
 - 18-09 Added an accessible label for adding a Tanit MCP server.
@@ -354,6 +361,7 @@ _Each change is dated DD-MM from the commit day. Newest first._
 
 ### Fixed
 
+- 21-09 Corrected line to fix potential syntax error in the existing code.
 - 10-09 Remove the stray quote from the playback speed aria-label.
 - 10-09 aria-label={`Playback speed ${formatPlaybackRate(playbackRate)}`}
 - 18-08 Fixed command variable palette descriptions for path helper variables to correctly describe filename stem and extension.

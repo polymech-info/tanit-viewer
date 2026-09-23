@@ -1,6 +1,6 @@
-# Tanit Commands
+# Tanit Chat Commands
 
-Use this skill when composing Tanit CLI invocations or calling user custom commands.
+Use this skill when composing Tanit Chat CLI invocations or calling user custom commands.
 
 ## Invocation Rules
 
@@ -1395,8 +1395,8 @@ Options:
 - `--planner-budget` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Maximum tool schemas the planner may pre-expand before falling back to the full catalog.
 - `--no-parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable concurrent tool dispatch and fall back to serial execution. Parallel dispatch (P6) is on by default; use this flag to opt out.
 - `--parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dispatch all tool calls in a single LLM response concurrently (std::async). On by default — this flag is accepted for compatibility but is a no-op unless --no-parallel-tools was previously applied.
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
-- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_command. Ineffective with --no-tools.
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
 
 **Session**
 - `--multi-turn` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable session memory across turns (default: on).
@@ -1737,7 +1737,7 @@ Register Windows Explorer menus: convert / meta + Workbench + Viewer + Chat + Pr
 
 Options:
 
-- `--group` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">Tanit</span></span></span>)
+- `--group` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">Tanit Chat</span></span></span>)
 - `--unregister` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
 - `--dry` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
 - `--no-refresh-shell` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
@@ -1752,7 +1752,7 @@ tanit-cli register-explorer
 **Full example**
 
 ```sh
-tanit-cli register-explorer --group 'Tanit' --unregister --dry --no-refresh-shell --media-bin 'foo'
+tanit-cli register-explorer --group 'Tanit Chat' --unregister --dry --no-refresh-shell --media-bin 'foo'
 ```
 
 #### register-startmenu
@@ -2877,186 +2877,6 @@ tanit-cli service categories remove ids {}
 
 ```sh
 tanit-cli service categories remove ids '{}' --server-url 'foo'
-```
-
----
-
-#### service store
-
-Microsoft Store billing (pm-pics billing-ms). Requires login + MS_STORE_MOCK on dev server.
-
-**Example**
-
-```sh
-tanit-cli service store app-license
-```
-
-#### service store app-license
-
-Microsoft Store app license (trial/full). PM_STORE_LICENSE_MOCK defaults to full; trial|expired|inactive override.
-
-**Example**
-
-```sh
-tanit-cli service store app-license
-```
-
----
-
-#### service store health
-
-GET /api/billing/ms/health (public; shows mock flag and product ids).
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base (default: PM_SERVICE_LICENSE_SERVER_BASE or SERVER_URL).
-
-**Example**
-
-```sh
-tanit-cli service store health
-```
-
-**Full example**
-
-```sh
-tanit-cli service store health --license-server-url 'foo'
-```
-
----
-
-#### service store link
-
-POST /api/billing/ms/link — associate UserCollectionsId with your account.
-
-Options:
-
-- `--collections-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - UserCollectionsId (default: cached or dev-mock-collections-* for MS_STORE_MOCK).
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store link
-```
-
-**Full example**
-
-```sh
-tanit-cli service store link --collections-id 'foo' --license-server-url 'foo'
-```
-
----
-
-#### service store reconcile
-
-POST /api/billing/ms/reconcile — grant credits and Pro entitlements.
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store reconcile
-```
-
-**Full example**
-
-```sh
-tanit-cli service store reconcile --license-server-url 'foo'
-```
-
----
-
-#### service store ms-balance
-
-GET /api/billing/balance — credit_ledger sum (not AI gateway balance).
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store ms-balance
-```
-
-**Full example**
-
-```sh
-tanit-cli service store ms-balance --license-server-url 'foo'
-```
-
----
-
-#### service store entitlements
-
-GET /api/billing/ms/entitlements — durable/subscription rows.
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store entitlements
-```
-
-**Full example**
-
-```sh
-tanit-cli service store entitlements --license-server-url 'foo'
-```
-
----
-
-#### service store mock-enqueue
-
-POST /api/billing/ms/mock/enqueue — seed a pending purchase (server MS_STORE_MOCK=1 only).
-
-Options:
-
-- `--product-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Store product id (e.g. STORE_PRODUCT_ID_100K).
-- `--kind` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - consumable | durable | subscription (default: consumable).
-- `--microsoft-item-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional stable item id for idempotency tests.
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store mock-enqueue --product-id <id>
-```
-
-**Full example**
-
-```sh
-tanit-cli service store mock-enqueue --product-id 'foo' --kind 'consumable' --microsoft-item-id 'foo' --license-server-url 'foo'
-```
-
----
-
-#### service store mock-reset
-
-POST /api/billing/ms/mock/reset — delete billing rows for the logged-in user.
-
-Options:
-
-- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
-
-**Example**
-
-```sh
-tanit-cli service store mock-reset
-```
-
-**Full example**
-
-```sh
-tanit-cli service store mock-reset --license-server-url 'foo'
 ```
 
 ### Automation
@@ -6252,7 +6072,7 @@ tanit-cli assistant spy --interval-ms 500 --no-value --no-selection --no-text --
 
 #### info
 
-Generate reference docs for Tanit: CLI commands, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
+Generate reference docs for Tanit Chat: CLI commands, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
 
 **Example**
 
@@ -6318,7 +6138,7 @@ tanit-cli info xblox --dst 'releases/web-docs/cli/cli.md' --stdout --skill --aut
 
 #### info app-commands
 
-Generate a Tanit app/UI command verb reference (togglechat, takescreenshot, etc.) grouped by category. Plain md: app-commands.md in cwd. --skill: <profile>/skills/app-commands/SKILL.md.
+Generate a Tanit Chat app/UI command verb reference (togglechat, takescreenshot, etc.) grouped by category. Plain md: app-commands.md in cwd. --skill: <profile>/skills/app-commands/SKILL.md.
 
 Options:
 
@@ -6368,7 +6188,7 @@ tanit-cli info keyboard-shortcuts --dst 'releases/web-docs/cli/cli.md' --stdout 
 
 #### info ui
 
-Generate a Tanit UI launch flag reference (--ui-preset, --size, --src paths/URLs, --show-panel, chat seed options). Plain md: ui.md in cwd. --skill: <profile>/skills/ui/SKILL.md.
+Generate a Tanit Chat UI launch flag reference (--ui-preset, --size, --src paths/URLs, --show-panel, chat seed options). Plain md: ui.md in cwd. --skill: <profile>/skills/ui/SKILL.md.
 
 Options:
 
@@ -7108,7 +6928,7 @@ Options:
 - `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
 - `--bind` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Interface/address for MCP HTTP. Default: 127.0.0.1 (loopback only).
 - `--port` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 65535]</span>, <span data-cli="default">default <span data-cli="value">4444</span></span></span>) - First TCP port to try for MCP HTTP (default 4444; next free port if busy)
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 
 **Example**
 
