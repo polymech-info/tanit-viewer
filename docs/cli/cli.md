@@ -1,6 +1,6 @@
-# Tanit Chat Commands
+# Tanit Commands
 
-Use this skill when composing Tanit Chat CLI invocations or calling user custom commands.
+Use this skill when composing Tanit CLI invocations or calling user custom commands.
 
 ## Invocation Rules
 
@@ -1395,8 +1395,8 @@ Options:
 - `--planner-budget` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Maximum tool schemas the planner may pre-expand before falling back to the full catalog.
 - `--no-parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable concurrent tool dispatch and fall back to serial execution. Parallel dispatch (P6) is on by default; use this flag to opt out.
 - `--parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dispatch all tool calls in a single LLM response concurrently (std::async). On by default — this flag is accepted for compatibility but is a no-op unless --no-parallel-tools was previously applied.
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
-- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
 
 **Session**
 - `--multi-turn` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable session memory across turns (default: on).
@@ -1737,7 +1737,7 @@ Register Windows Explorer menus: convert / meta + Workbench + Viewer + Chat + Pr
 
 Options:
 
-- `--group` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">Tanit Chat</span></span></span>)
+- `--group` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">Tanit</span></span></span>)
 - `--unregister` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
 - `--dry` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
 - `--no-refresh-shell` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>)
@@ -1752,7 +1752,7 @@ tanit-cli register-explorer
 **Full example**
 
 ```sh
-tanit-cli register-explorer --group 'Tanit Chat' --unregister --dry --no-refresh-shell --media-bin 'foo'
+tanit-cli register-explorer --group 'Tanit' --unregister --dry --no-refresh-shell --media-bin 'foo'
 ```
 
 #### register-startmenu
@@ -2163,7 +2163,7 @@ tanit-cli service files upload files {}
 **Full example**
 
 ```sh
-tanit-cli service files upload files '{}' --mount 'home' --remote-dir 'foo' --public --remote-path 'foo' --conflict 'foo' --skip --overwrite --if-newer --server-url 'foo' --dump-raw-http
+tanit-cli service files upload files '{}' --mount 'home' --remote-dir 'foo' --public --remote-path 'foo' --conflict 'if-newer' --skip --overwrite --if-newer --server-url 'foo' --dump-raw-http
 ```
 
 #### service files upload
@@ -2177,7 +2177,7 @@ Options:
 - `--remote-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Remote VFS directory. Each matched file is placed under this path; glob matches preserve relative subfolders. Default: VFS root. Prefer --public for the shared public folder.
 - `--public` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Upload into the home/public folder (same as --remote-dir public). Filebrowser URL uses ?mode=thumb&file=… for explorer links.
 - `--remote-path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Exact remote VFS path for one matched file (overrides --remote-dir; one positional spec only).
-- `--conflict` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Conflict policy: if-newer (default; overwrite older remotes), skip, overwrite.
+- `--conflict` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">if-newer</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">if-newer</span> <span data-cli="choice">skip</span> <span data-cli="choice">overwrite</span></span></span>) - When the remote file already exists: if-newer (default), skip, or overwrite.
 - `--skip` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip when the remote file already exists (any age).
 - `--overwrite` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Always replace the remote file.
 - `--if-newer` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Overwrite remote only when the local file is newer (default).
@@ -2193,7 +2193,7 @@ tanit-cli service files upload files {}
 **Full example**
 
 ```sh
-tanit-cli service files upload files '{}' --mount 'home' --remote-dir 'foo' --public --remote-path 'foo' --conflict 'foo' --skip --overwrite --if-newer --server-url 'foo' --dump-raw-http
+tanit-cli service files upload files '{}' --mount 'home' --remote-dir 'foo' --public --remote-path 'foo' --conflict 'if-newer' --skip --overwrite --if-newer --server-url 'foo' --dump-raw-http
 ```
 
 ---
@@ -2346,7 +2346,7 @@ tanit-cli service pages create input {}
 **Full example**
 
 ```sh
-tanit-cli service pages create input '{}' --title 'foo' --slug 'foo' --description 'foo' --tags 'foo' --owner 'foo' --parent 'foo' --category-id '{}' --include-images --conflict 'foo' --private 'foo' --hidden 'foo' --server-url 'foo' --dump-raw-http
+tanit-cli service pages create input '{}' --title 'foo' --slug 'foo' --description 'foo' --tags 'foo' --owner 'foo' --parent 'foo' --category-id '{}' --include-images --conflict 'if-newer' --private 'foo' --hidden 'foo' --server-url 'foo' --dump-raw-http
 ```
 
 #### service pages create
@@ -2364,7 +2364,7 @@ Options:
 - `--parent` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional parent page UUID or slug.
 - `--category-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Optional category slug, display name, or UUID; repeatable.
 - `--include-images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Find image refs in markdown, probe with libmagic, upload to home/public/{page-id-prefix}-{slug}/, and rewrite refs as ./{folder}/… for server render (default upload policy: if-newer).
-- `--conflict` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Image upload policy with --include-images: if-newer (default), skip, overwrite.
+- `--conflict` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">if-newer</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">if-newer</span> <span data-cli="choice">skip</span> <span data-cli="choice">overwrite</span></span></span>) - Image upload policy with --include-images: if-newer (default), skip, or overwrite.
 - `--private` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Create with is_public=false. Optional value: true/false.
 - `--hidden` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set visible=false (default without flags: link-only / hidden).
 - `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
@@ -2379,7 +2379,7 @@ tanit-cli service pages create input {}
 **Full example**
 
 ```sh
-tanit-cli service pages create input '{}' --title 'foo' --slug 'foo' --description 'foo' --tags 'foo' --owner 'foo' --parent 'foo' --category-id '{}' --include-images --conflict 'foo' --private 'foo' --hidden 'foo' --server-url 'foo' --dump-raw-http
+tanit-cli service pages create input '{}' --title 'foo' --slug 'foo' --description 'foo' --tags 'foo' --owner 'foo' --parent 'foo' --category-id '{}' --include-images --conflict 'if-newer' --private 'foo' --hidden 'foo' --server-url 'foo' --dump-raw-http
 ```
 
 ---
@@ -2401,7 +2401,7 @@ Options:
 - `--parent` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional replacement parent page UUID or slug.
 - `--category-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional replacement category slug, display name, or UUID; repeatable.
 - `--include-images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Find image refs in markdown, probe with libmagic, upload to home/public/{page-id-prefix}-{slug}/, and rewrite refs as ./{folder}/… for server render (default upload policy: if-newer).
-- `--conflict` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Image upload policy with --include-images: if-newer (default), skip, overwrite.
+- `--conflict` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">if-newer</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">if-newer</span> <span data-cli="choice">skip</span> <span data-cli="choice">overwrite</span></span></span>) - Image upload policy with --include-images: if-newer (default), skip, or overwrite.
 - `--private` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set is_public=false. Optional value: true/false.
 - `--hidden` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set visible=false. Optional value: true/false.
 - `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
@@ -2416,7 +2416,7 @@ tanit-cli service pages update input {}
 **Full example**
 
 ```sh
-tanit-cli service pages update input '{}' --id 'foo' --slug 'foo' --owner 'foo' --title 'foo' --new-slug 'foo' --description 'foo' --tags 'foo' --parent 'foo' --category-id '{}' --include-images --conflict 'foo' --private 'foo' --hidden 'foo' --server-url 'foo' --dump-raw-http
+tanit-cli service pages update input '{}' --id 'foo' --slug 'foo' --owner 'foo' --title 'foo' --new-slug 'foo' --description 'foo' --tags 'foo' --parent 'foo' --category-id '{}' --include-images --conflict 'if-newer' --private 'foo' --hidden 'foo' --server-url 'foo' --dump-raw-http
 ```
 
 ---
@@ -2879,6 +2879,186 @@ tanit-cli service categories remove ids {}
 tanit-cli service categories remove ids '{}' --server-url 'foo'
 ```
 
+---
+
+#### service store
+
+Microsoft Store billing (pm-pics billing-ms). Requires login + MS_STORE_MOCK on dev server.
+
+**Example**
+
+```sh
+tanit-cli service store app-license
+```
+
+#### service store app-license
+
+Microsoft Store app license (trial/full). PM_STORE_LICENSE_MOCK defaults to full; trial|expired|inactive override.
+
+**Example**
+
+```sh
+tanit-cli service store app-license
+```
+
+---
+
+#### service store health
+
+GET /api/billing/ms/health (public; shows mock flag and product ids).
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base (default: PM_SERVICE_LICENSE_SERVER_BASE or SERVER_URL).
+
+**Example**
+
+```sh
+tanit-cli service store health
+```
+
+**Full example**
+
+```sh
+tanit-cli service store health --license-server-url 'foo'
+```
+
+---
+
+#### service store link
+
+POST /api/billing/ms/link — associate UserCollectionsId with your account.
+
+Options:
+
+- `--collections-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - UserCollectionsId (default: cached or dev-mock-collections-* for MS_STORE_MOCK).
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store link
+```
+
+**Full example**
+
+```sh
+tanit-cli service store link --collections-id 'foo' --license-server-url 'foo'
+```
+
+---
+
+#### service store reconcile
+
+POST /api/billing/ms/reconcile — grant credits and Pro entitlements.
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store reconcile
+```
+
+**Full example**
+
+```sh
+tanit-cli service store reconcile --license-server-url 'foo'
+```
+
+---
+
+#### service store ms-balance
+
+GET /api/billing/balance — credit_ledger sum (not AI gateway balance).
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store ms-balance
+```
+
+**Full example**
+
+```sh
+tanit-cli service store ms-balance --license-server-url 'foo'
+```
+
+---
+
+#### service store entitlements
+
+GET /api/billing/ms/entitlements — durable/subscription rows.
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store entitlements
+```
+
+**Full example**
+
+```sh
+tanit-cli service store entitlements --license-server-url 'foo'
+```
+
+---
+
+#### service store mock-enqueue
+
+POST /api/billing/ms/mock/enqueue — seed a pending purchase (server MS_STORE_MOCK=1 only).
+
+Options:
+
+- `--product-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Store product id (e.g. STORE_PRODUCT_ID_100K).
+- `--kind` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - consumable | durable | subscription (default: consumable).
+- `--microsoft-item-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional stable item id for idempotency tests.
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store mock-enqueue --product-id <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli service store mock-enqueue --product-id 'foo' --kind 'consumable' --microsoft-item-id 'foo' --license-server-url 'foo'
+```
+
+---
+
+#### service store mock-reset
+
+POST /api/billing/ms/mock/reset — delete billing rows for the logged-in user.
+
+Options:
+
+- `--license-server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - License/billing API base.
+
+**Example**
+
+```sh
+tanit-cli service store mock-reset
+```
+
+**Full example**
+
+```sh
+tanit-cli service store mock-reset --license-server-url 'foo'
+```
+
 ### Automation
 
 #### batch
@@ -3053,7 +3233,7 @@ Options:
 
 **STT**
 - `--stt` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable speech-to-text alongside recording (live ElevenLabs or batch Whisper). Implied by --text-out, --subtitle-format, --provider, or --model. Without STT flags, --dst records audio only (.wav or .m4a/.aac by extension). Batch Whisper with .m4a uses a temporary WAV for transcription.
-- `--provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">whisper</span></span></span>) - STT provider. Implies transcription when no --dst/--text-out is set. Currently supported: elevenlabs (Scribe v2 Realtime), pixlwiz (Whisper batch), whisper (local whisper.cpp, offline). Defaults to chat.stt_provider from app settings.
+- `--provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">whisper</span></span></span>) - STT provider. Implies transcription when no --dst/--text-out is set. Currently supported: elevenlabs (Scribe v2 Realtime), tanit (Whisper batch), openrouter (batch transcription), whisper (local whisper.cpp, offline). Defaults to chat.stt_provider from app settings.
 - `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - STT model override. For --provider whisper this may be a ggml model path, for example ${MODELS_DIR}/ggml-base.en.bin. Defaults to Chat Provider voice model settings.
 - `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key for the selected STT provider (--provider elevenlabs → xi-api-key). Also used as the TTS key when --voice-id is set. Falls back to the provider entry in App Settings when omitted.
 - `--from-wav` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span></span>) - Transcribe an existing WAV file instead of capturing from the mic (batch providers only: whisper local / pixlwiz). Implies --stt. Prints the transcript and exits; combine with --text-out / --subtitle-format to write files.
@@ -3318,7 +3498,7 @@ Options:
 - `--no-play` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not play audio through speakers; only save to --dst.
 - `--output` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Playback device name (case-insensitive substring; use `audio info` to list names). Omit to use the system default output device.
 - `--no-stream` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Opt out of the streaming playback path (curl → ring → device). When omitted and --dst is not set, the playback path uses streaming for lowest first-audio latency (mirrors the agent's `do_speak`). Ignored when --dst is set (the file write requires the full buffer).
-- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output format override. ElevenLabs: mp3_44100_128, pcm_44100, opus_48000_32. Tanit proxy: mp3, opus, aac, flac. Defaults to mp3_44100_128 for .mp3, pcm_44100 for .wav.
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output format override. ElevenLabs: mp3_44100_128, pcm_44100, opus_48000_32. Tanit proxy: mp3, opus, aac, flac. OpenRouter: mp3 or pcm. Defaults to mp3_44100_128 for .mp3, pcm_44100 for .wav.
 
 **Bluetooth**
 - `--connect` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Connect a paired Bluetooth audio device by address or fuzzy name before TTS playback. Synthesis is overlapped with the device wake-up so total latency is minimised. Ignored with --no-play.
@@ -3326,13 +3506,13 @@ Options:
 - `--connect-delay-ms,--delay` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Extra delay (ms) after --connect succeeds, before TTS playback starts. Useful for AV receivers that need time to switch inputs or unmute (default 0).
 
 **Provider**
-- `--provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">vibevoice</span> <span data-cli="choice">moss</span></span></span>) - TTS provider: elevenlabs (direct API), pixlwiz (proxy /audio/speech), vibevoice (local ggml), or moss (local MOSS-TTS-Nano). Defaults to chat.tts_provider from app settings, then elevenlabs.
+- `--provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">vibevoice</span> <span data-cli="choice">moss</span></span></span>) - TTS provider: elevenlabs (direct API), pixlwiz (proxy /audio/speech), openrouter (/audio/speech), vibevoice (local ggml), or moss (local MOSS-TTS-Nano). Defaults to chat.tts_provider from app settings, then elevenlabs.
 - `--tokenizer` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Tokenizer GGUF path for vibevoice or moss. MOSS defaults to models/moss-tts-nano/moss-nano-tokenizer.gguf.
 - `--codec` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - MOSS Audio Tokenizer Nano GGUF. Defaults to models/moss-tts-nano/moss-audio-tokenizer-nano.gguf.
 - `--ref-audio` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Reference WAV for local voice cloning (vibevoice 1.5B or MOSS Nano).
 - `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key for the TTS provider. Falls back to ELEVENLABS_API_KEY env var.
-- `--voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">tLK6fPv15M0oKv4V3ACR</span></span></span>) - Voice ID. For elevenlabs: ElevenLabs voice UUID. For pixlwiz: ElevenLabs voice UUID override (empty = proxy default). Defaults to chat.tts_model from app settings when omitted.
-- `--model-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">eleven_v3</span></span></span>) - Model ID. For elevenlabs: eleven_v3, eleven_turbo_v2, etc. For pixlwiz: proxy alias (pixlwiz-speech, pixlwiz-speech-turbo). Defaults to chat.tts_model from app settings when omitted.
+- `--voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">tLK6fPv15M0oKv4V3ACR</span></span></span>) - Voice ID. For elevenlabs: ElevenLabs voice UUID. For tanit: ElevenLabs voice UUID override (empty = proxy default). For openrouter: model voice (default eve on Grok Voice). Defaults to chat.tts_model from app settings when omitted.
+- `--model-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">eleven_v3</span></span></span>) - Model ID. For elevenlabs: eleven_v3, eleven_turbo_v2, etc. For tanit: proxy alias (tanit-speech, tanit-speech-turbo). For openrouter: speech model slug (default x-ai/grok-voice-tts-1.0). Defaults to chat.tts_model from app settings when omitted.
 
 **Voice Settings**
 - `--no-voice-settings` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not send explicit ElevenLabs voice_settings (use voice defaults).
@@ -6072,7 +6252,7 @@ tanit-cli assistant spy --interval-ms 500 --no-value --no-selection --no-text --
 
 #### info
 
-Generate reference docs for Tanit Chat: CLI commands, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
+Generate reference docs for Tanit: CLI commands, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
 
 **Example**
 
@@ -6138,7 +6318,7 @@ tanit-cli info xblox --dst 'releases/web-docs/cli/cli.md' --stdout --skill --aut
 
 #### info app-commands
 
-Generate a Tanit Chat app/UI command verb reference (togglechat, takescreenshot, etc.) grouped by category. Plain md: app-commands.md in cwd. --skill: <profile>/skills/app-commands/SKILL.md.
+Generate a Tanit app/UI command verb reference (togglechat, takescreenshot, etc.) grouped by category. Plain md: app-commands.md in cwd. --skill: <profile>/skills/app-commands/SKILL.md.
 
 Options:
 
@@ -6188,7 +6368,7 @@ tanit-cli info keyboard-shortcuts --dst 'releases/web-docs/cli/cli.md' --stdout 
 
 #### info ui
 
-Generate a Tanit Chat UI launch flag reference (--ui-preset, --size, --src paths/URLs, --show-panel, chat seed options). Plain md: ui.md in cwd. --skill: <profile>/skills/ui/SKILL.md.
+Generate a Tanit UI launch flag reference (--ui-preset, --size, --src paths/URLs, --show-panel, chat seed options). Plain md: ui.md in cwd. --skill: <profile>/skills/ui/SKILL.md.
 
 Options:
 
@@ -6928,7 +7108,7 @@ Options:
 - `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
 - `--bind` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Interface/address for MCP HTTP. Default: 127.0.0.1 (loopback only).
 - `--port` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 65535]</span>, <span data-cli="default">default <span data-cli="value">4444</span></span></span>) - First TCP port to try for MCP HTTP (default 4444; next free port if busy)
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 
 **Example**
 
@@ -7050,6 +7230,7 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `custom.command-msx1xf70-ed2f7` | Text File | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
 | `custom.command-mtfnk3hu-47302` | Markdown File | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
 | `custom.command-mtczu1xa-c605f` | File Tab | New | `app:newfiletab` |  |
+| `custom.command-mudse19e-edcc5` | Browser | New | `app:openurl` |  |
 | `custom.command-mtfpcfxj-e1333` | Screen Recording | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
 | `custom.command-mpx9r1ur-8c6df` | Assistant | Home | `cli:llm` | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | Home | `app:togglelauncher` |  |
@@ -7059,7 +7240,7 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `custom.image-understand-speak` | Speak | Images | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-mqj3feqz-72a1a` | Resize-HD | Images | `cli:resize` | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui` |
 | `custom.command-mszwq2g6-780cb` | To Markdown | Images | `cli:llm` | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--no-skills`<br>`--hud`<br>`--hud-mode`<br>`both` |
-| `custom.command-mtun9312-7d0e1` | Share Post | Images | `cli:service` | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`listed` |
+| `custom.command-mtun9312-7d0e1` | Share Post | Images | `cli:service` | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`private` |
 | `custom.command-mrcja3yb-306c8` | Region | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot.xblox` |
 | `custom.command-mpxzouxv-ab189` | App | Screenshots | `app:takescreenshot` |  |
 | `custom.command-mu4l7dsk-4b406` | Fullscreen Screenshot | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-full.xblox` |
@@ -7103,6 +7284,7 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `custom.command-mssrlhcu-5aa17` | 1:1-ex | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
 | `custom.command-ms4vl4ur-4569d` | 16:9 | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
 | `custom.command-msghb0e2-e8c47` | Fixed | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed.xblox` |
+| `custom.command-mubm8ayh-a6d58` | Fixed & Subs | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed-subs.xblox` |
 | `custom.video-start` | WebCam | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
 | `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
 | `custom.handbrake-hq` | Handbrake | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
@@ -7123,7 +7305,7 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `custom.pdf-to-md` | To Markdown | PDF | `cli:pdf` | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md` |
 | `custom.fs-copy` | Copy | Files | `app:fscopy` |  |
 | `custom.fs-move` | Move | Files | `app:fsmove` |  |
-| `custom.command-mu114s8q-17bff` | Share | Files | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--if-newer`<br>`--remote-dir`<br>`public` |
+| `custom.command-mu114s8q-17bff` | Share | Files | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--public` |
 | `custom.dropdown-msaj5qk5-78a6b` | Help | Files | `metadata` |  |
 | `custom.help-cli` | CLI-Manual | Files | `app:open` |  |
 | `custom.help-xblox` | XBlox | Files | `app:open` |  |

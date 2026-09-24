@@ -1,8 +1,8 @@
-# Tanit Chat Keyboard Shortcuts
+# Tanit Keyboard Shortcuts
 
-Keyboard shortcuts run commands in a live Tanit Chat window. Built-in shortcuts are grouped the same way as **Settings → Keyboard shortcuts**. Custom command shortcuts come from your Commands list (`commands.json`) and are edited in **Settings → Commands**.
+Keyboard shortcuts run commands in a live Tanit window. Built-in shortcuts are grouped the same way as **Settings → Keyboard shortcuts**. Custom command shortcuts come from your Commands list (`commands.json`) and are edited in **Settings → Commands**.
 
-Window shortcuts fire when Tanit Chat is focused. **Global** custom shortcuts keep working when another app is in front (registered by the assistant or the session daemon).
+Window shortcuts fire when Tanit is focused. **Global** custom shortcuts keep working when another app is in front (registered by the assistant or the session daemon).
 
 Change built-in assignments in Settings → Keyboard shortcuts. Commands with no default shortcut can still be bound there.
 

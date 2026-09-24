@@ -1,6 +1,21 @@
-# Walkthroughs
 
-1
+##
+
+- apps setup
+- font size
+- lang
+- audio
+
+- models
+- tanit credits pack
+
+- sec
+
+- demos
+
+
+# Walkthroughs Test
+
 
 ![Test](https://tanit.polymech.info/api/vfs/get/software/tanit-chat/videos/test.mp4 "Introduction"){
   pm-media="video"

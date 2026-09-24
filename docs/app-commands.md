@@ -1,6 +1,6 @@
-# Tanit Chat App Commands
+# Tanit App Commands
 
-App commands are named verbs that control a running Tanit Chat UI instance from outside (keyboard shortcuts, custom commands, IPC, or the `app` CLI subcommand).
+App commands are named verbs that control a running Tanit UI instance from outside (keyboard shortcuts, custom commands, IPC, or the `app` CLI subcommand).
 
 ## Invocation
 
@@ -58,14 +58,14 @@ Commands that take args list them under the verb. Pass JSON with `tanit-cli.exe 
   - `filterModel` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Optional DeepFilter or GTCRN model path.
   - `postFilter` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Aggressive DeepFilter post-filter.
   - `filterBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Wet/dry mix: 0 = original speech, 1 = full filter.
-  - `provider` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">whisper</span> <span data-cli="choice">tanit</span> <span data-cli="choice">pixlwiz</span> <span data-cli="choice">elevenlabs</span></span></span>) - Local whisper or network STT. Moss is TTS and is not valid here.
+  - `provider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Local whisper or network STT. Empty uses Audio & Video settings.
   - `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Model id or whisper ggml path. Empty uses settings / provider default.
   - `language` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span></span>) - auto or an STT language code.
   - `inputSource` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">&quot;mic&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - Microphone, desktop loopback, or both.
-  - `input` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Microphone device substring. Empty uses settings.
-  - `desktop` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Loopback device substring. Empty uses settings.
-  - `micGain` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">&quot;1&quot;</span></span></span>) - Microphone gain multiplier.
-  - `desktopGain` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">&quot;1&quot;</span></span></span>) - Desktop loopback gain multiplier.
+  - `input` (<span data-cli="meta"><span data-cli="type">device_name</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Microphone for mic/mix. Empty uses Audio & Video settings.
+  - `desktop` (<span data-cli="meta"><span data-cli="type">device_name</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Loopback device for desktop/mix. Empty uses Audio & Video settings.
+  - `micGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Microphone gain multiplier.
+  - `desktopGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Desktop loopback gain multiplier.
 - `voicecommandstop` - Stop voice commands
 - `togglevoicecommand` - Toggle voice commands
   - `route` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">&quot;trigger&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trigger</span> <span data-cli="choice">agent</span></span></span>) - trigger = emit a command envelope; agent = later realtime handoff.
@@ -74,14 +74,14 @@ Commands that take args list them under the verb. Pass JSON with `tanit-cli.exe 
   - `filterModel` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Optional DeepFilter or GTCRN model path.
   - `postFilter` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Aggressive DeepFilter post-filter.
   - `filterBlend` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Wet/dry mix: 0 = original speech, 1 = full filter.
-  - `provider` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">whisper</span> <span data-cli="choice">tanit</span> <span data-cli="choice">pixlwiz</span> <span data-cli="choice">elevenlabs</span></span></span>) - Local whisper or network STT. Moss is TTS and is not valid here.
+  - `provider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Local whisper or network STT. Empty uses Audio & Video settings.
   - `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Model id or whisper ggml path. Empty uses settings / provider default.
   - `language` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span></span>) - auto or an STT language code.
   - `inputSource` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">&quot;mic&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - Microphone, desktop loopback, or both.
-  - `input` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Microphone device substring. Empty uses settings.
-  - `desktop` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Loopback device substring. Empty uses settings.
-  - `micGain` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">&quot;1&quot;</span></span></span>) - Microphone gain multiplier.
-  - `desktopGain` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">&quot;1&quot;</span></span></span>) - Desktop loopback gain multiplier.
+  - `input` (<span data-cli="meta"><span data-cli="type">device_name</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Microphone for mic/mix. Empty uses Audio & Video settings.
+  - `desktop` (<span data-cli="meta"><span data-cli="type">device_name</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Loopback device for desktop/mix. Empty uses Audio & Video settings.
+  - `micGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Microphone gain multiplier.
+  - `desktopGain` (<span data-cli="meta"><span data-cli="type">float</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="default">default <span data-cli="value">1.0</span></span></span>) - Desktop loopback gain multiplier.
 - `togglelauncher` - Toggle assistant toolbar
 
 ### Jobs

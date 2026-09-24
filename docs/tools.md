@@ -1,4 +1,4 @@
-# Tanit Chat Agent Tools
+# Tanit Agent Tools
 
 These are the path-mode LLM agent tools available in this build. They are offered to the model during `tanit-cli.exe llm agent` runs and via the embedded MCP server.
 
@@ -117,7 +117,7 @@ Params:
 - `reference` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Single-path alias of reference_images.
 - `reference_images` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Style / brand reference images (not keyframes).
 - `references` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Alias of reference_images.
-- `resolution` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">720p</span> <span data-cli="choice">1080p</span></span></span>)  -  Output resolution (720p default).
+- `resolution` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">720p</span> <span data-cli="choice">1080p</span> <span data-cli="choice">4K</span></span></span>)  -  Output resolution (720p default).
 - `src` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Keyframe stills (host paths).
 - `start_frame` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional start-frame still (host path or data URL).
 
@@ -199,7 +199,7 @@ Params:
 - `input_device` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional capture device name (case-insensitive substring; use `audio info` to list).
 - `max_duration_ms` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>)  -  Hard cap on recording length in milliseconds (default 30 000).
 - `prompt` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional short cue to speak before recording starts (one sentence is ideal, e.g.
-- `provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">tanit</span> <span data-cli="choice">elevenlabs</span> <span data-cli="choice">whisper</span> <span data-cli="choice"></span></span></span>)  -  STT provider override.
+- `provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">elevenlabs</span> <span data-cli="choice">whisper</span> <span data-cli="choice"></span></span></span>)  -  STT provider override.
 - `silence_ms` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="default">default <span data-cli="value">1500</span></span></span>)  -  VAD: auto-stop after this many ms of silence following at least one speech burst (default 1 500).
 - `text_out` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional path to write the transcript as a UTF-8 text file.
 
@@ -244,6 +244,21 @@ Params:
 - `max_bytes` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Maximum body bytes when materializing a resource.
 - `max_results` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Maximum matches to return.
 - `query` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Name or keyword, e.g.
+
+#### create_command
+
+Add a ribbon or context-menu button.
+
+Params:
+- `args` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Arguments.
+- `command` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  pm-image-cli subcommand slug (resize, transform, llm, audio, video, …), executable name in PATH (vlc, gimp, ffmpeg) or absolute path, or shell name (bash, pow…
+- `cwd_from_selection` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>)  -  When true, sets cwd to ${CURRENT_PATH} so the command runs in the selected folder.
+- `description` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional tooltip / description text for the command.
+- `group` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Ribbon group label to place the button in.
+- `icon` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Lucide icon name for the button (e.g.
+- `label` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Display name shown in the ribbon button or context-menu entry.
+- `surface` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">ribbon</span> <span data-cli="choice">context_menu</span> <span data-cli="choice">both</span></span>, <span data-cli="default">default <span data-cli="value">&quot;ribbon&quot;</span></span></span>)  -  Where to surface the command.
+- `tint` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Accent / tint color in #RRGGBB hex format (e.g.
 
 ---
 

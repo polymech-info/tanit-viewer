@@ -1,4 +1,4 @@
-# Tanit Chat XBlox
+# Tanit XBlox
 
 Use this skill when composing `.xblox` block-tree command flows.
 
@@ -1606,7 +1606,7 @@ Params:
 **voice_model**
 - `provider` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - TTS provider override. Default: empty → App Settings tts_provider (required).
 - `model` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">resolve</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">variables</span> <span data-cli="choice">deep</span></span></span>) - TTS model override. Default: empty → App Settings tts_model; pixlwiz → pixlwiz-speech when unset. moss → moss-tts-nano GGUF bundle.
-- `voice` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Voice id / UUID / GGUF path. Default: empty → App Settings tts_voice_id.
+- `voice` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Voice id. Default: empty → App Settings tts_voice_id. OpenRouter voices come from the selected model.
 
 **local_tts**
 - `tokenizer` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Tokenizer GGUF path. Required for VibeVoice; MOSS defaults to models/moss-tts-nano/moss-nano-tokenizer.gguf.
@@ -7499,6 +7499,7 @@ Default block:
 | `custom.command-msx1xf70-ed2f7` | Text File | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
 | `custom.command-mtfnk3hu-47302` | Markdown File | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
 | `custom.command-mtczu1xa-c605f` | File Tab | `app:newfiletab` |  |
+| `custom.command-mudse19e-edcc5` | Browser | `app:openurl` |  |
 | `custom.command-mtfpcfxj-e1333` | Screen Recording | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
 | `custom.command-mpx9r1ur-8c6df` | Assistant | `cli:llm` | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | `app:togglelauncher` |  |
@@ -7508,7 +7509,7 @@ Default block:
 | `custom.image-understand-speak` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-mqj3feqz-72a1a` | Resize-HD | `cli:resize` | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui` |
 | `custom.command-mszwq2g6-780cb` | To Markdown | `cli:llm` | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--no-skills`<br>`--hud`<br>`--hud-mode`<br>`both` |
-| `custom.command-mtun9312-7d0e1` | Share Post | `cli:service` | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`listed` |
+| `custom.command-mtun9312-7d0e1` | Share Post | `cli:service` | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`private` |
 | `custom.command-mrcja3yb-306c8` | Region | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot.xblox` |
 | `custom.command-mpxzouxv-ab189` | App | `app:takescreenshot` |  |
 | `custom.command-mu4l7dsk-4b406` | Fullscreen Screenshot | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-full.xblox` |
@@ -7552,6 +7553,7 @@ Default block:
 | `custom.command-mssrlhcu-5aa17` | 1:1-ex | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
 | `custom.command-ms4vl4ur-4569d` | 16:9 | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
 | `custom.command-msghb0e2-e8c47` | Fixed | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed.xblox` |
+| `custom.command-mubm8ayh-a6d58` | Fixed & Subs | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed-subs.xblox` |
 | `custom.video-start` | WebCam | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
 | `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
 | `custom.handbrake-hq` | Handbrake | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
@@ -7572,7 +7574,7 @@ Default block:
 | `custom.pdf-to-md` | To Markdown | `cli:pdf` | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md` |
 | `custom.fs-copy` | Copy | `app:fscopy` |  |
 | `custom.fs-move` | Move | `app:fsmove` |  |
-| `custom.command-mu114s8q-17bff` | Share | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--if-newer`<br>`--remote-dir`<br>`public` |
+| `custom.command-mu114s8q-17bff` | Share | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--public` |
 | `custom.dropdown-msaj5qk5-78a6b` | Help | `metadata` |  |
 | `custom.help-cli` | CLI-Manual | `app:open` |  |
 | `custom.help-xblox` | XBlox | `app:open` |  |
