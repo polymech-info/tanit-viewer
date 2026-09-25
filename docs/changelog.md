@@ -4,15 +4,17 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
-## 1.0.62 - 24-09
+## 1.0.64 - 25-09
 
 _Each change is dated DD-MM from the commit day. Newest first._
 
 ### New
 
+- 25-09 Added MCP server subcommands sourced from the tools cache, with query support, JSON arguments, per-field flag overrides, and configurable request timeouts.
 - 22-09 <FieldRow label={tr.grpLblPresentation}>
 - 22-09 Added a --scenario option to the test core process runner command.
 - 21-09 Added the UI.Editors.EnablePage policy for controlling access to the page editor.
+- 21-09 Added the UI.Editors.EnablePage policy for enabling the page editor.
 - 20-09 Added the --merge-keys option for configuring merge keys.
 - 20-09 Added the --widths option for setting the disabled Classic Resize maximum number of verbs.
 - 18-09 Added a terminal subcommand to the image registration CLI.
@@ -141,6 +143,7 @@ _Each change is dated DD-MM from the commit day. Newest first._
 
 ### Improved
 
+- 25-09 Enabled created commands to use the schedule_at tool.
 - 22-09 Improved accessibility by adding descriptive aria-labels to media elements for better screen reader support.
 - 22-09 s.test_core_process_runner_cmd = s.test_core_cmd->add_subcommand()->add_option("--scenario", s.test_core_process_runner_scenario,
 - 22-09 Improved the `aria-label` attributes in MarkdownMedia.tsx and MarkdownMediaLink.tsx for enhanced accessibility and user experience.
@@ -151,6 +154,7 @@ _Each change is dated DD-MM from the commit day. Newest first._
 - 21-09 Added a new option 'UI.Editors.EnablePage' in the policy_catalog.cpp to support enabling a page in the PM_UI_Editors.
 - 21-09 Added new options '--type' for various commands in cli.cpp to support multiple resource types such as 'prompt-template', 'command-config', 'mcp-config', 'prompt', 'page', 'settings-profile', and more.
 - 21-09 Added page as a supported type for put, document put, and plain document import commands.
+- 21-09 Added page to the supported type descriptions for put, document put, and plain document import commands.
 - 20-09 s.reg_cmd->add_option("--widths", s.reg_widths, "Classic Resize max N verbs (disabled)")
 - 19-09 Added an accessible label indicating whether the theme toggle will switch to light or dark mode.
 - 19-09 A toggle for changing between light and dark themes with an aria-label for accessibility.

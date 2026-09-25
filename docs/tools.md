@@ -250,15 +250,27 @@ Params:
 Add a ribbon or context-menu button.
 
 Params:
-- `args` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Arguments.
-- `command` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  pm-image-cli subcommand slug (resize, transform, llm, audio, video, …), executable name in PATH (vlc, gimp, ffmpeg) or absolute path, or shell name (bash, pow…
+- `args` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  JSON array of strings (never a single string).
+- `as_llm_tool` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Expose this command to chat as an LLM tool.
+- `as_voice_command` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Allow this command after the wake phrase.
+- `command` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  tanit-cli path ("audio record", "llm agent", "video record", …) validated against the live CLI grammar, or ONE program by name ("vlc", "ffmpeg").
+- `create_group` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Create `group` when it does not exist.
+- `cwd` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Working directory: an existing absolute folder or a palette variable such as ${CURRENT_PATH}.
 - `cwd_from_selection` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>)  -  When true, sets cwd to ${CURRENT_PATH} so the command runs in the selected folder.
 - `description` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional tooltip / description text for the command.
-- `group` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Ribbon group label to place the button in.
+- `explorer_file_types` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  When surface is context_menu or both, limit Explorer targets.
+- `group` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Ribbon group label to place the button in (matched case-insensitively).
 - `icon` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Lucide icon name for the button (e.g.
 - `label` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Display name shown in the ribbon button or context-menu entry.
+- `selection_mode` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">aggregate</span> <span data-cli="choice">perItem</span></span></span>)  -  How a multi-file selection is applied.
+- `shell` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">cmd</span> <span data-cli="choice">powershell</span> <span data-cli="choice">pwsh</span> <span data-cli="choice">bash</span> <span data-cli="choice">sh</span> <span data-cli="choice">zsh</span> <span data-cli="choice">fish</span></span></span>)  -  Last resort.
+- `shell_line` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  The exact one-liner the shell runs, stored verbatim (max 2048 chars).
+- `show_in_assistant_bar` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Show as a button on the assistant toolbar.
+- `show_in_launcher` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Show in the command launcher.
+- `show_parameter_dialog` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Prompt for CLI parameters before the command runs.
 - `surface` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">ribbon</span> <span data-cli="choice">context_menu</span> <span data-cli="choice">both</span></span>, <span data-cli="default">default <span data-cli="value">&quot;ribbon&quot;</span></span></span>)  -  Where to surface the command.
 - `tint` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Accent / tint color in #RRGGBB hex format (e.g.
+- `voice_command` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Spoken phrase (≥3 letters/digits).
 
 ---
 

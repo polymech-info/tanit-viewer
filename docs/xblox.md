@@ -7581,3 +7581,6 @@ Default block:
 | `custom.command-msakytc7-dd084` | Online Help | `app:openurl` |  |
 | `custom.command-mu1w66c6-5b959` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
 | `custom.command-mtum9djk-a760d` | Share as Article | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
+| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4 audio to MP3 | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
+| `custom.command-7883566e75cb852699295a0cc2a574c5` | Video poster frame | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-frames:v`<br>`1`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.png` |
+| `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | `external` | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |

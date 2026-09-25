@@ -1439,21 +1439,21 @@ Options:
 - `--host-tool-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Register an HTTP IAgentToolProvider as id=http://127.0.0.1:port/path (repeatable). Loopback HTTP only. Also TANIT_HOST_TOOL_PROVIDER.
 
 **Voice**
-- `--mic` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Use the microphone as prompt input (continuous STT → LLM → TTS loop). Replaces --prompt for user input; --prompt may still be given as context. Requires --stt-api-key or ELEVENLABS_API_KEY. Press Ctrl+C to stop.
-- `--stt-api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ElevenLabs API key for real-time STT (and TTS when --voice-id is set). Falls back to ELEVENLABS_API_KEY environment variable.
-- `--voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ElevenLabs voice ID to speak LLM responses aloud (empty = text-only). Browse voices at elevenlabs.io/app/voice-library.
+- `--mic` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Use the microphone as prompt input (continuous STT → LLM → TTS loop). Replaces --prompt for user input; --prompt may still be given as context. STT/TTS provider, model, and voice come from Chat → Voice & Audio (elevenlabs, tanit, openrouter, whisper). Press Ctrl+C to stop.
+- `--stt-api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key override for the selected STT provider. Falls back to the provider entry in App Settings.
+- `--voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - TTS voice for this mic run. Empty uses Chat settings. OpenRouter defaults to eve when the saved voice is an ElevenLabs id.
 - `--no-tts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Mic mode: disable TTS playback entirely (keep listening continuously after each response).
-- `--tts-model-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">eleven_v3</span></span></span>) - ElevenLabs TTS model used with --voice-id (default: eleven_v3).
+- `--tts-model-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - TTS model for this mic run. Empty uses Chat settings (eleven_v3 for ElevenLabs, x-ai/grok-voice-tts-1.0 for OpenRouter).
 - `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Microphone device name (case-insensitive substring; use `audio info` to list). Omit to use the system default input device.
 - `--input-source` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">mic</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - Input source for the realtime session: mic (default), desktop (system loopback), or mix (mic + desktop summed). Use `audio info` to list available devices.
 - `--desktop` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Loopback device name substring for --input-source desktop or mix (case-insensitive; empty = default render device). Sets --input-source desktop when --input-source is not explicitly provided.
 - `--mic-gain` (<span data-cli="meta"><span data-cli="type">FLOAT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Mic input level multiplier (linear; 0 = mute, 1 = unity, 2 = double). Applied before mixing when --input-source mix is set.
 - `--desktop-gain` (<span data-cli="meta"><span data-cli="type">FLOAT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Desktop/loopback input level multiplier (linear; 0 = mute, 1 = unity). Applied before mixing when --input-source desktop or mix is set.
 - `--silence-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">1500</span></span></span>) - Silence duration in ms after which speech is auto-committed to the LLM (0 = disabled; default 1500).
-- `--stt-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the STT provider for this run (whisper for local built-in, elevenlabs, …). Default: from Chat → Voice & Audio settings. Use 'whisper' to select the built-in local whisper.cpp (no API key needed).
-- `--stt-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the STT model id / alias for this run (e.g. base.en, small.en for whisper; scribe_v2_realtime for ElevenLabs). Default: from settings.
-- `--tts-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the TTS provider for this run (e.g. elevenlabs). Default: from settings.
-- `--tts-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the TTS model id for this run (e.g. eleven_flash_v2_5). Also applies as --tts-model-id when --voice-id is used.
+- `--stt-provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">whisper</span></span></span>) - Override the STT provider for this run. Default: from Chat → Voice & Audio settings. whisper is local whisper.cpp (no API key).
+- `--stt-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the STT model for this run. whisper: base.en. elevenlabs: scribe_v2_realtime. openrouter: openai/whisper-large-v3-turbo. Default: from settings.
+- `--tts-provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">vibevoice</span> <span data-cli="choice">moss</span></span></span>) - Override the TTS provider for this run. Default: from settings.
+- `--tts-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the TTS model for this run (eleven_v3, x-ai/grok-voice-tts-1.0, …). Also applies as --tts-model-id when --voice-id is used.
 - `--tts-voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the TTS voice id for this run. Alias for --voice-id; wins if both are set.
 
 **Example**
@@ -1465,7 +1465,7 @@ tanit-cli llm agent
 **Full example**
 
 ```sh
-tanit-cli llm agent -p 'foo' --logging-dir 'foo' --system-prompt 'foo' --planner-prompt 'foo' --include '{}' --embed '{}' --preset 'foo' --runner 'foo' --save-preset 'foo' --router 'foo' --model 'foo' --ai-consent-review --ai-consent-router 'foo' --ai-consent-model 'foo' --consent-ui 'foo' --consent-owner 'foo' --ocr-provider 'foo' --ocr-model 'foo' --recognition-provider 'foo' --recognition-model 'foo' --image-provider 'foo' --image-model 'foo' --video-provider 'foo' --video-model 'foo' --api-key 'foo' --base-url 'foo' --timeout-ms 0 --max-iter 0 --no-tools --no-mcp --no-skills --skills --no-planner --planner --planner-budget 8 --no-parallel-tools --parallel-tools --multi-turn --single-turn --session-id 'foo' --load-snapshot 'foo' --save-snapshot 'foo' --memory-features 'foo' --no-replay --scheduler --scheduler-timeout 0 --scheduler-exit-when-idle --disable-tools 'foo' --enable-tools 'foo' --hud --hud-mode 'off' --dry-run --log 'agent.json' --dst 'foo' --type 'responses' --realtime --realtime-stop --realtime-status --serve --host '127.0.0.1' --port 8090 --concurrency 2 --http-workers 0 --serve-api-key 'foo' --host-tool-provider '{}' --realtime-idle-ms 120000 --streaming 'on' --markdown 'auto' --color 'auto' --mic --stt-api-key 'foo' --voice-id 'foo' --no-tts --tts-model-id 'eleven_v3' --input 'foo' --input-source 'mic' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --silence-ms 1500 --stt-provider 'foo' --stt-model 'foo' --tts-provider 'foo' --tts-model 'foo' --tts-voice-id 'foo'
+tanit-cli llm agent -p 'foo' --logging-dir 'foo' --system-prompt 'foo' --planner-prompt 'foo' --include '{}' --embed '{}' --preset 'foo' --runner 'foo' --save-preset 'foo' --router 'foo' --model 'foo' --ai-consent-review --ai-consent-router 'foo' --ai-consent-model 'foo' --consent-ui 'foo' --consent-owner 'foo' --ocr-provider 'foo' --ocr-model 'foo' --recognition-provider 'foo' --recognition-model 'foo' --image-provider 'foo' --image-model 'foo' --video-provider 'foo' --video-model 'foo' --api-key 'foo' --base-url 'foo' --timeout-ms 0 --max-iter 0 --no-tools --no-mcp --no-skills --skills --no-planner --planner --planner-budget 8 --no-parallel-tools --parallel-tools --multi-turn --single-turn --session-id 'foo' --load-snapshot 'foo' --save-snapshot 'foo' --memory-features 'foo' --no-replay --scheduler --scheduler-timeout 0 --scheduler-exit-when-idle --disable-tools 'foo' --enable-tools 'foo' --hud --hud-mode 'off' --dry-run --log 'agent.json' --dst 'foo' --type 'responses' --realtime --realtime-stop --realtime-status --serve --host '127.0.0.1' --port 8090 --concurrency 2 --http-workers 0 --serve-api-key 'foo' --host-tool-provider '{}' --realtime-idle-ms 120000 --streaming 'on' --markdown 'auto' --color 'auto' --mic --stt-api-key 'foo' --voice-id 'foo' --no-tts --tts-model-id 'foo' --input 'foo' --input-source 'mic' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --silence-ms 1500 --stt-provider 'elevenlabs' --stt-model 'foo' --tts-provider 'elevenlabs' --tts-model 'foo' --tts-voice-id 'foo'
 ```
 
 ##### Examples
@@ -7130,6 +7130,7 @@ Options:
 
 - `--no-probe` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Use cached tools/list only; skip live MCP handshakes.
 - `--probe` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Allow live MCP handshakes when cache is missing or stale (default).
+- `--jq` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - jq filter applied to the JSON result (same engine as the xblox Parse block).
 
 **Example**
 
@@ -7215,6 +7216,29 @@ tanit-cli mcp client call --server <value> --tool <value>
 
 ```sh
 tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client query
+
+Run a jq filter on a previous JSON result (stdin or --input).
+
+Options:
+
+- `--filter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - jq filter. Default '.'.
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON file. Default: stdin.
+
+**Example**
+
+```sh
+tanit-cli mcp client query
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client query --filter 'foo' --input 'foo'
 ```
 
 ## Custom Commands
@@ -7312,6 +7336,9 @@ tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 | `custom.command-msakytc7-dd084` | Online Help | Files | `app:openurl` |  |
 | `custom.command-mu1w66c6-5b959` | Speak | Text | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
 | `custom.command-mtum9djk-a760d` | Share as Article | Text | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
+| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4 audio to MP3 | AI Commands | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
+| `custom.command-7883566e75cb852699295a0cc2a574c5` | Video poster frame | AI Commands | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-frames:v`<br>`1`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.png` |
+| `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | AI Commands | `external` | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
 
 Call custom commands with the exact dotted ID shown above, e.g. `tanit-cli.exe custom.mic-start`.
 Pass `...` extra args after `--` to append them to the configured command without wrapper interception.

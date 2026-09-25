@@ -21,7 +21,7 @@ The executor is native C++ and shared by the desktop UI and CLI. It starts
 quickly, adds only a small footprint, and does not require a separate Node or
 Rust runtime for the core path.
 
-![XBlox blocks compose run and reuse](./tanit-xblox-overview.png)
+![XBlox blocks compose run and reuse](./src/tanit-xblox-overview.png)
 
 *Compose a flow, run it, then reuse it as a tool.*
 
@@ -32,7 +32,7 @@ visual canvas, appear as a live example inside Markdown, launch from a ribbon
 or Explorer command, become a button on a custom Page Builder page, appear as
 a new MCP tool, or execute unattended with `tanit-cli xblox run`.
 
-![One XBlox flow reused across every surface](./tanit-xblox-surfaces.png)
+![One XBlox flow reused across every surface](./src/tanit-xblox-surfaces.png)
 
 *Build once, then reuse the same flow in the editor, interactive docs,
 commands, custom pages, CLI, and MCP clients.*
@@ -50,7 +50,7 @@ label, icon, tint, tooltip, arguments, and disabled state. At runtime they also
 reflect whether a flow is active or has failed. This makes purpose-built
 control panels possible without creating another application.
 
-![Custom launch pad in the Tanit Page Builder](./tanit-xblox-page-builder.png)
+![Custom launch pad in the Tanit Page Builder](./src/tanit-xblox-page-builder.png)
 
 *Compose a custom page from tabs, containers, and command buttons—including
 buttons backed by XBlox flows.*
@@ -73,7 +73,7 @@ XBlox can listen to local inputs, communicate over common protocols, transform
 data, and send results back to applications, devices, or services. AI and MCP
 are available as optional steps rather than requirements.
 
-![XBlox map of senses and actions](./tanit-xblox-senses-improved.png)
+![XBlox map of senses and actions](./src/tanit-xblox-senses-improved.png)
 
 *Mic, webcam, screen, picker, files, OCR and STT · Bluetooth, HTTP, SSH, MQTT
 and Modbus · CMS, MCP and browser · TTS, speaker, HQ recording, image, video,
@@ -87,7 +87,7 @@ A useful flow can be only four blocks: retrieve a weather report over HTTP,
 extract the relevant text, turn it into speech, and play it through a local or
 Bluetooth speaker.
 
-![Weather report to Bluetooth speaker flow](./tanit-xblox-flow.png)
+![Weather report to Bluetooth speaker flow](./src/tanit-xblox-flow.png)
 
 *HTTP → parse → TTS → speaker.*
 
@@ -98,7 +98,7 @@ the session and transcribes the audio locally with Whisper. It appends a
 timestamped entry to `Documents/journal.txt`, pastes the transcript into the
 focused control, opens the journal, and speaks a short confirmation.
 
-![Voice journal flow](./tanit-xblox-ex-stt-journal.png)
+![Voice journal flow](./src/tanit-xblox-ex-stt-journal.png)
 
 ```sh
 tanit-cli xblox run --src tests/xblox/stt-journal-ex.xblox
@@ -113,7 +113,7 @@ extracts the visible rows, the flow parses the response as CSV, and writes a
 `.csv` file beside the source image. The extraction step does not require a
 cloud round trip. Additionally, we support [`Replicate`](https://replicate.com/collections/text-to-image), a service enabling access to over 400 models, specialized for certain tasks from vision, generative AI - for images, text, video and audio.
 
-![Receipt image to CSV with a local vision model](./tanit-xblox-ex-vision-pipe.png)
+![Receipt image to CSV with a local vision model](./src/tanit-xblox-ex-vision-pipe.png)
 
 ```sh
 tanit-cli xblox run --src dist/shared/xblox/vision-pipe.xblox
@@ -129,7 +129,7 @@ existing translated file when the cache matches. Otherwise it uploads the
 document, polls the DeepL job, downloads the result, and saves it beside the
 source as `name_DE.ext`.
 
-![Document translation through the DeepL API](./tanit-xblox-ex-deepl.png)
+![Document translation through the DeepL API](./src/tanit-xblox-ex-deepl.png)
 
 The API key comes from the Tanit user variable `DEEPL_KEY`:
 
@@ -153,7 +153,7 @@ resolves the selected UI element, reads its text, and sends that text to the
 speaker. It turns otherwise inaccessible on-screen copy into a small,
 hands-free reading tool.
 
-![Pick an application element and speak its text](./tanit-xblox-ex-inspect-speak.png)
+![Pick an application element and speak its text](./src/tanit-xblox-ex-inspect-speak.png)
 
 ```sh
 tanit-cli xblox run --src dist/shared/xblox/inspect-text-speak.xblox
@@ -167,7 +167,7 @@ Record a full display or enable the picker to capture a window or selected
 region. The native fast capture path produces H.264 MP4 and can include desktop
 audio and the cursor.
 
-![HQ screen recording with follow and interactive zoom](./tanit-xblox-ex-video-recorder.png)
+![HQ screen recording with follow and interactive zoom](./src/tanit-xblox-ex-video-recorder.png)
 
 The shipped example is configured for a 1080 × 1080 canvas at 24 fps and
 18 Mbps. It follows the cursor with a smooth viewport transition and accepts
@@ -193,7 +193,7 @@ sends keys as one batch, moves the pointer using window-relative coordinates,
 finds the editor through UI Automation, captures a screenshot, and closes the
 demo window.
 
-![Desktop application automation flow](./tanit-xblox-ex-computer-use.png)
+![Desktop application automation flow](./src/tanit-xblox-ex-computer-use.png)
 
 ```sh
 tanit-cli xblox run --no-wait --src tests/xblox/computer-use-notepad.xblox
@@ -210,7 +210,7 @@ chunks an annual report and meeting notes, embeds them into a local vector
 store, runs semantic searches for financial results and action items, and
 writes the ranked results as JSON.
 
-![Local semantic search over Word and Excel](./tanit-xblox-ex-vector-office.png)
+![Local semantic search over Word and Excel](./src/tanit-xblox-ex-vector-office.png)
 
 ```sh
 tanit-cli xblox run --src tests/xblox/vector-store-office.xblox
@@ -228,7 +228,7 @@ starts a local server with holding registers, input registers, coils, and
 discrete inputs. A client connects, reads the initial values, performs single
 and multi-value writes, verifies the result, and closes the connection.
 
-![Modbus TCP client and server flow](./tanit-xblox-ex-modbus.png)
+![Modbus TCP client and server flow](./src/tanit-xblox-ex-modbus.png)
 
 Run the server first, then the client in a second terminal:
 
@@ -250,7 +250,7 @@ the primary screen, runs YOLO object detection through a local ONNX model,
 smooths detections between frames, draws labels and statistics, and records
 the annotated result as MP4.
 
-![Live local object detection recorded to MP4](./tanit-xblox-ex-video-detect.png)
+![Live local object detection recorded to MP4](./src/tanit-xblox-ex-video-detect.png)
 
 ```sh
 tanit-cli xblox run --src tests/xblox/video-detect-record.xblox
@@ -269,7 +269,7 @@ The live fixture calls an external Tavily search tool through an MCP client,
 parses the returned JSON with `jq`, extracts the item count and sample, and
 passes the structured result to the remaining blocks.
 
-![MCP tool as one step in an XBlox flow](./tanit-xblox-ex-mcp-call.png)
+![MCP tool as one step in an XBlox flow](./src/tanit-xblox-ex-mcp-call.png)
 
 ```sh
 tanit-cli xblox run --src tests/xblox/network-mcp-live.xblox
@@ -315,7 +315,7 @@ step. Tanit supports more than 100 models across dozens of providers, including
 local models and custom endpoints. Consent, scopes, and policy remain around
 the flow, so changing a model does not mean rebuilding the automation.
 
-![Local files feeding an XBlox flow with optional MCP and AI steps](./tanit-xblox-mcp.png)
+![Local files feeding an XBlox flow with optional MCP and AI steps](./src/tanit-xblox-mcp.png)
 
 *Files and deterministic blocks form the workflow; MCP and AI extend it when
 needed.*
