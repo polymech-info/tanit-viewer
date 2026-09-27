@@ -1,9 +1,9 @@
 ---
 title: Why Tanit
 slug: why-tanit
-description: Tanit turns local and cloud AI into a governed Windows workspace for files, media, devices, and repeatable work.
-tags: [tanit, comparison, ai, codex, claude, ollama, hermes, unsloth, automation, security]
-category-id: [knowlede-base]
+description: Compare Tanit with Codex, Claude, Cursor, Ollama, Hermes Agent, and Unsloth across daily work, models, automation, security, deployment, and runtime.
+tags: [tanit, comparison, ai, codex, claude, cursor, ollama, hermes, unsloth, automation, security]
+category-id: [knowledge-base]
 private: false
 hidden: false
 ---
@@ -12,186 +12,295 @@ hidden: false
 
 # AI that belongs to the workstation
 
-Codex and Claude are excellent coding agents. Ollama runs local models.
-Unsloth trains them. Hermes follows you across chat platforms.
+Codex and Claude are agents. Cursor is an AI-native code editor and agent
+workspace. Ollama is a model runtime. Unsloth builds and optimizes models.
+Hermes is an agent and automation environment.
 
-**Tanit turns those capabilities into a Windows application people can use
-for everyday work.**
+**Tanit is the application layer around the work itself.**
 
-Files, documents, images, speech, cameras, applications, and workflows live
-beside the agent. Local and cloud models can be mixed per task. Successful
-work is packaged as a portable preset, command, or visual flow—not left in a
-chat transcript. The same solution can run in Chat, the CLI, Explorer, or on
-a schedule.
-
----
-
-## The difference in 30 seconds
-
-| | Tanit | A model server or agent alone |
-|:--|:------|:------------------------------|
-| **What users receive** | A complete Windows workspace | A model endpoint, terminal, chat, or web UI |
-| **Where AI works** | Beside folders, documents, media, applications, cameras, and devices | Inside its own conversation or development environment |
-| **Model choice** | Local GGUF, cloud providers, private endpoints, or a mix per capability | Usually one provider or one runtime at a time |
-| **Portable solutions** | Presets and XBlox flows move a reviewed setup between interactive, headless, and managed deployments | Prompts, scripts, or product-specific tasks |
-| **Runtime** | Compiled C++ core; no Python, Node.js, virtual environment, or container required | Often an interpreter, package environment, service, or browser stack |
-| **Parallel work** | Multiple agent sessions, flows, and tool calls can run concurrently | Depends on the client and the surrounding orchestration |
-| **Control** | One security gateway for built-in tools and MCP across every surface | Permissions limited to that agent or service |
-| **Deployment** | One installer; reduced runtime dependency surface; GPO, Intune, ADMX, secure profiles, and UI lockdown | An integration project around separate components |
-
-Tanit is not another wrapper around a chat API. Its agent, tool gateway,
-automation runtime, file workspace, media tools, and policy controls ship
-together.
-
----
-
-## Compared with the usual choices
-
-| Product | What it does best | Why choose Tanit |
-|:--------|:------------------|:-----------------|
-| **Codex** | Writes and tests code in a repository, locally or in a cloud task | Tanit covers the rest of the workstation: files, Office and PDF documents, images, speech, cameras, applications, devices, and repeatable operational workflows |
-| **Claude** | Strong interactive reasoning and coding with MCP, skills, hooks, and managed settings | Tanit is provider-independent and local-capable, with native Windows integration and one policy path from conversation to scheduled automation |
-| **Ollama** | Downloads and serves open models through a local API | Tanit puts local models to work inside a governed application instead of leaving users to assemble the interface, tools, automation, and security |
-| **Hermes Agent** | A personal agent with memory, skills, scheduling, and messaging gateways | Tanit is designed as a deployable workstation: controlled UI, local media, deterministic flows, Windows fleet policy, and bounded tools for each role |
-| **Unsloth Studio** | Fine-tunes, compares, runs, and exports models | Tanit deploys models into daily work. Train or export in Unsloth; use the result in presets, files, voice, and workflows |
-
-These products can remain part of the solution. Tanit can use compatible local
-endpoints, install GGUF models exported by training tools, and hand repository
-work to installed Codex or Claude Code runners.
+Files, media, applications, and devices remain first-class objects.
+AI can participate in a task without turning the task into a chat session.
+Local and cloud models can be mixed per capability inside one governed Windows
+workspace.
 
 ---
 
 ## Build once, carry the solution
 
-A Tanit solution is configuration, not a fragile conversation. Package the
-working setup and reuse it on the next file, in another interface, or on
-another managed PC.
+**A Tanit solution is configuration, not a fragile transcript.**
 
-| Portable part | What travels |
-|:--------------|:-------------|
-| **Preset** | Agent runner, main and planner models, media routes, tools, MCP, skills, prompts, limits, and consent behavior |
-| **Flow** | Reviewed XBlox steps for files, media, HTTP, applications, MQTT, Modbus, and AI |
+| Portable part | What it carries |
+|:--------------|:----------------|
+| **Preset** | Agent runner, models, planner, media routes, tools, MCP, skills, prompts, limits, and consent behavior |
+| **XBlox flow** | Reviewed steps for files, documents, media, HTTP, applications, MQTT, Modbus, and AI |
 | **Command** | A named action for the ribbon, Explorer, voice, CLI, or scheduler |
-| **Profile** | Encrypted, signed configuration that can be backed up, restored, or deployed |
+| **Profile** | Encrypted and signed configuration that can be backed up, restored, or deployed |
 
-Create as many solutions as the organization needs: a local-only document
-helper, a voice-first accessibility agent, a research setup with selected MCP
-tools, or a workshop flow limited to approved manuals and devices.
-
-The package is portable across Tanit surfaces and Windows PCs; model files,
-provider credentials, and machine-level policy remain separately managed.
-Organization policy is the outer boundary and cannot be weakened by a preset.
+The same solution runs in Chat, headlessly from `tanit-cli`, from Explorer, or
+on a schedule. Model files, credentials, and machine policy remain separately
+managed, so moving a solution does not leak secrets or weaken the destination
+PC.
 
 ---
 
-## Native by design
+## Known work should not become prompt work
 
-Tanit’s agent loop, security gateway, secure storage, tools, automation, file
-operations, and media pipeline run in a compiled C++ core. The OS WebView
-presents selected interfaces; it is not a Node.js application runtime.
-
-| Advantage | What it means |
-|:----------|:--------------|
-| **Ready after install** | The product runtime is complete—no Python environment, `pip install`, `npm install`, package restore, or container bootstrap |
-| **Fast launch** | Start the native application directly instead of first starting an application server and its dependency stack |
-| **Small operational surface** | Desktop, CLI, tools, policy, and XBlox ship as one versioned product instead of a chain of separately managed frameworks |
-| **Reduced supply-chain exposure** | Editions compile out unused capabilities; native dependencies and signed plugins can be inventoried and shipped deliberately |
-| **Multiple instances** | Run independent agent sessions and XBlox jobs with different presets; dispatch independent tool calls in parallel |
-| **Predictable deployment** | The same binaries, presets, and included GPO / ADMX policy can be tested once and deployed across the fleet |
-
-Tanit does not download packages when a flow starts. Connect an approved
-provider or select an installed model and work immediately. Large local model
-weights remain separate payloads; cloud-backed and shared models avoid that
-load on each seat.
-
-Schools, laboratories, and corporate IT can ship the application, portable
-solutions, and Group Policy without first building a Python or Node stack,
-agent UI, and security layer.
-
----
-
-## Built around actual work
-
-| Work | What Tanit provides |
-|:-----|:--------------------|
-| **Files and documents** | Local folders, SSH/SFTP, FTP, connected phones, Office and PDF viewing, search, and file-aware chat |
-| **Images and video** | Browse, cull, OCR, understand, resize, generate, capture, record, and process |
-| **Speech** | Local whisper.cpp transcription, TTS, realtime voice, mic recording, and voice commands |
-| **Applications** | Commands, UI Automation, computer-use tools, Explorer integration, and global shortcuts |
-| **Lab and shop systems** | MQTT and Modbus in the same flow as files, HTTP, and AI |
-| **Automation** | Native C++ XBlox flows, CLI jobs, schedules, ribbon actions, and Explorer commands |
-
-### Skip the chat when the job is already known
-
-A repeated job should not pay for a fresh conversation, a full chat history,
+A repeated job should not pay for a fresh conversation, full chat history,
 every tool schema, and another round of prompt engineering.
 
-Presets select the right provider and model for text, planning, vision, OCR,
-images, video, speech, and realtime voice. XBlox then sends only the required
-input to the required step. A document flow can extract, classify, and file;
-an image flow can inspect and resize; an audio flow can clean, transcribe, and
-export—without asking the user to reconstruct the procedure in chat.
+| Job | Focused flow |
+|:----|:-------------|
+| **Document** | Extract → classify → transform → file or send |
+| **Image** | Inspect → select → resize or generate → export |
+| **Audio** | Record → clean → transcribe → summarize → save |
+| **Video** | Capture → filter or inspect → encode → publish |
+| **Workshop** | Read sensor → consult approved manual → ask for consent → write result |
 
-Deterministic work stays deterministic. File moves, conditions, device writes,
-exports, and approvals remain explicit blocks. AI is used only where
-interpretation or generation adds value. This removes noise, improves
-repeatability, and lets each step use the smallest local model or most
-cost-effective provider that can do the job.
-
----
-
-## Local where it matters, cloud where it earns its keep
-
-A single preset can use:
-
-- a local llama.cpp model for private text or vision
-- local whisper.cpp for speech
-- ONNX models for focused media work
-- a fast model for planning
-- an approved cloud model for difficult reasoning
-- a private OpenAI-compatible endpoint on the LAN
-
-The Models page helps select GGUF variants by quantization, size, sharding,
-capabilities, and estimated VRAM. A stronger machine can serve other seats
-over the LAN with `llm agent --serve`; the clients keep the managed Tanit
-workspace and its policy.
-
-No cloud account is required for a local-only configuration.
+Hermes also supports script-only scheduled jobs with no model call. Tanit’s
+specific advantage is **XBlox**: deterministic and AI steps share one visual,
+inspectable workstation flow. Each step can use the smallest local model or
+most cost-effective provider that can perform it.
 
 ---
 
-## Policy follows the action
+## At a glance
 
-The assistant proposes an action. Tanit allows it, denies it, or asks the
-user.
+Legend: **●** built in · **◐** available, but narrower or externally assembled ·
+**—** not the product’s focus
 
-| Control | Scope |
-|:--------|:------|
-| **Consent** | Once, session, timed, always, or never — with the action and target named |
-| **Profiles** | Light, Strict, and Developer grant sets |
-| **Sandbox** | AppContainer / LPAC isolation and limited writable paths for higher-risk tools |
-| **Fleet policy** | GPO, Intune, and ADMX for providers, tools, MCP hosts, skills, computer use, voice, CLI verbs, and UI panels |
-| **Secure storage** | Encrypt and sign settings, commands, MCP configuration, and prompt documents |
+| Capability | Tanit | Codex | Claude | Cursor | Ollama | Hermes | Unsloth |
+|:-----------|:-----:|:-----:|:------:|:------:|:------:|:------:|:-------:|
+| Windows workspace for daily work | ● | ◐ | ◐ | ◐ | — | ◐ | ◐ |
+| Repository coding agent | ◐ | ● | ● | ● | — | ● | ◐ |
+| Local text and vision models | ● | ◐ | ◐ | ◐ | ● | ◐ | ● |
+| Cloud and private model endpoints | ● | ◐ | ● | ● | ◐ | ● | ● |
+| **Different provider per capability** | ● | — | ◐ | — | — | ◐ | ◐ |
+| Integrated viewer: images, video, audio, PDF, documents, and code | ● | ◐ | — | — | — | — | — |
+| Work directly with local and remote files | ● | ● | ◐ | ● | — | ● | ◐ |
+| Voice and real-time voice | ● | — | ◐ | — | — | ● | — |
+| Application and browser operation | ● | ● | ◐ | ◐ | — | ● | — |
+| Camera, MQTT, and Modbus integration | ● | — | ◐ | — | — | ◐ | — |
+| Deterministic automation without model calls | ● | ◐ | ◐ | ◐ | — | ● | — |
+| Visual mixed deterministic + AI workflow | ● | — | — | — | — | — | — |
+| Portable agent presets and flows | ● | ◐ | ◐ | ◐ | ◐ | ● | ◐ |
+| Scheduled and headless execution | ● | ● | ◐ | ● | — | ● | ◐ |
+| Central Windows policy | ● | ◐ | ● | ◐ | — | — | — |
+| Integrated CMS / managed publishing | ● | — | ◐ | — | — | — | — |
+| Model fine-tuning | — | — | — | — | — | — | ● |
 
-The same gateway protects built-in and MCP tool calls in Chat, CLI jobs, and
-headless flows. Security is not a warning added to one interface; it is part
-of the runtime.
+The distinction is not that other agents cannot touch files or operate an
+application. Tanit exposes these as first-class workstation capabilities,
+independent of a coding-agent workflow.
+
+---
+
+## Bring the agent you prefer
+
+Tanit ships with its own agent harness. It is the default, not a lock-in.
+A preset can switch the runner to an installed **Claude Code** or **Codex**
+agent while keeping Tanit as the workstation around it.
+
+```mermaid
+flowchart LR
+  subgraph Tanit["Tanit workstation"]
+    Surface["Surfaces<br/>Chat · CLI · XBlox · Explorer · Voice"]
+    Runner{"Agent runner"}
+    Gateway["Capability gateway<br/>policy · consent · context · tools"]
+
+    Surface --> Runner
+    Runner --> Native["Tanit harness"]
+    Native --> Gateway
+
+    Gateway --> Files["Files · documents · viewer"]
+    Gateway --> Apps["Apps · browser · computer use"]
+    Gateway --> Media["Camera · audio · recording"]
+    Gateway --> Devices["MQTT · Modbus · hardware"]
+  end
+
+  Runner --> Claude["Claude Code"]
+  Runner --> Codex["Codex"]
+
+  Claude -->|"MCP"| Gateway
+  Codex -->|"MCP"| Gateway
+
+  External["Other MCP client"] -->|"Tanit MCP server"| Gateway
+```
+
+| Mode | Who runs the agent loop | What Tanit contributes |
+|:-----|:------------------------|:-----------------------|
+| **Native** | Tanit’s built-in harness | Models, planner, tools, MCP clients, skills, consent, memory, and all workstation surfaces |
+| **Claude / Codex runner** | The installed external agent | Tanit workspace context and the enabled Tanit tool surface through MCP |
+| **Tanit as MCP server** | Any compatible external client | Governed file, media, computer-use, application, camera, recording, and configured hardware capabilities |
+
+This lets users keep the agent they prefer without rebuilding the surrounding
+desktop integration. Claude or Codex can gain access to Tanit’s computer and
+application tools, media capture, files, commands, and device workflows; Tanit
+continues to decide which capabilities the active preset and machine policy
+expose.
+
+---
+
+## Primary orientation
+
+| Product | Primary orientation |
+|:--------|:--------------------|
+| **Tanit** | Governed Windows operational workspace |
+| **Codex** | Software-development agent expanding into computer use and repeatable work |
+| **Claude** | General reasoning, knowledge-work, and coding agent |
+| **Cursor** | AI-native code editor, coding agents, and cloud development workflows |
+| **Ollama** | Local model runtime and API |
+| **Hermes Agent** | Personal, desktop, messaging, and automation agent |
+| **Unsloth Studio** | Model training, optimization, comparison, and inference |
+
+These are different layers, not mutually exclusive replacements.
+
+---
+
+## How they complement Tanit
+
+| Product | Strongest focus | How it complements Tanit |
+|:--------|:----------------|:-------------------------|
+| **Codex** | Development, parallel agents, computer use, browser tasks, SSH, and scheduled work | Tanit can hand it repository work while retaining the wider files, media, device, and policy surface |
+| **Claude** | Reasoning, knowledge work, coding, MCP, skills, and enterprise-managed desktop sessions | Tanit adds capability-specific routing, local media, deterministic visual flows, and policy across the whole workstation |
+| **Cursor** | AI-native editing, repository agents, cloud agents, and application deployment through Vercel | Tanit adds the wider operational workspace, capability routing, devices, CMS, and governed non-code workflows |
+| **Ollama** | Pulling and serving open models through a local API | Tanit supplies the user interface, tools, workflows, consent, and deployment layer |
+| **Hermes Agent** | Personal automation, memory, profiles, voice, cron, messaging, files, and previews | Tanit adds a Windows-native operational workspace and visual flows that mix deterministic and AI steps |
+| **Unsloth Studio** | Fine-tuning, comparing, running, and exporting models | Tanit deploys the resulting models into documents, media, voice, commands, and workflows |
+
+Tanit can use compatible local endpoints, install GGUF models exported by
+training tools, and run installed Codex or Claude Code agents.
+
+---
+
+## Publishing and delivery
+
+Once an agent produces something useful, it still has to become something
+other people can open, review, or use.
+
+| Product | Delivery model |
+|:--------|:---------------|
+| **Tanit** | Integrated content and CMS layer: publish local Markdown as pages, create posts, upload pictures and VFS files, search and update content, and place publishing inside governed XBlox flows |
+| **Claude** | Hosted artifacts: live interactive pages on `claude.ai`, with private, organization, or public-link sharing where the plan and policy allow it |
+| **ChatGPT / Codex ecosystem** | ChatGPT Sites publishes generated sites to production URLs and, where available, custom domains; Codex CLI alone is not a CMS |
+| **Cursor** | Application deployment through Vercel plugins, CLI, MCP, or connected repositories; this is deployment integration, not a built-in CMS |
+| **Hermes Agent** | Scripts and tools can deliver output to files, messaging platforms, or an external publishing service |
+| **Ollama / Unsloth** | Model runtime and training layers; publishing belongs to the calling application |
+
+Tanit’s distinction is the full path from a local file, recording, generated
+asset, or reviewed flow into managed pages, posts, pictures, and files—without
+leaving the workstation or turning the result into a separate deployment
+project.
+
+---
+
+## Model choice is per capability
+
+| Capability | Tanit route |
+|:-----------|:------------|
+| **Text and agent** | Local llama.cpp GGUF, cloud providers, aggregators, or private OpenAI-compatible endpoints |
+| **Planning** | A separate fast local or cloud model selects a focused tool set |
+| **Vision and OCR** | Local VLM, ONNX OCR, or an external vision provider |
+| **Speech-to-text** | Local whisper.cpp or a configured external service |
+| **Text-to-speech** | Local speech engines or configured voices |
+| **Images and video** | Independent generation and recognition routes instead of forcing media through the chat model |
+| **Shared inference** | One stronger PC serves managed LAN seats with `llm agent --serve` |
+| **Offline use** | A local-only preset requires no cloud account |
+
+The Models page reads GGUF quantization, size, sharding, capabilities, and
+estimated VRAM.
+
+---
+
+## Security and fleet control
+
+| Control | Tanit | Codex | Claude | Cursor | Ollama | Hermes | Unsloth |
+|:--------|:-----:|:-----:|:------:|:------:|:------:|:------:|:-------:|
+| Tool allow / deny / ask policy | ● | ● | ● | ● | — | ● | ◐ |
+| Consent UI naming action and target | ● | ● | ● | ● | — | ● | ◐ |
+| Sandboxed command / code execution | ● | ● | ● | ● | — | ● | ● |
+| Built-in and MCP tools share one policy path | ● | ◐ | ◐ | ◐ | — | ◐ | — |
+| Encrypted and signed portable configuration | ● | — | — | — | — | — | — |
+| Windows Hello key protection | ● | — | — | — | — | — | — |
+| Windows machine policy / MDM controls | ● | ◐ | ● | ◐ | — | — | — |
+| UI panels and Settings can be locked down | ● | — | ◐ | ◐ | — | — | — |
+| Policy spans viewer, models, voice, devices, commands, MCP, CLI, and automation | ● | ◐ | ◐ | ◐ | — | ◐ | — |
+
+Claude has substantial Windows registry and MDM policy of its own. Tanit’s
+distinction is the breadth of its integrated policy surface: one path covers
+the viewer, models, voice, devices, commands, MCP, CLI, and XBlox. A preset
+cannot re-enable a capability disabled by machine policy.
+
+That makes the product practical for schools, laboratories, workshops, and
+corporate fleets without first assembling a separate interface and security
+layer.
+
+---
+
+## Runtime and supply chain
+
+### Product architecture
+
+| Technical concern | Tanit approach |
+|:------------------|:---------------|
+| **Core runtime** | Compiled C++ |
+| **Web interface host** | Microsoft Edge WebView2 for selected interfaces; it is not a Node.js application runtime |
+| **After installation** | No Python environment, `pip install`, `npm install`, package restore, or container bootstrap |
+| **Flow startup** | No package downloads when a preset or XBlox flow starts |
+| **Feature surface** | Editions compile out unused capabilities |
+| **Dependencies** | Native dependencies and signed plugins can be inventoried and shipped deliberately |
+| **Updates** | Desktop, CLI, tools, policy, and automation move as one versioned product |
+| **Concurrency** | Independent agent sessions and XBlox jobs can run together; independent tool calls can dispatch in parallel |
+
+Large local model weights remain separate payloads. Their download and load
+time depend on model size, storage, RAM, and GPU.
+
+### Observed disk usage on our Windows test machine — September 27, 2026
+
+These figures are observations, not vendor requirements. They exclude model
+weights, datasets, projects, and conversation data. WebView2 is supplied by
+Windows and is not included in the Tanit base figure.
+
+| Product | Main implementation | Observed disk usage |
+|:--------|:--------------------|--------------------:|
+| **Tanit base** | C++ core; HTML / TypeScript assets hosted in WebView2 | **~100 MB** |
+| **Codex CLI** | Native Rust executable | ~293 MB |
+| **Claude Code** | TypeScript-based agent distributed as a packaged executable | ~235 MB |
+| **Cursor** | Electron / TypeScript editor with native helpers | ~858 MB active installation; project metadata and caches observed up to ~100 GB on large workspaces |
+| **Ollama** | Go service and CLI with native C / C++ compute backends | ~3.1 GB before models |
+| **Hermes Agent** | Python agent; TypeScript / Electron desktop | ~2.6 GB measured; roughly 5 GB with environment and caches |
+| **Unsloth Studio** | Python / PyTorch stack, web UI, and llama.cpp inference | ~4.8 GB before models and datasets |
+
+Codex / ChatGPT and Claude desktop applications are separate from the CLI
+figures. Cursor was measured from the active `Program Files` installation.
+Optional Tanit plugins and local models are separate from the ~100 MB base.
+
+On large indexed projects, Cursor has also been observed using roughly
+**3–5 GB RAM**, with workspace startup taking up to **~15 seconds**. These are
+working-set observations, not Cursor installation requirements; project size,
+extensions, indexing state, and open agents materially affect them.
+
+### Startup
+
+On the current Tanit test system, the installed workspace reaches a usable UI
+in approximately **two seconds**. This is an informal product observation, not
+a cross-product benchmark. A publishable competitor comparison needs the same
+hardware, cold / warm definition, login and resident-process state, network
+conditions, start / end points, and repeated-run protocol.
 
 ---
 
 ## Choose Tanit when
 
-- Users need an application, not an AI infrastructure project.
-- Work begins with folders, documents, speech, images, or devices—not only a
+- Users need a finished application, not an AI integration project.
+- Work starts with documents, media, applications, or devices—not only a
   prompt or git repository.
-- Local and cloud models must coexist without changing the user experience.
-- A successful interaction must become a reviewed, repeatable procedure.
-- Different roles need different agents, tools, and interfaces.
-- A solution must move from one user or machine to another without recreating
-  its prompts, tools, and workflow.
+- Local and cloud models must coexist behind one experience.
+- A useful interaction must become a portable, reviewed procedure.
+- Deterministic and AI steps must remain visible in the same workflow.
+- IT needs one policy surface across the entire Windows workspace.
 
-**Choose the models you trust. Build the agents each role needs. Keep the
-workspace, automation, and policy in one deployable product.**
+**Choose the models you trust. Package the solution once. Deploy it wherever
+the work happens.**
 
 ---
 
@@ -208,8 +317,17 @@ workspace, automation, and policy in one deployable product.**
 
 ## Comparison sources
 
-- [OpenAI Codex sandboxing](https://developers.openai.com/codex/sandboxing)
+- [Codex for (almost) everything](https://openai.com/index/codex-for-almost-everything/)
+- [Codex on Windows](https://developers.openai.com/codex/whats-new)
+- [Codex Windows sandbox](https://openai.com/index/building-codex-windows-sandbox/)
 - [Claude Desktop](https://code.claude.com/docs/en/desktop)
+- [Claude Desktop managed configuration](https://claude.com/docs/third-party/claude-desktop/configuration)
+- [Claude Desktop MDM deployment](https://claude.com/docs/third-party/claude-desktop/mdm)
+- [Claude Code artifacts](https://code.claude.com/docs/en/artifacts)
+- [ChatGPT Sites](https://learn.chatgpt.com/docs/sites)
+- [Vercel plugin for Cursor and other coding agents](https://vercel.com/docs/agent-resources/vercel-plugin)
+- [Vercel for Cursor Origin](https://vercel.com/docs/git/vercel-for-origin)
 - [Ollama OpenAI compatibility](https://docs.ollama.com/api/openai-compatibility)
-- [Hermes Agent](https://hermes-agent.nousresearch.com/)
+- [Hermes Desktop](https://hermes-agent.nousresearch.com/docs/user-guide/desktop)
+- [Hermes script-only cron jobs](https://hermes-agent.nousresearch.com/docs/guides/cron-script-only)
 - [Unsloth Studio](https://unsloth.ai/docs/new/studio)

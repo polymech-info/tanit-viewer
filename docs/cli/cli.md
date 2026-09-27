@@ -3328,8 +3328,8 @@ Options:
 - `--silence-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">1500</span></span></span>) - Auto-commit STT utterance after this many milliseconds of silence (0 = disabled; requires --stt or --text-out; default: 1500).
 - `--text-out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write the full STT transcript to this file (UTF-8 text). Enables STT automatically. --dst is optional. Relative paths are resolved from the current working directory.
 - `--subtitle-format` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">none</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">none</span> <span data-cli="choice">off</span> <span data-cli="choice">srt</span> <span data-cli="choice">vtt</span> <span data-cli="choice">sbv</span> <span data-cli="choice">all</span> <span data-cli="choice">on</span></span></span>) - Write YouTube-accepted subtitle sidecar(s) next to --dst (or --subtitle-path). none (default) | srt | vtt | sbv | all. Implies --stt.
-- `--subtitle-path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sidecar stem. Default: empty → next to --dst, --from-wav, or --text-out.
-- `--subtitle-max-chars` (<span data-cli="meta"><span data-cli="type">INT:INT in [8 - 120]</span>, <span data-cli="default">default <span data-cli="value">42</span></span></span>) - Cue wrap width (default 42).
+- `--subtitle-path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sidecar stem. Default: empty → next to --dst, --from-wav, or a --text-out path that already ends in .srt/.vtt/.sbv. A .debug or .log path writes a cue trace and does not replace the sidecar.
+- `--subtitle-max-chars` (<span data-cli="meta"><span data-cli="type">INT:INT in [8 - 40000]</span>, <span data-cli="default">default <span data-cli="value">42</span></span></span>) - Cue wrap width (default 42).
 - `--subtitle-max-lines` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 4]</span>, <span data-cli="default">default <span data-cli="value">2</span></span></span>) - Cue wrap line count (default 2).
 
 **Whisper**
@@ -7329,6 +7329,510 @@ tanit-cli mcp client query
 tanit-cli mcp client query --filter 'foo' --input 'foo'
 ```
 
+---
+
+#### mcp client Tanit
+
+MCP server from the tools cache.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_search --query <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_search --args '{}' --timeout-ms 0 --country 'foo' --end_date 'foo' --exact_match 'foo' --exclude_domains '{}' --include_domains '{}' --include_favicon --include_image_descriptions --include_images --include_raw_content --max_results 'foo' --query 'foo' --search_depth 'foo' --start_date 'foo' --time_range 'foo' --topic 'foo'
+```
+
+#### mcp client Tanit tavily-tavily_search
+
+Search the web for current information on any topic. Use for news, facts, or data beyond your knowledge cutoff. Returns snippets and source URLs.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
+- `--country` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Boost search results from a specific country. Must be a full country name (e.g., 'United States', 'Japan', 'Germany'). ISO country codes (e.g., 'us', 'jp') are not supported. Available only if topic is general. See https://docs.tavily.com/documentation/api-reference/search for the full list of supported countries.
+- `--end_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results before the specified end date. Required to be written in the format YYYY-MM-DD
+- `--exact_match` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Only return results containing the exact phrase(s) in quotes in your query
+- `--exclude_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - List of domains to specifically exclude, if the user asks to exclude a domain set this to the domain of the site
+- `--include_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - A list of domains to specifically include in the search results, if the user asks to search on specific sites set this to the domain of the site
+- `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to include the favicon URL for each result
+- `--include_image_descriptions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include a list of query-related images and their descriptions in the response
+- `--include_images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include a list of query-related images in the response
+- `--include_raw_content` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include the cleaned and parsed HTML content of each search result
+- `--max_results` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The maximum number of search results to return
+- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Search query
+- `--search_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The depth of the search. 'basic' for generic results, 'advanced' for more thorough search, 'fast' for optimized low latency with high relevance, 'ultra-fast' for prioritizing latency above all else
+- `--start_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results after the specified start date. Required to be written in the format YYYY-MM-DD.
+- `--time_range` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The time range back from the current date to include in the search results
+- `--topic` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The category of the search. This will determine which of our agents will be used for the search
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_search --query <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_search --args '{}' --timeout-ms 0 --country 'foo' --end_date 'foo' --exact_match 'foo' --exclude_domains '{}' --include_domains '{}' --include_favicon --include_image_descriptions --include_images --include_raw_content --max_results 'foo' --query 'foo' --search_depth 'foo' --start_date 'foo' --time_range 'foo' --topic 'foo'
+```
+
+---
+
+#### mcp client Tanit tavily-tavily_extract
+
+Extract content from URLs. Returns raw page content in markdown or text format.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--extract_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Use 'advanced' for LinkedIn, protected sites, or tables/embedded content
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output format
+- `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include favicon URLs
+- `--include_images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include images from pages
+- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Query to rerank content chunks by relevance
+- `--urls` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List of URLs to extract content from
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_extract
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_extract --args '{}' --timeout-ms 0 --extract_depth 'foo' --format 'foo' --include_favicon --include_images --query 'foo' --urls '{}'
+```
+
+---
+
+#### mcp client Tanit tavily-tavily_crawl
+
+Crawl a website starting from a URL. Extracts content from pages with configurable depth and breadth.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--allow_external` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to return external links in the final response
+- `--extract_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Advanced extraction retrieves more data, including tables and embedded content, with higher success but may increase latency
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.
+- `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to include the favicon URL for each result
+- `--instructions` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Natural language instructions for the crawler. Instructions specify which types of pages the crawler should return.
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Total number of links the crawler will process before stopping
+- `--max_breadth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max number of links to follow per level of the tree (i.e., per page)
+- `--max_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max depth of the crawl. Defines how far from the base URL the crawler can explore.
+- `--select_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to restrict crawling to specific domains or subdomains (e.g., ^docs\.example\.com$)
+- `--select_paths` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)
+- `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The root URL to begin the crawl
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_crawl --url <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_crawl --args '{}' --timeout-ms 0 --allow_external --extract_depth 'foo' --format 'foo' --include_favicon --instructions 'foo' --limit 'foo' --max_breadth 'foo' --max_depth 'foo' --select_domains '{}' --select_paths '{}' --url 'foo'
+```
+
+---
+
+#### mcp client Tanit tavily-tavily_map
+
+Map a website's structure. Returns a list of URLs found starting from the base URL.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--allow_external` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to return external links in the final response
+- `--instructions` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Natural language instructions for the crawler
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Total number of links the crawler will process before stopping
+- `--max_breadth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max number of links to follow per level of the tree (i.e., per page)
+- `--max_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max depth of the mapping. Defines how far from the base URL the crawler can explore
+- `--select_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to restrict crawling to specific domains or subdomains (e.g., ^docs\.example\.com$)
+- `--select_paths` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)
+- `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The root URL to begin the mapping
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_map --url <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_map --args '{}' --timeout-ms 0 --allow_external --instructions 'foo' --limit 'foo' --max_breadth 'foo' --max_depth 'foo' --select_domains '{}' --select_paths '{}' --url 'foo'
+```
+
+---
+
+#### mcp client Tanit tavily-tavily_research
+
+Perform comprehensive research on a given topic or question. Use this tool when you need to gather information from multiple sources, including web pages, documents, and other reso
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - A comprehensive description of the research task
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Defines the degree of depth of the research. 'mini' is good for narrow tasks with few subtopics. 'pro' is good for broad tasks with many subtopics
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_research --input <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_research --args '{}' --timeout-ms 0 --input 'foo' --model 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-source-languages
+
+Get list of available source languages for translation
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-source-languages
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-source-languages --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-get-target-languages
+
+Get list of available target languages for translation
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-target-languages
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-target-languages --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-translate-text
+
+Translate text to a target language using DeepL API. Review all available optional parameters and use those applicable to your scenario for best results. When the translation inclu
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--context` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Recommended: describe what this text is about (e.g., 'Technical documentation for a software API'). Improves translation accuracy but is not itself translated.
+- `--customInstructions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Array of custom instructions to guide translation style (max 10 instructions, 300 chars each)
+- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls formality: 'less' for informal, 'more' for formal/polite, 'prefer_less'/'prefer_more' to prefer but fall back to default
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Glossary ID to ensure consistent terminology translation
+- `--preserveFormatting` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to preserve original formatting - recommended for markdown, code blocks, HTML, or any structured text
+- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
+- `--splitSentences` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sentence splitting: '0' disables, '1' (default) splits on punctuation and newlines, 'nonewlines' preserves line breaks
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
+- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to translate, as a single string or an array of strings handled independently
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-text --targetLangCode <value> --text <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-text --args '{}' --timeout-ms 0 --context 'foo' --customInstructions '{}' --formality 'foo' --glossaryId 'foo' --preserveFormatting --sourceLangCode 'foo' --splitSentences 'foo' --styleId 'foo' --targetLangCode 'foo' --text 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-writing-styles
+
+Get list of writing styles the DeepL API can use while rephrasing text
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-styles
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-styles --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-get-writing-tones
+
+Get list of writing tones the DeepL API can use while rephrasing text
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-tones
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-tones --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-rephrase-text
+
+Rephrase text in the same language, or into a different language, using DeepL API
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--style` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing style for rephrasing
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr') to rephrase into a different language, or leave empty to keep the original language
+- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to rephrase, as a single string or an array of strings handled independently
+- `--tone` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing tone for rephrasing
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-rephrase-text --text <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-rephrase-text --args '{}' --timeout-ms 0 --style 'foo' --targetLangCode 'foo' --text 'foo' --tone 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-translate-document
+
+Translate a document file using DeepL API
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls whether translations should lean toward informal or formal language
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ID of glossary to use for translation
+- `--inputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to the input document file to translate
+- `--outputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path where the translated document will be saved (if not provided, will be auto-generated)
+- `--outputFormat` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Desired output file format (e.g. 'pdf'), or leave empty to keep the input format. Only some conversions are supported.
+- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-document --inputFile <value> --targetLangCode <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-document --args '{}' --timeout-ms 0 --formality 'foo' --glossaryId 'foo' --inputFile 'foo' --outputFile 'foo' --outputFormat 'foo' --sourceLangCode 'foo' --styleId 'foo' --targetLangCode 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-list-glossaries
+
+Get a list of all glossaries with metadata for each - name, dictionaries available, and creation time. This does not fetch any glossary entries. Use the get-glossary-dictionary-ent
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-glossaries
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-glossaries --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-get-glossary-info
+
+Given an id, get metadata about the glossary with that id - its name, available dictionaries, and creation time. This does not fetch any glossary entries. Use the get-glossary-dict
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-info --glossaryId <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-info --args '{}' --timeout-ms 0 --glossaryId 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-glossary-dictionary-entries
+
+Retrieve all the entries from a given glossary dictionary. (A glossary consists one of one or more dictionaries, each of which contains entries for a specific language pair, in one
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
+- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - source language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --glossaryId <value> --sourceLangCode <value> --targetLangCode <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --args '{}' --timeout-ms 0 --glossaryId 'foo' --sourceLangCode 'foo' --targetLangCode 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-list-style-rules
+
+Get a list of all style rules with metadata for each - id, name, language, and timestamps. Style rules can be applied when translating text or documents. Use the get-style-rule too
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--detailed` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to include the configured rules and custom instructions of each rule
+- `--page` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page number, 0-based
+- `--pageSize` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of style rules per page (max 10)
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-style-rules
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-style-rules --args '{}' --timeout-ms 0 --detailed --page 'foo' --pageSize 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-style-rule
+
+Given an id, get a single style rule with its full detail - configured rules and custom instructions.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-style-rule --styleId <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-style-rule --args '{}' --timeout-ms 0 --styleId 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-custom-instruction
+
+Get a single custom instruction belonging to a style rule. Use the get-style-rule tool to find out which custom instructions a style rule contains.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--instructionId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the custom instruction
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-custom-instruction --instructionId <value> --styleId <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms 0 --instructionId 'foo' --styleId 'foo'
+```
+
 ## Custom Commands
 
 | Exact ID | Label | Group | Action | Pre-configured Args |
@@ -7362,7 +7866,7 @@ tanit-cli mcp client query --filter 'foo' --input 'foo'
 | `custom.command-mpohnfaf-26b0c` | TTS | AI | `app:setVariable` |  |
 | `custom.command-mpokt0hv-41237` | Funny | AI | `app:setVariable` |  |
 | `custom.command-mpokxo4w-0910a` | Serious | AI | `app:setVariable` |  |
-| `custom.command-mtloapd5-06baa` | MCP | AI | `cli:mcp` |  |
+| `custom.command-mtloapd5-06baa` | MCP | AI | `cli:mcp` | `--json` |
 | `custom.command-mu1wob56-d1f45` | Share as Article (copy) | AI | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
 | `custom.command-mtva51l4-2e559` | Login | AI | `app:login` |  |
 | `custom.command-mtvdak7f-00d65` | Logout | AI | `app:logout` |  |
@@ -7381,7 +7885,7 @@ tanit-cli mcp client query --filter 'foo' --input 'foo'
 | `custom.command-mtv9cd7k-7a458` | Reset | View | `app:resetlayout` |  |
 | `custom.command-70eabea6-957e6` | Spanish | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`Translate to Spanish`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_es.${SRC_EXT}`<br>`--hud` |
 | `custom.command-msyzmkcu-9b027` | English | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_en.${SRC_EXT}`<br>`--prompt`<br>`Translate to English`<br>`--no-tools`<br>`--preset`<br>`Tanit-Fast`<br>`--hud`<br>`--hud-mode`<br>`both` |
-| `custom.command-msyznegr-9190e` | German | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_de.${SRC_EXT}`<br>`--prompt`<br>`Translate to German` |
+| `custom.command-msyznegr-9190e` | German | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_de.${SRC_EXT}`<br>`--hud`<br>`--hud-mode`<br>`both`<br>`--prompt`<br>`Translate to German. Return raw response, no fences!` |
 | `custom.command-mt0dfzrn-665b0` | French | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--prompt`<br>`Translate to French`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_fr.${SRC_EXT}` |
 | `text.md2pdf` | MD->PDF | Translate | `external` | `--headless`<br>`--convert-to pdf`<br>`--outdir`<br>`${CWD}`<br>`${CURRENT_FILE}` |
 | `custom.command-ms0phpqj-d1ca3` | Chrome | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-chrome.xblox` |
@@ -7393,6 +7897,7 @@ tanit-cli mcp client query --filter 'foo' --input 'foo'
 | `custom.command-mtk0rcb2-f401a` | Speech to Text | Audio | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/stt-paste-whisper.xblox` |
 | `custom.command-ms0q0j9j-92441` | Yamaha | Audio | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/bluetooth-yamaha.xblox` |
 | `custom.command-mtn0t1b3-722de` | Voice Commands | Audio | `app:togglevoicecommand` |  |
+| `custom.command-7201753fce13ac9f1c6b945856a73c94` | SRT->WAV | Audio | `cli:audio` | `tts-scripted`<br>`--srt`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
 | `custom.command-mrf5dhi8-76608` | 1:1 | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
 | `custom.command-mssrlhcu-5aa17` | 1:1-ex | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
 | `custom.command-ms4vl4ur-4569d` | 16:9 | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
@@ -7402,6 +7907,7 @@ tanit-cli mcp client query --filter 'foo' --input 'foo'
 | `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
 | `custom.handbrake-hq` | Handbrake | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-video-social-hq` | Social Video HQ | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.command-mujkog2v-f9c2b` | Swap MP4 audio | Converters | `external` | `-y`<br>`-i`<br>`${CURRENT_SELECTION_0}`<br>`-i`<br>`${CURRENT_SELECTION_1}`<br>`-map`<br>`0:v:0`<br>`-map`<br>`1:a:0`<br>`-c:v`<br>`copy`<br>`-c:a`<br>`aac`<br>`-shortest`<br>`${PATH_DIR:CURRENT_SELECTION_0}${PATH_SEP}${PATH_NAME:CURRENT_SELECTION_0}_with_${PATH_NAME:CURRENT_SELECTION_1}.mp4` |
 | `custom.command-mr51514h-c34ec` | System | Default Prompts | `app:edit` |  |
 | `custom.command-mr50fk3n-1a7d7` | Realtime | Default Prompts | `app:edit` |  |
 | `custom.command-mppft700-137e9` | Planner | Default Prompts | `app:edit` |  |
@@ -7415,7 +7921,7 @@ tanit-cli mcp client query --filter 'foo' --input 'foo'
 | `custom.command-mt4msl99-55414` | Start | Scheduler | `app:schedulerstart` |  |
 | `custom.command-mt4munur-873bb` | Stop | Scheduler | `app:schedulerstop` |  |
 | `custom.command-mt7672eh-b7786` | To Images | PDF | `cli:pdf` | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
-| `custom.pdf-to-md` | To Markdown | PDF | `cli:pdf` | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md` |
+| `custom.pdf-to-md` | To Markdown | PDF | `cli:pdf` | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--per-page`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16` |
 | `custom.fs-copy` | Copy | Files | `app:fscopy` |  |
 | `custom.fs-move` | Move | Files | `app:fsmove` |  |
 | `custom.command-mu114s8q-17bff` | Share | Files | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--public` |
@@ -7425,9 +7931,11 @@ tanit-cli mcp client query --filter 'foo' --input 'foo'
 | `custom.command-msakytc7-dd084` | Online Help | Files | `app:openurl` |  |
 | `custom.command-mu1w66c6-5b959` | Speak | Text | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
 | `custom.command-mtum9djk-a760d` | Share as Article | Text | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
-| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4 audio to MP3 | AI Commands | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
+| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4->MP3 | AI Commands | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
+| `custom.command-mujlyke2-1c42f` | MP4->WAV | AI Commands | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-ac`<br>`1`<br>`-ar`<br>`16000`<br>`-c:a`<br>`pcm_s16le`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
 | `custom.command-7883566e75cb852699295a0cc2a574c5` | Video poster frame | AI Commands | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-frames:v`<br>`1`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.png` |
 | `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | AI Commands | `external` | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
+| `custom.command-mujkxt3w-4af40` | Subtitles | Audio Converter | `cli:audio` | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt` |
 
 Call custom commands with the exact dotted ID shown above, e.g. `tanit-cli.exe custom.mic-start`.
 Pass `...` extra args after `--` to append them to the configured command without wrapper interception.

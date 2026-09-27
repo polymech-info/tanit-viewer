@@ -1703,7 +1703,7 @@ Params:
 - `json` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Return structured STT JSON vs transcript string. Includes segments when available. Default: false.
 - `subtitleFormat` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;none&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">none</span> <span data-cli="choice">srt</span> <span data-cli="choice">vtt</span> <span data-cli="choice">sbv</span> <span data-cli="choice">all</span></span></span>) - Write YouTube-accepted sidecar(s) next to the audio (or subtitlePath).
 - `subtitlePath` (<span data-cli="meta"><span data-cli="type">output_path</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span>, <span data-cli="tag" data-variant="enum">constraints</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">writable</span> <span data-cli="choice">createParents</span></span></span>) - Sidecar stem. Default: empty → next to the source/WAV.
-- `subtitleMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">8-120</span>, <span data-cli="default">default <span data-cli="value">42</span></span></span>) - Cue wrap width.
+- `subtitleMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">8-40000</span>, <span data-cli="default">default <span data-cli="value">42</span></span></span>) - Cue wrap width.
 - `subtitleMaxLines` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-4</span>, <span data-cli="default">default <span data-cli="value">2</span></span></span>) - Cue wrap line count.
 - `result` (<span data-cli="meta"><span data-cli="type">json_value</span></span>) - Structured STT payload when json=true: provider, model, transcript, segments, duration, samples, optional wav/subtitlePath.
 - `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;transcript&quot;</span></span></span>) - Variable for PREVIOUS / downstream blocks. Default: transcript.
@@ -6339,7 +6339,7 @@ Params:
 - `captions` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;off&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">sidecar</span></span></span>) - After finalize, transcribe the encoded-timeline 16 kHz dump and write sidecars. Not a live HUD (use audioTranscribe for that).
 - `captionFormat` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;srt&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">srt</span> <span data-cli="choice">vtt</span> <span data-cli="choice">sbv</span> <span data-cli="choice">all</span></span></span>) - YouTube-accepted sidecar: SubRip, WebVTT, SubViewer, or all three.
 - `captionStt` (<span data-cli="meta"><span data-cli="type">stt_route</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Dictation STT route. Empty {} inherits App Settings Voice & Audio.
-- `subtitleMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">8-120</span>, <span data-cli="default">default <span data-cli="value">42</span></span></span>) - Cue wrap width (writer, not viewport).
+- `subtitleMaxChars` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">8-40000</span>, <span data-cli="default">default <span data-cli="value">42</span></span></span>) - Cue wrap width (writer, not viewport).
 - `subtitleMaxLines` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-4</span>, <span data-cli="default">default <span data-cli="value">2</span></span></span>) - Cue wrap line count.
 
 **beauty**
@@ -7519,7 +7519,7 @@ Default block:
 | `custom.command-mpohnfaf-26b0c` | TTS | `app:setVariable` |  |
 | `custom.command-mpokt0hv-41237` | Funny | `app:setVariable` |  |
 | `custom.command-mpokxo4w-0910a` | Serious | `app:setVariable` |  |
-| `custom.command-mtloapd5-06baa` | MCP | `cli:mcp` |  |
+| `custom.command-mtloapd5-06baa` | MCP | `cli:mcp` | `--json` |
 | `custom.command-mu1wob56-d1f45` | Share as Article (copy) | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
 | `custom.command-mtva51l4-2e559` | Login | `app:login` |  |
 | `custom.command-mtvdak7f-00d65` | Logout | `app:logout` |  |
@@ -7538,7 +7538,7 @@ Default block:
 | `custom.command-mtv9cd7k-7a458` | Reset | `app:resetlayout` |  |
 | `custom.command-70eabea6-957e6` | Spanish | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`Translate to Spanish`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_es.${SRC_EXT}`<br>`--hud` |
 | `custom.command-msyzmkcu-9b027` | English | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_en.${SRC_EXT}`<br>`--prompt`<br>`Translate to English`<br>`--no-tools`<br>`--preset`<br>`Tanit-Fast`<br>`--hud`<br>`--hud-mode`<br>`both` |
-| `custom.command-msyznegr-9190e` | German | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_de.${SRC_EXT}`<br>`--prompt`<br>`Translate to German` |
+| `custom.command-msyznegr-9190e` | German | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_de.${SRC_EXT}`<br>`--hud`<br>`--hud-mode`<br>`both`<br>`--prompt`<br>`Translate to German. Return raw response, no fences!` |
 | `custom.command-mt0dfzrn-665b0` | French | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--prompt`<br>`Translate to French`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_fr.${SRC_EXT}` |
 | `text.md2pdf` | MD->PDF | `external` | `--headless`<br>`--convert-to pdf`<br>`--outdir`<br>`${CWD}`<br>`${CURRENT_FILE}` |
 | `custom.command-ms0phpqj-d1ca3` | Chrome | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-chrome.xblox` |
@@ -7550,6 +7550,7 @@ Default block:
 | `custom.command-mtk0rcb2-f401a` | Speech to Text | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/stt-paste-whisper.xblox` |
 | `custom.command-ms0q0j9j-92441` | Yamaha | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/bluetooth-yamaha.xblox` |
 | `custom.command-mtn0t1b3-722de` | Voice Commands | `app:togglevoicecommand` |  |
+| `custom.command-7201753fce13ac9f1c6b945856a73c94` | SRT->WAV | `cli:audio` | `tts-scripted`<br>`--srt`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
 | `custom.command-mrf5dhi8-76608` | 1:1 | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
 | `custom.command-mssrlhcu-5aa17` | 1:1-ex | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
 | `custom.command-ms4vl4ur-4569d` | 16:9 | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
@@ -7559,6 +7560,7 @@ Default block:
 | `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
 | `custom.handbrake-hq` | Handbrake | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-video-social-hq` | Social Video HQ | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.command-mujkog2v-f9c2b` | Swap MP4 audio | `external` | `-y`<br>`-i`<br>`${CURRENT_SELECTION_0}`<br>`-i`<br>`${CURRENT_SELECTION_1}`<br>`-map`<br>`0:v:0`<br>`-map`<br>`1:a:0`<br>`-c:v`<br>`copy`<br>`-c:a`<br>`aac`<br>`-shortest`<br>`${PATH_DIR:CURRENT_SELECTION_0}${PATH_SEP}${PATH_NAME:CURRENT_SELECTION_0}_with_${PATH_NAME:CURRENT_SELECTION_1}.mp4` |
 | `custom.command-mr51514h-c34ec` | System | `app:edit` |  |
 | `custom.command-mr50fk3n-1a7d7` | Realtime | `app:edit` |  |
 | `custom.command-mppft700-137e9` | Planner | `app:edit` |  |
@@ -7572,7 +7574,7 @@ Default block:
 | `custom.command-mt4msl99-55414` | Start | `app:schedulerstart` |  |
 | `custom.command-mt4munur-873bb` | Stop | `app:schedulerstop` |  |
 | `custom.command-mt7672eh-b7786` | To Images | `cli:pdf` | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
-| `custom.pdf-to-md` | To Markdown | `cli:pdf` | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md` |
+| `custom.pdf-to-md` | To Markdown | `cli:pdf` | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--per-page`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16` |
 | `custom.fs-copy` | Copy | `app:fscopy` |  |
 | `custom.fs-move` | Move | `app:fsmove` |  |
 | `custom.command-mu114s8q-17bff` | Share | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--public` |
@@ -7582,6 +7584,8 @@ Default block:
 | `custom.command-msakytc7-dd084` | Online Help | `app:openurl` |  |
 | `custom.command-mu1w66c6-5b959` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
 | `custom.command-mtum9djk-a760d` | Share as Article | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
-| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4 audio to MP3 | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
+| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4->MP3 | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
+| `custom.command-mujlyke2-1c42f` | MP4->WAV | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-ac`<br>`1`<br>`-ar`<br>`16000`<br>`-c:a`<br>`pcm_s16le`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
 | `custom.command-7883566e75cb852699295a0cc2a574c5` | Video poster frame | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-frames:v`<br>`1`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.png` |
 | `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | `external` | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
+| `custom.command-mujkxt3w-4af40` | Subtitles | `cli:audio` | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt` |

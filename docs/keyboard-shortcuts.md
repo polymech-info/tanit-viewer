@@ -312,46 +312,46 @@ Worth knowing when learning the wiring and tree UIs:
 
 These come from the `commands.json` that was loaded when this page was generated (same file as Settings → Commands).
 
-### Start
+### Home
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Befehle | `Ctrl+Alt+P` | Window |
+| Commands | `Ctrl+Alt+P` | Window |
 
-### Schnappschüsse
-
-| Command | Shortcut | Scope |
-|:---|:---|:---|
-| Vollbildaufnahme | `F14` | Global |
-
-### Ansicht
+### Screenshots
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Vollbild | `Alt+F` | Window |
+| Fullscreen Screenshot | `F14` | Global |
 
-### Ton
+### View
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Sprache zu Text | `Shift+F7` | Global |
+| Fullscreen | `Alt+F` | Window |
 
-### Bildschirmaufnahme
+### Audio
+
+| Command | Shortcut | Scope |
+|:---|:---|:---|
+| Speech to Text | `Shift+F7` | Global |
+
+### Screen-Recorder
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
 | 1:1 | `Shift+F8` | Global |
 
-### Planer
+### Scheduler
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Test | `Ctrl+Alt+F8` | Window |
+| test-screen | `Ctrl+Alt+F8` | Window |
 
-### Dateien
+### Files
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Kop. | `F5` | Window |
-| Verschieb | `F6` | Window |
-| Hilfe | `F1` | Window |
+| Copy | `F5` | Window |
+| Move | `F6` | Window |
+| Online Help | `F1` | Window |
