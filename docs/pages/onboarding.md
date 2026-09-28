@@ -30,7 +30,6 @@
   pm-caption_de="Einfuehrung"
 }
 
-2
 
 ***
 

@@ -7561,6 +7561,7 @@ Default block:
 | `custom.handbrake-hq` | Handbrake | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-video-social-hq` | Social Video HQ | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-mujkog2v-f9c2b` | Swap MP4 audio | `external` | `-y`<br>`-i`<br>`${CURRENT_SELECTION_0}`<br>`-i`<br>`${CURRENT_SELECTION_1}`<br>`-map`<br>`0:v:0`<br>`-map`<br>`1:a:0`<br>`-c:v`<br>`copy`<br>`-c:a`<br>`aac`<br>`-shortest`<br>`${PATH_DIR:CURRENT_SELECTION_0}${PATH_SEP}${PATH_NAME:CURRENT_SELECTION_0}_with_${PATH_NAME:CURRENT_SELECTION_1}.mp4` |
+| `custom.command-mujpxpuu-eff23` | Download | `external` | `${CURRENT_URL}` |
 | `custom.command-mr51514h-c34ec` | System | `app:edit` |  |
 | `custom.command-mr50fk3n-1a7d7` | Realtime | `app:edit` |  |
 | `custom.command-mppft700-137e9` | Planner | `app:edit` |  |

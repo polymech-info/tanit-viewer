@@ -4,13 +4,19 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
-## 1.0.64 - 25-09
+## 1.0.66 - 28-09
 
 _Each change is dated DD-MM from the commit day. Newest first._
 
 ### New
 
+- 26-09 The PDF image command now exposes a new configurable option.
+- 26-09 The understand command now supports --max-tokens, --threads, --ctx, and --gpu-layers.
 - 25-09 Added MCP server subcommands sourced from the tools cache, with query support, JSON arguments, per-field flag overrides, and configurable request timeouts.
+- 25-09 Added CLI support for launching MCP servers and selecting cached tools.
+- 25-09 Added --args for nested JSON fields and --timeout-ms for MCP request timeouts, with command-line flags taking precedence.
+- 25-09 Added dynamically generated command-line options for MCP tool parameters, including repeated-value fields.
+- 25-09 Added a dedicated query command and associated CLI options for MCP requests.
 - 22-09 <FieldRow label={tr.grpLblPresentation}>
 - 22-09 Added a --scenario option to the test core process runner command.
 - 21-09 Added the UI.Editors.EnablePage policy for controlling access to the page editor.
@@ -144,6 +150,7 @@ _Each change is dated DD-MM from the commit day. Newest first._
 ### Improved
 
 - 25-09 Enabled created commands to use the schedule_at tool.
+- 25-09 The command creation tool now supports ask_user, memory_read, memory_write, memory_append_event, and schedule_at.
 - 22-09 Improved accessibility by adding descriptive aria-labels to media elements for better screen reader support.
 - 22-09 s.test_core_process_runner_cmd = s.test_core_cmd->add_subcommand()->add_option("--scenario", s.test_core_process_runner_scenario,
 - 22-09 Improved the `aria-label` attributes in MarkdownMedia.tsx and MarkdownMediaLink.tsx for enhanced accessibility and user experience.
