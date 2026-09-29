@@ -139,6 +139,7 @@ Commands that take args list them under the verb. Pass JSON with `tanit-cli.exe 
 - `debugstate` - Dump dock debug snapshot
 - `resetlayout` - Reset layout
 - `settings` - Open settings
+  - `section` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">general</span> <span data-cli="choice">wizard</span> <span data-cli="choice">directories</span> <span data-cli="choice">advanced</span> <span data-cli="choice">providers</span> <span data-cli="choice">chat</span> <span data-cli="choice">sessions</span> <span data-cli="choice">commands</span> <span data-cli="choice">variables</span> <span data-cli="choice">mcp</span> <span data-cli="choice">tanit</span> <span data-cli="choice">tools</span> <span data-cli="choice">skills</span> <span data-cli="choice">workbench</span> <span data-cli="choice">audio-video</span> <span data-cli="choice">models</span> <span data-cli="choice">keyboard-shortcuts</span> <span data-cli="choice">security</span></span></span>) - Settings page. wizard opens the setup wizard.
 - `toggletheme` - Toggle theme
 - `toggleautogrow` - Toggle auto grow
 - `showautogrow` - Enable auto grow

@@ -7495,15 +7495,16 @@ Default block:
 | `custom.command-mtlnivuv-4aae3` | Explorer | `app:togglefiletree` |  |
 | `file.next` | Next | `app:nextfile` |  |
 | `custom.dropdown-msx1rszr-19148` | New | `metadata` |  |
+| `custom.command-mulazcgl-a19cb` | New Chat | `app:togglechat` |  |
 | `custom.command-msx1rszr-32ae1` | XBlox Script | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |
 | `custom.command-msx1xf70-ed2f7` | Text File | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
 | `custom.command-mtfnk3hu-47302` | Markdown File | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
 | `custom.command-mtczu1xa-c605f` | File Tab | `app:newfiletab` |  |
 | `custom.command-mudse19e-edcc5` | Browser | `app:openurl` |  |
 | `custom.command-mtfpcfxj-e1333` | Screen Recording | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
+| `custom.command-mulbk22p-b16a6` | Wizard | `app:settings` |  |
 | `custom.command-mpx9r1ur-8c6df` | Assistant | `cli:llm` | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | `app:togglelauncher` |  |
-| `custom.command-mtox7vvr-093fc` | Voice Commands | `app:togglevoicecommand` |  |
 | `custom.command-712fbd00-f9ac4` | Product | `cli:transform` | `--prompt`<br>`render this as product shooting, white background, studio`<br>`--json`<br>`${CURRENT_SELECTION}` |
 | `custom.command-mpch9gdx-44982` | Illustration | `cli:transform` | `--src`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`as technical illustration`<br>`--model`<br>`image-generation-deep` |
 | `custom.image-understand-speak` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
@@ -7551,8 +7552,8 @@ Default block:
 | `custom.command-ms0q0j9j-92441` | Yamaha | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/bluetooth-yamaha.xblox` |
 | `custom.command-mtn0t1b3-722de` | Voice Commands | `app:togglevoicecommand` |  |
 | `custom.command-7201753fce13ac9f1c6b945856a73c94` | SRT->WAV | `cli:audio` | `tts-scripted`<br>`--srt`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
+| `custom.command-mtox7vvr-093fc` | Voice Commands | `app:togglevoicecommand` |  |
 | `custom.command-mrf5dhi8-76608` | 1:1 | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
-| `custom.command-mssrlhcu-5aa17` | 1:1-ex | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
 | `custom.command-ms4vl4ur-4569d` | 16:9 | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
 | `custom.command-msghb0e2-e8c47` | Fixed | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed.xblox` |
 | `custom.command-mubm8ayh-a6d58` | Fixed & Subs | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed-subs.xblox` |
@@ -7562,6 +7563,9 @@ Default block:
 | `custom.command-video-social-hq` | Social Video HQ | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-mujkog2v-f9c2b` | Swap MP4 audio | `external` | `-y`<br>`-i`<br>`${CURRENT_SELECTION_0}`<br>`-i`<br>`${CURRENT_SELECTION_1}`<br>`-map`<br>`0:v:0`<br>`-map`<br>`1:a:0`<br>`-c:v`<br>`copy`<br>`-c:a`<br>`aac`<br>`-shortest`<br>`${PATH_DIR:CURRENT_SELECTION_0}${PATH_SEP}${PATH_NAME:CURRENT_SELECTION_0}_with_${PATH_NAME:CURRENT_SELECTION_1}.mp4` |
 | `custom.command-mujpxpuu-eff23` | Download | `external` | `${CURRENT_URL}` |
+| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4->MP3 | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
+| `custom.command-mujlyke2-1c42f` | MP4->WAV | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-ac`<br>`1`<br>`-ar`<br>`16000`<br>`-c:a`<br>`pcm_s16le`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
+| `custom.command-7883566e75cb852699295a0cc2a574c5` | Video poster frame | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-frames:v`<br>`1`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.png` |
 | `custom.command-mr51514h-c34ec` | System | `app:edit` |  |
 | `custom.command-mr50fk3n-1a7d7` | Realtime | `app:edit` |  |
 | `custom.command-mppft700-137e9` | Planner | `app:edit` |  |
@@ -7576,6 +7580,7 @@ Default block:
 | `custom.command-mt4munur-873bb` | Stop | `app:schedulerstop` |  |
 | `custom.command-mt7672eh-b7786` | To Images | `cli:pdf` | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
 | `custom.pdf-to-md` | To Markdown | `cli:pdf` | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--per-page`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16` |
+| `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | `external` | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
 | `custom.fs-copy` | Copy | `app:fscopy` |  |
 | `custom.fs-move` | Move | `app:fsmove` |  |
 | `custom.command-mu114s8q-17bff` | Share | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--public` |
@@ -7585,8 +7590,4 @@ Default block:
 | `custom.command-msakytc7-dd084` | Online Help | `app:openurl` |  |
 | `custom.command-mu1w66c6-5b959` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
 | `custom.command-mtum9djk-a760d` | Share as Article | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
-| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4->MP3 | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
-| `custom.command-mujlyke2-1c42f` | MP4->WAV | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-ac`<br>`1`<br>`-ar`<br>`16000`<br>`-c:a`<br>`pcm_s16le`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
-| `custom.command-7883566e75cb852699295a0cc2a574c5` | Video poster frame | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-frames:v`<br>`1`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.png` |
-| `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | `external` | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
 | `custom.command-mujkxt3w-4af40` | Subtitles | `cli:audio` | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt` |

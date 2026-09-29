@@ -1483,7 +1483,7 @@ Options:
 - `--planner-budget` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Maximum tool schemas the planner may pre-expand before falling back to the full catalog.
 - `--no-parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable concurrent tool dispatch and fall back to serial execution. Parallel dispatch (P6) is on by default; use this flag to opt out.
 - `--parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dispatch all tool calls in a single LLM response concurrently (std::async). On by default — this flag is accepted for compatibility but is a no-op unless --no-parallel-tools was previously applied.
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 - `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
 
 **Session**
@@ -1903,7 +1903,7 @@ tanit-cli installer --uninstall --dry --no-seed --no-explorer --no-startmenu --n
 
 #### installer chrome
 
-Register Tanit Chrome native messaging host only (no npm). Run once per user, then Load unpacked from extension/tanit-chrome in Chrome.
+Register Tanit Chrome native messaging host only (no npm). Run once per user. A zip install then loads unpacked from extension/tanit-chrome. A Store install then installs Tanit Chat from the Chrome Web Store.
 
 Options:
 
@@ -2981,7 +2981,7 @@ tanit-cli service store app-license
 
 #### service store app-license
 
-Microsoft Store app license (trial/full). PM_STORE_LICENSE_MOCK defaults to full; trial|expired|inactive override.
+Microsoft Store app license. v1 is free (no trial lock). PM_STORE_LICENSE_MOCK=trial|full|expired|inactive overrides for tests.
 
 **Example**
 
@@ -5545,6 +5545,175 @@ tanit-cli test core process-runner --scenario 'all'
 
 ---
 
+#### test core settings
+
+Settings path handles: config dir, settings.json, and stored-expression UTF-8.
+
+Options:
+
+- `--path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sample filesystem path (apostrophe / Unicode) to persist via path_to_stored_expression
+
+**Example**
+
+```sh
+tanit-cli test core settings
+```
+
+**Full example**
+
+```sh
+tanit-cli test core settings --path 'foo'
+```
+
+---
+
+#### test core settings-roundtrip
+
+Single-process save_subtree / merge_subtree_object / reload.
+
+**Example**
+
+```sh
+tanit-cli test core settings-roundtrip
+```
+
+---
+
+#### test core settings-owner
+
+Claim settings owner mutex, start cmd_ipc, print status; --hold blocks.
+
+Options:
+
+- `--hold` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Stay alive until timeout or process kill.
+- `--hang-ipc` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Owner accept thread hangs on settings_mutate.
+- `--persist-delay-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Sleep inside owner persist (encrypt injection).
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Hold timeout (default 30000).
+- `--apply-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - After ready, save_subtree this key (owner intercept).
+- `--apply-value` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Value for --apply-key.
+- `--apply-after-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Delay after ready before --apply-key (peer connect window).
+
+**Example**
+
+```sh
+tanit-cli test core settings-owner
+```
+
+**Full example**
+
+```sh
+tanit-cli test core settings-owner --hold --hang-ipc --persist-delay-ms 0 --timeout-ms 30000 --apply-key 'foo' --apply-value 'foo' --apply-after-ms 0
+```
+
+---
+
+#### test core settings-mutate
+
+Optimistic local + IPC mutate: --op set|merge|append-history.
+
+Options:
+
+- `--op` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">set</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">set</span> <span data-cli="choice">merge</span> <span data-cli="choice">append-history</span></span></span>) - set, merge, or append-history
+- `--key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Top-level settings key
+- `--value` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON value or raw string
+- `--guid` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Idempotency guid
+- `--wait-persisted` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Ask owner to FlushNow after mutate.
+- `--no-ipc` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip cmd_ipc; write the blob from this process.
+
+**Example**
+
+```sh
+tanit-cli test core settings-mutate
+```
+
+**Full example**
+
+```sh
+tanit-cli test core settings-mutate --op 'set' --key 'foo' --value 'foo' --guid 'foo' --wait-persisted --no-ipc
+```
+
+---
+
+#### test core settings-wait-changed
+
+Connect as IPC client and wait until revision >= --min-revision.
+
+Options:
+
+- `--min-revision` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Revision to wait for.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Wait timeout (default 30000).
+
+**Example**
+
+```sh
+tanit-cli test core settings-wait-changed
+```
+
+**Full example**
+
+```sh
+tanit-cli test core settings-wait-changed --min-revision 0 --timeout-ms 30000
+```
+
+---
+
+#### test core settings-status
+
+Owner/client snapshot: epoch, revision, pending, persistSeq, lastCommitMeta.
+
+**Example**
+
+```sh
+tanit-cli test core settings-status
+```
+
+---
+
+#### test core src
+
+Entry --src path: media fragment split, UTF-8 normalize, and first-source argv scan.
+
+Options:
+
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path, optionally with #t= fragment
+- `--argv` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON array of argv tokens; reports the first --src/-s/--input/-i value
+
+**Example**
+
+```sh
+tanit-cli test core src
+```
+
+**Full example**
+
+```sh
+tanit-cli test core src --input 'foo' --argv 'foo'
+```
+
+---
+
+#### test core loopback
+
+agent_factory loopback router: script rounds, cancel, and reset_script.
+
+Options:
+
+- `--script` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON array of scripted LLM rounds (default: one run tool call, then text)
+
+**Example**
+
+```sh
+tanit-cli test core loopback
+```
+
+**Full example**
+
+```sh
+tanit-cli test core loopback --script 'foo'
+```
+
+---
+
 #### test core context
 
 Windows OS context-store acceptance scenarios (synthetic Explorer/Desktop/drag).
@@ -7196,7 +7365,7 @@ Options:
 - `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
 - `--bind` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Interface/address for MCP HTTP. Default: 127.0.0.1 (loopback only).
 - `--port` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 65535]</span>, <span data-cli="default">default <span data-cli="value">4444</span></span></span>) - First TCP port to try for MCP HTTP (default 4444; next free port if busy)
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 
 **Example**
 
@@ -7842,15 +8011,16 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms
 | `custom.command-mtlnivuv-4aae3` | Explorer | Navigation | `app:togglefiletree` |  |
 | `file.next` | Next | Navigation | `app:nextfile` |  |
 | `custom.dropdown-msx1rszr-19148` | New | New | `metadata` |  |
+| `custom.command-mulazcgl-a19cb` | New Chat | New | `app:togglechat` |  |
 | `custom.command-msx1rszr-32ae1` | XBlox Script | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |
 | `custom.command-msx1xf70-ed2f7` | Text File | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
 | `custom.command-mtfnk3hu-47302` | Markdown File | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
 | `custom.command-mtczu1xa-c605f` | File Tab | New | `app:newfiletab` |  |
 | `custom.command-mudse19e-edcc5` | Browser | New | `app:openurl` |  |
 | `custom.command-mtfpcfxj-e1333` | Screen Recording | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
+| `custom.command-mulbk22p-b16a6` | Wizard | Home | `app:settings` |  |
 | `custom.command-mpx9r1ur-8c6df` | Assistant | Home | `cli:llm` | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | Home | `app:togglelauncher` |  |
-| `custom.command-mtox7vvr-093fc` | Voice Commands | Home | `app:togglevoicecommand` |  |
 | `custom.command-712fbd00-f9ac4` | Product | Images | `cli:transform` | `--prompt`<br>`render this as product shooting, white background, studio`<br>`--json`<br>`${CURRENT_SELECTION}` |
 | `custom.command-mpch9gdx-44982` | Illustration | Images | `cli:transform` | `--src`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`as technical illustration`<br>`--model`<br>`image-generation-deep` |
 | `custom.image-understand-speak` | Speak | Images | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
@@ -7898,8 +8068,8 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms
 | `custom.command-ms0q0j9j-92441` | Yamaha | Audio | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/bluetooth-yamaha.xblox` |
 | `custom.command-mtn0t1b3-722de` | Voice Commands | Audio | `app:togglevoicecommand` |  |
 | `custom.command-7201753fce13ac9f1c6b945856a73c94` | SRT->WAV | Audio | `cli:audio` | `tts-scripted`<br>`--srt`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
+| `custom.command-mtox7vvr-093fc` | Voice Commands | Audio | `app:togglevoicecommand` |  |
 | `custom.command-mrf5dhi8-76608` | 1:1 | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
-| `custom.command-mssrlhcu-5aa17` | 1:1-ex | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
 | `custom.command-ms4vl4ur-4569d` | 16:9 | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
 | `custom.command-msghb0e2-e8c47` | Fixed | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed.xblox` |
 | `custom.command-mubm8ayh-a6d58` | Fixed & Subs | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed-subs.xblox` |
@@ -7909,6 +8079,9 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms
 | `custom.command-video-social-hq` | Social Video HQ | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-mujkog2v-f9c2b` | Swap MP4 audio | Converters | `external` | `-y`<br>`-i`<br>`${CURRENT_SELECTION_0}`<br>`-i`<br>`${CURRENT_SELECTION_1}`<br>`-map`<br>`0:v:0`<br>`-map`<br>`1:a:0`<br>`-c:v`<br>`copy`<br>`-c:a`<br>`aac`<br>`-shortest`<br>`${PATH_DIR:CURRENT_SELECTION_0}${PATH_SEP}${PATH_NAME:CURRENT_SELECTION_0}_with_${PATH_NAME:CURRENT_SELECTION_1}.mp4` |
 | `custom.command-mujpxpuu-eff23` | Download | Converters | `external` | `${CURRENT_URL}` |
+| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4->MP3 | Converters | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
+| `custom.command-mujlyke2-1c42f` | MP4->WAV | Converters | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-ac`<br>`1`<br>`-ar`<br>`16000`<br>`-c:a`<br>`pcm_s16le`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
+| `custom.command-7883566e75cb852699295a0cc2a574c5` | Video poster frame | Converters | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-frames:v`<br>`1`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.png` |
 | `custom.command-mr51514h-c34ec` | System | Default Prompts | `app:edit` |  |
 | `custom.command-mr50fk3n-1a7d7` | Realtime | Default Prompts | `app:edit` |  |
 | `custom.command-mppft700-137e9` | Planner | Default Prompts | `app:edit` |  |
@@ -7923,6 +8096,7 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms
 | `custom.command-mt4munur-873bb` | Stop | Scheduler | `app:schedulerstop` |  |
 | `custom.command-mt7672eh-b7786` | To Images | PDF | `cli:pdf` | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
 | `custom.pdf-to-md` | To Markdown | PDF | `cli:pdf` | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--per-page`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16` |
+| `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | PDF | `external` | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
 | `custom.fs-copy` | Copy | Files | `app:fscopy` |  |
 | `custom.fs-move` | Move | Files | `app:fsmove` |  |
 | `custom.command-mu114s8q-17bff` | Share | Files | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--public` |
@@ -7932,10 +8106,6 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms
 | `custom.command-msakytc7-dd084` | Online Help | Files | `app:openurl` |  |
 | `custom.command-mu1w66c6-5b959` | Speak | Text | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
 | `custom.command-mtum9djk-a760d` | Share as Article | Text | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
-| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4->MP3 | AI Commands | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
-| `custom.command-mujlyke2-1c42f` | MP4->WAV | AI Commands | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-ac`<br>`1`<br>`-ar`<br>`16000`<br>`-c:a`<br>`pcm_s16le`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
-| `custom.command-7883566e75cb852699295a0cc2a574c5` | Video poster frame | AI Commands | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-frames:v`<br>`1`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.png` |
-| `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | AI Commands | `external` | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
 | `custom.command-mujkxt3w-4af40` | Subtitles | Audio Converter | `cli:audio` | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt` |
 
 Call custom commands with the exact dotted ID shown above, e.g. `tanit-cli.exe custom.mic-start`.
