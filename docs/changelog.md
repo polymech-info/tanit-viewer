@@ -4,14 +4,20 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
-## 1.0.66 - 28-09
+## 1.0.68 - 30-09
 
 _Each change is dated DD-MM from the commit day. Newest first._
 
 ### New
 
+- 30-09 The CLI test harness now supports core settings round-trip and owner workflows, configurable persistence and timeouts, idempotent mutations (set, merge, or append-history), revision waiting, and status inspection.
+- 30-09 Added CLI test commands for settings round-trip, ownership, mutation, waiting for revisions, and status, including persistence/timeout controls, key/value application, mutation operations, and idempotency GUID support.
+- 28-09 Added CLI test setup for core settings, source, and loopback commands, with source input paths optionally supporting #t= fragments.
+- 28-09 The CLI test suite now covers core settings, source, and loopback subcommands, with support for specifying an input path and optional #t= fragment.
 - 26-09 The PDF image command now exposes a new configurable option.
 - 26-09 The understand command now supports --max-tokens, --threads, --ctx, and --gpu-layers.
+- 26-09 Added --max-tokens, --threads, --ctx, and --gpu-layers options to configure understand command execution.
+- 26-09 Added a new option to the PDF image command.
 - 25-09 Added MCP server subcommands sourced from the tools cache, with query support, JSON arguments, per-field flag overrides, and configurable request timeouts.
 - 25-09 Added CLI support for launching MCP servers and selecting cached tools.
 - 25-09 Added --args for nested JSON fields and --timeout-ms for MCP request timeouts, with command-line flags taking precedence.
