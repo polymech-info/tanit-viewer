@@ -1586,6 +1586,8 @@ Options:
 - `--max-retries` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 16]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Per-leaf retries on transform failure (0 = auto: 1 dry-run, 3 live)
 - `--throttle-ms` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 60000]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Minimum delay between transform starts (rate limit)
 - `--no-cache` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable identical-input result cache (default: cache on).
+- `--abort-after-consecutive-errors` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 1024]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Abort the run after N consecutive leaf failures (0 = off). A run that keeps failing is unlikely to recover — the model is probably unsuited for the prompt/shape.
+- `--partial-commit` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - On abort, write --dst with the successfully transformed leaves merged (failed/unprocessed left as-is). Makes an aborted run resumable via --only-missing. No effect without --abort-after-consecutive-errors.
 
 **Provider**
 - `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id (same as parent llm agent).
@@ -1593,6 +1595,7 @@ Options:
 - `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model id (router-specific). Default: Chat Provider Settings.
 - `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key (optional; default from app chat / API Keys).
 - `--base-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the router's default base URL (OpenAI-compatible).
+- `--api-mode` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">completion</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">completion</span> <span data-cli="choice">responses</span> <span data-cli="choice">realtime</span></span></span>) - API mode for leaf transforms: completion|responses|realtime. Default: completion (/chat/completions). Non-OpenAI-backed tanit aliases are downgraded off responses (see resolve_agent_launch).
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - HTTP timeout per LLM round (ms). Default: Chat Provider Settings (or 60000).
 
 **Example**
@@ -1604,7 +1607,7 @@ tanit-cli llm agent each -i <value> --selector <value>
 **Full example**
 
 ```sh
-tanit-cli llm agent each -i 'foo' --selector 'foo' --target 'foo' --merge-json --merge-keys '{}' -o 'foo' -p 'foo' --dry-run --transform 'upper' --prefix 'x' --concurrency 0 --max-retries 0 --throttle-ms 0 --no-cache --preset 'foo' --router 'foo' --model 'foo' --api-key 'foo' --base-url 'foo' --timeout-ms 0
+tanit-cli llm agent each -i 'foo' --selector 'foo' --target 'foo' --merge-json --merge-keys '{}' -o 'foo' -p 'foo' --dry-run --transform 'upper' --prefix 'x' --concurrency 0 --max-retries 0 --throttle-ms 0 --no-cache --abort-after-consecutive-errors 0 --partial-commit --preset 'foo' --router 'foo' --model 'foo' --api-key 'foo' --base-url 'foo' --api-mode 'completion' --timeout-ms 0
 ```
 
 ##### Examples
@@ -8057,10 +8060,8 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms
 | `custom.command-msyzmkcu-9b027` | English | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_en.${SRC_EXT}`<br>`--prompt`<br>`Translate to English`<br>`--no-tools`<br>`--preset`<br>`Tanit-Fast`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-msyznegr-9190e` | German | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_de.${SRC_EXT}`<br>`--hud`<br>`--hud-mode`<br>`both`<br>`--prompt`<br>`Translate to German. Return raw response, no fences!` |
 | `custom.command-mt0dfzrn-665b0` | French | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--prompt`<br>`Translate to French`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_fr.${SRC_EXT}` |
-| `text.md2pdf` | MD->PDF | Translate | `external` | `--headless`<br>`--convert-to pdf`<br>`--outdir`<br>`${CWD}`<br>`${CURRENT_FILE}` |
 | `custom.command-ms0phpqj-d1ca3` | Chrome | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-chrome.xblox` |
 | `custom.command-ms33shnl-97127` | App | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-win32.xblox` |
-| `custom.color-picker` | Color | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-color.xblox` |
 | `custom.text-speak` | Speak | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
 | `custom.voice-cloner` | Voice Cloner | Audio | `cli:audio` | `voice-change`<br>`--remove-background-noise`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_cloned.wav`<br>`--style`<br>`0.5`<br>`--stability`<br>`1` |
 | `custom.command-mpxzk7g4-67590` | Voice Recorder | Audio | `cli:audio` | `record`<br>`--dst`<br>`${CONFIG_DIR}/recordings/tanit-${DD}-${HH}-${mm}.wav`<br>`--hud`<br>`--filter`<br>`deepfilter` |
@@ -8068,17 +8069,15 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms
 | `custom.command-ms0q0j9j-92441` | Yamaha | Audio | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/bluetooth-yamaha.xblox` |
 | `custom.command-mtn0t1b3-722de` | Voice Commands | Audio | `app:togglevoicecommand` |  |
 | `custom.command-7201753fce13ac9f1c6b945856a73c94` | SRT->WAV | Audio | `cli:audio` | `tts-scripted`<br>`--srt`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
-| `custom.command-mtox7vvr-093fc` | Voice Commands | Audio | `app:togglevoicecommand` |  |
 | `custom.command-mrf5dhi8-76608` | 1:1 | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
 | `custom.command-ms4vl4ur-4569d` | 16:9 | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
 | `custom.command-msghb0e2-e8c47` | Fixed | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed.xblox` |
 | `custom.command-mubm8ayh-a6d58` | Fixed & Subs | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed-subs.xblox` |
 | `custom.video-start` | WebCam | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
-| `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
+| `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox`<br>`--audioSource`<br>``<br>`--camera`<br>``<br>`--encoder`<br>`auto`<br>`--hud`<br>`true`<br>`--microphone`<br>`` |
 | `custom.handbrake-hq` | Handbrake | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-video-social-hq` | Social Video HQ | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-mujkog2v-f9c2b` | Swap MP4 audio | Converters | `external` | `-y`<br>`-i`<br>`${CURRENT_SELECTION_0}`<br>`-i`<br>`${CURRENT_SELECTION_1}`<br>`-map`<br>`0:v:0`<br>`-map`<br>`1:a:0`<br>`-c:v`<br>`copy`<br>`-c:a`<br>`aac`<br>`-shortest`<br>`${PATH_DIR:CURRENT_SELECTION_0}${PATH_SEP}${PATH_NAME:CURRENT_SELECTION_0}_with_${PATH_NAME:CURRENT_SELECTION_1}.mp4` |
-| `custom.command-mujpxpuu-eff23` | Download | Converters | `external` | `${CURRENT_URL}` |
 | `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4->MP3 | Converters | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
 | `custom.command-mujlyke2-1c42f` | MP4->WAV | Converters | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-ac`<br>`1`<br>`-ar`<br>`16000`<br>`-c:a`<br>`pcm_s16le`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
 | `custom.command-7883566e75cb852699295a0cc2a574c5` | Video poster frame | Converters | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-frames:v`<br>`1`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.png` |
@@ -8104,9 +8103,7 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms
 | `custom.help-cli` | CLI-Manual | Files | `app:open` |  |
 | `custom.help-xblox` | XBlox | Files | `app:open` |  |
 | `custom.command-msakytc7-dd084` | Online Help | Files | `app:openurl` |  |
-| `custom.command-mu1w66c6-5b959` | Speak | Text | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
-| `custom.command-mtum9djk-a760d` | Share as Article | Text | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
-| `custom.command-mujkxt3w-4af40` | Subtitles | Audio Converter | `cli:audio` | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt` |
+| `custom.command-mujkxt3w-4af40` | Subtitles | Audio Converter | `cli:audio` | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt`<br>`--hud` |
 
 Call custom commands with the exact dotted ID shown above, e.g. `tanit-cli.exe custom.mic-start`.
 Pass `...` extra args after `--` to append them to the configured command without wrapper interception.
