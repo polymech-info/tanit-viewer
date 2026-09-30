@@ -1903,7 +1903,7 @@ tanit-cli installer --uninstall --dry --no-seed --no-explorer --no-startmenu --n
 
 #### installer chrome
 
-Register Tanit Chrome native messaging host only (no npm). Run once per user. A zip install then loads unpacked from extension/tanit-chrome. A Store install then installs Tanit Chat from the Chrome Web Store.
+Register Tanit Chrome native messaging host only (no npm). Run once per user. Load unpacked from extension/tanit-chrome. A Store install uses the copy under the Tanit profile, not WindowsApps.
 
 Options:
 
