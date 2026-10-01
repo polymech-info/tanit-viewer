@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="Tanit Chat brings AI, files, media, automation and everyday desktop tools into one fast local-first Windows workspace. Many tools. One workspace. Local first."/>
+<title>Tanit Chat — Many tools. One workspace. Local first.</title>
+<link rel="stylesheet" href="fonts.css"/>
+<style>
+:root{
+  --shell:#c8362b; --shell-deep:#9e2a22; --ink:#1b1a17;
+  --paper:#f3ead8; --steel:#e5e5e5; --steel-dim:#b8b8b2; --pivot:#9a9a93;
+  --bg:#14130f; --bg-2:#1c1b16; --text:#ece8df; --text-dim:#a7a299; --rule:#3a3830;
+  --display:"Big Shoulders Display","Public Sans",sans-serif;
+  --body:"Public Sans",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:var(--shell);color:var(--paper)}
+:focus-visible{outline:2px solid var(--steel);outline-offset:3px}
+a{color:var(--shell);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+a:hover{border-bottom-color:var(--shell)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.top{position:sticky;top:0;z-index:20;background:rgba(20,19,15,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.top-in{display:flex;align-items:center;justify-content:space-between;height:62px}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-weight:700;letter-spacing:.04em;color:var(--steel);font-size:14px}
+.brand-mark{width:22px;height:22px;background:var(--shell);border-radius:4px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.25);position:relative}
+.brand-mark::after{content:"";position:absolute;inset:5px;border:1.5px solid rgba(255,255,255,.55);border-radius:2px}
+.top-cta{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;color:#fff;background:var(--shell-deep);padding:9px 16px;border-radius:4px;border-bottom:none;text-transform:uppercase}
+.top-cta:hover{background:#8a251e;border-bottom-color:transparent}
+.theme-toggle{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--steel);background:transparent;border:1px solid var(--rule);padding:8px 12px;border-radius:4px;cursor:pointer;border-bottom:1px solid var(--rule)}
+.theme-toggle:hover{border-color:var(--steel);color:var(--ink)}
+.body-section{padding:64px 0 70px;text-align:center;overflow:hidden}
+.body{position:relative;width:min(760px,94vw);margin:0 auto;perspective:1400px}
+.shell-plate{position:relative;z-index:2;background:linear-gradient(180deg,var(--shell) 0%,var(--shell) 58%,var(--shell-deep) 100%);border-radius:18px 18px 4px 4px;padding:54px 40px 40px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7),inset 0 2px 0 rgba(255,255,255,.18),inset 0 -10px 24px rgba(0,0,0,.28);transform-origin:bottom center;transition:transform .9s cubic-bezier(.16,1,.3,1);cursor:pointer}
+.body.opened .shell-plate{transform:rotateX(-104deg)}
+.shell-plate::before{content:"";position:absolute;left:14px;right:14px;top:14px;bottom:14px;border:1px solid rgba(255,255,255,.14);border-radius:10px;pointer-events:none}
+.shell-stamp{font-family:var(--mono);font-weight:700;font-size:clamp(1.9rem,6vw,3rem);line-height:1;letter-spacing:.14em;color:#fff;text-transform:uppercase}
+.shell-claim{font-family:var(--body);font-weight:500;font-size:clamp(1.05rem,2.6vw,1.3rem);color:#fff;margin:22px auto 0;max-width:30ch;opacity:.95}
+html{scrollbar-color:var(--pivot) var(--bg);scrollbar-width:thin}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--pivot);border-radius:6px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--steel-dim)}
+:root{caret-color:var(--shell)}
+a{text-underline-offset:3px}
+.shell-hinge{position:relative;z-index:2;height:7px;background:var(--pivot);border-radius:0 0 4px 4px;box-shadow:0 2px 6px rgba(0,0,0,.45),inset 0 -1px 0 rgba(0,0,0,.3)}
+.tools-reveal{overflow:hidden;max-height:0;opacity:0;transition:opacity .5s ease}
+.body.opened .tools-reveal{max-height:none;opacity:1}
+.tools-head{padding:26px 0 6px}
+.tools-sub{color:var(--text-dim);max-width:58ch;margin:0 auto;font-size:14px}
+.ring{display:inline-flex;align-items:center;gap:10px;margin-top:30px;font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:var(--paper);padding:13px 22px;border-radius:40px;border-bottom:none;box-shadow:0 8px 20px -6px rgba(0,0,0,.5);cursor:pointer}
+.ring:hover{background:#fff;border-bottom-color:transparent}
+.ring::before{content:"";width:11px;height:11px;border:2.5px solid var(--ink);border-radius:50%}
+.hero-note{margin-top:26px;font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim)}
+.hero-note b{color:var(--steel);font-weight:700}
+/* Overview grid: the eight tools laid out as the multi-tool object */
+.tool-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--rule);border-radius:14px;overflow:hidden;background:var(--bg-2);margin:18px 0 0}
+.tool-stub{display:flex;flex-direction:column;gap:6px;padding:18px 14px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);background:transparent;color:var(--text);text-align:left;cursor:pointer;position:relative;transition:background .18s}
+.tool-stub:nth-child(4n){border-right:none}
+.tool-stub:nth-last-child(-n+4){border-bottom:none}
+.tool-stub::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:2px;background:var(--pivot);opacity:.55;transition:background .18s,opacity .18s}
+.tool-stub .stub-label{font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel)}
+.tool-stub .stub-job{font-family:var(--body);font-size:12.5px;color:var(--text-dim);line-height:1.35}
+.tool-stub:hover{background:var(--bg)}
+.tool-stub:hover::before{background:var(--shell);opacity:1}
+.tool-stub:hover .stub-label{color:var(--shell-accent)}
+
+/* Continuous detail sections — one scroll, no fold-out */
+.tools-list{margin:22px 0 0;display:flex;flex-direction:column}
+.tool{padding:38px 0;border-top:1px solid var(--rule);scroll-margin-top:24px}
+.tool:first-child{border-top:none;padding-top:6px}
+.tool-head{display:flex;align-items:baseline;gap:16px;margin:0 0 16px;flex-wrap:wrap}
+.tool-label{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--shell-accent)}
+.tool-job{font-family:var(--body);font-size:15px;color:var(--text-dim)}
+.tool-text p{margin:0 0 16px;color:var(--text);font-size:15.5px;line-height:1.6;max-width:62ch}
+.tool-text ul{list-style:none;padding:0;margin:0 0 18px;display:grid;grid-template-columns:1fr 1fr;gap:8px 22px}
+.tool-text li{font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;color:var(--text);padding-left:18px;position:relative;line-height:1.5}
+.tool-text li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:2px;background:var(--shell)}
+.tool-shot{display:block;width:100%;border-radius:10px;border:1px solid var(--rule);box-shadow:0 16px 38px -16px rgba(0,0,0,.55);background:#fff;cursor:zoom-in;transition:transform .25s ease,box-shadow .25s ease}
+.tool-shot:hover{transform:translateY(-2px);box-shadow:0 22px 46px -16px rgba(0,0,0,.65)}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0 0}
+.shots .tool-shot{margin:0}
+.shot-cap{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--shell-deep);margin:10px 0 0}
+
+/* Lightbox — full-bleed zoom overlay (themed) */
+html.lb-open,html.lb-open body{overflow:hidden!important}
+.lb{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(10,9,7,.88);padding:5vmin;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.lb[hidden]{display:none!important}
+.lb-img{display:block;max-width:94vw;max-height:86vh;border-radius:10px;border:1px solid rgba(255,255,255,.14);box-shadow:0 24px 70px rgba(0,0,0,.6);background:#fff;cursor:zoom-out}
+.lb-close{position:fixed;top:max(18px,env(safe-area-inset-top));right:max(22px,env(safe-area-inset-right));width:48px;height:48px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(20,19,15,.78);color:#fff;font-size:26px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:background .15s}
+.lb-close:hover{background:rgba(40,38,30,.92)}
+.lb-cap{position:fixed;bottom:max(22px,env(safe-area-inset-bottom));left:0;right:0;text-align:center;color:rgba(236,232,223,.82);font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;padding:0 20px}
+section.block{padding:72px 0;border-top:1px solid var(--rule)}
+.block-h{font-family:var(--display);font-weight:900;font-size:clamp(1.9rem,5vw,2.9rem);line-height:.98;text-transform:uppercase;letter-spacing:.01em;margin:0 0 18px;max-width:20ch}
+.block-h em{font-style:normal;color:#e8635a}
+.block-lead{color:var(--text-dim);max-width:62ch;margin:0 0 30px;font-size:1.05rem}
+.cols{display:grid;grid-template-columns:repeat(2,1fr);gap:34px 48px}
+.col h3{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin:0 0 8px}
+.col p{margin:0;color:var(--text)}
+.localfirst{background:var(--paper);color:var(--ink);border-top:none}
+.localfirst .block-h{color:var(--ink)}
+.localfirst .block-h em{color:var(--shell-deep)}
+.localfirst .block-lead{color:#5a564c}
+.localfirst .col h3{color:var(--shell-deep)}
+.localfirst .col p{color:#3c3a33}
+.localfirst a{color:var(--shell-deep)}
+.localfirst .tagline{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,4vw,2.1rem);line-height:1.3;text-transform:uppercase;letter-spacing:.01em;color:var(--ink);margin:0 0 8px}
+.close{padding:84px 0 64px;text-align:center}
+.close-shell{width:min(440px,86vw);margin:0 auto 26px;background:linear-gradient(180deg,var(--shell),var(--shell-deep));border-radius:16px;padding:40px 28px;box-shadow:0 24px 50px -18px rgba(0,0,0,.7),inset 0 2px 0 rgba(255,255,255,.16)}
+.close-stamp{font-family:var(--display);font-weight:900;font-size:clamp(2rem,7vw,3rem);text-transform:uppercase;color:#fff;letter-spacing:.02em;line-height:.92}
+.close-claim{color:rgba(255,255,255,.92);margin:16px 0 0;font-weight:500}
+.close .ring{margin-top:24px}
+.close-note{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-top:18px}
+footer{border-top:1px solid var(--rule);padding:40px 0 56px}
+.foot-in{max-width:1180px;margin:0 auto;padding:0 24px;display:flex;flex-wrap:wrap;gap:30px;justify-content:space-between;align-items:flex-start}
+.foot-brand{font-family:var(--mono);font-weight:700;letter-spacing:.04em;color:var(--steel);font-size:14px}
+.foot-brand small{display:block;font-weight:500;font-size:12px;letter-spacing:.1em;color:var(--text-dim);margin-top:6px;text-transform:none}
+.foot-links{display:flex;gap:26px;flex-wrap:wrap;font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase}
+.foot-links a{color:var(--text-dim);border-bottom:none}
+.foot-links a:hover{color:var(--steel)}
+.foot-line{max-width:1180px;margin:26px auto 0;padding:0 24px;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--text-dim);text-transform:uppercase}
+html[data-theme="light"]{--bg:#f4f0e6;--bg-2:#fffdf7;--text:#1b1a17;--text-dim:#5a564c;--rule:#dcd3bf;--steel:#1b1a17;--steel-dim:#5a564c;--pivot:#b3a994;--paper:#ffffff;--shell:#c8362b;--shell-deep:#9e2a22;--ink:#1b1a17}
+html[data-theme="light"] body{background:var(--bg)}
+html[data-theme="light"] .top{background:rgba(244,240,230,.86);border-bottom-color:var(--rule)}
+html[data-theme="light"] .brand{color:var(--ink)}
+html[data-theme="light"] .top-cta{color:#fff}
+html[data-theme="light"] .tool-grid{background:var(--bg-2)}
+html[data-theme="light"] .tool-stub:hover{background:var(--bg)}
+html[data-theme="light"] .tool-shot{border-color:rgba(27,26,23,.16);box-shadow:0 16px 38px -18px rgba(27,26,23,.4)}
+html[data-theme="light"] .tool-shot:hover{box-shadow:0 22px 46px -18px rgba(27,26,23,.5)}
+html[data-theme="light"] .lb{background:rgba(244,240,230,.9)}
+html[data-theme="light"] .localfirst{background:var(--ink);color:var(--paper);border-top:none}
+html[data-theme="light"] .localfirst .tagline{color:var(--paper)}
+html[data-theme="light"] .localfirst .block-h{color:var(--paper)}
+html[data-theme="light"] .localfirst .block-h em{color:#e8635a}
+html[data-theme="light"] .localfirst .block-lead{color:#cfc7b6}
+html[data-theme="light"] .localfirst .col h3{color:#e8635a}
+html[data-theme="light"] .localfirst .col p{color:#cfc7b6}
+html[data-theme="light"] .localfirst a{color:#e8635a}
+html[data-theme="light"] .block-h em{color:var(--shell)}
+html[data-theme="light"] .close-note{color:#cfc7b6}
+html[data-theme="light"] .hero-note{color:var(--text-dim)}
+html[data-theme="light"] .hero-note b{color:var(--ink)}
+html[data-theme="light"] .foot-links a{color:var(--text-dim)}
+html[data-theme="light"] .foot-links a:hover{color:var(--ink)}
+html[data-theme="light"] ::selection{background:var(--shell);color:#fff}
+html[data-theme="light"] ::-webkit-scrollbar-track{background:var(--bg)}
+html[data-theme="light"] ::-webkit-scrollbar-thumb{background:var(--pivot);border-color:var(--bg)}
+html[data-theme="light"] :focus-visible{outline-color:var(--shell)}
+@media (max-width:760px){
+  body{font-size:16px}
+  .tool-grid{grid-template-columns:repeat(2,1fr)}
+  .tool-stub:nth-child(4n){border-right:1px solid var(--rule)}
+  .tool-stub:nth-child(2n){border-right:none}
+  .tool-stub:nth-last-child(-n+4){border-bottom:1px solid var(--rule)}
+  .tool-stub:nth-last-child(-n+2){border-bottom:none}
+  .tool-text ul{grid-template-columns:1fr}
+  .shots{grid-template-columns:1fr}
+  .cols{grid-template-columns:1fr;gap:26px}
+  .top-cta{display:none}
+  .body-section{padding:44px 0 30px}
+  section.block{padding:56px 0}
+  .close{padding:64px 0 48px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.001ms!important;animation-duration:.001ms!important}
+  html{scroll-behavior:auto}
+  .shell-plate,.tool-shot{transition:none}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in wrap">
+  <div class="brand"><span class="brand-mark" aria-hidden="true"></span>TANIT&nbsp;CHAT</div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" title="Switch theme">Light</button>
+    <a class="top-cta" href="https://apps.microsoft.com/detail/9N5F39064NPD">Get the app</a>
+  </div>
+</div></header>
+
+<section class="body-section">
+  <div class="body" id="shell">
+    <div class="shell-plate">
+      <div class="shell-stamp">Tanit&nbsp;Chat</div>
+      <p class="shell-claim">Many tools. One workspace. Local first.</p>
+      <button class="ring" id="openShell" type="button" aria-controls="shell">Get Tanit Chat — free</button>
+    </div>
+    <div class="shell-hinge" aria-hidden="true"></div>
+    <div class="tools-reveal" id="toolsReveal">
+      <div class="tools-head">
+        <p class="tools-sub">Eight tools, one workspace. Each runs local, cloud, or both — routed per job, never tied to one vendor. Click any screenshot to enlarge.</p>
+      </div>
+      <div class="tool-grid" id="toolGrid">
+        <button class="tool-stub" type="button" data-tool="files"><span class="stub-label">Files</span><span class="stub-job">Your selection becomes the context</span></button>
+        <button class="tool-stub" type="button" data-tool="ai"><span class="stub-label">AI</span><span class="stub-job">Route each capability to the right model</span></button>
+        <button class="tool-stub" type="button" data-tool="voice"><span class="stub-label">Voice</span><span class="stub-job">Talk instead of typing</span></button>
+        <button class="tool-stub" type="button" data-tool="images"><span class="stub-label">Images</span><span class="stub-job">Inspect, batch, generate</span></button>
+        <button class="tool-stub" type="button" data-tool="video"><span class="stub-label">Video</span><span class="stub-job">Play, capture, convert</span></button>
+        <button class="tool-stub" type="button" data-tool="markdown"><span class="stub-label">Markdown</span><span class="stub-job">Rich answers, with history</span></button>
+        <button class="tool-stub" type="button" data-tool="automation"><span class="stub-label">Automation</span><span class="stub-job">Turn a chat into a command</span></button>
+        <button class="tool-stub" type="button" data-tool="security"><span class="stub-label">Security</span><span class="stub-job">Approve every action</span></button>
+      </div>
+      <div class="tools-list" id="toolsList">
+
+      <section class="tool" id="tool-files">
+        <div class="tool-head"><span class="tool-label">Files</span><span class="tool-job">Your selection becomes the context</span></div>
+        <div class="tool-text">
+          <p>Select files in Tanit or Windows Explorer and work with them immediately — no separate upload. A visual filmstrip shows exactly what Chat can see before you send.</p>
+          <ul><li>Filmstrip context</li><li>Drop, paste, or @-reference</li><li>Markdown, tables, code, Mermaid</li><li>Local file links &amp; live shell output</li></ul>
+        </div>
+        <img class="tool-shot" src="screenshots/filemanager.jpg" alt="Tanit Chat file manager with filmstrip context" loading="lazy"/>
+      </section>
+
+      <section class="tool" id="tool-ai">
+        <div class="tool-head"><span class="tool-label">AI</span><span class="tool-job">Route each capability to the right model</span></div>
+        <div class="tool-text">
+          <p>Connect direct providers, bring your own key, use compatible endpoints, choose an aggregator, or run supported models locally with llama.cpp. Switch models as your needs change.</p>
+          <ul><li>Local llama.cpp + GGUF</li><li>Cloud &amp; BYOK</li><li>Per-capability routing</li><li>Save a full agent as a preset</li></ul>
+        </div>
+        <img class="tool-shot" src="screenshots/chat.jpg" alt="Tanit Chat AI workspace with local and cloud routing" loading="lazy"/>
+      </section>
+
+      <section class="tool" id="tool-voice">
+        <div class="tool-head"><span class="tool-label">Voice</span><span class="tool-job">Talk instead of typing</span></div>
+        <div class="tool-text">
+          <p>Transcribe recordings and voice input offline with whisper.cpp. Local speech synthesis can read responses without sending them to a cloud voice provider.</p>
+          <ul><li>whisper.cpp offline transcription</li><li>Local speech synthesis</li><li>Realtime voice routing</li><li>Voice commands</li></ul>
+        </div>
+        <img class="tool-shot" src="screenshots/audio.jpg" alt="Tanit Chat voice transcription and speech synthesis" loading="lazy"/>
+      </section>
+
+      <section class="tool" id="tool-images">
+        <div class="tool-head"><span class="tool-label">Images</span><span class="tool-job">Inspect, batch, generate</span></div>
+        <div class="tool-text">
+          <p>Browse and inspect images, transform media, work with metadata. Use local vision-language models for private image understanding, ONNX for OCR and layout, or route image generation to a cloud provider.</p>
+          <ul><li>View &amp; batch</li><li>Local VLM vision</li><li>ONNX OCR &amp; layout</li><li>Cloud image generation</li></ul>
+        </div>
+        <img class="tool-shot" src="screenshots/image-ops.jpg" alt="Tanit Chat image operations, VLM vision and OCR" loading="lazy"/>
+      </section>
+      <section class="tool" id="tool-video">
+        <div class="tool-head"><span class="tool-label">Video</span><span class="tool-job">Play, capture, convert</span></div>
+        <div class="tool-text">
+          <p>Playback and inspect video, capture webcam or screen, batch convert formats. Session MP4 recording and xblox record blocks — user-started or user-authored scheduled flows only, never covert capture.</p>
+          <ul><li>Playback &amp; inspect</li><li>Webcam / screen capture</li><li>Batch convert</li><li>Session recording</li></ul>
+        </div>
+        <img class="tool-shot" src="screenshots/chat-video-gen.jpg" alt="Tanit Chat video generation and capture" loading="lazy"/>
+      </section>
+
+      <section class="tool" id="tool-markdown">
+        <div class="tool-head"><span class="tool-label">Markdown</span><span class="tool-job">Rich answers, with history</span></div>
+        <div class="tool-text">
+          <p>Responses support Markdown, tables, code highlighting, KaTeX math, Mermaid diagrams, local file links, generated images, and live shell output. Live XBlox blocks render in the answer; version history tracks changes.</p>
+          <ul><li>Markdown + tables + code</li><li>KaTeX &amp; Mermaid</li><li>Live XBlox blocks</li><li>Version history</li></ul>
+        </div>
+        <img class="tool-shot" src="screenshots/office-docs.jpg" alt="Tanit Chat Markdown and office document rendering" loading="lazy"/>
+      </section>
+
+      <section class="tool" id="tool-automation">
+        <div class="tool-head"><span class="tool-label">Automation</span><span class="tool-job">Turn a chat into a command</span></div>
+        <div class="tool-text">
+          <p>Capture the process as an XBlox flow — combine an LLM agent with file input, models, OCR, vision, audio, conditions, loops, and saved output. Publish it to the ribbon, launcher, Tanit, or the Windows Explorer context menu.</p>
+          <ul><li>Visual XBlox flows</li><li>Conditions &amp; loops</li><li>Publish to ribbon / launcher / Explorer</li><li>One-click actions for recurring work</li></ul>
+        </div>
+        <img class="tool-shot" src="screenshots/automation.jpg" alt="Tanit Chat visual XBlox automation flow" loading="lazy"/>
+        <div class="shots">
+          <img class="tool-shot" src="screenshots/launcher.jpg" alt="Published command in the Tanit launcher" loading="lazy"/>
+          <img class="tool-shot" src="screenshots/forms-browser-use.jpg" alt="Browser-use flow driven from a chat command" loading="lazy"/>
+        </div>
+      </section>
+
+      <section class="tool" id="tool-security">
+        <div class="tool-head"><span class="tool-label">Security</span><span class="tool-job">Approve every action</span></div>
+        <div class="tool-text">
+          <p>Light, Strict, or Developer profiles. Review the action, target, and risk, then approve once, for a task, for a session, for a limited time, always, or never. Administrators set policy via Windows Group Policy, Intune MDM, or registry; machine policy overrides user settings.</p>
+          <ul><li>Light / Strict / Developer profiles</li><li>Per-action approval</li><li>Group Policy &amp; Intune</li><li>Sandboxed command execution</li></ul>
+        </div>
+      </section>
+
+  </div>
+    </div>
+  </div>
+  <p class="hero-note">Free for real work · <b>Tanit Pro</b> only when using paid AI routing · <b>Microsoft Store</b></p>
+</section>
+<section class="block localfirst">
+  <div class="wrap">
+    <p class="tagline">Fast. Local when you want it. Powerful when you need it.</p>
+    <h2 class="block-h">Local-first by <em>default</em></h2>
+    <p class="block-lead">A lean native C++ architecture is chosen for speed, stability, and a smaller attack surface. Many everyday features run on-device without sending your content to a cloud, and AI stays a replaceable tool inside the workspace — not the foundation that controls it.</p>
+    <div class="cols">
+      <div class="col"><h3>Free for real work</h3><p>Most functionality is free, including local features and local AI models. Tanit Pro is required only when using paid AI routing services — the application does not become useless without cloud services.</p></div>
+      <div class="col"><h3>Mix local and cloud</h3><p>Combine local transcription with cloud reasoning, local OCR with online image generation, or local chat with external research tools. You decide when cloud services are worth using.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2 class="block-h">For schools &amp; <em>security-sensitive</em> environments</h2>
+    <p class="block-lead">Give students, teachers, analysts, and other managed users useful AI workflows without giving every assistant unrestricted access to files, tools, providers, or external services.</p>
+    <div class="cols">
+      <div class="col"><h3>Keep workloads on the device</h3><p>Use local llama.cpp models, whisper.cpp transcription, ONNX media pipelines, local speech, and local semantic search when data should remain on managed hardware. Administrators can restrict which cloud providers are available.</p></div>
+      <div class="col"><h3>Set policy centrally</h3><p>Apply organization settings through Windows Group Policy, Intune MDM, or direct registry. Machine-level policy takes precedence over user settings, and protected security requirements cannot be lowered by a non-admin user.</p></div>
+      <div class="col"><h3>Control tools precisely</h3><p>Disable MCP entirely or restrict it to approved hosts. Allow or block individual tools, disable computer control and realtime voice, lock provider and model selection, and restrict writable folders.</p></div>
+      <div class="col"><h3>Protect configuration</h3><p>Enforce encryption, signing, and verification for settings, credentials, prompts, commands, and MCP configuration. Users still see permission requests before sensitive actions are allowed.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2 class="block-h">For developers &amp; <em>researchers</em></h2>
+    <p class="block-lead">Move from model discovery to repeatable experiments without assembling a separate application around every model, file set, or tool.</p>
+    <div class="cols">
+      <div class="col"><h3>Explore Hugging Face models</h3><p>Resolve repositories and supported GGUF variants, compare quantizations and download sizes, estimate VRAM use, and install model assets for local llama.cpp workflows.</p></div>
+      <div class="col"><h3>Build mixed-model pipelines</h3><p>Route text, vision, OCR, transcription, speech, image generation, and research tools independently — llama.cpp, whisper.cpp, ONNX Runtime, cloud APIs, compatible endpoints, and MCP servers in one workflow.</p></div>
+      <div class="col"><h3>Inspect &amp; reproduce runs</h3><p>Follow tool calls and command output live, inspect planning and model rounds in the Log view, then save the provider, model, tools, skills, and MCP configuration as a reusable preset.</p></div>
+      <div class="col"><h3>Turn experiments into tools</h3><p>Capture a successful process in XBlox, add conditions, loops, file inputs, and saved outputs, then publish it as a command for a team or the next dataset.</p></div>
+    </div>
+  </div>
+</section>
+<section class="block">
+  <div class="wrap">
+    <h2 class="block-h">A successful chat becomes a <em>command</em></h2>
+    <p class="block-lead">Start with the files in front of you. Select one or more files, open Chat, and ask your first question. When the task becomes repeatable, capture the successful process in XBlox and publish it as a command for the next file — in the ribbon, the command launcher, Tanit, or the Windows Explorer context menu.</p>
+    <div class="cols">
+      <div class="col"><h3>Build visually</h3><p>Combine an LLM agent with file input, local or external models, OCR, vision, audio, video, conditions, loops, commands, and saved output.</p></div>
+      <div class="col"><h3>Use the current selection</h3><p>Pass files selected in Tanit or Windows Explorer to an automation, then process each item or the entire selection.</p></div>
+      <div class="col"><h3>Publish as a ready-to-run command</h3><p>Place a finished workflow in the ribbon, command launcher, integrated file manager, or Windows Explorer context menu.</p></div>
+      <div class="col"><h3>Keep your model &amp; security choices</h3><p>Run automations locally, call external providers, or combine both while preserving provider settings, file scope, permissions, and sandbox policy.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="close">
+  <div class="wrap">
+    <div class="close-shell">
+      <div class="close-stamp">Open yours</div>
+      <p class="close-claim">Many tools. One workspace. Local first.</p>
+      <a class="ring" href="https://apps.microsoft.com/detail/9N5F39064NPD">Get Tanit Chat — free</a>
+    </div>
+    <p class="close-note">Microsoft Store · 9N5F39064NPD · PolyMech.TanitChat</p>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-in">
+    <div class="foot-brand">POLYMECH<small>tanit.polymech.info</small></div>
+    <nav class="foot-links">
+      <a href="https://apps.microsoft.com/detail/9N5F39064NPD">Get the app</a>
+      <a href="https://tanit.polymech.info">tanit.polymech.info</a>
+      <a href="https://polymech.info">polymech.info</a>
+    </nav>
+  </div>
+  <p class="foot-line">Free for real work · Local when you want it · Powerful when you need it</p>
+</footer>
+
+<div class="lb" id="lightbox" hidden>
+  <button class="lb-close" id="lbClose" type="button" aria-label="Close">&times;</button>
+  <img class="lb-img" id="lbImg" alt=""/>
+  <p class="lb-cap" id="lbCap"></p>
+</div>
+
+<script>
+(function(){
+  // Theme toggle (dark default, light variant), persisted
+  var themeBtn = document.getElementById('themeToggle');
+  function applyTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    if(themeBtn){ themeBtn.textContent = t === 'light' ? 'Dark' : 'Light'; themeBtn.setAttribute('aria-label', t === 'light' ? 'Switch to dark theme' : 'Switch to light theme'); }
+  }
+  try { var saved = localStorage.getItem('tanit-theme'); if(saved) applyTheme(saved); } catch(e){}
+  var qp = (location.search.match(/theme=([^&]+)/)||[])[1];
+  if(qp === 'light' || qp === 'dark') applyTheme(qp);
+  if(themeBtn){ themeBtn.addEventListener('click', function(){ var cur = document.documentElement.getAttribute('data-theme') || 'dark'; var next = cur === 'dark' ? 'light' : 'dark'; applyTheme(next); try { localStorage.setItem('tanit-theme', next); } catch(e){} }); }
+
+  var shell = document.getElementById('shell');
+  var openBtn = document.getElementById('openShell');
+  // Hero shell fold-open → reveal the tools
+  function openShell(scroll){
+    if(!shell.classList.contains('opened')){
+      shell.classList.add('opened');
+    }
+    if(scroll){
+      var t = document.getElementById('toolsReveal');
+      if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  }
+  openBtn.addEventListener('click', function(){ openShell(true); });
+  shell.querySelector('.shell-plate').addEventListener('click', function(e){
+    if(e.target.closest('.ring')) return;
+    openShell(true);
+  });
+
+  // Overview grid → smooth-scroll to the matching tool section
+  var grid = document.getElementById('toolGrid');
+  if(grid){
+    grid.addEventListener('click', function(e){
+      var stub = e.target.closest('.tool-stub');
+      if(!stub) return;
+      var sec = document.getElementById('tool-' + stub.getAttribute('data-tool'));
+      if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  }
+
+  // Lightbox: click any tool screenshot to enlarge
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbCap = document.getElementById('lbCap');
+  function openLb(src, alt){
+    if(!lb) return;
+    lbImg.src = src; lbImg.alt = alt || ''; lbCap.textContent = alt || '';
+    lb.hidden = false;
+    document.documentElement.classList.add('lb-open');
+  }
+  function closeLb(){
+    if(!lb) return;
+    lb.hidden = true;
+    document.documentElement.classList.remove('lb-open');
+  }
+  document.addEventListener('click', function(e){
+    var s = e.target.closest('img.tool-shot');
+    if(s){ openLb(s.currentSrc || s.src, s.alt); return; }
+    if(e.target === lb || e.target.id === 'lbClose'){ closeLb(); }
+  });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeLb(); });
+
+  // Open the shell on first scroll past the hero, so the fold reads as the reveal
+  var revealed = false;
+  if(location.search.indexOf('open') >= 0){ revealed = true; openShell(false); }
+  if(location.search.indexOf('expand') >= 0){ revealed = true; openShell(false); }
+  function onScroll(){
+    if(!revealed && window.scrollY > 60){
+      revealed = true;
+      openShell(false);
+      window.removeEventListener('scroll', onScroll, {passive:true});
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+})();
+</script>
+</body>
+</html>

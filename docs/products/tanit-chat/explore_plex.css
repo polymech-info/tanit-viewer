@@ -1,0 +1,59 @@
+/**
+ * @explore-theme plex
+ * @explore-font https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap
+ *
+ * Default explorer skin (IBM Plex + blue). Light/dark via data-theme.
+ * Activate with data-skin="plex" (the generator default).
+ */
+[data-skin="plex"]{
+  --tv-font:"IBM Plex Sans",system-ui,sans-serif;
+  --tv-bg-light:#F7F6F5;
+  --tv-bg-dark:#282828;
+  --side-w:240px;
+  --radius:12px;
+}
+[data-skin="plex"],
+[data-skin="plex"][data-theme="light"]{
+  color-scheme:light;
+  --bg:var(--tv-bg-light); --ink:#0f172a; --muted:#64748b; --dim:#94a3b8;
+  --accent:#2563eb; --accent-hover:#1d4ed8;
+  --accent-soft:rgba(37,99,235,.08);
+  --amber:#d97706;
+  --panel:#ffffff; --panel-2:#f1f0ee;
+  --line:rgba(15,23,42,.09); --line-strong:rgba(15,23,42,.14);
+  --media:var(--tv-bg-light);
+  --shadow:0 1px 2px rgba(15,23,42,.04);
+  --shadow-lg:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.05);
+  --sel-bg:rgba(37,99,235,.08);
+  --lb-scrim:color-mix(in srgb,var(--tv-bg-light) 94%,transparent);
+  --lb-card:rgba(255,255,255,.92);
+  --lb-line:rgba(15,23,42,.12);
+  --lb-ink:#0f172a;
+  --lb-muted:#64748b;
+  --lb-dim:rgba(15,23,42,.48);
+  --lb-btn:rgba(255,255,255,.92);
+  --lb-btn-hover:#fff;
+  --lb-shadow:0 10px 32px rgba(15,23,42,.14);
+}
+[data-skin="plex"][data-theme="dark"]{
+  color-scheme:dark;
+  --bg:var(--tv-bg-dark); --ink:#e8eef8; --muted:#8b9bb3; --dim:#64748b;
+  --accent:#3b82f6; --accent-hover:#60a5fa;
+  --accent-soft:rgba(59,130,246,.14);
+  --amber:#fbbf24;
+  --panel:#1f1f1f; --panel-2:#242424;
+  --line:rgba(148,163,184,.14); --line-strong:rgba(148,163,184,.22);
+  --media:var(--tv-bg-dark);
+  --shadow:0 1px 2px rgba(0,0,0,.25);
+  --shadow-lg:0 1px 2px rgba(0,0,0,.25),0 10px 28px rgba(0,0,0,.28);
+  --sel-bg:rgba(59,130,246,.12);
+  --lb-scrim:color-mix(in srgb,var(--tv-bg-dark) 92%,transparent);
+  --lb-card:rgba(31,31,31,.82);
+  --lb-line:rgba(148,163,184,.22);
+  --lb-ink:#e8eef8;
+  --lb-muted:#8b9bb3;
+  --lb-dim:rgba(232,238,248,.55);
+  --lb-btn:rgba(31,31,31,.82);
+  --lb-btn-hover:rgba(40,40,40,.94);
+  --lb-shadow:0 10px 32px rgba(0,0,0,.35);
+}
