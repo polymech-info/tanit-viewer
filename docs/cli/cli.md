@@ -1483,8 +1483,8 @@ Options:
 - `--planner-budget` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Maximum tool schemas the planner may pre-expand before falling back to the full catalog.
 - `--no-parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable concurrent tool dispatch and fall back to serial execution. Parallel dispatch (P6) is on by default; use this flag to opt out.
 - `--parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dispatch all tool calls in a single LLM response concurrently (std::async). On by default — this flag is accepted for compatibility but is a no-op unless --no-parallel-tools was previously applied.
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
-- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
 
 **Session**
 - `--multi-turn` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable session memory across turns (default: on).
@@ -1538,9 +1538,9 @@ Options:
 - `--mic-gain` (<span data-cli="meta"><span data-cli="type">FLOAT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Mic input level multiplier (linear; 0 = mute, 1 = unity, 2 = double). Applied before mixing when --input-source mix is set.
 - `--desktop-gain` (<span data-cli="meta"><span data-cli="type">FLOAT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Desktop/loopback input level multiplier (linear; 0 = mute, 1 = unity). Applied before mixing when --input-source desktop or mix is set.
 - `--silence-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">1500</span></span></span>) - Silence duration in ms after which speech is auto-committed to the LLM (0 = disabled; default 1500).
-- `--stt-provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">whisper</span></span></span>) - Override the STT provider for this run. Default: from Chat → Voice & Audio settings. whisper is local whisper.cpp (no API key).
+- `--stt-provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">whisper</span> <span data-cli="choice">windows</span></span></span>) - Override the STT provider for this run. Default: from Chat → Voice & Audio settings. whisper is local whisper.cpp (no API key). windows is Windows AI speech when the packaged runtime registers it (no API key).
 - `--stt-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the STT model for this run. whisper: base.en. elevenlabs: scribe_v2_realtime. openrouter: openai/whisper-large-v3-turbo. Default: from settings.
-- `--tts-provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">vibevoice</span> <span data-cli="choice">moss</span></span></span>) - Override the TTS provider for this run. Default: from settings.
+- `--tts-provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">vibevoice</span> <span data-cli="choice">moss</span> <span data-cli="choice">windows</span></span></span>) - Override the TTS provider for this run. Default: from settings.
 - `--tts-model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the TTS model for this run (eleven_v3, x-ai/grok-voice-tts-1.0, …). Also applies as --tts-model-id when --voice-id is used.
 - `--tts-voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override the TTS voice id for this run. Alias for --voice-id; wins if both are set.
 
@@ -3476,7 +3476,7 @@ Options:
 
 **STT**
 - `--stt` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable speech-to-text alongside recording (live ElevenLabs or batch Whisper). Implied by --text-out, --subtitle-format, --provider, or --model. Without STT flags, --dst records audio only (.wav or .m4a/.aac by extension). Batch Whisper with .m4a uses a temporary WAV for transcription.
-- `--provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">whisper</span></span></span>) - STT provider. Implies transcription when no --dst/--text-out is set. Currently supported: elevenlabs (Scribe v2 Realtime), tanit (Whisper batch), openrouter (batch transcription), whisper (local whisper.cpp, offline). Defaults to chat.stt_provider from app settings.
+- `--provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">whisper</span> <span data-cli="choice">windows</span></span></span>) - STT provider. Implies transcription when no --dst/--text-out is set. Currently supported: elevenlabs (Scribe v2 Realtime), tanit (Whisper batch), openrouter (batch transcription), whisper (local whisper.cpp, offline), or windows (Windows AI speech when the packaged runtime registers it, no API key). Defaults to chat.stt_provider from app settings.
 - `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - STT model override. For --provider whisper this may be a ggml model path, for example ${MODELS_DIR}/ggml-base.en.bin. Defaults to Chat Provider voice model settings.
 - `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key for the selected STT provider (--provider elevenlabs → xi-api-key). Also used as the TTS key when --voice-id is set. Falls back to the provider entry in App Settings when omitted.
 - `--from-wav` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span></span>) - Transcribe an existing WAV file instead of capturing from the mic (batch providers only: whisper local / pixlwiz). Implies --stt. Prints the transcript and exits; combine with --text-out / --subtitle-format to write files.
@@ -3749,7 +3749,7 @@ Options:
 - `--connect-delay-ms,--delay` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Extra delay (ms) after --connect succeeds, before TTS playback starts. Useful for AV receivers that need time to switch inputs or unmute (default 0).
 
 **Provider**
-- `--provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">vibevoice</span> <span data-cli="choice">moss</span></span></span>) - TTS provider: elevenlabs (direct API), pixlwiz (proxy /audio/speech), openrouter (/audio/speech), vibevoice (local ggml), or moss (local MOSS-TTS-Nano). Defaults to chat.tts_provider from app settings, then elevenlabs.
+- `--provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">elevenlabs</span> <span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">vibevoice</span> <span data-cli="choice">moss</span> <span data-cli="choice">windows</span></span></span>) - TTS provider: elevenlabs (direct API), pixlwiz (proxy /audio/speech), openrouter (/audio/speech), vibevoice (local ggml), moss (local MOSS-TTS-Nano), or windows (installed Windows voices, no API key). Defaults to chat.tts_provider from app settings, then elevenlabs.
 - `--tokenizer` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Tokenizer GGUF path for vibevoice or moss. MOSS defaults to models/moss-tts-nano/moss-nano-tokenizer.gguf.
 - `--codec` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - MOSS Audio Tokenizer Nano GGUF. Defaults to models/moss-tts-nano/moss-audio-tokenizer-nano.gguf.
 - `--ref-audio` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Reference WAV for local voice cloning (vibevoice 1.5B or MOSS Nano).
@@ -7520,7 +7520,7 @@ Options:
 - `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
 - `--bind` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Interface/address for MCP HTTP. Default: 127.0.0.1 (loopback only).
 - `--port` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 65535]</span>, <span data-cli="default">default <span data-cli="value">4444</span></span></span>) - First TCP port to try for MCP HTTP (default 4444; next free port if busy)
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 
 **Example**
 
@@ -7655,261 +7655,253 @@ tanit-cli mcp client query --filter 'foo' --input 'foo'
 
 ---
 
-#### mcp client Tanit
+#### mcp client code-mcp
 
 MCP server from the tools cache.
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_search --query <value>
+tanit-cli mcp client code-mcp index_repository --repo_path <path>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_search --args '{}' --timeout-ms 0 --country 'foo' --end_date 'foo' --exact_match 'foo' --exclude_domains '{}' --include_domains '{}' --include_favicon --include_image_descriptions --include_images --include_raw_content --max_results 'foo' --query 'foo' --search_depth 'foo' --start_date 'foo' --time_range 'foo' --topic 'foo'
+tanit-cli mcp client code-mcp index_repository --args '{}' --timeout-ms 0 --mode 'foo' --persistence --repo_path 'foo' --target_projects '{}'
 ```
 
-#### mcp client Tanit tavily-tavily_search
+#### mcp client code-mcp index_repository
 
-Search the web for current information on any topic. Use for news, facts, or data beyond your knowledge cutoff. Returns snippets and source URLs.
+Index a repository into the knowledge graph. Special mode 'cross-repo-intelligence': skip extraction, only match Routes/Channels across projects to create CROSS_HTTP_CALLS/CROSS_AS
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
-- `--country` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Boost search results from a specific country. Must be a full country name (e.g., 'United States', 'Japan', 'Germany'). ISO country codes (e.g., 'us', 'jp') are not supported. Available only if topic is general. See https://docs.tavily.com/documentation/api-reference/search for the full list of supported countries.
-- `--end_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results before the specified end date. Required to be written in the format YYYY-MM-DD
-- `--exact_match` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Only return results containing the exact phrase(s) in quotes in your query
-- `--exclude_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - List of domains to specifically exclude, if the user asks to exclude a domain set this to the domain of the site
-- `--include_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - A list of domains to specifically include in the search results, if the user asks to search on specific sites set this to the domain of the site
-- `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to include the favicon URL for each result
-- `--include_image_descriptions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include a list of query-related images and their descriptions in the response
-- `--include_images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include a list of query-related images in the response
-- `--include_raw_content` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include the cleaned and parsed HTML content of each search result
-- `--max_results` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The maximum number of search results to return
-- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Search query
-- `--search_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The depth of the search. 'basic' for generic results, 'advanced' for more thorough search, 'fast' for optimized low latency with high relevance, 'ultra-fast' for prioritizing latency above all else
-- `--start_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results after the specified start date. Required to be written in the format YYYY-MM-DD.
-- `--time_range` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The time range back from the current date to include in the search results
-- `--topic` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The category of the search. This will determine which of our agents will be used for the search
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - All modes run type-aware LSP call/usage resolution (per-file + cross-file). full: all files + similarity/semantic edges. moderate: filtered files + similarity/semantic. fast: filtered files, no similarity/semantic. cross-repo-intelligence: match Routes/Channels across projects.
+- `--persistence` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write compressed artifact to .codebase-memory/graph.db.zst for team sharing. Teammates can bootstrap from the artifact instead of full re-indexing.
+- `--repo_path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to the repository
+- `--target_projects` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Projects to search for cross-repo links (cross-repo-intelligence mode). Use ["*"] for all indexed projects. Run list_projects to see available projects.
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_search --query <value>
+tanit-cli mcp client code-mcp index_repository --repo_path <path>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_search --args '{}' --timeout-ms 0 --country 'foo' --end_date 'foo' --exact_match 'foo' --exclude_domains '{}' --include_domains '{}' --include_favicon --include_image_descriptions --include_images --include_raw_content --max_results 'foo' --query 'foo' --search_depth 'foo' --start_date 'foo' --time_range 'foo' --topic 'foo'
+tanit-cli mcp client code-mcp index_repository --args '{}' --timeout-ms 0 --mode 'foo' --persistence --repo_path 'foo' --target_projects '{}'
 ```
 
 ---
 
-#### mcp client Tanit tavily-tavily_extract
+#### mcp client code-mcp search_graph
 
-Extract content from URLs. Returns raw page content in markdown or text format.
+Search the code knowledge graph for functions, classes, routes, and variables. Use INSTEAD OF grep/glob when finding code definitions, implementations, or relationships. Three sear
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--extract_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Use 'advanced' for LinkedIn, protected sites, or tables/embedded content
-- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output format
-- `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include favicon URLs
-- `--include_images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include images from pages
-- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Query to rerank content chunks by relevance
-- `--urls` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List of URLs to extract content from
+- `--exclude_entry_points` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - boolean
+- `--file_pattern` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--include_connected` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - boolean
+- `--label` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max results per call. Default 200. Response carries 'total' (full match count) and 'has_more' (true if truncated) so callers can detect the limit and paginate.
+- `--max_degree` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--min_degree` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--name_pattern` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Skip the first N matching nodes. Combine with 'limit' to page: increment offset by limit and re-call while has_more is true.
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--qn_pattern` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Natural-language or keyword full-text search using BM25 ranking. Tokens are split on whitespace; camelCase identifiers are indexed as individual words (updateCloudClient → update, cloud, client). Results are ranked with structural boosting: Functions/Methods +10, Routes +8, Classes/Interfaces +5. Noise labels (File/Folder/Module/Variable) are filtered out. When provided, name_pattern is ignored.
+- `--relationship` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--semantic_query` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - MUST be an ARRAY of keyword strings (e.g. ["send","pubsub","publish"]) — NOT a single string. Each keyword is scored independently via per-keyword min-cosine; results reflect functions that score well on ALL keywords. Requires moderate/full index mode. Results appear in the 'semantic_results' field (separate from 'results').
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_extract
+tanit-cli mcp client code-mcp search_graph --project <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_extract --args '{}' --timeout-ms 0 --extract_depth 'foo' --format 'foo' --include_favicon --include_images --query 'foo' --urls '{}'
+tanit-cli mcp client code-mcp search_graph --args '{}' --timeout-ms 0 --exclude_entry_points --file_pattern 'foo' --include_connected --label 'foo' --limit 'foo' --max_degree 'foo' --min_degree 'foo' --name_pattern 'foo' --offset 'foo' --project 'foo' --qn_pattern 'foo' --query 'foo' --relationship 'foo' --semantic_query '{}'
 ```
 
 ---
 
-#### mcp client Tanit tavily-tavily_crawl
+#### mcp client code-mcp query_graph
 
-Crawl a website starting from a URL. Extracts content from pages with configurable depth and breadth.
+Execute a Cypher query against the knowledge graph for complex multi-hop patterns, aggregations, and cross-service analysis. The response includes 'total' (returned row count). The
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--allow_external` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to return external links in the final response
-- `--extract_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Advanced extraction retrieves more data, including tables and embedded content, with higher success but may increase latency
-- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.
-- `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to include the favicon URL for each result
-- `--instructions` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Natural language instructions for the crawler. Instructions specify which types of pages the crawler should return.
-- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Total number of links the crawler will process before stopping
-- `--max_breadth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max number of links to follow per level of the tree (i.e., per page)
-- `--max_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max depth of the crawl. Defines how far from the base URL the crawler can explore.
-- `--select_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to restrict crawling to specific domains or subdomains (e.g., ^docs\.example\.com$)
-- `--select_paths` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)
-- `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The root URL to begin the crawl
+- `--max_rows` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional row limit. Default: unlimited up to a 100k row ceiling. No offset support — use search_graph for paginated browsing.
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Cypher query
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_crawl --url <value>
+tanit-cli mcp client code-mcp query_graph --project <value> --query <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_crawl --args '{}' --timeout-ms 0 --allow_external --extract_depth 'foo' --format 'foo' --include_favicon --instructions 'foo' --limit 'foo' --max_breadth 'foo' --max_depth 'foo' --select_domains '{}' --select_paths '{}' --url 'foo'
+tanit-cli mcp client code-mcp query_graph --args '{}' --timeout-ms 0 --max_rows 'foo' --project 'foo' --query 'foo'
 ```
 
 ---
 
-#### mcp client Tanit tavily-tavily_map
+#### mcp client code-mcp trace_path
 
-Map a website's structure. Returns a list of URLs found starting from the base URL.
+Trace paths through the code graph. Modes: calls (callers/callees), data_flow (value propagation with args at each hop), cross_service (through HTTP/async Route nodes). Use INSTEAD
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--allow_external` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to return external links in the final response
-- `--instructions` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Natural language instructions for the crawler
-- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Total number of links the crawler will process before stopping
-- `--max_breadth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max number of links to follow per level of the tree (i.e., per page)
-- `--max_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max depth of the mapping. Defines how far from the base URL the crawler can explore
-- `--select_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to restrict crawling to specific domains or subdomains (e.g., ^docs\.example\.com$)
-- `--select_paths` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)
-- `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The root URL to begin the mapping
+- `--depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--direction` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--edge_types` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - array
+- `--function_name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--include_tests` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include test files in results. When false (default), test files are filtered out. When true, test nodes are included with is_test=true marker.
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - calls: follow CALLS edges. data_flow: follow CALLS+DATA_FLOWS with arg expressions. cross_service: follow HTTP_CALLS+ASYNC_CALLS+DATA_FLOWS through Routes.
+- `--parameter_name` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - For data_flow mode: scope trace to a specific parameter name
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--risk_labels` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Add risk classification (CRITICAL/HIGH/MEDIUM/LOW) based on hop distance
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_map --url <value>
+tanit-cli mcp client code-mcp trace_path --function_name <value> --project <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_map --args '{}' --timeout-ms 0 --allow_external --instructions 'foo' --limit 'foo' --max_breadth 'foo' --max_depth 'foo' --select_domains '{}' --select_paths '{}' --url 'foo'
+tanit-cli mcp client code-mcp trace_path --args '{}' --timeout-ms 0 --depth 'foo' --direction 'foo' --edge_types '{}' --function_name 'foo' --include_tests --mode 'foo' --parameter_name 'foo' --project 'foo' --risk_labels
 ```
 
 ---
 
-#### mcp client Tanit tavily-tavily_research
+#### mcp client code-mcp get_code_snippet
 
-Perform comprehensive research on a given topic or question. Use this tool when you need to gather information from multiple sources, including web pages, documents, and other reso
+Read source code for a function/class/symbol. IMPORTANT: First call search_graph to find the exact qualified_name, then pass it here. This is a read tool, not a search tool. Accept
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - A comprehensive description of the research task
-- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Defines the degree of depth of the research. 'mini' is good for narrow tasks with few subtopics. 'pro' is good for broad tasks with many subtopics
+- `--include_neighbors` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - boolean
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--qualified_name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Full qualified_name from search_graph, or short function name
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_research --input <value>
+tanit-cli mcp client code-mcp get_code_snippet --project <value> --qualified_name <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_research --args '{}' --timeout-ms 0 --input 'foo' --model 'foo'
+tanit-cli mcp client code-mcp get_code_snippet --args '{}' --timeout-ms 0 --include_neighbors --project 'foo' --qualified_name 'foo'
 ```
 
 ---
 
-#### mcp client Tanit deepl-get-source-languages
+#### mcp client code-mcp get_graph_schema
 
-Get list of available source languages for translation
+Get the schema of the knowledge graph (node labels, edge types)
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-source-languages
+tanit-cli mcp client code-mcp get_graph_schema --project <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-source-languages --args '{}' --timeout-ms 0
+tanit-cli mcp client code-mcp get_graph_schema --args '{}' --timeout-ms 0 --project 'foo'
 ```
 
 ---
 
-#### mcp client Tanit deepl-get-target-languages
+#### mcp client code-mcp get_architecture
 
-Get list of available target languages for translation
+Get high-level architecture overview — packages, services, dependencies, and project structure at a glance. Includes 'clusters': Leiden community detection over the call/import g
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--aspects` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - array
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-target-languages
+tanit-cli mcp client code-mcp get_architecture --project <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-target-languages --args '{}' --timeout-ms 0
+tanit-cli mcp client code-mcp get_architecture --args '{}' --timeout-ms 0 --aspects '{}' --project 'foo'
 ```
 
 ---
 
-#### mcp client Tanit deepl-translate-text
+#### mcp client code-mcp search_code
 
-Translate text to a target language using DeepL API. Review all available optional parameters and use those applicable to your scenario for best results. When the translation inclu
+Graph-augmented code search. Finds text patterns via grep, then enriches results with the knowledge graph: deduplicates matches into containing functions, ranks by structural impor
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--context` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Recommended: describe what this text is about (e.g., 'Technical documentation for a software API'). Improves translation accuracy but is not itself translated.
-- `--customInstructions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Array of custom instructions to guide translation style (max 10 instructions, 300 chars each)
-- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls formality: 'less' for informal, 'more' for formal/polite, 'prefer_less'/'prefer_more' to prefer but fall back to default
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Glossary ID to ensure consistent terminology translation
-- `--preserveFormatting` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to preserve original formatting - recommended for markdown, code blocks, HTML, or any structured text
-- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
-- `--splitSentences` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sentence splitting: '0' disables, '1' (default) splits on punctuation and newlines, 'nonewlines' preserves line breaks
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
-- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to translate, as a single string or an array of strings handled independently
+- `--context` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Lines of context around each match (like grep -C). Only used in compact mode.
+- `--file_pattern` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Glob for grep --include (e.g. *.go)
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max enriched results per call. Default 10. Response includes 'total_grep_matches' and 'total_results' so callers can detect truncation. No offset parameter — raise limit or narrow with file_pattern / path_filter to see more.
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - compact: signatures+metadata (default). full: with source. files: just file list.
+- `--path_filter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Regex filter on result file paths (e.g. ^src/ or \.(go|ts)$)
+- `--pattern` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--regex` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - boolean
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-translate-text --targetLangCode <value> --text <value>
+tanit-cli mcp client code-mcp search_code --pattern <value> --project <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-translate-text --args '{}' --timeout-ms 0 --context 'foo' --customInstructions '{}' --formality 'foo' --glossaryId 'foo' --preserveFormatting --sourceLangCode 'foo' --splitSentences 'foo' --styleId 'foo' --targetLangCode 'foo' --text 'foo'
+tanit-cli mcp client code-mcp search_code --args '{}' --timeout-ms 0 --context 'foo' --file_pattern 'foo' --limit 'foo' --mode 'foo' --path_filter 'foo' --pattern 'foo' --project 'foo' --regex
 ```
 
 ---
 
-#### mcp client Tanit deepl-get-writing-styles
+#### mcp client code-mcp list_projects
 
-Get list of writing styles the DeepL API can use while rephrasing text
+List all indexed projects
 
 Options:
 
@@ -7919,242 +7911,231 @@ Options:
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-writing-styles
+tanit-cli mcp client code-mcp list_projects
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-writing-styles --args '{}' --timeout-ms 0
+tanit-cli mcp client code-mcp list_projects --args '{}' --timeout-ms 0
 ```
 
 ---
 
-#### mcp client Tanit deepl-get-writing-tones
+#### mcp client code-mcp delete_project
 
-Get list of writing tones the DeepL API can use while rephrasing text
+Delete a project from the index
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-writing-tones
+tanit-cli mcp client code-mcp delete_project --project <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-writing-tones --args '{}' --timeout-ms 0
+tanit-cli mcp client code-mcp delete_project --args '{}' --timeout-ms 0 --project 'foo'
 ```
 
 ---
 
-#### mcp client Tanit deepl-rephrase-text
+#### mcp client code-mcp index_status
 
-Rephrase text in the same language, or into a different language, using DeepL API
+Get the indexing status of a project
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--style` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing style for rephrasing
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr') to rephrase into a different language, or leave empty to keep the original language
-- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to rephrase, as a single string or an array of strings handled independently
-- `--tone` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing tone for rephrasing
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-rephrase-text --text <value>
+tanit-cli mcp client code-mcp index_status --project <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-rephrase-text --args '{}' --timeout-ms 0 --style 'foo' --targetLangCode 'foo' --text 'foo' --tone 'foo'
+tanit-cli mcp client code-mcp index_status --args '{}' --timeout-ms 0 --project 'foo'
 ```
 
 ---
 
-#### mcp client Tanit deepl-translate-document
+#### mcp client code-mcp detect_changes
 
-Translate a document file using DeepL API
+Detect code changes and their impact
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls whether translations should lean toward informal or formal language
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ID of glossary to use for translation
-- `--inputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to the input document file to translate
-- `--outputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path where the translated document will be saved (if not provided, will be auto-generated)
-- `--outputFormat` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Desired output file format (e.g. 'pdf'), or leave empty to keep the input format. Only some conversions are supported.
-- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
+- `--base_branch` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--scope` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--since` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Git ref or date to compare from (e.g. HEAD~5, v0.5.0, 2026-01-01)
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-translate-document --inputFile <value> --targetLangCode <value>
+tanit-cli mcp client code-mcp detect_changes --project <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-translate-document --args '{}' --timeout-ms 0 --formality 'foo' --glossaryId 'foo' --inputFile 'foo' --outputFile 'foo' --outputFormat 'foo' --sourceLangCode 'foo' --styleId 'foo' --targetLangCode 'foo'
+tanit-cli mcp client code-mcp detect_changes --args '{}' --timeout-ms 0 --base_branch 'foo' --depth 'foo' --project 'foo' --scope 'foo' --since 'foo'
 ```
 
 ---
 
-#### mcp client Tanit deepl-list-glossaries
+#### mcp client code-mcp manage_adr
 
-Get a list of all glossaries with metadata for each - name, dictionaries available, and creation time. This does not fetch any glossary entries. Use the get-glossary-dictionary-ent
+Create or update Architecture Decision Records
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--content` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--sections` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - array
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-list-glossaries
+tanit-cli mcp client code-mcp manage_adr --project <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-list-glossaries --args '{}' --timeout-ms 0
+tanit-cli mcp client code-mcp manage_adr --args '{}' --timeout-ms 0 --content 'foo' --mode 'foo' --project 'foo' --sections '{}'
 ```
 
 ---
 
-#### mcp client Tanit deepl-get-glossary-info
+#### mcp client code-mcp ingest_traces
 
-Given an id, get metadata about the glossary with that id - its name, available dictionaries, and creation time. This does not fetch any glossary entries. Use the get-glossary-dict
+Ingest runtime traces to enhance the knowledge graph
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--traces` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - array
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-glossary-info --glossaryId <value>
+tanit-cli mcp client code-mcp ingest_traces --project <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-glossary-info --args '{}' --timeout-ms 0 --glossaryId 'foo'
+tanit-cli mcp client code-mcp ingest_traces --args '{}' --timeout-ms 0 --project 'foo' --traces '{}'
 ```
 
 ---
 
-#### mcp client Tanit deepl-get-glossary-dictionary-entries
+#### mcp client memory
 
-Retrieve all the entries from a given glossary dictionary. (A glossary consists one of one or more dictionaries, each of which contains entries for a specific language pair, in one
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
-- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - source language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
+MCP server from the tools cache.
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --glossaryId <value> --sourceLangCode <value> --targetLangCode <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --args '{}' --timeout-ms 0 --glossaryId 'foo' --sourceLangCode 'foo' --targetLangCode 'foo'
+tanit-cli mcp client memory
 ```
 
 ---
 
-#### mcp client Tanit deepl-list-style-rules
+#### mcp client office-cli
 
-Get a list of all style rules with metadata for each - id, name, language, and timestamps. Style rules can be applied when translating text or documents. Use the get-style-rule too
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--detailed` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to include the configured rules and custom instructions of each rule
-- `--page` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page number, 0-based
-- `--pageSize` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of style rules per page (max 10)
+MCP server from the tools cache.
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-list-style-rules
+tanit-cli mcp client office-cli officecli --command <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-list-style-rules --args '{}' --timeout-ms 0 --detailed --page 'foo' --pageSize 'foo'
+tanit-cli mcp client office-cli officecli --args '{}' --timeout-ms 0 --command 'foo'
+```
+
+#### mcp client office-cli officecli
+
+Create, read, and modify Office documents (.docx, .xlsx, .pptx) by running officecli command lines.
+
+Pass an officecli command line in `command` (string or pre-split argv array); i
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
+- `--command` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The officecli command line — either a single string (e.g. "add deck.pptx /slide[1] --type shape --prop text=Hi") or a pre-split argv array of strings (use the array form when an argument contains spaces or quotes). A leading 'officecli' is optional. Examples: "help" lists commands; "help pptx shape" shows an element's schema; "view deck.pptx text" reads it; "view deck.pptx screenshot --page 2" returns a rendered image; add --json to get/query/validate for structured output. Run help first to learn the verbs and flags.
+
+**Example**
+
+```sh
+tanit-cli mcp client office-cli officecli --command <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client office-cli officecli --args '{}' --timeout-ms 0 --command 'foo'
 ```
 
 ---
 
-#### mcp client Tanit deepl-get-style-rule
+#### mcp client poolypress-cms-local
 
-Given an id, get a single style rule with its full detail - configured rules and custom instructions.
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
+MCP server from the tools cache.
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-style-rule --styleId <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-style-rule --args '{}' --timeout-ms 0 --styleId 'foo'
+tanit-cli mcp client poolypress-cms-local
 ```
 
 ---
 
-#### mcp client Tanit deepl-get-custom-instruction
+#### mcp client tavily-remote-mcp
 
-Get a single custom instruction belonging to a style rule. Use the get-style-rule tool to find out which custom instructions a style rule contains.
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--instructionId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the custom instruction
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
+MCP server from the tools cache.
 
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-custom-instruction --instructionId <value> --styleId <value>
+tanit-cli mcp client tavily-remote-mcp
 ```
 
-**Full example**
+---
+
+#### mcp client token-optimizer
+
+MCP server from the tools cache.
+
+**Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms 0 --instructionId 'foo' --styleId 'foo'
+tanit-cli mcp client token-optimizer
 ```
 
 ## Custom Commands

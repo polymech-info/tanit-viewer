@@ -117,7 +117,7 @@ Params:
 - `reference` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Single-path alias of reference_images.
 - `reference_images` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Style / brand reference images (not keyframes).
 - `references` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Alias of reference_images.
-- `resolution` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">720p</span> <span data-cli="choice">1080p</span> <span data-cli="choice">4K</span></span></span>)  -  Output resolution (720p default).
+- `resolution` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">720p</span> <span data-cli="choice">1080p</span></span></span>)  -  Output resolution (720p default).
 - `src` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Keyframe stills (host paths).
 - `start_frame` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional start-frame still (host path or data URL).
 
@@ -157,6 +157,15 @@ Params:
 - `expected_version` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional.
 - `options` (<span data-cli="meta"><span data-cli="type">object</span></span>)
 - `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Output path: absolute, or relative to the Explorer folder / selection base in-app (e.g.
+
+#### download_url
+
+Download one http(s) URL into the current folder, or into path when set.
+
+Params:
+- `filename` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional fallback name when the server and the URL path have none.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional destination.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  http or https URL.
 
 #### file_str_replace
 
@@ -199,7 +208,7 @@ Params:
 - `input_device` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional capture device name (case-insensitive substring; use `audio info` to list).
 - `max_duration_ms` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="default">default <span data-cli="value">30000</span></span></span>)  -  Hard cap on recording length in milliseconds (default 30 000).
 - `prompt` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional short cue to speak before recording starts (one sentence is ideal, e.g.
-- `provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">elevenlabs</span> <span data-cli="choice">whisper</span> <span data-cli="choice"></span></span></span>)  -  STT provider override.
+- `provider` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">tanit</span> <span data-cli="choice">openrouter</span> <span data-cli="choice">elevenlabs</span> <span data-cli="choice">whisper</span> <span data-cli="choice">windows</span> <span data-cli="choice"></span></span></span>)  -  STT provider override.
 - `silence_ms` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="default">default <span data-cli="value">1500</span></span></span>)  -  VAD: auto-stop after this many ms of silence following at least one speech burst (default 1 500).
 - `text_out` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional path to write the transcript as a UTF-8 text file.
 
