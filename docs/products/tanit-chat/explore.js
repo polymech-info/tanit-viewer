@@ -171,6 +171,10 @@
           '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h12v12H6z"/></svg></button>' +
       '</div>' +
       '<div class="tour-meta"><b class="tour-label">Auto</b><span class="tour-hint">Images 4s · videos to end</span></div>' +
+      '<button type="button" class="theme-btn" data-act="theme" aria-label="Toggle theme" title="Theme">' +
+        '<span class="moon" aria-hidden="true">◐</span>' +
+        '<span class="sun" aria-hidden="true">☀</span>' +
+      '</button>' +
     '</div>';
   }
 
@@ -289,6 +293,7 @@
       elTour.setAttribute('data-mode', tourMode);
       elTour.querySelectorAll('[data-act]').forEach(function (btn) {
         var act = btn.getAttribute('data-act');
+        if (act === 'theme') return;
         var on = (act === 'play' && tourMode === 'playing') ||
           (act === 'pause' && tourMode === 'paused') ||
           (act === 'stop' && tourMode === 'stopped');
@@ -375,6 +380,9 @@
     if (typeof paint === 'function') paint();
     if (lb && lb.open && typeof renderLightboxContent === 'function') renderLightboxContent();
   }
+  function toggleTheme() {
+    applyTheme(themeName() === 'dark' ? 'light' : 'dark', true);
+  }
   /** True when hosted in pm iframe-widget (?embed=1 or nested). */
   function isEmbed() {
     try {
@@ -383,39 +391,23 @@
     } catch (e) { return window.parent !== window; }
   }
   function enableEmbedLayout() {
-    if (!isEmbed()) return;
-    document.documentElement.setAttribute('data-pm-embed', '1');
     var explore = document.querySelector('.tv-explore');
     if (explore) explore.setAttribute('data-pm-embed', '1');
+    try {
+      if (window.parent !== window) document.documentElement.setAttribute('data-pm-embed', '1');
+      else if (!explore && new URLSearchParams(location.search).get('embed') === '1') {
+        document.documentElement.setAttribute('data-pm-embed', '1');
+      }
+    } catch (e) { /* ignore */ }
   }
   /**
-   * Measure CONTENT height, not the clipped iframe viewport.
-   * getBoundingClientRect is wrong when parent height < content (classic mobile clip).
+   * Host slot height. Do not report content scrollHeight — that grows the
+   * iframe to the phone viewport and unsticks the tour chrome.
    */
   function measureHeight() {
     enableEmbedLayout();
-    var doc = document.documentElement;
-    var body = document.body;
-    var root = document.querySelector('.tv-explore') || body;
-    var shell = document.querySelector('.shell');
-    var h = Math.max(
-      root.scrollHeight || 0,
-      root.offsetHeight || 0,
-      shell ? shell.scrollHeight : 0,
-      shell ? shell.offsetHeight : 0,
-      body ? body.scrollHeight : 0,
-      body ? body.offsetHeight : 0,
-      doc ? doc.scrollHeight : 0,
-      doc ? doc.offsetHeight : 0
-    );
-    // Sum in-flow children if shell collapsed under a previous clip
-    if (shell && h < 200) {
-      var sum = 0;
-      for (var i = 0; i < shell.children.length; i++) {
-        sum += shell.children[i].getBoundingClientRect().height;
-      }
-      h = Math.max(h, Math.ceil(sum + 24));
-    }
+    var frame = playFrame();
+    var h = frame && frame.clientHeight > 40 ? frame.clientHeight : 400;
     return Math.ceil(h);
   }
   var _heightReportTimer = null;
@@ -789,6 +781,10 @@
       e.stopPropagation();
       playClick();
       var act = btn.getAttribute('data-act');
+      if (act === 'theme') {
+        toggleTheme();
+        return;
+      }
       suppressIdle = true;
       if (act === 'play') setTourMode('playing');
       else if (act === 'pause') setTourMode('paused');
@@ -1314,42 +1310,48 @@
   }
 
   function playScrollRoot() {
-    try {
-      if (window.matchMedia('(max-width:900px)').matches) {
-        return document.scrollingElement || document.documentElement;
-      }
-    } catch (e) { /* ignore */ }
-    return elStage;
+    var explore = document.querySelector('.tv-explore');
+    if (explore && explore.getAttribute('data-pm-embed')) return explore;
+    var shell = document.querySelector('.shell');
+    if (document.documentElement.getAttribute('data-pm-embed') && shell) return shell;
+    if (isNarrow() && shell) return shell;
+    return window;
+  }
+  function playFrame() {
+    var root = playScrollRoot();
+    if (root && root !== window) return root;
+    return document.querySelector('.tv-explore') || document.querySelector('.shell') || document.documentElement;
   }
 
-  /** Size the playing card so tour chrome + slide stay in the viewport. */
+  /** Size the playing card to the host frame, not the phone viewport. */
   function fitPlayViewport() {
     var root = document.documentElement;
+    var tokenRoot = document.querySelector('.tv-explore') || root;
     var tour = (elStage && elStage.querySelector('.stack-tour')) || document.querySelector('.stack-tour');
     var tourH = 56;
-    var tourTop = 12;
     if (tour) {
       var tr = tour.getBoundingClientRect();
       tourH = Math.max(40, Math.ceil(tr.height));
-      tourTop = tr.top;
     }
-    root.style.setProperty('--tour-h', tourH + 'px');
+    tokenRoot.style.setProperty('--tour-h', tourH + 'px');
+    if (tokenRoot !== root) root.style.setProperty('--tour-h', tourH + 'px');
     if (tourMode !== 'playing' || !isStackMode()) {
-      root.style.removeProperty('--play-fit');
+      tokenRoot.style.removeProperty('--play-fit');
+      if (tokenRoot !== root) root.style.removeProperty('--play-fit');
       return;
     }
-    var padT = 12;
-    var padB = 12;
+    var frame = playFrame();
+    var fh = (frame && frame.clientHeight > 40) ? frame.clientHeight : 400;
+    var padB = 8;
     var shell = document.querySelector('.shell');
     if (shell) {
       var cs = getComputedStyle(shell);
-      padT = parseFloat(cs.paddingTop) || 12;
-      padB = parseFloat(cs.paddingBottom) || 12;
+      padB = parseFloat(cs.paddingBottom) || 8;
     }
-    var usedTop = (tourTop >= 0 && tourTop < 120) ? Math.ceil(tourTop + tourH) : (padT + tourH);
-    var vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    var h = Math.floor(vh - usedTop - padB - 8);
-    root.style.setProperty('--play-fit', Math.max(160, h) + 'px');
+    var h = Math.floor(fh - tourH - padB - 8);
+    var fit = Math.max(120, h) + 'px';
+    tokenRoot.style.setProperty('--play-fit', fit);
+    if (tokenRoot !== root) root.style.setProperty('--play-fit', fit);
   }
 
   function scrollSelectedCard(smooth) {
@@ -1359,16 +1361,16 @@
     if (!card) return;
     var tour = elStage.querySelector('.stack-tour');
     var margin = tour ? tour.getBoundingClientRect().height : 0;
-    var scroller = playScrollRoot();
     var ms = smooth === false ? 0 : SLIDE_MS;
-    if (scroller === elStage) {
-      var stageRect = elStage.getBoundingClientRect();
-      var cardRect = card.getBoundingClientRect();
-      var to = elStage.scrollTop + (cardRect.top - stageRect.top) - margin;
-      animateScrollY(elStage, Math.max(0, to), ms);
-    } else {
+    var scroller = playScrollRoot();
+    if (scroller === window) {
       var y = card.getBoundingClientRect().top + (window.scrollY || window.pageYOffset || 0) - margin;
       animateScrollY(window, Math.max(0, y), ms);
+    } else {
+      var sRect = scroller.getBoundingClientRect();
+      var cRect = card.getBoundingClientRect();
+      var to = scroller.scrollTop + (cRect.top - sRect.top) - margin;
+      animateScrollY(scroller, Math.max(0, to), ms);
     }
     if (tourMode === 'playing') {
       fitPlayViewport();
@@ -1695,6 +1697,10 @@
     if (tourBtn) {
       playClick();
       var act = tourBtn.getAttribute('data-act');
+      if (act === 'theme') {
+        toggleTheme();
+        return;
+      }
       suppressIdle = true;
       if (act === 'play') setTourMode('playing');
       else if (act === 'pause') setTourMode('paused');
@@ -1725,6 +1731,7 @@
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.target.closest('input, textarea, select, video')) return;
     if (e.target.closest('.stage-media[data-zoomed]')) return;
+    if (isStackMode()) return;
     e.preventDefault();
     var dy = e.deltaY;
     if (e.deltaMode === 1) dy *= 16;
@@ -1751,7 +1758,7 @@
   if (themeBtn) {
     themeBtn.addEventListener('click', function () {
       playClick();
-      applyTheme(themeName() === 'dark' ? 'light' : 'dark', true);
+      toggleTheme();
     });
   }
 
@@ -1799,7 +1806,7 @@
     hostThemeMo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
   }
   if (typeof ResizeObserver !== 'undefined') {
-    var roRoot = document.querySelector('.shell') || document.querySelector('.tv-explore') || document.body;
+    var roRoot = playFrame();
     if (roRoot) {
       var ro = new ResizeObserver(function () { reportHeightSoon(); fitPlayViewport(); });
       ro.observe(roRoot);
@@ -1808,7 +1815,6 @@
   window.addEventListener('load', reportHeightSoon);
   window.addEventListener('orientationchange', function () { reportHeightSoon(); fitPlayViewport(); });
   window.addEventListener('resize', fitPlayViewport);
-  if (window.visualViewport) window.visualViewport.addEventListener('resize', fitPlayViewport);
   try {
     var mqStack = window.matchMedia('(max-width:900px)');
     var onStackMq = function () { paint(); };

@@ -77,7 +77,10 @@ export function cssForInline(css) {
 		// Theme attrs on .tv-explore only — never rewrite .tv-lightbox[data-theme=…]
 		.replace(/(^|[,}\n])(\s*)\[data-theme=/g, '$1$2.tv-explore[data-theme=')
 		.replace(/(^|[,}\n])(\s*)\[data-skin=/g, '$1$2.tv-explore[data-skin=')
-		.replace(/html,body\{height:100%;margin:0\}/, '.tv-explore{height:auto;min-height:480px;margin:0}')
+		.replace(/html,body\{height:100%;margin:0\}/, '.tv-explore{height:100%;min-height:0;margin:0}')
+		.replace(/html\.tv-playing/g, '.tv-explore.tv-playing')
+		.replace(/html\.tv-stack/g, '.tv-explore.tv-stack')
+		.replace(/html\[data-pm-embed\]/g, '.tv-explore[data-pm-embed]')
 		.replace(/(?<![a-zA-Z0-9_-])body\{/g, '.tv-explore{')
 		.replace(/(?<![a-zA-Z0-9_-])html\{/g, '.tv-explore{')
 		.replace(/(^|})\s*\*\{/g, '$1.tv-explore,.tv-explore *{')

@@ -13,20 +13,29 @@ body{
   letter-spacing:-.01em;
 }
 
-/* Parent iframe-widget (?embed=1): size to content, never lock to 100dvh (mobile clip) */
-html[data-pm-embed],html[data-pm-embed] body,
-.tv-explore[data-pm-embed]{
-  height:auto!important;min-height:0!important;overflow:visible!important;
+/* Fill the host slot (iframe / inline ~400px). Scroll inside; do not use 100dvh. */
+html[data-pm-embed],html[data-pm-embed] body{
+  height:100%!important;min-height:0!important;overflow:hidden!important;
 }
-html[data-pm-embed] .shell,
+.tv-explore[data-pm-embed]{
+  height:100%!important;min-height:0!important;max-height:100%!important;
+  overflow:auto!important;
+}
+/* Standalone iframe: shell is the scroller. Inline .tv-explore: widget scrolls. */
+html[data-pm-embed] .shell{
+  height:100%!important;min-height:0!important;max-height:none!important;
+  overflow:auto!important;
+}
 .tv-explore[data-pm-embed] .shell{
-  height:auto!important;min-height:0!important;max-height:none!important;
+  height:auto!important;min-height:100%!important;max-height:none!important;
   overflow:visible!important;
 }
 html[data-pm-embed] .sidebar,
-.tv-explore[data-pm-embed] .sidebar{max-height:none!important}
+.tv-explore[data-pm-embed] .sidebar{
+  max-height:100%;
+}
 html[data-pm-embed] .stage-media,
-.tv-explore[data-pm-embed] .stage-media{min-height:220px}
+.tv-explore[data-pm-embed] .stage-media{min-height:160px}
 button,input{font:inherit;color:inherit}
 button{cursor:pointer;border:none;background:none}
 img,video{display:block;max-width:100%}
@@ -380,6 +389,9 @@ html.tv-stack .layout-btn .ico-classic{display:block}
 .tour-controls[data-mode="playing"] .tour-meta b{color:var(--accent)}
 .tour-controls[data-mode="paused"] .tour-meta b{color:var(--amber)}
 .tour-meta span{font-size:.65rem;color:var(--muted);line-height:1.25;white-space:nowrap;max-width:22ch;overflow:hidden;text-overflow:ellipsis}
+.tour-controls .theme-btn{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;margin-left:auto;
+}
 .slide-nav{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto}
 .slide-nav button{
   height:32px;padding:0 11px;border-radius:8px;border:1px solid var(--line);
@@ -401,31 +413,28 @@ html.tv-stack .layout-btn .ico-classic{display:block}
   .shell{grid-template-columns:200px minmax(0,1fr)}
   .metrics{grid-template-columns:repeat(2,1fr)}
 }
-/* Stack: all features scroll; slides via buttons + horizontal swipe only */
+/* Narrow: nav off. Classic fills the leftover viewport; stack still page-scrolls. */
 @media(max-width:900px){
-  html,body{height:auto;overflow:auto}
-  html.tv-stack,html.tv-stack body{
-    scrollbar-width:none;-ms-overflow-style:none;
+  html.tv-stack,html.tv-stack body{height:100%;overflow:hidden}
+  html.tv-stack .tv-explore,html.tv-stack.tv-explore{
+    height:100%!important;min-height:0!important;overflow:auto!important;
   }
-  html.tv-stack::-webkit-scrollbar,
-  html.tv-stack body::-webkit-scrollbar{width:0;height:0;display:none}
-  .tv-explore,.tv-explore.tv-stack{
-    height:auto!important;min-height:0!important;overflow:visible!important;
-  }
+  html:not(.tv-stack),html:not(.tv-stack) body{height:100%;overflow:hidden}
 
   .shell{
     display:flex;flex-direction:column;
-    height:auto;min-height:0;overflow:visible;
     gap:8px;
     padding:8px;
     padding-left:max(8px,env(safe-area-inset-left));
     padding-right:max(8px,env(safe-area-inset-right));
     padding-bottom:max(12px,env(safe-area-inset-bottom));
   }
+  html.tv-stack .shell{height:100%;min-height:0;overflow:auto}
+  html:not(.tv-stack) .shell{height:100%;min-height:0;overflow:hidden}
 
-  /* Compact brand bar */
+  /* Compact brand bar — nav hidden */
   .sidebar{
-    width:100%;max-height:none;
+    width:100%;max-height:none;flex:0 0 auto;
     display:grid;
     grid-template-columns:1fr auto;
     grid-template-areas:"brand foot";
@@ -442,7 +451,12 @@ html.tv-stack .layout-btn .ico-classic{display:block}
   .theme-btn,.layout-btn{width:36px;height:36px;border-radius:9px}
   .side-nav{display:none!important}
 
-  .main,.stage{overflow:visible;min-height:0;flex:none;height:auto}
+  html.tv-stack .main,html.tv-stack .stage{
+    overflow:visible;min-height:0;flex:none;height:auto;
+  }
+  html:not(.tv-stack) .main,html:not(.tv-stack) .stage{
+    flex:1 1 auto;min-height:0;height:auto;overflow:hidden;
+  }
   .stage.is-stack{
     background:transparent;border:0;box-shadow:none;
     overflow:visible;touch-action:pan-y;
@@ -450,15 +464,17 @@ html.tv-stack .layout-btn .ico-classic{display:block}
 
   /* Solid sticky tour chrome — no gradient wash */
   .stack-tour{
-    position:sticky;top:0;z-index:5;
+    position:sticky;top:0;z-index:6;
     margin:0;
     padding:0 0 1rem;
     background:var(--bg);
-    padding-top:env(safe-area-inset-top,0);
   }
   .stack-tour .tour-controls{
     width:100%;
-    justify-content:center;
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;
+    justify-content:stretch;
     padding:8px 10px;gap:10px;
     border-radius:10px;
     background:var(--panel);
@@ -466,6 +482,10 @@ html.tv-stack .layout-btn .ico-classic{display:block}
   }
   .stack-tour .tour-btn{width:40px;height:40px;border-radius:9px}
   .stack-tour .tour-btn svg{width:16px;height:16px}
+  .stack-tour .tour-controls .theme-btn{
+    width:40px;height:40px;border-radius:9px;margin-left:0;
+  }
+  .stack-tour .tour-meta{align-items:center;text-align:center}
   .stack-tour .tour-meta b{font-size:.72rem}
   .stack-tour .tour-meta span{white-space:normal;max-width:none;font-size:.68rem}
 
@@ -555,22 +575,45 @@ html.tv-stack .layout-btn .ico-classic{display:block}
   .feature-card .slide-dots button{width:8px;height:8px}
 }
 
-/* Desktop continuous-scroll: keep the classic sidebar, expand every feature in the stage */
+/* Desktop continuous-scroll: classic sidebar + stacked features.
+   One scrollport (html). Body/stage overflow:visible so sticky chrome can pin. */
 @media(min-width:901px){
+  html.tv-stack{
+    height:100%;overflow:auto;
+  }
+  html.tv-stack body{
+    height:auto;min-height:100%;overflow:visible;
+  }
+  html.tv-stack .shell{
+    height:auto;min-height:100%;overflow:visible;align-items:start;
+  }
+  html.tv-stack .sidebar{
+    position:sticky;top:12px;z-index:4;align-self:start;
+    height:calc(100dvh - 24px);max-height:calc(100dvh - 24px);
+  }
+  html.tv-stack .main,
+  html.tv-stack .stage,
+  html.tv-stack .stage.is-stack{
+    height:auto;min-height:0;flex:none;overflow:visible;
+  }
   html.tv-stack .stage.is-stack{
     background:transparent;border:0;box-shadow:none;
-    overflow:auto;touch-action:pan-y;
+    touch-action:pan-y;
   }
   html.tv-stack .stack-tour{
-    position:sticky;top:0;z-index:5;
+    position:sticky;top:12px;z-index:6;
     margin:0;padding:0 0 1rem;
     background:var(--bg);
   }
   html.tv-stack .stack-tour .tour-controls{
     width:100%;
-    justify-content:center;
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;
+    justify-content:stretch;
     background:var(--panel);box-shadow:var(--shadow);
   }
+  html.tv-stack .stack-tour .tour-controls .theme-btn{margin-left:0}
   html.tv-stack .feature-stack{display:flex;flex-direction:column;gap:12px;padding-bottom:8px}
   html.tv-stack .feature-card{
     border-radius:12px;border:1px solid var(--line);
@@ -626,10 +669,6 @@ html.tv-stack .layout-btn .ico-classic{display:block}
 }
 
 html.tv-stack .feature-card{scroll-margin-top:var(--tour-h,72px)}
-html.tv-stack .stage.is-stack{
-  scrollbar-width:none;-ms-overflow-style:none;
-}
-html.tv-stack .stage.is-stack::-webkit-scrollbar{width:0;height:0;display:none}
 
 @keyframes tv-slide-in{
   from{opacity:0;transform:translate3d(0,14px,0)}
@@ -653,7 +692,7 @@ html.tv-stack .stage.is-stack::-webkit-scrollbar{width:0;height:0;display:none}
 /* During play, the active card is one viewport-fit slide (media + chrome + controls). */
 html.tv-playing.tv-stack .feature-card[aria-current="true"]{
   display:flex;flex-direction:column;
-  max-height:var(--play-fit,calc(100dvh - 88px));
+  max-height:var(--play-fit,calc(100% - 4.5rem));
   overflow:hidden;
 }
 html.tv-playing.tv-stack .feature-card[aria-current="true"] .feature-cat,
@@ -679,7 +718,7 @@ html.tv-playing.tv-stack .feature-card[aria-current="true"] .stage-media video.m
 }
 html.tv-playing.tv-stack .feature-card[aria-current="true"] .stage-below,
 html.tv-playing.tv-stack .feature-card[aria-current="true"] .metrics{
-  flex:0 0 auto;overflow:visible;
+  flex:0 1 auto;min-height:0;max-height:30%;overflow:auto;
 }
 
 /* Lightbox — full-bleed overlay (themed light/dark).

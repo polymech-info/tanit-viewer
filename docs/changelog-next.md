@@ -1,257 +1,102 @@
 # Changelog
 
-End-user release notes for Tanit / Tanit Viewer.
-Generated from git diffs via `npm run build:post:changelog:next`.
-Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
+End-user features for Tanit / Tanit Viewer, from `src/` only.
+Generated via `npm run build:post:changelog:next`.
+Each change is dated **DD-MM**. Newest first.
 
-## 1.0.60 - 22-09
+## 1.0.69 - 01-10
 
-_Each change is dated DD-MM from the commit day. Newest first._
-
-### New
-
-- 22-09 New commands and options added to CLI files in the src/ directory.
-- 22-09 Implement consent_stdin_attached function and initialize delegate_ with a non-json mode CliConsentDelegate.
-- 22-09 Define FEATURE_SECURITY_CONSENT_DELEGATE and include security/web_host_consent.hpp. Manage session grants with pm::security::web_host_consent_detail.
-- 22-09 Highlighting new additions in code for better tracking.
-- 21-09 Added new options and enhancements to policy-related files. Includes changes to UI editors, security features, and CLI options.
-- 21-09 LLM agent and xblox runs support consent UI routing and optional multi-turn session IDs.
-- 20-09 Add a new option '--widths' to the command in 'src/cli/pm_image_cmd_register_explorer.cpp', specifying 'Classic Resize max N verbs (disabled)'.
-- 19-09 If the application display name is empty, assign it the name derived from the executable stem. Afterwards, adjust the tool display name based on its name, ensuring it's not empty.
-- 19-09 Added new line: std::string display_name;
-- 18-09 Added options for assistant and llm codex commands in the CLI.
-- 16-09 Launcher file selections open a side pane with matching Tanit commands and registered Open with applications; item menus also provide Open, Show in folder, and Copy path.
-- 16-09 Open the launcher by hovering over Commands or pressing Alt+Win, then pin it open or switch its light and dark appearance.
-- 16-09 Running launcher commands pulse and can be stopped from their right-click menu.
-- 16-09 The XBlox Picker block and CLI `assistant pick` add free-rectangle selection, target-stack navigation, an 8x pixel loupe, sampled colors, and richer Chrome, selection, foreground-window, and context outputs.
-- 16-09 The `Privacy.EnableClipboardContext` policy controls whether clipboard files, text, and images can enter assistant context; clipboard previews remain unavailable without consent.
-- 15-09 CLI adds an assistant context dump command with explicit consent for clipboard payload and event-preview metadata, plus capability, app ID, context age, and MRU age options.
-- 14-09 CLI adds options for creating and updating service pages and listing service posts and categories.
-- 14-09 xblox lists available service categories.
-- 14-09 xblox retrieves a specific service category.
-- 14-09 xblox lists items within a service category.
-- 14-09 xblox creates service categories.
-- 14-09 xblox updates existing service categories.
-- 14-09 xblox removes service categories.
-- 14-09 CLI adds options for creating service pages.
-- 14-09 CLI adds options for updating service pages.
-- 14-09 CLI adds options for listing service posts.
-- 14-09 CLI adds options for listing service categories.
-- 14-09 xblox adds service blocks to list, retrieve, inspect items in, create, update, and remove service categories.
-- 14-09 CLI adds an option for service page creation commands.
-- 14-09 CLI adds an option for service page update commands.
-- 14-09 CLI adds an option for service post listing commands.
-- 14-09 CLI adds an option for service category listing commands.
-- 14-09 xblox adds APIs to list, retrieve, inspect items for, create, update, and remove service categories.
-- 13-09 File panels include a new menu command.
-- 13-09 File panels include a new context menu command.
-- 12-09 Run the LLM agent pipeline as a server with configurable host, port, concurrency, HTTP workers, and API key.
-- 12-09 llm-agent shows configured display names for HTTP tools, falling back to the tool ID when none is set.
-- 12-09 Run the standard LLM agent pipeline as a server with configurable host, port, concurrency, HTTP workers, API key, and auto-deny consent by default.
-- 12-09 Pass a session_id in server requests to load recent session state and associate new turns and responses with that session.
-- 12-09 llm-agent presents an HTTP tool’s display name when available, falling back to its ID.
-- 12-09 Run the LLM agent server with configurable host, port, concurrency, HTTP workers, and API key.
-- 12-09 llm-agent shows configured tool display names, falling back to tool IDs when no display name is set.
-- 11-09 CLI adds new options for audio image commands.
-- 10-09 Add command-line options for image service file uploads and video commands.
-- 10-09 win-ui status bar labels now show friendly names for recent output paths.
-- 09-09 CLI adds a service store app-license command.
-- 09-09 CLI adds a service store health command.
-- 09-09 CLI adds a service store link command with license server configuration.
-- 09-09 CLI adds a service store reconcile command with license server configuration.
-- 09-09 CLI adds a service store balance command with license server configuration.
-- 09-09 CLI adds a service store entitlements command.
-- 09-09 CLI adds a service store mock-enqueue command with license server configuration.
-- 09-09 CLI adds a service store mock-reset command with license server configuration.
-- 09-09 Add CLI support for llm-agent image deduplication and service-store management, including licensing, health, linking, reconciliation, balance, entitlements, and mock enqueue/reset commands with related options.
-- 09-09 Review the src/llm/agent_launch.cpp changes related to AI consent review, router licensing enforcement, and ASR networking commits.
-- 09-09 Cancel an active Ask User request from anywhere in Chat.
-- 06-09 llm-agent uses session and item IDs for stable memory lookup across sessions.
-- 06-09 Memory recall now preserves stable paths for session and item lookups.
-- 05-09 CLI can semantically deduplicate JSON text entries with a local embedding model.
-- 05-09 CLI adds model search by query with a configurable result limit.
-- 05-09 xblox replays wake-and-command text through voice-listening routes and reports when no wake or phrase matches.
-- 04-09 src/audio/voice adds an in-process VoiceListenHost with configurable routes, start/stop controls, text routing, runtime state, options, and JSON status for Whisper, Tanit, and ElevenLabs.
-- 04-09 CLI info subcommands report commands, xblox, app commands, keyboard shortcuts, UI capabilities, tools, and LLM-tool eligibility.
-- 04-09 CLI purgetrial removes trial data.
-- 04-09 CLI exposes registered custom commands as top-level subcommands.
-- 04-09 CLI accepts videostart, startsessionvideo, and sessionvideostart commands to start session video.
-- 04-09 Transform images with the new image_transform tool.
-- 04-09 Request text, choice, multi-choice, or confirmation input with the new ask_user tool.
-- 04-09 Mark a web command with `asLlmTool` to expose it as an LLM tool.
-- 04-09 llm-agent derives filesystem-safe run identifiers from agent display names.
-- 04-09 win-ui menus provide access to bookmarks and recent folders, with default and named choices where available.
-- 04-09 Chat preserves active realtime sessions when moving between centre and docked chat views.
-- 04-09 Ribbon context menus include an Abort command for stopping active work.
-- 04-09 Ribbon context menus can show or hide command groups, with the preference saved in Settings.
-- 04-09 File panels include a context-menu option to create a new folder.
-- 04-09 File panels include a context-menu option to create a new file.
-- 04-09 File panels include a context-menu option to rename items.
-- 04-09 Build workflows with I/O, commands, variables, saved state, conditions, loops, grouping, and scripts.
-- 04-09 Add model and model-control operations to workflows.
-- 04-09 Chat can surgically edit an existing text file or delete a file when those tools are enabled.
-- 03-09 Create video with the new POLYMECH_API TransformResult create_video API.
-- 03-09 llm-agent asks for additional input with ask_user.
-- 03-09 llm-agent persists pending recall and retrieves memory across sessions.
-- 03-09 Chat supports running commands through command creation.
-- 03-09 Chat supports writing, replacing text in, and deleting files.
-- 03-09 Chat supports spoken output and audio transcription.
-- 03-09 Chat supports requesting user input and reading stored memory.
-- 03-09 Chat accepts replies to agent follow-up questions and cancels pending questions when a run ends.
-- 03-09 Chat shows agent display names and includes them in completed-run details.
-- 03-09 Chat recognizes image, video, file-writing, and file-replacement tool activity in targeted frames.
-- 03-09 xblox adds prompt-based video generation with output path, progress, and batch support.
-- 03-09 xblox adds discovery of available video devices.
-- 03-09 xblox adds video and still-image capture from camera devices.
-- 03-09 xblox adds video source and streaming blocks.
-- 03-09 xblox adds screen discovery and screen video capture.
-- 03-09 xblox adds video detection capabilities.
-- 01-09 CLI adds login and logout commands with issuer and client ID options, and reports the application display name.
-- 01-09 CLI status supports selecting the number of log days to include.
-- 01-09 xblox CLI adds info, schema, options, and self-test commands.
-- 01-09 Local model selectors show configured display names and installed filenames.
-- 01-09 llm-agent uses friendly preset names in compact configuration and MCP policy summaries.
-- 01-09 llm-agent provides hooks for monitoring file-based image transformation progress.
-- 01-09 llm-agent creates child sessions for overlapping realtime agents and records named voice-task turns independently.
-- 01-09 Chat stores agent task IDs, log paths, session memory, and session logs for restored agent sessions.
-- 01-09 Policy adds controls for MCP, skills, computer and browser use, realtime, sandbox mode, file operations, commands, scheduling, memory, and other agent tools.
-- 01-09 The Windows jump list now includes a Recent outputs category.
-- 01-09 Audio entries now show the filename alongside the display name.
-- 01-09 xblox adds audio device listing and playback blocks.
-- 01-09 xblox adds blocks to create, resize, and transform images.
-- 01-09 xblox adds image and file uploads plus file listing, reading, searching, and removal.
-- 01-09 xblox adds blocks to create, update, list, retrieve, and remove pages.
-- 01-09 xblox adds blocks to list, retrieve, and remove pictures.
-- 01-09 xblox adds blocks to create, list, retrieve, and remove posts.
-- 01-09 xblox adds a general service search block.
-- 01-09 xblox adds blocks to list, create, and search vector stores and add text or files.
-- 01-09 xblox llmAgent can add a file or folder to chat context, seed the composer, and auto-send.
-- 30-08 CLI adds assistant app inspection, Markdown control dumps, targeted window or element screenshots, and app-use commands.
-- 30-08 CLI adds file copy, move, directory creation, and file timestamp commands.
-- 30-08 CLI adds duplicate detection by size, fingerprint, or AI-generated metadata, with similarity controls, saved sessions, and Markdown or JSON reports.
-- 30-08 CLI adds Hugging Face model catalog listing, organization lookup, variant discovery, metadata inspection, probing, sidecar generation, and downloads.
-- 30-08 CLI adds ONNX model inspection, inference, image classification, and OCR with configurable execution providers and threads.
-- 30-08 CLI adds PDF information, page rendering, and Markdown extraction, including encrypted documents and configurable DPI, rotation, and image quality.
-- 30-08 CLI adds service information, search, spending logs, and balance commands with date ranges, pagination, sorting, and responsive image options.
-- 30-08 CLI adds AI video generation plus video information and image extraction, with duration, resolution, aspect ratio, source frames, and references.
-- 30-08 CLI adds settings path lookup plus settings import and export to relative or absolute files.
-- 30-08 src/session/recorder accepts an optional SessionVideoAudioConfig for mixed audio capture during video recording.
-- 30-08 xblox adds an fsRead block for reading files.
-- 30-08 xblox adds an fsWrite block for writing files.
-- 30-08 xblox adds an fsHash block for hashing files.
-- 30-08 xblox adds an fsExists block for checking whether paths exist.
-- 30-08 xblox adds an fsDelete block for deleting files and directories.
-- 30-08 xblox adds an fsList block for listing directory contents.
-- 30-08 xblox adds an fsMkdir block for creating directories.
-- 30-08 xblox adds an fsNew block for creating files.
-- 30-08 xblox adds an fsCopy block for copying files and directories.
-- 30-08 xblox adds an fsMove block for moving files and directories.
-- 30-08 xblox adds shell and Shell blocks for running shell commands.
-- 30-08 xblox adds an openPath block for opening filesystem paths.
-- 30-08 xblox adds an xbloxRun block for launching xblox operations.
-- 29-08 Video creation supports --preset, while llm agent supports --preset and --save-preset alongside explicit configuration overrides.
-- 28-08 Stream video with configurable FPS, bitrate, MJPEG quality, encoder, token, and duration.
-- 28-08 Launch the embedded MCP subcommand.
-- 28-08 Sanitize text or UTF-8/binary file input using an optional profile.
-- 28-08 Validate a required input path.
-- 28-08 Validate UUID, ID, group, permission, and permissions values.
-- 28-08 Run core command-handling tests.
-- 28-08 Check a path against read, sensitive, or write filesystem guard modes.
-- 28-08 Parse and validate tanit:// URIs.
-- 28-08 Expand variables in URL-scheme template strings.
-- 28-08 Chat links sessions to agent task IDs and log paths.
-- 28-08 Chat loads, saves, and deletes session memory documents.
-- 28-08 Chat loads, saves, and deletes session log documents.
-- 28-08 Chat restores final responses and tool results and seeds sessions from prior agent activity.
-- 28-08 Send HTTP requests through a dedicated block.
-- 28-08 Fetch remote resources through a dedicated block.
-- 28-08 Execute remote commands over SSH.
-- 28-08 Retrieve available IPC sessions.
-- 28-08 Access an individual IPC session.
-- 28-08 Send a message to an IPC session.
-- 28-08 Send multiple IPC messages in one operation.
-- 28-08 Broadcast a message across IPC sessions.
-- 28-08 Receive messages from IPC sessions.
-- 27-08 CLI adds IPC commands to list, inspect, browse, prune, ping, check status, retrieve run IDs, cancel runs, and send custom actions with JSON payloads and configurable timeouts.
-- 27-08 Computer-use actions can resolve targets from a cached session_id and query instead of raw coordinates.
-- 27-08 The ask_user tool prompts for required free-text, single-choice, or multi-choice input, with scripted replies supported through PM_ASK_USER_REPLY_FILE in non-interactive environments.
-- 27-08 xblox adds a block to list available Bluetooth devices.
-- 27-08 xblox adds a block to retrieve Bluetooth endpoints.
-- 27-08 xblox adds a block to connect to a Bluetooth device.
-- 27-08 xblox adds a block to pair with a Bluetooth device.
-- 27-08 xblox adds a block to set the default Bluetooth device.
-- 26-08 Pause file operations from the File Queue menu.
-- 26-08 Resume paused file operations from the File Queue menu.
-- 26-08 Cancel file operations from the File Queue menu.
-- 25-08 Buffer type detection accepts an optional display name and forwards it with probe options to media probing.
-- 24-08 Find and score unwanted or duplicate images with configurable prompts, junk kinds, thresholds, actions, providers, and models.
-- 24-08 Run, register, unregister, stop, or inspect the daemon path, with tray shortcuts for Chat, Viewer, and the main app.
-- 22-08 Compile scheduler definitions with namespace and current-time options.
-- 22-08 Preview upcoming scheduler occurrences with namespace, current-time, and count options.
-- 22-08 Process a scheduler tick with namespace and current-time options.
-- 22-08 Run a schedule immediately by schedule ID.
-- 22-08 Send a scheduler notification.
-- 22-08 Display scheduler paths.
-- 22-08 Acquire a scheduler lock with an optional hold duration.
-- 22-08 Run the scheduler service for a specified number of seconds.
-- 19-08 Abort an active operation from the launcher popup menu.
-- 16-08 xblox adds a videoVirtualOut block for sending video to a virtual camera.
-- 12-08 Chat search typeahead now includes presets built from bookmarks.
-- 04-08 Policy supports automatically approving tool requests with session-scoped grants.
-- 03-08 xblox registers browser blocks for computer-use workflows.
-- 31-07 llm-agent keeps recalled and pending memory isolated by session.
-- 31-07 llm-agent avoids loading the same resource content more than once per session.
-- 30-07 llm-agent persists session metadata, conversation turns, journals, and memory state, including Codex thread associations.
-- 30-07 llm-agent supports saving session snapshots for later restoration.
-- 30-07 llm-agent supports deleting stored session data.
-- 30-07 xblox supports custom display names for probed media.
-- 30-07 Policy adds AI-assisted consent review and recommendation application, with scoped decisions, deny-safe defaults, and a Settings handoff.
-- 30-07 Add MQTT server functionality with the new server block.
-- 30-07 Connect to MQTT services with the new client block.
-- 30-07 File panels use a native breadcrumb bar for path navigation.
-- 29-07 CLI adds installer commands with options for root, bundle, verbs, journal directory, server URL, configuration, and Chrome installation.
-- 29-07 Assistant toolbar includes a menu command to close the toolbar.
-- 29-07 Presets menu lists saved presets for applying a prompt configuration.
-- 29-07 Presets menu saves the current prompt as a preset.
-- 29-07 Presets menu provides a submenu for removing saved presets.
-- 25-07 CLI app commands capture screenshots, browse paths, select workbench slots, pause, resume, cancel, record, replay, and control session video recording.
-- 25-07 CLI Bluetooth commands list devices and endpoints, connect, disconnect, pair, unpair, and set the default device.
-- 25-07 CLI ipc starts a JSON-line TCP or Unix-socket server with configurable host, port, and cache directory.
-- 25-07 CLI license commands generate fingerprints, import and verify licenses, inspect features, purchase or obtain licenses, and revoke access.
-- 25-07 CLI llama commands create embeddings, match candidates, benchmark models, and run vision-language inference with configurable CPU, context, and GPU settings.
-- 25-07 CLI llm commands run Codex, Claude, and Cursor agents with prompts, included files, model overrides, resumable sessions, timeouts, executables, and provider-specific modes.
-- 25-07 CLI media commands probe files, list matching MIME and file types, and search magic-database definitions.
-- 25-07 CLI provider models list retrieves Replicate or OpenRouter model catalogs with authentication, filtering, pagination, sorting, and limits.
-- 25-07 CLI startmenu registers Windows Start menu entries with configurable folders and media binaries.
-- 25-07 CLI search adds semantic indexing, embedding, extraction, fingerprinting, chunking, metadata, detail, sorting, backend, and query controls.
-- 25-07 CLI serve starts an HTTP REST server with configurable host, port, and default cache directory.
-- 25-07 CLI MCP client commands list servers and tools, inspect tool schemas, and invoke tools.
-- 25-07 Run `kbot ai` with configurable prompts, paths, models, routers, tools, file filters, iteration, output handling, and API credentials.
-- 25-07 Run a `.vscode/launch.json` configuration with `kbot run`.
-- 25-07 CMS identities now include display and app display names.
-- 25-07 xblox generates and stores a unique UUID when each batch starts.
-- 25-07 xblox reads the app_display_name field from Zitadel OAuth metadata.
-- 25-07 llm-tools/audio resolves both file path inputs against the current Explorer or context folder and also accepts absolute paths.
-- 25-07 llm-tools/info supports display names when indexing, matching, and returning Windows apps, while filtering KB updates from registry results.
-- 25-07 llm-tools/sequencer returns context paths for use in subsequent image_transform calls.
-- 25-07 Policy supports one-time, session, activity, and persistent consent choices, with session-bound permissions and audit records.
-- 25-07 CLI adds security info and command-information subcommands.
-- 25-07 src/session/recorder supports appending named string items to Win32 menus.
-- 25-07 Chat sessions now retain associated agent task IDs and log paths.
-- 25-07 Chat typeahead presets now load artifact metadata from the active and related sessions.
-- 25-07 Reveal the focused file in File Explorer.
-- 25-07 Reveal the focused file in the system shell.
-- 25-07 Copy the focused file’s path.
-- 25-07 Copy all file paths in the duplicate group.
-- 25-07 Save the current duplicate session.
-- 25-07 Open a saved duplicate session.
-- 25-07 Remove the focused file from the list.
-- 25-07 Allow images to be enlarged.
-- 25-07 xblox adds Parse, parse, and iterator blocks for parsing and traversing data.
-- 25-07 xblox adds keyEvent and keyWait blocks for reacting to or waiting for keyboard events.
-- 25-07 xblox adds Modbus server and connection blocks with read and write operations for registers, coils, and discrete inputs.
-- 25-07 xblox adds an mcpCall block for invoking MCP operations.
-- 25-07 xblox adds ocr and ocrText blocks for optical character recognition.
-- 25-07 xblox adds blocks to open local vector stores, add text, files, or directories, delete data, view stats, and search.
-- 25-07 xblox adds visionAsk and visionDescribe blocks for asking questions about images and generating descriptions.
-
+- 01-10 CLI: Run choice / noul / score questions on a JSON document.
+- 30-09 CLI: Use -o for a custom path (relative paths are from cwd).
+- 30-09 CLI: Open path(s) in the File tree (semicolon-separated).
+- 30-09 CLI: , and Tanit Cam (tanit_vcam_source.dll).
+- 28-09 CLI: Microsoft Store billing (pm-pics billing-ms).
+- 28-09 CLI: Microsoft Store app license.
+- 28-09 CLI: GET /api/billing/ms/health (public; shows mock flag and product ids).
+- 28-09 CLI: POST /api/billing/ms/link — associate UserCollectionsId with your account.
+- 28-09 CLI: POST /api/billing/ms/reconcile — grant credits and Pro entitlements.
+- 28-09 Commands: Start the in-process Voice Command Center listen loop.
+- 28-09 Commands: Start or stop the in-process Voice Command Center listen loop.
+- 27-09 CLI: List audio devices: capture inputs by default; use --playback for MMDevice render endpoints.
+- 27-09 CLI: Record from mic, desktop loopback, or mix.
+- 27-09 CLI: Sign out and remove stored tokens from the app profile.
+- 26-09 CLI: List built-in catalog aliases (GGUF + file models).
+- 26-09 CLI: Search Hugging Face models by free text (not just org or owner/repo slugs).
+- 26-09 CLI: List models published by a Hugging Face organization or user.
+- 26-09 CLI: List GGUF quantization variants for a catalog alias or repo id.
+- 26-09 CLI: PDF tools: inspect documents, rasterize pages, and extract Markdown.
+- 26-09 CLI: Print page count and page sizes.
+- 26-09 xblox: List all available video capture (camera) devices.
+- 26-09 xblox: Generate a video from a prompt using the same core create_video API as `video create`.
+- 26-09 xblox: Capture Image / Video.
+- 25-09 CLI: Call the configured Tanit web service API.
+- 25-09 CLI: Default uses login token (includes your private content); --public searches global/public content only.
+- 25-09 CLI: MCP server from the tools cache.
+- 25-09 CLI: Inspect and call external MCP servers configured in mcp.json.
+- 25-09 CLI: List MCP servers from mcp.json and the tools each enabled server exposes.
+- 25-09 CLI: List tools on an MCP server (name and description).
+- 24-09 Settings: Show &groups.
+- 22-09 CLI: Import / export the app settings profile (UTF-8 JSON), manage .cloud_storage_key.
+- 22-09 CLI: Print the canonical on-disk settings.json path for this OS (no file I/O) and exit.
+- 22-09 CLI: Replace the live profile store with the given UTF-8 JSON file (full document replace).
+- 22-09 CLI: Windows: `--encrypted` writes PME1 instead of JSON.
+- 21-09 Settings: Consenti una volta, Consenti sessione, Consenti sempre, Consentito solo questa volta; non salvato..
+- 20-09 CLI: Generate reference docs for.
+- 20-09 CLI: Generate a CLI + custom command reference.
+- 20-09 CLI: Generate an XBlox block-flow reference.
+- 18-09 CLI: With no subcommand: starts the assistant toolbar/global shortcut host.
+- 18-09 CLI: Inspect desktop applications for computer-use.
+- 18-09 CLI: Dump visible windows and useful UIA elements with screen coordinates.
+- 18-09 CLI: Run the user-session tray daemon with global hotkeys and a notification-area menu.
+- 18-09 CLI: Windows: register the daemon for logon by writing HKLM Run (requires elevation).
+- 18-09 CLI: Discover and control live pm-image instances over the command IPC bus.
+- 16-09 The launcher: Open with, Show in folder, Copy path.
+- 15-09 CLI: Run XBlox block-tree command flows.
+- 15-09 CLI: Print XBlox block/command metadata for builders and LLM composition.
+- 14-09 xblox: POST /api/images?forward=vfs&original=true - multipart upload one or more image files.
+- 14-09 xblox: POST /api/vfs/upload/{mount}/{remotePath} - upload any file to the VFS.
+- 14-09 xblox: GET /api/vfs/ls/{mount}/{path} - list files in a VFS directory.
+- 11-09 CLI: AI text-to-image (Gemini / Google, no input file).
+- 11-09 CLI: AI image editing (Gemini / Google).
+- 10-09 xblox: Place scripted TTS from an SRT/VTT file or transcribe JSON onto a 48 kHz PCM timeline.
+- 10-09 xblox: Sleep for a fixed number of milliseconds.
+- 10-09 xblox: Write a message directly to stdout (pipe-friendly).
+- 10-09 xblox: Read piped input from stdin (whole stream or one line) into PREVIOUS/storeAs.
+- 10-09 xblox: Stop the run immediately and set the process exit code.
+- 09-09 CLI: Show Tanit credits and license status.
+- 09-09 xblox: Run a shell command through the native RunTool.
+- 09-09 xblox: Open a file or folder with the OS default app, or inside Tanit.
+- 09-09 xblox: Run another XBlox document directly, with context overrides and optional document-loop controls.
+- 04-09 Settings: Voice commands.
+- 04-09 xblox: List or unload loaded local model instances for this xBlox process.
+- 01-09 xblox: GET /vector_store/list - list all registered vector stores in the LiteLLM proxy.
+- 01-09 xblox: POST /vector_store/new - register a new pg_vector store in the LiteLLM proxy.
+- 01-09 xblox: POST /v1/vector_stores/{storeId}/search - semantic search in a vector store.
+- 28-08 CLI: Prototype window/screen streaming host for a mobile WebRTC remote.
+- 28-08 xblox: iterate over each element (PREVIOUS = element, index = i).
+- 27-08 xblox: List paired / connected Bluetooth devices.
+- 27-08 xblox: List MMDevice audio endpoints (playback by default).
+- 27-08 xblox: Connect a Bluetooth audio device (pairs if needed) and implicitly route audio to it.
+- 24-08 CLI: Find images by name/folder, semantic LLM prompt, or junk (dark/blur/flat/blown/tiny).
+- 22-08 CLI: Compile and preview command schedules.
+- 22-08 CLI: Parse commands.json schedules and print compiled definitions.
+- 22-08 CLI: Preview the next planned occurrence(s) without persisting.
+- 22-08 CLI: Emit due occurrences and persist scheduler state under config_dir.
+- 22-08 CLI: Emit one occurrence for --schedule immediately and persist state.
+- 22-08 CLI: Recompile commands.json into the local host and notify daemon peers.
+- 30-07 xblox: Start, stop, or inspect a named in-process MQTT broker instance.
+- 30-07 xblox: Connect to an MQTT broker and Publish, Subscribe, or RoundTrip a test message.
+- 25-07 CLI: Bluetooth and audio-endpoint management: list, pair, and connect devices.
+- 25-07 CLI: List paired/connected Bluetooth devices (and optionally audio endpoints).
+- 25-07 CLI: List MMDevice audio endpoints (playback by default).
+- 25-07 CLI: Connect a Bluetooth audio device (pairs if needed) and route audio to it.
+- 25-07 CLI: Disconnect a Bluetooth audio device (best-effort).
+- 25-07 CLI: Pair a Bluetooth device.
+- 25-07 Misc: KBot AI & Task runner.
+- 25-07 The launcher: Reveal in &Explorer panel, Show in Windows &File Explorer, Copy &path (focused file), Copy &all paths in group.
+- 25-07 xblox: Parse PREVIOUS or named input with a jq filter expression.
+- 25-07 xblox: Iterate over PREVIOUS or any named scope/context variable.
+- 25-07 xblox: Sample a keyboard shortcut once and emit down/pressed/released/toggle state.
+- 25-07 xblox: Wait for a keyboard shortcut then run child blocks.
+- 25-07 xblox: Run a Modbus TCP server until cancelled, durationMs expires, or maxRequests is reached.
+- 25-07 xblox: Start, stop, or inspect a named cached Modbus client connection for fast repeated reads/writes.
