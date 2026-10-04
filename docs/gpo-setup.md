@@ -641,15 +641,15 @@ Allow the agent to persist information between sessions using the memory tools.
 
 Deny-list of agent tool names (one per line). Tools in this list are never dispatched even if their individual Enable* flag is set.
 
-Available tool names as of this build (54 tools):
+Available tool names as of this build (58 tools):
   ?: app_command
   Browser: browser_batch, browser_click, browser_find, browser_navigate, browser_read, browser_scope, browser_select, browser_type
   Computer: app_batch, app_click, app_close, app_drag, app_hotkey, app_inspect_dump, app_inspect_find, app_open, app_screenshot, app_type
-  File: file_glob, file_read, file_search, list_images
+  File: file_glob, file_read, file_search, list_images, search_detail, search_index, search_query
   Image: create_video, image_create, image_crop, image_from_camera, image_resize, image_transform, image_understand, ocr_text
   Memory: memory_append_event, memory_find, memory_read, memory_write
   Service: service_files_get, service_files_list, service_files_upload, service_page_create, service_page_get, service_page_list, service_page_update, service_search
-  Utility: ask_user, audio_transcribe, create_command, download_url, file_delete, file_str_replace, info_lookup, run, run_sequence, speak, write_file
+  Utility: ask_user, audio_transcribe, create_command, download_url, file_compose, file_delete, file_str_replace, info_lookup, run, run_sequence, speak, write_file
 
 ---
 
@@ -667,15 +667,15 @@ Allow-list of agent tool names. When non-empty, only tools listed here are avail
 
 Leave empty (default) to allow all tools that are not individually disabled.
 
-Available tool names as of this build (54 tools):
+Available tool names as of this build (58 tools):
   ?: app_command
   Browser: browser_batch, browser_click, browser_find, browser_navigate, browser_read, browser_scope, browser_select, browser_type
   Computer: app_batch, app_click, app_close, app_drag, app_hotkey, app_inspect_dump, app_inspect_find, app_open, app_screenshot, app_type
-  File: file_glob, file_read, file_search, list_images
+  File: file_glob, file_read, file_search, list_images, search_detail, search_index, search_query
   Image: create_video, image_create, image_crop, image_from_camera, image_resize, image_transform, image_understand, ocr_text
   Memory: memory_append_event, memory_find, memory_read, memory_write
   Service: service_files_get, service_files_list, service_files_upload, service_page_create, service_page_get, service_page_list, service_page_update, service_search
-  Utility: ask_user, audio_transcribe, create_command, download_url, file_delete, file_str_replace, info_lookup, run, run_sequence, speak, write_file
+  Utility: ask_user, audio_transcribe, create_command, download_url, file_compose, file_delete, file_str_replace, info_lookup, run, run_sequence, speak, write_file
 
 ---
 

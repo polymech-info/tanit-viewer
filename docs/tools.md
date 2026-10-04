@@ -54,6 +54,31 @@ Params:
 - `type` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  File type shorthand (rg -t): cpp, c, cs, go, html, java, js, json, md, py, rs, sh, swift, ts, toml, xml, yaml, …
 - `whole_word` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Match whole words only (rg -w).
 
+#### search_index
+
+Index a file or folder into a temporary document index (markdown headings become chunks).
+
+Params:
+- `path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  File or folder to index.
+- `paths` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Several files or folders.
+
+#### search_query
+
+Search a temporary document index.
+
+Params:
+- `index` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Index id from search_index.
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Max hits.
+- `query` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  What to find.
+
+#### search_detail
+
+Return the text of one indexed passage.
+
+Params:
+- `doc_id` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  doc_id from a search_query hit.
+- `index` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Index id from search_index.
+
 ---
 
 ### Image
@@ -117,7 +142,7 @@ Params:
 - `reference` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Single-path alias of reference_images.
 - `reference_images` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Style / brand reference images (not keyframes).
 - `references` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Alias of reference_images.
-- `resolution` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">720p</span> <span data-cli="choice">1080p</span></span></span>)  -  Output resolution (720p default).
+- `resolution` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">720p</span> <span data-cli="choice">1080p</span> <span data-cli="choice">4K</span></span></span>)  -  Output resolution (720p default).
 - `src` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Keyframe stills (host paths).
 - `start_frame` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional start-frame still (host path or data URL).
 
@@ -157,6 +182,16 @@ Params:
 - `expected_version` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional.
 - `options` (<span data-cli="meta"><span data-cli="type">object</span></span>)
 - `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Output path: absolute, or relative to the Explorer folder / selection base in-app (e.g.
+
+#### file_compose
+
+Compose one file from existing files, inclusive 1-based line ranges, and small literal fragments.
+
+Params:
+- `expected_version` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional.
+- `output` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Destination file path.
+- `overwrite` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Replace an existing output.
+- `parts` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)
 
 #### download_url
 

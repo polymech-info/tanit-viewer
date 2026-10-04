@@ -14,8 +14,9 @@ hidden: false
 
 Select a mesh, a STEP file, or a FreeCAD document in the file panel. The
 centre viewer loads it in place — shaded surfaces, optional edges, wireframe,
-or hidden lines. Orbit with the mouse; fit, front, top, and isometric from
-the toolbar.
+or hidden lines. Turn it with the middle mouse button; fit, front, top, and
+isometric from the toolbar. Sky on the toolbar puts a backdrop behind the
+model; it starts off.
 
 No separate CAD package has to start. Chat still sees the file next to the
 preview.
@@ -55,7 +56,9 @@ in the viewer — the file on disk is unchanged.
 
 | Control | What it does |
 |:--------|:-------------|
-| Drag | Orbit |
+| Middle drag | Orbit |
+| Ctrl + middle drag | Pan |
+| Shift + middle drag | Zoom |
 | Scroll | Zoom |
 | Fit | Frame the whole model |
 | Front / Top / Iso | Standard views |
@@ -64,11 +67,18 @@ in the viewer — the file on disk is unchanged.
 | Wireframe | Edges only |
 | Hidden lines | Visible edges, hidden ones dashed |
 | Perspective | Toggle perspective and orthographic |
+| Sky | Backdrop behind the model. Off until you turn it on |
+| Object tree | Show or hide the parts in the file |
+| Walk | Move on the ground: W A S D, right-drag to look, Shift to go faster, double-click a surface to go there, Esc to orbit again |
+| Fly | Same keys, plus Space up and Ctrl down |
 
-The navigation cube in the corner jumps to a face the same way.
+The navigation cube in the corner jumps to a face the same way. The right
+side of the toolbar shows the frame rate while the view is moving, and an
+em dash when it is still.
 
-Colours come from the file when it stores them (typical for STEP and
-FreeCAD). Meshes without a colour use a neutral grey.
+Colours and textures come from the file when it stores them (typical for
+STEP, FreeCAD, and glTF). A glTF scene can also play simple motion of its
+parts. Meshes without a colour use a neutral grey.
 
 ---
 
@@ -140,9 +150,10 @@ viewer as usual.
 
 ## Size and time
 
-Most models in the tens of megabytes open in the native viewer. Very large
-tessellations take longer; a FreeCAD document can be much bigger than a
-single STL because it carries the full part history.
+A 50 MB STEP file is on screen in a second or two. Very large tessellations
+take longer. A mesh above 512 MB is refused; AMF and 3DS stop at 64 MB. A
+FreeCAD document can be much bigger than a single STL because it carries
+the full part history.
 
 The preview is a view of the file, not an editor. Saving still happens in
 the tool that created the model.
@@ -159,4 +170,9 @@ the tool that created the model.
 - [Images](./feature-images.md)
 - [Video](./feature-video.md)
 
----------
+---
+
+## References
+
+- [Khronos - GlTF Samples](https://github.khronos.org/glTF-Sample-Viewer-Release/?model=https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/./Models/AnimatedCube/glTF/AnimatedCube.gltf)
+

@@ -1,284 +1,780 @@
-# Files: browse, copy, and see what takes space
+# Files
 
-The file panel is a full file manager beside chat and the viewer. Open a folder on this PC, a phone, an SSH host, or an FTP server — then copy, move, preview, and (on local disks) see which subfolders are actually eating space.
+Browse local and remote files, move data between devices, search large folder trees, see what is taking up disk space, and let **Tanit** work directly with the files in front of you.
 
-Shortcuts follow classic dual-pane managers: **Alt+number** for view modes, **Ctrl+function key** for sort. The current layout and sort are always shown in the status bar.
+The file panel sits beside the viewer and Tanit. Open a folder on this PC, connect to a phone, browse an SSH or FTP server, preview files, copy between locations, or switch to a visual disk-usage view.
 
----
-
-## Who it's for
-
-- Anyone who lives in local folders — projects, exports, photo shoots, client deliverables — and wants navigation next to chat and the viewer.
-- People who copy between this PC, a connected phone, a Linux box over SSH, or an FTP drop box without opening a separate client.
-- Anyone who has asked *"which folder is 40 GB?"* and wants a sunburst map instead of another disk-usage tool.
-- People who ask Chat to find a file in a tree, jump to a heading, or change one section without rewriting the whole document.
+For larger projects, Tanit can also index Markdown, Office documents, source code, and other text so you can search by meaning rather than filename alone.
 
 ---
 
-## Open a location
+## Browse anywhere
 
-The **address bar** at the top of the panel shows where you are. Click a segment of the path to jump up; type a path or address and press Enter to go there.
+The address bar shows the current location. Click any part of the path to jump upward, or type a path or remote address directly.
 
-**Alt+F1** opens the location menu: bookmarks, recent folders, local places (Desktop, Downloads, Documents, Pictures, Music, Videos), cloud folders that Windows already knows (OneDrive, Google Drive, Dropbox, and similar), drives, and connected phones.
+**Alt+F1** opens the location menu with:
 
-Toolbar buttons: **Back**, **Up**, **Forward**, **list / icon** toggle, **Search**, **bookmark this folder**, and **new file panel** (a second panel, so you can copy between two places).
+- bookmarks
+- recent locations
+- Desktop, Downloads, Documents, Pictures, Music, and Videos
+- local and removable drives
+- cloud folders already known to Windows
+- connected phones and cameras
+- Tanit storage
 
-| Where | How to open it |
-|:------|:---------------|
-| This PC | Location menu, or type a path such as `C:\Projects` |
-| Bookmarked folder | Star on the toolbar, or **Alt+F1** → Bookmarks |
-| Phone / camera (MTP) | **Devices** in the location menu, or type `mtp://…` |
-| SSH / SFTP host | Type `ssh://…` or `sftp://…` in the address bar |
-| FTP / FTPS server | Type `ftp://…` or `ftps://…` in the address bar |
-| Tanit storage | **Tanit** in the location menu (Home, Models, Software) |
+You can also enter locations directly:
 
-While you are already on a remote host, a path that starts with `/` stays on that host — so `/var` on `ssh://workshop` opens `ssh://workshop/var`, not a local folder named `var`.
+| Location | Example |
+|:--|:--|
+| Local folder | `C:\Projects` |
+| SSH host | `ssh://workshop` |
+| SFTP | `sftp://user:password@host/home/user` |
+| FTP | `ftp://user:password@host/pub` |
+| FTPS | `ftps://user:password@host/` |
+| Phone or camera | `mtp://realme/Internal storage/DCIM` |
 
-If the address points at a file (an image on the phone, a log on SSH), the panel opens the parent folder and selects that file.
+If an address points to a file rather than a folder, Tanit opens its parent folder and selects the file.
+
+### Toolbar
+
+The file panel provides:
+
+- **Back**
+- **Up**
+- **Forward**
+- **List / Icons**
+- **Search**
+- **Bookmark**
+- **New file panel**
+
+Open a second file panel when you want a traditional source/destination layout for copying or moving files.
 
 ---
 
 ## SSH and SFTP
 
-Browse a remote machine over SSH the same way you browse a local disk. Open a file to preview it in the viewer; copy and paste to upload or download.
+Browse a remote machine much like a local folder.
 
-Hosts from your SSH config (`~/.ssh/config`) use the short form. Password sessions put the user and password in the address.
-
-```
+```text
 ssh://workshop
 ssh://workshop/opt
 ssh://workshop/home/you/readme.md
 ssh://user@host:2222/var/log
+
 sftp://user:password@host/var
 sftp://user:password@host:2222/home/user
 ```
 
-- `ssh://workshop` opens the server's home directory (whatever the session starts in). After the first listing, the bar shows the real path.
-- `ssh://workshop/` is the remote filesystem root (`/`). Use **Up** from home to get there.
-- `sftp://` is the same connection when you want the password in the URL. `ssh://user:password@host/path` works too.
+Hosts defined in `~/.ssh/config` can use their configured short name:
 
-Copy, cut, paste, delete, and drag-and-drop use the same transfer queue as local folders. Organization policy can disable SSH; if a host will not open, that is often why.
+```text
+ssh://workshop
+```
+
+`ssh://workshop` opens the session's home directory.
+
+`ssh://workshop/` opens the remote filesystem root.
+
+Once you are on a remote host, an absolute path such as `/var/log` remains on that host rather than being interpreted as a local Windows path.
+
+Files can be previewed directly from the server. Copy, move, paste, delete, upload, and download all use Tanit's normal transfer queue.
+
+Organization policy can disable SSH access.
 
 ---
 
 ## FTP and FTPS
 
-FTP is a bookmark-style address: host, user, and password live in the URL so Recents can reopen the same session.
+FTP locations use URL-style addresses:
 
-```
+```text
 ftp://user:password@host/pub
 ftp://user:password@host:2121/inbox
 ftps://user:password@host/
 ```
 
-- An empty path is the server's login directory. `ftp://user:password@host/` is `/` on the server.
-- **FTPS** (`ftps://`) is FTP over TLS. Plain `ftp://` is unencrypted.
-- Same browsing and copy/paste as SSH. Copying **directly between a phone and an FTP server** is not supported — copy to this PC first, then out again.
+An empty path opens the server's login directory.
+
+`ftps://` uses TLS. Plain `ftp://` is unencrypted.
+
+Browsing and transfers work in the same way as SSH.
+
+Direct phone-to-FTP transfers are not supported. Copy the file to this PC first, then send it to the FTP server.
 
 ---
 
-## Phones and cameras (MTP)
+## Phones and cameras
 
-Plug in a phone or camera and it appears under **Devices** in the location menu. Folders use the names you see on the device (`Internal storage`, `DCIM`, and so on).
+Connected MTP devices appear under **Devices** in the location menu.
 
-```
+Example:
+
+```text
 mtp://realme
+mtp://realme/Internal storage
 mtp://realme/Internal storage/DCIM
 mtp://realme/Internal storage/DCIM/IMG.jpg
 ```
 
-If two devices share a name, the address can include a hardware pin after `@` so the right one opens. Copy photos off the device with the same copy/paste and drag-and-drop as any other folder.
+Folder names follow the device itself, such as `Internal storage`, `SD card`, or `DCIM`.
+
+If two devices have the same display name, Tanit can include a hardware identifier in the address to distinguish them.
+
+Photos and other files use the same copy, paste, and drag-and-drop workflow as local files.
 
 ---
 
-## Copy, cut, paste, and drag
+# Copy and move files
 
-Select items, then copy or move them anywhere the panel can open — this PC, a second file panel, SSH, FTP, a phone, or Tanit storage.
+Select one or more items and use the familiar shortcuts:
 
 | Action | Shortcut |
-|:-------|:---------|
+|:--|:--|
 | Copy | **Ctrl+C** |
 | Cut | **Ctrl+X** |
 | Paste | **Ctrl+V** |
 | Delete | **Delete** |
-| Cancel a pending cut | **Escape** |
+| Cancel pending cut | **Escape** |
 | Select all | **Ctrl+A** |
 
-- **Paste** goes into the current folder. If exactly one folder is selected, paste goes *into that folder* instead.
-- Cut items look faded until you paste or press **Escape**.
-- Drag items onto another folder in the panel, onto a second file panel, or onto chat.
-- Drop files from File Explorer onto the current folder (or a folder under the cursor).
-- Paste a bitmap from the clipboard into a **local** folder — it is saved as an image file. Remote folders do not accept a raw clipboard image; copy a file instead.
+Paste normally targets the current folder.
 
-### Copy / Move with a destination box
+If exactly one folder is selected, Paste goes directly into that folder.
 
-The command palette **Copy** and **Move** commands (file panels) ask for a destination. Type a path or remote address, pick from history, or browse. If you have two file panels open, the other panel is offered as the destination.
+Cut files remain visually faded until they are pasted or the operation is cancelled.
 
-### When a name already exists
+You can also:
 
-The transfer pauses and asks what to do:
+- drag files onto another folder
+- drag between two Tanit file panels
+- drag files onto Tanit
+- drop files from Windows File Explorer into the current folder
+- paste a bitmap from the clipboard into a local folder
 
-- **Overwrite** — replace the file at the destination
-- **Skip** — leave the destination as-is
-- **Rename** — keep both (a new name is suggested)
+Clipboard images are saved as image files. Raw clipboard images cannot be pasted directly into remote folders.
+
+---
+
+## Copy or Move to…
+
+The **Copy** and **Move** commands in the command palette can prompt for a destination.
+
+Enter:
+
+- a local path
+- a remote address
+- a recent destination
+- a location selected through the browser
+
+If two file panels are open, the other panel is offered automatically.
+
+---
+
+## File conflicts
+
+When a destination already contains the same filename, the transfer pauses and asks what to do:
+
+- **Overwrite** — replace the destination
+- **Skip** — keep the existing file
+- **Rename** — keep both
 - **If newer** — replace only when the source is newer
-- **Cancel** — stop the rest of the job
+- **Cancel** — stop the remaining transfer
 
-Tick **Do this for the remaining files** to apply the same choice to the rest of the batch. Progress lives in the **queue** panel.
+Enable **Do this for the remaining files** to apply the same decision to the rest of the batch.
 
----
-
-## View modes
-
-Press **Alt** and a number to switch how the current folder is displayed. Folders are listed before files in every mode. The same names appear under **View options** (**Shift+F1**).
-
-| Mode | Shortcut | What you see |
-|:-----|:---------|:-------------|
-| Tree | **Alt+1** | Folder tree you can expand in place |
-| Brief | **Alt+2** | Name only — compact list |
-| Type | **Alt+3** | Name and type (default) |
-| Size | **Alt+4** | Name and size; folder totals fill in as they are measured |
-| Icons | **Alt+5** | Thumbnail grid (images load as you scroll) |
-| Tiles | **Alt+6** | Icon plus name and details on each card |
-| Types | **Alt+7** | Grouped by file type, with section headers |
-| Sunburst | **Alt+8** | Full-panel folder size map (see below) |
-
-**Ctrl++** / **Ctrl+-** zoom tiles and thumbnails.
-
-Turn extra columns on from **Shift+F1** → Columns: Type, Size, Extension, Date, Resolution (pixel size of images). Showing the Size column also starts folder-size scanning on local disks.
-
-**Size** view and **Sunburst** scan folder totals in the background for local disk folders. Sizes update as deeper folders are measured. Remote locations (SSH, FTP, phones) show file sizes only.
+Transfer progress appears in the **Queue** panel.
 
 ---
 
-## Sorting
+# Choose how files are displayed
 
-Press **Ctrl** and a function key to sort the current folder. Press the same shortcut again to reverse direction (ascending ↔ descending). Folders stay at the top either way.
+Press **Alt+number** to switch views.
+
+| View | Shortcut | Best for |
+|:--|:--|:--|
+| Tree | **Alt+1** | Expanding folders in place |
+| Brief | **Alt+2** | Maximum density |
+| Type | **Alt+3** | General browsing |
+| Size | **Alt+4** | Disk cleanup |
+| Icons | **Alt+5** | Images and visual files |
+| Tiles | **Alt+6** | Larger cards with details |
+| Types | **Alt+7** | Grouping files by format |
+| Sunburst | **Alt+8** | Visual disk-usage analysis |
+
+Folders remain above files in every view.
+
+The same options are available under **Shift+F1 → View options**.
+
+Use:
+
+- **Ctrl++** to enlarge thumbnails and tiles
+- **Ctrl+-** to reduce them
+
+Additional columns include:
+
+- Type
+- Size
+- Extension
+- Date
+- Resolution
+
+Showing the Size column begins background folder-size calculation on local disks.
+
+Remote locations show individual file sizes but do not recursively calculate directory totals.
+
+---
+
+# See what is taking up space
+
+Press **Alt+8** for **Sunburst** view.
+
+The current folder becomes the center of a circular size map. Each surrounding ring represents another directory level.
+
+Large files and folders occupy larger slices. Very small items are grouped into **Other**.
+
+You can:
+
+- click a file to select it
+- click a folder to open it
+- use the mouse wheel to zoom
+- hover a slice to see its name and size
+
+Folder totals appear progressively while Tanit scans the directory in the background.
+
+Sunburst is useful when the question is simply:
+
+> What is taking up all the space in this folder?
+
+Click the largest branch and keep drilling down.
+
+---
+
+# Sorting
+
+Use **Ctrl+function key** to sort.
 
 | Sort by | Shortcut |
-|:--------|:---------|
+|:--|:--|
 | Name | **Ctrl+F3** |
 | Extension | **Ctrl+F4** |
-| Time (modified) | **Ctrl+F5** |
+| Modified time | **Ctrl+F5** |
 | Size | **Ctrl+F6** |
 
-Name sort uses natural ordering (`file2` before `file10`). Size sort uses scanned folder totals when they are available, so subfolders reflect real disk usage rather than showing zero.
+Press the same shortcut again to reverse the order.
 
-**F5** alone refreshes the listing (without changing sort).
+Folders remain above files.
+
+Name sorting is natural, so:
+
+```text
+file2
+file10
+```
+
+appears in that order.
+
+When folder sizes have already been calculated, **Ctrl+F6** sorts directories by their actual contents rather than treating them as zero-byte entries.
+
+**F5** refreshes the current location without changing the sort.
 
 ---
 
-## Sunburst map
-
-**Alt+8** switches to **Sunburst** — a circular chart of the current folder, drawn by relative size. The center is this folder; each outer ring is the next level of children. Larger slices take more space. Tiny items are grouped as **Other**.
-
-- **Click** a file slice to select it, or a folder slice to open that folder.
-- **Mouse wheel** zooms the chart in and out.
-- Hover a slice to see its name and size. The center shows the running total.
-- Sizes fill in as the background scan progresses — same data as Size view.
-
-Use Sunburst when you want a quick visual answer to *"what's heavy in this directory?"* without walking the tree by hand. Click a heavy folder to drill into it.
-
----
-
-## Navigation
+# Navigation shortcuts
 
 | Action | Shortcut |
-|:-------|:---------|
+|:--|:--|
 | Back | **Alt+←** |
 | Forward | **Alt+→** |
-| Up one folder | **Backspace** |
+| Up | **Backspace** |
 | Refresh | **F5** |
-| Open location menu | **Alt+F1** |
+| Locations | **Alt+F1** |
 | View options | **Shift+F1** |
-| Open selected item / enter folder | **Enter** |
+| Open | **Enter** |
 | Rename | **F2** |
-| Preview (lightbox) | **Space** |
+| Preview / lightbox | **Space** |
 | Search | **Ctrl+F** or **F3** |
-| Context menu | **Shift+F10** or right-click |
+| Context menu | **Shift+F10** |
 | Glob select | **Num+** |
 
-Type letters to **find by name** in the current folder — matching starts from the focused item and wraps around. **Escape** clears that filter string (and also cancels a pending cut).
+Typing letters jumps to matching names in the current folder.
 
-Arrow keys move focus; **Home** / **End** jump to the first or last item. **Page Up** / **Page Down** scroll by a page in list views. **Shift+click** or **Shift+arrow** extends the selection; **Ctrl+click** toggles one item.
+**Escape** clears the type-ahead search.
 
-Right-click opens the usual Windows context menu for the clicked item (or the current selection). On remote folders, copy / cut / paste / delete go through Tanit's transfer queue instead of Explorer.
+Standard keyboard selection works as expected:
 
----
+- arrows move focus
+- **Home / End** jump to the beginning or end
+- **Page Up / Page Down** move by one page
+- **Shift+click** extends a selection
+- **Shift+arrow** extends a keyboard selection
+- **Ctrl+click** toggles individual items
 
-## Search, glob select, and hidden files
+Local items use the normal Windows context menu.
 
-**Ctrl+F** (or **F3**) opens search in the file panel. Results stay in the same pane; Enter opens a hit.
-
-**Num+** (numeric keypad plus) opens **glob select**. Type a mask such as `*.wav`, `*.jpg;*.png`, or `*.{jpg,png}`:
-
-- **Select** highlights matching files in the current folder (optionally recursive).
-- **Filter** hides non-matching files in every folder until you clear it. Folders stay visible so you can still browse.
-
-**Shift+F1** → **Show → Hidden** lists hidden files and names that start with a dot. Off by default.
+Remote locations use Tanit's own transfer operations where Explorer actions do not apply.
 
 ---
 
-## Ask Chat to find and edit files
+# Find files
 
-The file panel and Chat share a workspace. Chat already knows the **current folder** and any **selected files** (and what is open in the viewer). Relative names resolve there — you do not have to paste a full path every time.
+Press **Ctrl+F** or **F3**.
 
-Ask in plain language. The assistant calls file tools; you can follow those calls in the Log. Writes that leave the workspace, or anything destructive, go through the usual consent prompt.
+Tanit supports several kinds of search depending on what you remember.
 
-### Find a particular file
+| Search | Use it when |
+|:--|:--|
+| **Name** | You remember part of the filename |
+| **Content** | You remember exact text or a pattern inside the file |
+| **Semantic** | You remember what the file was about |
+| **Fingerprint** | You are looking for structure such as a heading, class, symbol, or path |
 
-| You might say | What Chat does |
-|:--------------|:---------------|
-| “List the Markdown files here” | Matches a glob in the current folder (`*.md`, `src/**/*.cpp`, a directory). Skips junk such as `.git` and `node_modules` unless you ask otherwise. |
-| “Where is `grant` in the file names?” | Fast **name** search across the tree (good on large projects). |
-| “Find the heading `### grant`” / “Where do we mention the serial?” | **Content** search — literal text by default, or a regex when you need one. You can limit by type (`*.md`, C++, JSON) and ask for surrounding lines. |
-| “How many photos are in this shoot?” | Lists images in the folder (JPEG, PNG, WebP, RAW, and similar). Read-only. |
+### Name search
 
-On a large file, Chat does **not** swallow the whole thing. It locates the hit, then reads a **window of lines** around it (about 400 lines at a time). An unwindowed read of a big file is refused — that is intentional, so a 2,000-line spec is not dumped into the prompt.
+Search recursively by filename:
 
-Tanit cloud storage is separate from this disk: Chat can list, download, or upload files there when you are signed in. Local globs stay on this PC.
+```text
+grant
+IMG_2041
+```
 
-### Fine-grained edits
+No index is required.
 
-For an **existing** text file, Chat is steered away from “read everything, write everything back.” The path is:
+### Content search
 
-1. **Locate** the section (search by heading or unique phrase).
-2. **Read** just that window of lines.
-3. **Replace** a unique snippet with the new text.
+Search inside files for text or regular expressions.
 
-The replacement must match once (or you can say “replace all”). If the snippet appears twice, the edit fails with line numbers instead of guessing — Chat then widens the snippet or pins a line range. Empty replacement deletes the snippet. Binary and image files are refused here; use image tools for pictures.
+You can restrict the search to a folder, file, extension, or glob.
 
-Use a full rewrite only when you really want a new file, or when the task is “replace this whole document.” Creating notes, reports, and Markdown from scratch still writes the complete body in one step.
+Examples:
 
-| You might say | What Chat does |
-|:--------------|:---------------|
-| “In `handbook.md`, change the grant section to …” | Search → read that region → surgical replace. The rest of the file is left alone. |
-| “Write `notes.md` in this folder with …” | Create or overwrite a UTF-8 text file. |
-| “Delete `scratch.tmp`” | Removes that one regular file. Folders are not deleted this way. |
+```text
+docs/**/*.md
+src/**/*.cpp
+**/*.{md,docx,txt}
+```
 
-Chat shows which files changed. A one-section tweak on a large handbook should not rewrite thousands of untouched lines.
+`**` crosses directory levels.
 
-Paths you invent (a folder that is not the current one, a file that is not selected) fail — point Chat at the file panel folder, select the file, or `@`-mention it in the composer.
+`*` and `?` stay within one path segment.
+
+`{md,docx}` expands alternatives.
+
+Bulky directories such as `.git` and `node_modules` are ignored unless explicitly included.
+
+### Semantic search
+
+Use this when you remember the subject rather than the exact wording.
+
+For example:
+
+```text
+the invoice total
+how the spindle starts
+the document about the Barcelona installation
+```
+
+Semantic search requires the folder to be indexed first.
+
+### Fingerprint search
+
+The index also stores structural information that helps locate things such as:
+
+- Markdown titles and headings
+- source-code symbols
+- class names
+- function names
+- path tokens
+- front-matter metadata
 
 ---
 
-## Status bar
+# Select by pattern
 
-The strip at the bottom of the file panel shows:
+Press **Num+** to open **Glob select**.
 
-- item count and selection count
-- current **view mode** and its shortcut (e.g. `Type (Alt+3)`)
-- current **sort** and its shortcut (e.g. `Size ↓ (Ctrl+F6)` when sorted by size descending)
-- active type-ahead or glob filter text, if any
+Examples:
+
+```text
+*.wav
+*.jpg;*.png
+*.{jpg,png}
+```
+
+Choose:
+
+- **Select** — highlight matching files
+- **Filter** — hide everything that does not match
+
+Selection can optionally recurse through subdirectories.
+
+Filtering keeps folders visible so you can continue navigating.
 
 ---
 
-## Tips
+# Hidden files
 
-- Open a **second file panel**, put the source on one side and the destination on the other, then Copy / Move — or just drag.
-- Switch to **Type** when you care about kinds of files; **Brief** when you only need names; **Size** when you are cleaning up.
-- Use **Ctrl+F6** (Size) after folder scanning has run to float the largest items to the top — handy before archiving.
-- **Sunburst** shows several hierarchy levels at once; click a heavy folder to drill into it.
-- Bookmark remote sessions you reuse (`sftp://…`, `ftp://…`, `ssh://workshop/opt`). They land in Recents after the first visit, and you can star the current folder from the toolbar.
-- On a phone, start at the device name, then open **Internal storage** (or **SD card**) before you hunt for `DCIM`.
-- To change one heading in a long document, select the file (or `@` it) and say which section — Chat searches and edits that region instead of rewriting the file.
+Open:
+
+**Shift+F1 → Show → Hidden**
+
+to display hidden files and dotfiles.
+
+They are hidden by default.
+
+---
+
+# Index a folder
+
+For larger projects, Tanit can build a searchable index beside the folder.
+
+The default store is:
+
+```text
+YourFolder/.pixlwiz/search/index.vstore
+```
+
+The index can contain Markdown, text, Office documents, structured data, and source code together.
+
+Once built, semantic searches work across the project without reopening every file for every question.
+
+Indexing is incremental:
+
+- unchanged files are skipped
+- changed files are reindexed
+- deleted files are removed
+- changing the chunk configuration updates affected content rather than rebuilding everything unnecessarily
+
+Long files are split into overlapping passages.
+
+Search results can expand to their natural document structure:
+
+- Markdown → section
+- code → symbol
+- Excel → row or sheet
+- PowerPoint → slide
+- Word → document region
+
+---
+
+## What goes into the default index
+
+| Format | Extensions | Indexed content |
+|:--|:--|:--|
+| Markdown | `.md`, `.markdown`, `.mdx` | Body, title, summary, headings, front matter |
+| Text | `.txt` | Body |
+| Tables | `.csv` | Cell text |
+| Structured data | `.json`, `.yaml`, `.yml` | Text content |
+| Word | `.docx` | Extracted text |
+| Excel | `.xlsx` | Cell content |
+| PowerPoint | `.pptx` | Slide text |
+| C/C++ | `.c`, `.cc`, `.cpp`, `.cxx`, `.h`, `.hh`, `.hpp`, `.hxx`, `.inl` | Source plus symbols and adjacent comments |
+| Other source | `.js`, `.jsx`, `.ts`, `.tsx`, `.py`, `.rs`, `.go`, `.java`, `.cs`, `.swift`, `.kt` | Source plus lightweight symbol information |
+| Images | supported image and RAW formats | Filename and sidecar information |
+
+For C and C++, fingerprints include information such as:
+
+- namespace
+- class
+- method
+- signature
+- comment immediately above the symbol
+
+Other supported languages receive a lighter symbol scan covering constructs such as classes, structs, enums, and functions.
+
+---
+
+## Images, OCR, and vision
+
+Image pixels are **not** analyzed by the default folder index.
+
+That is intentional: OCR and visual understanding are much more expensive than indexing filenames and text.
+
+When required, Tanit can build separate image indexes using:
+
+| Mode | Adds |
+|:--|:--|
+| OCR | Text visible inside the image |
+| Vision | A short description of what the image contains |
+
+These are stored separately unless you explicitly choose otherwise.
+
+---
+
+## Searchable but not included in the default index
+
+Live content search can still read formats such as:
+
+| Type | Extensions |
+|:--|:--|
+| Logs | `.log`, `.tsv` |
+| Web | `.html`, `.htm`, `.xml`, `.css`, `.svg` |
+| Configuration | `.toml`, `.ini`, `.conf`, `.cfg`, `.env` |
+| Scripts | `.sh`, `.ps1`, `.bat`, `.cmd`, `.sql`, `.cmake` |
+| Patches | `.diff`, `.patch` |
+
+These are not copied into the default semantic store.
+
+---
+
+## Not indexed
+
+Some formats are deliberately excluded:
+
+| Format | Reason |
+|:--|:--|
+| PDF | Not ingested directly |
+| Legacy Office | `.doc`, `.xls`, and `.ppt` are not supported by the Open XML reader |
+| Executables | Binary content |
+| Archives | Binary/container content |
+| Audio | Media rather than text |
+| Video | Media rather than text |
+
+They can still be opened or previewed where supported.
+
+PDFs can be converted to Markdown when their text is needed.
+
+---
+
+# Let Tanit work with the current files
+
+The file panel, viewer, and Tanit share the same working context.
+
+Tanit knows:
+
+- the current folder
+- the selected files
+- the file open in the viewer
+
+That means you can say:
+
+```text
+find all Markdown files here
+```
+
+instead of pasting a full directory path.
+
+Or:
+
+```text
+find where this project mentions the spindle
+```
+
+Or:
+
+```text
+change the installation section in this file
+```
+
+The relevant file operations are visible in the Log.
+
+Destructive operations and writes outside the active workspace still use the normal consent controls.
+
+---
+
+## Examples
+
+| Ask Tanit | What happens |
+|:--|:--|
+| `List the Markdown files here` | Searches the current workspace using a glob |
+| `Where is "grant" in the filenames?` | Searches names recursively |
+| `Find the heading "### grant"` | Searches file contents |
+| `Where do we mention the serial number?` | Searches text with surrounding context |
+| `How many photos are in this shoot?` | Lists supported image files |
+| `Index this folder, then find where we discuss the spindle` | Builds or updates the folder index and runs semantic search |
+| `Who calls startSpindle?` | Can query a configured source-code graph |
+| `Set Sheet1!B2 to 42` | Uses the configured Office tooling |
+| `Add a slide to this presentation` | Uses the configured Office tooling |
+| `Download the PDFs and read me a summary` | Downloads, converts, indexes, summarizes, and speaks the result |
+
+---
+
+# Large files stay large
+
+Tanit does not need to load an entire 2,000-line document into the model just to change one paragraph.
+
+For existing text files, the normal edit flow is:
+
+1. locate the relevant section
+2. read a small surrounding window
+3. replace the exact target text
+
+Large reads are deliberately windowed, typically around a few hundred lines at a time.
+
+This reduces prompt size and avoids unnecessary rewriting.
+
+If the same target text appears more than once, Tanit does not guess. It can widen the match or use a more precise range.
+
+A complete rewrite is still available when that is actually what you want—for example, when creating a new document or replacing the entire file.
+
+---
+
+## Fine-grained edit examples
+
+```text
+In handbook.md, replace the grant section with …
+```
+
+Tanit finds that section, reads the relevant region, and changes only that part.
+
+```text
+Write notes.md in this folder with …
+```
+
+Tanit creates the new file.
+
+```text
+Delete scratch.tmp
+```
+
+Tanit removes that file after the appropriate confirmation.
+
+Invented paths do not silently resolve somewhere else. If a file is not part of the current workspace, select it, navigate to its folder, or reference it explicitly.
+
+---
+
+# Build a document from many sources
+
+Tanit can combine information from multiple files without feeding every source document into the model at once.
+
+A typical flow is:
+
+1. collect or download the source files
+2. extract searchable text where necessary
+3. build a temporary index
+4. locate the most relevant passages
+5. compose the result from those passages
+
+For example:
+
+```text
+Download these PDFs and read me a summary.
+```
+
+Tanit can download the documents, convert their text, index the extracted material, write a combined summary, and read it aloud.
+
+The same workflow can be started from Tanit's Chrome extension while working on a page in the browser.
+
+Temporary indexes used for this kind of job live in the application temp area and are automatically cleared later.
+
+Large files assembled from material already on disk stay on disk; the model only needs the outline and relevant passages.
+
+---
+
+# Word, Excel, and PowerPoint
+
+Tanit uses components from [OfficeCLI](https://github.com/iOfficeAI/OfficeCLI) for Open XML documents.
+
+Word and Excel reading is integrated directly into Tanit in C++, keeping folder indexing fast and independent of Microsoft Office.
+
+PowerPoint processing uses OfficeCLI.
+
+For edits—such as changing workbook cells, creating workbooks, or adding slides—OfficeCLI can run as an MCP server.
+
+The same server can be used from:
+
+- Tanit
+- `tanit-cli mcp`
+- XBlox **MCP Call** steps
+
+---
+
+# Large source repositories
+
+The standard folder index works well for mixed projects containing documentation, Office files, and source code.
+
+Very large repositories need something more structural when the question becomes:
+
+```text
+Who defines this function?
+Who calls it?
+What depends on this class?
+```
+
+For that kind of work, add a source graph such as:
+
+[codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp)
+
+It stores functions, classes, and call relationships in a graph that can be queried repeatedly.
+
+Configured MCP servers are shared by:
+
+- Tanit
+- `tanit-cli mcp`
+- XBlox workflows
+
+Servers can be configured through `mcp.json` or directly on an XBlox MCP step.
+
+---
+
+# Tanit storage
+
+Tanit cloud storage is separate from the local filesystem.
+
+When signed in, Tanit can list, upload, and download files stored there.
+
+Local globs and folder searches remain local to this PC unless another location is explicitly selected.
+
+---
+
+# Status bar
+
+The bottom of the file panel shows the state of the current view, including:
+
+- number of items
+- number of selected items
+- current view mode
+- view shortcut
+- current sort
+- sort direction
+- sort shortcut
+- active type-ahead text
+- active glob filter
+
+Examples:
+
+```text
+Type (Alt+3)
+Size ↓ (Ctrl+F6)
+```
+
+The status bar makes the current view and sort state visible without opening another menu.
+
+---
+
+# Useful combinations
+
+For moving files between locations, open **two file panels**, put the source on one side and the destination on the other, then drag or use Copy / Move.
+
+For a compact directory, use **Brief (Alt+2)**.
+
+For general browsing, use **Type (Alt+3)**.
+
+For cleanup, use **Size (Alt+4)** and then **Ctrl+F6** once folder totals have been calculated.
+
+For visual cleanup, use **Sunburst (Alt+8)** and drill into the largest slices.
+
+Bookmark remote locations you use regularly:
+
+```text
+ssh://workshop/opt
+sftp://user:password@host/home/user
+ftp://user:password@host/pub
+```
+
+For a phone, start at the device and then open `Internal storage`, `SD card`, or `DCIM`.
+
+For a precise change in a long document, select the file and tell Tanit which section to change.
+
+For recurring semantic searches across a project, index the folder once.
+
+For large source repositories that need call relationships rather than just text search, add a source-code graph MCP server.
+
+For Office editing, add OfficeCLI as an MCP server.
+
+And when the request spans several steps, just describe the result you want:
+
+```text
+Download the PDFs, summarize them, save the summary here, and read it aloud.
+```
+
+Tanit can handle the file operations, indexing, composition, and speech as one workflow.
