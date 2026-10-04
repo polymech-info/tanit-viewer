@@ -4,12 +4,12 @@ End-user features for Tanit / Tanit Viewer, from `src/` only.
 Generated via `npm run build:post:changelog:next`.
 Each change is dated **DD-MM**. Newest first.
 
-## 1.0.69 - 01-10
+## 1.0.71 - 04-10
 
-- 01-10 CLI: Run choice / noul / score questions on a JSON document.
-- 30-09 CLI: Use -o for a custom path (relative paths are from cwd).
-- 30-09 CLI: Open path(s) in the File tree (semicolon-separated).
-- 30-09 CLI: , and Tanit Cam (tanit_vcam_source.dll).
+- 04-10 Settings: Voice commands.
+- 02-10 CLI: Enhance after capture (same lib as `audio filter`).
+- 02-10 CLI: DeepFilterNet tar.gz or unpacked ONNX directory.
+- 02-10 xblox: Enhance a recorded audio file.
 - 28-09 CLI: Microsoft Store billing (pm-pics billing-ms).
 - 28-09 CLI: Microsoft Store app license.
 - 28-09 CLI: GET /api/billing/ms/health (public; shows mock flag and product ids).
@@ -17,86 +17,38 @@ Each change is dated **DD-MM**. Newest first.
 - 28-09 CLI: POST /api/billing/ms/reconcile — grant credits and Pro entitlements.
 - 28-09 Commands: Start the in-process Voice Command Center listen loop.
 - 28-09 Commands: Start or stop the in-process Voice Command Center listen loop.
-- 27-09 CLI: List audio devices: capture inputs by default; use --playback for MMDevice render endpoints.
-- 27-09 CLI: Record from mic, desktop loopback, or mix.
-- 27-09 CLI: Sign out and remove stored tokens from the app profile.
 - 26-09 CLI: List built-in catalog aliases (GGUF + file models).
 - 26-09 CLI: Search Hugging Face models by free text (not just org or owner/repo slugs).
-- 26-09 CLI: List models published by a Hugging Face organization or user.
-- 26-09 CLI: List GGUF quantization variants for a catalog alias or repo id.
 - 26-09 CLI: PDF tools: inspect documents, rasterize pages, and extract Markdown.
 - 26-09 CLI: Print page count and page sizes.
-- 26-09 xblox: List all available video capture (camera) devices.
+- 26-09 CLI: Rasterize pages to image files (all, ranges, or specific pages).
+- 26-09 CLI: Extract document text to Markdown.
 - 26-09 xblox: Generate a video from a prompt using the same core create_video API as `video create`.
-- 26-09 xblox: Capture Image / Video.
-- 25-09 CLI: Call the configured Tanit web service API.
-- 25-09 CLI: Default uses login token (includes your private content); --public searches global/public content only.
 - 25-09 CLI: MCP server from the tools cache.
-- 25-09 CLI: Inspect and call external MCP servers configured in mcp.json.
-- 25-09 CLI: List MCP servers from mcp.json and the tools each enabled server exposes.
-- 25-09 CLI: List tools on an MCP server (name and description).
+- 25-09 CLI: Run a jq filter on a previous JSON result (stdin or --input).
 - 24-09 Settings: Show &groups.
-- 22-09 CLI: Import / export the app settings profile (UTF-8 JSON), manage .cloud_storage_key.
-- 22-09 CLI: Print the canonical on-disk settings.json path for this OS (no file I/O) and exit.
-- 22-09 CLI: Replace the live profile store with the given UTF-8 JSON file (full document replace).
-- 22-09 CLI: Windows: `--encrypted` writes PME1 instead of JSON.
-- 21-09 Settings: Consenti una volta, Consenti sessione, Consenti sempre, Consentito solo questa volta; non salvato..
-- 20-09 CLI: Generate reference docs for.
-- 20-09 CLI: Generate a CLI + custom command reference.
-- 20-09 CLI: Generate an XBlox block-flow reference.
-- 18-09 CLI: With no subcommand: starts the assistant toolbar/global shortcut host.
-- 18-09 CLI: Inspect desktop applications for computer-use.
-- 18-09 CLI: Dump visible windows and useful UIA elements with screen coordinates.
-- 18-09 CLI: Run the user-session tray daemon with global hotkeys and a notification-area menu.
-- 18-09 CLI: Windows: register the daemon for logon by writing HKLM Run (requires elevation).
-- 18-09 CLI: Discover and control live pm-image instances over the command IPC bus.
+- 22-09 CLI: Manage the portable cloud storage key (.cloud_storage_key) used by --pmbackup and cloud sync.
+- 22-09 CLI: Print the profile .cloud_storage_key path (no file I/O) and exit.
+- 20-09 CLI: Generate an end-user keyboard shortcut reference: built-in app-command defaults.
+- 18-09 CLI: One-shot Windows OS context snapshot (Explorer/Desktop/drag/invocation, optional MRU.
+- 18-09 CLI: Find an installed program and its folder (same lookup as Settings → Directories).
 - 16-09 The launcher: Open with, Show in folder, Copy path.
-- 15-09 CLI: Run XBlox block-tree command flows.
-- 15-09 CLI: Print XBlox block/command metadata for builders and LLM composition.
-- 14-09 xblox: POST /api/images?forward=vfs&original=true - multipart upload one or more image files.
-- 14-09 xblox: POST /api/vfs/upload/{mount}/{remotePath} - upload any file to the VFS.
-- 14-09 xblox: GET /api/vfs/ls/{mount}/{path} - list files in a VFS directory.
-- 11-09 CLI: AI text-to-image (Gemini / Google, no input file).
-- 11-09 CLI: AI image editing (Gemini / Google).
+- 15-09 CLI: Consent surface for security-gated tools in this run:.
+- 15-09 CLI: Target descriptor (ipc id) for --consent-ui owner routing.
+- 11-09 CLI: Chat settings preset name or id; loads image_provider/image_model;.
 - 10-09 xblox: Place scripted TTS from an SRT/VTT file or transcribe JSON onto a 48 kHz PCM timeline.
-- 10-09 xblox: Sleep for a fixed number of milliseconds.
-- 10-09 xblox: Write a message directly to stdout (pipe-friendly).
-- 10-09 xblox: Read piped input from stdin (whole stream or one line) into PREVIOUS/storeAs.
-- 10-09 xblox: Stop the run immediately and set the process exit code.
-- 09-09 CLI: Show Tanit credits and license status.
-- 09-09 xblox: Run a shell command through the native RunTool.
-- 09-09 xblox: Open a file or folder with the OS default app, or inside Tanit.
-- 09-09 xblox: Run another XBlox document directly, with context overrides and optional document-loop controls.
-- 04-09 Settings: Voice commands.
-- 04-09 xblox: List or unload loaded local model instances for this xBlox process.
-- 01-09 xblox: GET /vector_store/list - list all registered vector stores in the LiteLLM proxy.
-- 01-09 xblox: POST /vector_store/new - register a new pg_vector store in the LiteLLM proxy.
-- 01-09 xblox: POST /v1/vector_stores/{storeId}/search - semantic search in a vector store.
-- 28-08 CLI: Prototype window/screen streaming host for a mobile WebRTC remote.
-- 28-08 xblox: iterate over each element (PREVIOUS = element, index = i).
-- 27-08 xblox: List paired / connected Bluetooth devices.
-- 27-08 xblox: List MMDevice audio endpoints (playback by default).
-- 27-08 xblox: Connect a Bluetooth audio device (pairs if needed) and implicitly route audio to it.
-- 24-08 CLI: Find images by name/folder, semantic LLM prompt, or junk (dark/blur/flat/blown/tiny).
+- 05-09 CLI: Route: trigger emits a mapping envelope; agent starts realtime voice.
+- 05-09 CLI: Wet/dry mix for utterance enhancement: 0 = original, 1 = full filter.
+- 30-08 CLI, xblox: Copy files or folders through the VFS queue (local, ssh://, ftp://, vfs://).
+- 30-08 CLI, xblox: Move files or folders through the VFS queue (copy then delete source).
+- 30-08 CLI: Create folders through the VFS queue (local, ssh://, ftp://, vfs://).
+- 30-08 xblox: Create a new file with the Explorer New name for an extension (localized).
+- 24-08 CLI: Search query (required for name / --llm; unused with --junk).
+- 24-08 CLI: After matches: none | delete | recyclebin.
 - 22-08 CLI: Compile and preview command schedules.
 - 22-08 CLI: Parse commands.json schedules and print compiled definitions.
 - 22-08 CLI: Preview the next planned occurrence(s) without persisting.
 - 22-08 CLI: Emit due occurrences and persist scheduler state under config_dir.
 - 22-08 CLI: Emit one occurrence for --schedule immediately and persist state.
 - 22-08 CLI: Recompile commands.json into the local host and notify daemon peers.
-- 30-07 xblox: Start, stop, or inspect a named in-process MQTT broker instance.
-- 30-07 xblox: Connect to an MQTT broker and Publish, Subscribe, or RoundTrip a test message.
-- 25-07 CLI: Bluetooth and audio-endpoint management: list, pair, and connect devices.
-- 25-07 CLI: List paired/connected Bluetooth devices (and optionally audio endpoints).
-- 25-07 CLI: List MMDevice audio endpoints (playback by default).
-- 25-07 CLI: Connect a Bluetooth audio device (pairs if needed) and route audio to it.
-- 25-07 CLI: Disconnect a Bluetooth audio device (best-effort).
-- 25-07 CLI: Pair a Bluetooth device.
-- 25-07 Misc: KBot AI & Task runner.
-- 25-07 The launcher: Reveal in &Explorer panel, Show in Windows &File Explorer, Copy &path (focused file), Copy &all paths in group.
-- 25-07 xblox: Parse PREVIOUS or named input with a jq filter expression.
-- 25-07 xblox: Iterate over PREVIOUS or any named scope/context variable.
-- 25-07 xblox: Sample a keyboard shortcut once and emit down/pressed/released/toggle state.
-- 25-07 xblox: Wait for a keyboard shortcut then run child blocks.
-- 25-07 xblox: Run a Modbus TCP server until cancelled, durationMs expires, or maxRequests is reached.
-- 25-07 xblox: Start, stop, or inspect a named cached Modbus client connection for fast repeated reads/writes.
+- 16-08 xblox: Push a frame to the Pixlwiz virtual webcam (MF Frame Server).

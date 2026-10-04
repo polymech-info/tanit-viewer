@@ -4,15 +4,18 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
-## 1.0.69 - 30-09
+## 1.0.71 - 04-10
 
 _Each change is dated DD-MM from the commit day. Newest first._
 
 ### New
 
+- 04-10 Added --gpu-layers option to pm_image_cmd_search
+- 01-10 Added a new `llm-agent decide` subcommand that runs LLM-assisted decisions over paired left/right inputs, configurable via options including `--source`, `--questions`, `--selector`, `--pairs`, `--left`/`--right` with `--left-key`/`--right-key`, `--target`, `--dst`, `--chunk`, `--max-tokens`, and provider settings such as `--provider`, `--path`, `--model`, `--api-key`, `--base-url`, and `--timeout-ms`.
 - 30-09 The CLI test harness now supports core settings round-trip and owner workflows, configurable persistence and timeouts, idempotent mutations (set, merge, or append-history), revision waiting, and status inspection.
 - 30-09 Added CLI test commands for settings round-trip, ownership, mutation, waiting for revisions, and status, including persistence/timeout controls, key/value application, mutation operations, and idempotency GUID support.
 - 30-09 Added CLI test coverage and options for exercising core settings persistence, ownership, mutation, revision waiting, and status behavior.
+- 30-09 New test-core settings subcommands for roundtrip, owner, mutate, wait, and status operations with configurable timeouts, apply delays, idempotency guids, and revision waiting
 - 28-09 Added CLI test setup for core settings, source, and loopback commands, with source input paths optionally supporting #t= fragments.
 - 28-09 The CLI test suite now covers core settings, source, and loopback subcommands, with support for specifying an input path and optional #t= fragment.
 - 28-09 Expanded pm_image_register CLI coverage with test-core settings, source, and loopback subcommands.
@@ -158,6 +161,7 @@ _Each change is dated DD-MM from the commit day. Newest first._
 
 ### Improved
 
+- 30-09 llm-agent each command now supports --abort-after-consecutive-errors and --api-mode; app-browse accepts an instance option (new or same)
 - 25-09 Enabled created commands to use the schedule_at tool.
 - 25-09 The command creation tool now supports ask_user, memory_read, memory_write, memory_append_event, and schedule_at.
 - 22-09 Improved accessibility by adding descriptive aria-labels to media elements for better screen reader support.
