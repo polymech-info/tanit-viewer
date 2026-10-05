@@ -1,6 +1,6 @@
 ##### Examples
 
-Hand-picked patterns beyond the auto-generated flags above.
+
 
 Local OCR check for one image. `llama` / `vlm` use slot `ocr` and need the language GGUF plus a sibling `*mmproj*.gguf`. `paddle` / `onnx` use the PP-OCR ONNX files. `--resize-width` (default 1600) shrinks the longest edge before llama, paddle, and cloud upload. Images already smaller stay at their own size. `--no-resize` sends the original file. Cloud providers also take `--api-key`.
 

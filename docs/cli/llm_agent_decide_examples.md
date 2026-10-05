@@ -1,6 +1,6 @@
 ##### Examples
 
-Hand-picked patterns beyond the auto-generated flags above.
+
 
 Path roles: `--source` / `--dst` are whole JSON **files**; `--questions` is a JSON object of choice / noul / score questions; `--selector` (or `--pairs`, or `--left` with `--right`) picks the values to judge. `--target` is the key that receives the answer object (default `decisions`). Omit the picker to judge the whole document as one state.
 

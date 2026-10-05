@@ -1,6 +1,6 @@
 ##### Examples
 
-Hand-picked patterns beyond the auto-generated flags above.
+
 
 **Convert full document to Markdown** (writes `report.md` beside the PDF)
 

@@ -1,6 +1,6 @@
 ##### Examples
 
-Hand-picked patterns beyond the auto-generated flags above.
+
 
 **Desktop loopback → WAV** (48 kHz stereo default; PCM spills to disk after ~30 s in RAM)
 

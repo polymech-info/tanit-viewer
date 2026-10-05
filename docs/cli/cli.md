@@ -238,7 +238,7 @@ tanit-cli understand input 'foo' -p 'foo' --dst 'foo' --stdout --provider 'foo' 
 
 ##### Examples
 
-Hand-picked patterns beyond the auto-generated flags above.
+
 
 Local OCR check for one image. `llama` / `vlm` use slot `ocr` and need the language GGUF plus a sibling `*mmproj*.gguf`. `paddle` / `onnx` use the PP-OCR ONNX files. `--resize-width` (default 1600) shrinks the longest edge before llama, paddle, and cloud upload. Images already smaller stay at their own size. `--no-resize` sends the original file. Cloud providers also take `--api-key`.
 
@@ -326,7 +326,7 @@ tanit-cli pdf info path '{}' --password 'foo'
 
 ##### Examples
 
-Hand-picked patterns beyond the auto-generated flags above.
+
 
 **Page count and sizes** (human-readable)
 
@@ -507,7 +507,7 @@ tanit-cli pdf md path '{}' --pages 'all' -o 'foo' --per-page --output-dir 'foo' 
 
 ##### Examples
 
-Hand-picked patterns beyond the auto-generated flags above.
+
 
 **Convert full document to Markdown** (writes `report.md` beside the PDF)
 
@@ -724,6 +724,225 @@ tanit-cli cp
 
 ```sh
 tanit-cli cp paths '{}' -s '{}' -d 'foo' --conflict 'foo' --overwrite --skip --rename --if-newer --include '{}' --exclude '{}' --dry-run
+```
+
+##### Examples
+
+`cp` and `copy` copy through the same queue as the file panel. The last path is the destination folder unless `--dst` is set. Quote globs and any URI that contains a space. A finished copy emits each destination path as a run artifact.
+
+`${CWD}`, `${ENV:…}`, `${KNOWNFOLDER:Desktop}`, and `${SRC_NAME}` expand in `--src` and `--dst`.
+
+**Local folder**
+
+```sh
+tanit-cli cp report.pdf notes.md ./out
+tanit-cli cp "shots/*.{jpg,png}" --dst "${KNOWNFOLDER:Desktop}"
+```
+
+**Preview, then copy**
+
+```sh
+tanit-cli cp report.pdf ./out --dry-run
+tanit-cli cp report.pdf ./out --if-newer --json
+```
+
+**SSH / SFTP** (`ssh://host/` is the filesystem root; a host with no slash opens that session's home. A key in `~/.ssh` is used when the URI has no password.)
+
+```sh
+tanit-cli cp report.pdf ssh://workshop/opt/incoming
+tanit-cli cp ssh://workshop/home/you/readme.md ./inbox
+tanit-cli cp ./build sftp://user:password@host/var/drops --overwrite
+```
+
+**FTP / FTPS**
+
+```sh
+tanit-cli cp report.pdf ftp://user:password@host/pub
+tanit-cli cp ftps://user@host/inbox/brief.pdf ./inbox --skip
+```
+
+**Tanit VFS** (`vfs://{mount}/{path}` — `home`, `models`, `software`, …)
+
+```sh
+tanit-cli cp diagram.png vfs://home/public
+tanit-cli cp vfs://models/weights/model.gguf ./models --if-newer
+```
+
+**Phone or camera** (folder names come from the device)
+
+```sh
+tanit-cli cp "mtp://realme/Internal storage/DCIM/IMG.jpg" ./inbox
+tanit-cli cp shot.jpg "mtp://realme/Internal storage/DCIM"
+```
+
+Copy a phone file to a local folder, then copy that folder to SSH, FTP, or VFS. One command cannot put the phone on one side and SSH, FTP, or VFS on the other.
+
+**Keep or drop names**
+
+```sh
+tanit-cli cp ./photos --dst ssh://workshop/opt/incoming --include "*.jpg" --exclude "*~"
+```
+
+#### mv
+
+Move files or folders through the VFS queue (copy then delete source).
+
+Options:
+
+- `paths` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sources and destination folder. Last path is dest unless --dst is set.
+- `-s,--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Source path, glob, or URI (repeatable). ${CWD} ${KNOWNFOLDER:…} ${ENV:…} ${SRC_NAME} …
+- `-d,--dst,--dest` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Destination folder path or URI. Same ${…} variables as --src.
+- `--conflict` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Conflict strategy: error (default), overwrite, skip, rename, if-newer.
+- `--overwrite` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Overwrite existing dest files.
+- `--skip` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip existing dest files.
+- `--rename` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Rename dest when it already exists.
+- `--if-newer` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Overwrite dest only when the source is newer.
+- `--include` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Keep sources matching this glob (repeatable).
+- `--exclude` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Drop sources matching this glob (repeatable).
+- `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Expand sources and dest; do not move.
+
+**Example**
+
+```sh
+tanit-cli mv
+```
+
+**Full example**
+
+```sh
+tanit-cli mv paths '{}' -s '{}' -d 'foo' --conflict 'foo' --overwrite --skip --rename --if-newer --include '{}' --exclude '{}' --dry-run
+```
+
+##### Examples
+
+`mv` and `move` use the same paths, globs, URIs, and conflict flags as `cp`. The transfer copies, then deletes the source. A finished move emits each destination path as a run artifact.
+
+**Local**
+
+```sh
+tanit-cli mv report.pdf ./archive
+tanit-cli mv "shots/*.jpg" --dst "${KNOWNFOLDER:Desktop}" --skip
+```
+
+**SSH, FTP, or Tanit VFS**
+
+```sh
+tanit-cli mv ./build ssh://workshop/opt/incoming --if-newer
+tanit-cli mv ftp://user:password@host/pub/old.zip ./archive
+tanit-cli mv diagram.png vfs://home/public
+```
+
+**Phone.** Copy with `cp`. Deleting the file on the device is not available, so `mv` from `mtp://` stops when it tries to remove the source. A phone and SSH, FTP, or VFS still need a local folder between them.
+
+```sh
+tanit-cli cp "mtp://realme/Internal storage/DCIM/IMG.jpg" ./inbox
+```
+
+**Dry-run**
+
+```sh
+tanit-cli mv report.pdf ssh://workshop/opt/incoming --dry-run
+```
+
+#### mkdir
+
+Create folders through the VFS queue (local, ssh://, ftp://, vfs://). Existing folders succeed.
+
+Options:
+
+- `paths` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Folder or file path / URI to create (repeatable).
+- `-s,--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Same as a positional dest (repeatable). ${CWD} ${KNOWNFOLDER:…} ${ENV:…}
+- `-d,--dst,--dest` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Same as a positional dest. Same ${…} variables.
+- `--skip` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip when a file already occupies the path.
+- `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Expand dest URIs; do not create.
+
+**Example**
+
+```sh
+tanit-cli mkdir
+```
+
+**Full example**
+
+```sh
+tanit-cli mkdir paths '{}' -s '{}' -d 'foo' --skip --dry-run
+```
+
+##### Examples
+
+Creates folders on a local path or a `ssh://`, `sftp://`, `ftp://`, `ftps://`, `vfs://`, or `mtp://` URI. A folder that already exists succeeds. `--skip` skips a path that a file already occupies. Each created folder is a run artifact.
+
+**Local and known folders**
+
+```sh
+tanit-cli mkdir ./archive "${KNOWNFOLDER:Desktop}/incoming"
+```
+
+**Remote**
+
+```sh
+tanit-cli mkdir ssh://workshop/opt/incoming
+tanit-cli mkdir ftp://user:password@host/pub/drops
+tanit-cli mkdir vfs://home/public/album
+tanit-cli mkdir "mtp://realme/Internal storage/DCIM/tanit"
+```
+
+**Several paths, JSON**
+
+```sh
+tanit-cli mkdir vfs://home/inbox vfs://home/public/album --json
+```
+
+#### touch
+
+Create empty files through the VFS queue. Existing files conflict unless --skip / --overwrite.
+
+Options:
+
+- `paths` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Folder or file path / URI to create (repeatable).
+- `-s,--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Same as a positional dest (repeatable). ${CWD} ${KNOWNFOLDER:…} ${ENV:…}
+- `-d,--dst,--dest` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Same as a positional dest. Same ${…} variables.
+- `--conflict` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - When the file exists: error (default), overwrite, skip.
+- `--overwrite` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Replace an existing file with an empty file.
+- `--skip` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Leave an existing file unchanged.
+- `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Expand dest URIs; do not create.
+
+**Example**
+
+```sh
+tanit-cli touch
+```
+
+**Full example**
+
+```sh
+tanit-cli touch paths '{}' -s '{}' -d 'foo' --conflict 'foo' --overwrite --skip --dry-run
+```
+
+##### Examples
+
+Creates an empty file on a local path or a `ssh://`, `sftp://`, `ftp://`, `ftps://`, `vfs://`, or `mtp://` URI. An existing file is an error unless `--skip` or `--overwrite`. `--overwrite` replaces it with an empty file. Each created file is a run artifact.
+
+**Local**
+
+```sh
+tanit-cli touch ./notes.md
+tanit-cli touch "${KNOWNFOLDER:Desktop}/scratch.txt" --skip
+```
+
+**Remote**
+
+```sh
+tanit-cli touch ssh://workshop/opt/incoming/.keep
+tanit-cli touch ftp://user:password@host/pub/marker.txt
+tanit-cli touch vfs://home/public/album/.keep
+tanit-cli touch "mtp://realme/Internal storage/DCIM/note.txt"
+```
+
+**Replace an existing file**
+
+```sh
+tanit-cli touch vfs://home/inbox/empty.txt --overwrite --json
 ```
 
 ### Search
@@ -1558,7 +1777,7 @@ tanit-cli llm agent -p 'foo' --logging-dir 'foo' --system-prompt 'foo' --planner
 
 ##### Examples
 
-Hand-picked patterns beyond the auto-generated flags above.
+
 
 For bulk JSON leaf transforms (jq selector + optional sibling `--target`), see **`llm agent each`** and `llm_agent_each_examples.md`.
 
@@ -1608,7 +1827,7 @@ tanit-cli llm agent decide -i 'foo' --questions 'foo' --selector 'foo' --pairs '
 
 ##### Examples
 
-Hand-picked patterns beyond the auto-generated flags above.
+
 
 Path roles: `--source` / `--dst` are whole JSON **files**; `--questions` is a JSON object of choice / noul / score questions; `--selector` (or `--pairs`, or `--left` with `--right`) picks the values to judge. `--target` is the key that receives the answer object (default `decisions`). Omit the picker to judge the whole document as one state.
 
@@ -1764,7 +1983,7 @@ tanit-cli llm agent each -i 'foo' --selector 'foo' --target 'foo' --merge-json -
 
 ##### Examples
 
-Hand-picked patterns beyond the auto-generated flags above.
+
 
 Path roles: `--source` / `--dst` are whole JSON **files**; `--selector` is a **jq** leaf picker (JSONPath-ish `$.a[*].b` → `.a[].b`); `--target` is an optional **sibling key** (omit = in-place overwrite). Provider flags (`--router`, `--model`, `--api-key`, `--preset`, …) work on `each` or on the parent: `llm agent --router openai each …`.
 
@@ -2094,6 +2313,45 @@ tanit-cli service info
 tanit-cli service info --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+Run `tanit-cli login` first. These calls use the logged-in account.
+
+**Resolved service URLs**
+
+```sh
+tanit-cli service info
+```
+
+**Search your pages**
+
+```sh
+tanit-cli service search "keyboard" --type pages
+```
+
+**Publish a markdown page** (front matter can supply title, slug, and category)
+
+```sh
+tanit-cli service pages create releases/web-docs/changelog.md \
+  --title "Changelog" \
+  --slug tanit-changelog \
+  --category-id knowlede-base
+```
+
+**Upload a file to the home VFS**
+
+```sh
+tanit-cli service files upload notes.md
+```
+
+**Credit balance**
+
+```sh
+tanit-cli service balance
+```
+
 #### service info
 
 Print resolved CMS, LLM, license, and Zitadel service URLs.
@@ -2112,6 +2370,28 @@ tanit-cli service info
 
 ```sh
 tanit-cli service info --server-url 'foo'
+```
+
+##### Examples
+
+
+
+**Resolved CMS, LLM, license, and Zitadel URLs**
+
+```sh
+tanit-cli service info
+```
+
+**JSON for scripting**
+
+```sh
+tanit-cli service info --json
+```
+
+**Override the service base** (no trailing slash)
+
+```sh
+tanit-cli service info --server-url https://tanit.polymech.info
 ```
 
 ---
@@ -2143,6 +2423,43 @@ tanit-cli service search query <value>
 tanit-cli service search query 'foo' --type 'all' --limit 20 --sizes 'foo' --formats 'foo' --visibility-filter 'foo' --public --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+The default search uses the login token and includes your private content.
+
+**Pages**
+
+```sh
+tanit-cli service search "keyboard shortcuts" --type pages --limit 10
+```
+
+**VFS files**
+
+```sh
+tanit-cli service search "settings.json" --type files --json
+```
+
+**Posts, pictures, or places**
+
+```sh
+tanit-cli service search "bench" --type posts
+tanit-cli service search "diagram" --type pictures
+```
+
+**Public content only** (no bearer token)
+
+```sh
+tanit-cli service search "tanit" --public
+```
+
+**Owner-only visibility**
+
+```sh
+tanit-cli service search "draft" --visibility-filter private
+```
+
 ---
 
 #### service spending
@@ -2164,6 +2481,24 @@ tanit-cli service spending
 ```sh
 tanit-cli service spending --server-url 'foo'
 ```
+
+##### Examples
+
+
+
+**Account spend summary**
+
+```sh
+tanit-cli service spending
+```
+
+**JSON for scripting**
+
+```sh
+tanit-cli service spending --json
+```
+
+Request-level rows are `service spending logs`.
 
 #### service spending logs
 
@@ -2193,6 +2528,34 @@ tanit-cli service spending logs
 tanit-cli service spending logs --days-back 7 --start-date 'foo' --end-date 'foo' --page 1 --page-size 25 --sort-by 'startTime' --sort-order 'desc' --all-pages --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+**Last 7 days** (default lookback)
+
+```sh
+tanit-cli service spending logs
+```
+
+**Last 30 days, JSON**
+
+```sh
+tanit-cli service spending logs --days-back 30 --json
+```
+
+**Explicit range**
+
+```sh
+tanit-cli service spending logs --start-date 2026-09-01 --end-date 2026-09-30 --page-size 50
+```
+
+**Every page in the range**
+
+```sh
+tanit-cli service spending logs --all-pages --sort-by startTime --sort-order desc
+```
+
 ---
 
 #### service balance
@@ -2215,6 +2578,24 @@ tanit-cli service balance
 tanit-cli service balance --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+**Purchased credits minus synced spend**
+
+```sh
+tanit-cli service balance
+```
+
+**JSON for scripting**
+
+```sh
+tanit-cli service balance --json
+```
+
+Microsoft Store ledger balance is `service store ms-balance`.
+
 ---
 
 #### service ai-gateway-health
@@ -2235,6 +2616,22 @@ tanit-cli service ai-gateway-health
 
 ```sh
 tanit-cli service ai-gateway-health --server-url 'foo'
+```
+
+##### Examples
+
+
+
+**Gateway configured and alive**
+
+```sh
+tanit-cli service ai-gateway-health
+```
+
+**JSON for scripting**
+
+```sh
+tanit-cli service ai-gateway-health --json
 ```
 
 ---
@@ -2261,6 +2658,24 @@ tanit-cli service upload files {}
 tanit-cli service upload files '{}' --server-url 'foo' --dump-raw-http
 ```
 
+##### Examples
+
+
+
+`service upload` is the old name for `service images upload`.
+
+**One image**
+
+```sh
+tanit-cli service upload photo.png
+```
+
+**Several images, JSON per file**
+
+```sh
+tanit-cli service upload a.jpg b.png --json
+```
+
 ---
 
 #### service images
@@ -2277,6 +2692,22 @@ tanit-cli service images upload files {}
 
 ```sh
 tanit-cli service images upload files '{}' --server-url 'foo' --dump-raw-http
+```
+
+##### Examples
+
+
+
+**Upload one image** (`POST /api/images`)
+
+```sh
+tanit-cli service images upload photo.png
+```
+
+**Several images**
+
+```sh
+tanit-cli service images upload a.jpg b.png --json
 ```
 
 #### service images upload
@@ -2301,6 +2732,28 @@ tanit-cli service images upload files {}
 tanit-cli service images upload files '{}' --server-url 'foo' --dump-raw-http
 ```
 
+##### Examples
+
+
+
+**One image**
+
+```sh
+tanit-cli service images upload photo.png
+```
+
+**Several images, one JSON object per file**
+
+```sh
+tanit-cli service images upload a.jpg b.png --json
+```
+
+**Exact HTTP response** (`http_status` and `raw_body`)
+
+```sh
+tanit-cli service images upload photo.png --dump-raw-http
+```
+
 ---
 
 #### service settings
@@ -2317,6 +2770,36 @@ tanit-cli service settings upload
 
 ```sh
 tanit-cli service settings upload --remote-dir 'settings' --commands --mcp --server-url 'foo'
+```
+
+##### Examples
+
+
+
+These commands sync plaintext `settings.json` on the home VFS. Encrypted profile backup is a separate flow.
+
+**Upload local settings**
+
+```sh
+tanit-cli service settings upload
+```
+
+**Also sync commands and MCP config**
+
+```sh
+tanit-cli service settings upload --commands --mcp
+```
+
+**Import into this profile**
+
+```sh
+tanit-cli service settings import
+```
+
+**Remove the remote sync folder**
+
+```sh
+tanit-cli service settings remove
 ```
 
 #### service settings upload
@@ -2340,6 +2823,30 @@ tanit-cli service settings upload
 
 ```sh
 tanit-cli service settings upload --remote-dir 'settings' --commands --mcp --server-url 'foo'
+```
+
+##### Examples
+
+
+
+Uploads unencrypted `settings.json` under the home mount (default remote directory: `settings`).
+
+**Settings only**
+
+```sh
+tanit-cli service settings upload
+```
+
+**Settings, commands.json, and MCP config**
+
+```sh
+tanit-cli service settings upload --commands --mcp
+```
+
+**Custom remote directory**
+
+```sh
+tanit-cli service settings upload --remote-dir sync/workstation --json
 ```
 
 ---
@@ -2368,6 +2875,30 @@ tanit-cli service settings import
 tanit-cli service settings import --remote-dir 'settings' --download-dir '.' --commands --mcp --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+Downloads the remote sync folder, then imports `settings.json` into the local profile.
+
+**Default remote directory** (`settings`)
+
+```sh
+tanit-cli service settings import
+```
+
+**Also import commands and MCP when they exist remotely**
+
+```sh
+tanit-cli service settings import --commands --mcp
+```
+
+**Keep the downloaded files in a chosen folder**
+
+```sh
+tanit-cli service settings import --download-dir ./sync --json
+```
+
 ---
 
 #### service settings remove
@@ -2391,6 +2922,22 @@ tanit-cli service settings remove
 tanit-cli service settings remove --remote-dir 'settings' --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+**Remove the default sync directory** (`settings` on the home mount)
+
+```sh
+tanit-cli service settings remove
+```
+
+**Remove a custom directory**
+
+```sh
+tanit-cli service settings remove --remote-dir sync/workstation --json
+```
+
 ---
 
 #### service files
@@ -2407,6 +2954,42 @@ tanit-cli service files upload files {}
 
 ```sh
 tanit-cli service files upload files '{}' --mount 'home' --remote-dir 'foo' --public --remote-path 'foo' --conflict 'if-newer' --skip --overwrite --if-newer --server-url 'foo' --dump-raw-http
+```
+
+##### Examples
+
+
+
+Quote globs so `tanit-cli` expands them the same way in every shell.
+
+**Upload one file** (home mount)
+
+```sh
+tanit-cli service files upload notes.md
+```
+
+**Public folder** (artifact is `/app/filebrowser/home/public?mode=thumb&file=…`)
+
+```sh
+tanit-cli service files upload "releases/web-docs/llm/*.{png,jpg,jpeg,webp}" --public
+```
+
+**List a directory**
+
+```sh
+tanit-cli service files list public
+```
+
+**Pull into a local folder** (existing local files are skipped)
+
+```sh
+tanit-cli service files pull public/diagram.png --local-dir ./downloads
+```
+
+**Read a text file**
+
+```sh
+tanit-cli service files read settings/settings.json
 ```
 
 #### service files upload
@@ -2439,6 +3022,66 @@ tanit-cli service files upload files {}
 tanit-cli service files upload files '{}' --mount 'home' --remote-dir 'foo' --public --remote-path 'foo' --conflict 'if-newer' --skip --overwrite --if-newer --server-url 'foo' --dump-raw-http
 ```
 
+##### Examples
+
+
+
+Quote globs. A directory path uploads the tree. Default conflict policy is `if-newer`: replace the remote file only when the local file is newer.
+
+**Public link.** Each upload, including a skip, emits a filebrowser URL as the run artifact. The finish toast and recent-outputs list label it with the `file=` name. Opening the artifact follows that URL.
+
+| Remote path | Artifact URL |
+|---|---|
+| `notes.md` | `{server}/app/filebrowser/home?file=notes.md` |
+| `--public` / `public/shot.png` | `{server}/app/filebrowser/home/public?mode=thumb&file=shot.png` |
+| `public/album/shot.png` | `{server}/app/filebrowser/home/public/album?mode=thumb&file=shot.png` |
+
+`--json` also includes `api_get_url`: a signed download (`/api/vfs/sign-get`, about 15 minutes, `download=1`). If signing fails, that field is `/api/vfs/get/home/...`.
+
+`home/public` is the public tree. The owner's user id is a mount for that folder with `public/` omitted, so a rendered image is `{server}/api/vfs/get/{owner-uuid}/shot.png`.
+
+**One file at the VFS root**
+
+```sh
+tanit-cli service files upload notes.md
+```
+
+**Public images** (same as `--remote-dir public`)
+
+```sh
+tanit-cli service files upload "releases/web-docs/llm/*.{png,jpg,jpeg,webp}" --public
+```
+
+**Keep relative subfolders**
+
+```sh
+tanit-cli service files upload "docs/**/*.md" --remote-dir docs
+```
+
+**Exact remote path** (one local file)
+
+```sh
+tanit-cli service files upload report.pdf --remote-path inbox/report.pdf
+```
+
+**Leave an existing remote file alone**
+
+```sh
+tanit-cli service files upload clip.mp4 --skip
+```
+
+**Always replace**
+
+```sh
+tanit-cli service files upload clip.mp4 --overwrite
+```
+
+**JSON per file, including skips**
+
+```sh
+tanit-cli service files upload "shots/*.jpg" --json
+```
+
 ---
 
 #### service files list
@@ -2461,6 +3104,34 @@ tanit-cli service files list
 
 ```sh
 tanit-cli service files list path 'foo' --mount 'home' --server-url 'foo'
+```
+
+##### Examples
+
+
+
+**Home root**
+
+```sh
+tanit-cli service files list
+```
+
+**A directory inside home**
+
+```sh
+tanit-cli service files list public
+```
+
+**Another mount**
+
+```sh
+tanit-cli service files list --mount models
+```
+
+**JSON**
+
+```sh
+tanit-cli service files list settings --json
 ```
 
 ---
@@ -2494,6 +3165,42 @@ tanit-cli service files pull path <path>
 tanit-cli service files pull path 'foo' --mount 'home' --local-dir 'foo' --pattern 'foo' --no-resume --overwrite --retries 3 --read-endpoint --progress --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+Downloads with HTTP Range resume. Files that already exist locally are skipped unless `--overwrite`. `--mount models` writes under `MODELS_DIR` when `--local-dir` is omitted. Other mounts write under the current directory.
+
+**One file**
+
+```sh
+tanit-cli service files pull public/diagram.png --local-dir ./downloads
+```
+
+**A model tree, filtered**
+
+```sh
+tanit-cli service files pull weights --mount models --pattern "**/*.gguf" --progress
+```
+
+**Settings sync folder**
+
+```sh
+tanit-cli service files pull settings --local-dir ./sync
+```
+
+**Re-download even when the local file exists**
+
+```sh
+tanit-cli service files pull public/diagram.png --overwrite
+```
+
+**JSON summary**
+
+```sh
+tanit-cli service files pull public --local-dir ./downloads --json
+```
+
 ---
 
 #### service files read
@@ -2520,6 +3227,42 @@ tanit-cli service files read path <path>
 
 ```sh
 tanit-cli service files read path 'foo' --mount 'home' --out 'foo' --download 'foo' --download-as 'foo' --server-url 'foo' --overwrite
+```
+
+##### Examples
+
+
+
+Text goes to stdout. Binary and large files need `--download`, `--download-as`, or `--out`.
+
+**Print a text file**
+
+```sh
+tanit-cli service files read settings/settings.json
+```
+
+**Save using the remote basename**
+
+```sh
+tanit-cli service files read public/diagram.png --download
+```
+
+**Save to an exact path**
+
+```sh
+tanit-cli service files read public/diagram.png --download-as ./out/diagram.png
+```
+
+**Metadata JSON beside the bytes**
+
+```sh
+tanit-cli service files read settings/settings.json --out ./settings.json --json
+```
+
+**Replace a local file that already exists**
+
+```sh
+tanit-cli service files read public/diagram.png --download --overwrite
 ```
 
 ---
@@ -2550,6 +3293,30 @@ tanit-cli service files get path <path>
 tanit-cli service files get path 'foo' --mount 'home' --download 'foo' --download-as 'foo' --out 'foo' --server-url 'foo' --overwrite
 ```
 
+##### Examples
+
+
+
+`files get` is an alias of `files read`. `--out` is an alias of `--download-as`. Binary and large files need a destination.
+
+**Print a text file**
+
+```sh
+tanit-cli service files get settings/settings.json
+```
+
+**Save using the remote basename**
+
+```sh
+tanit-cli service files get public/diagram.png --download
+```
+
+**Save to an exact path**
+
+```sh
+tanit-cli service files get public/diagram.png --out ./out/diagram.png --json
+```
+
 ---
 
 #### service files remove
@@ -2574,6 +3341,28 @@ tanit-cli service files remove paths {}
 tanit-cli service files remove paths '{}' --mount 'home' --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+**One path**
+
+```sh
+tanit-cli service files remove public/old.png
+```
+
+**Several paths**
+
+```sh
+tanit-cli service files remove inbox/a.pdf inbox/b.pdf --json
+```
+
+**Another mount**
+
+```sh
+tanit-cli service files remove scratch/tmp.bin --mount home
+```
+
 ---
 
 #### service pages
@@ -2590,6 +3379,62 @@ tanit-cli service pages create input {}
 
 ```sh
 tanit-cli service pages create input '{}' --title 'foo' --slug 'foo' --description 'foo' --tags 'foo' --owner 'foo' --parent 'foo' --category-id '{}' --include-images --conflict 'if-newer' --private 'foo' --hidden 'foo' --server-url 'foo' --dump-raw-http
+```
+
+##### Examples
+
+
+
+`.md` is wrapped as a markdown-text widget. `.page` uploads raw page JSON. Quote globs.
+
+A new page is link-only until front matter `hidden: false` or `--hidden false` lists it. The opening `---` block is stripped from the stored markdown. A flag overrides the same front-matter field. On create, `slug` comes from `--slug`, then front matter, then the filename. The create title comes from `--title`, otherwise from the filename. `title:` is applied on update. Create emits `{server}/user/{username}/pages/{slug}` as the run artifact. `--include-images` uploads referenced images to `home/public/{page-id-prefix}-{slug}/` and rewrites those refs to `./…`, which render as `/api/vfs/get/{owner-uuid}/…`.
+
+**One page from flags** (same shape as `releases/build-docs.sh`)
+
+```sh
+tanit-cli service pages create releases/web-docs/changelog.md \
+  --title "Changelog" \
+  --slug tanit-changelog \
+  --tags "changelog,release,tanit" \
+  --description "End-user release notes" \
+  --category-id knowlede-base
+```
+
+**Front matter supplies slug, tags, category, and visibility**
+
+```yaml
+---
+title: Tanit Chat
+slug: tanit-chat
+description: Chat with the files in your workspace.
+tags: [tanit, chat]
+category-id: [knowlede-base]
+hidden: false
+---
+```
+
+```sh
+tanit-cli service pages create "releases/web-docs/llm/*.md" --include-images
+```
+
+**Nested product pages**
+
+```sh
+tanit-cli service pages create "releases/web-docs/products/**/*.md" --include-images
+```
+
+**Link-only companion** (hidden from nav, still reachable by slug)
+
+```sh
+tanit-cli service pages create releases/web-docs/cli/llm_agent_more.md \
+  --slug llm_agent_more \
+  --hidden true
+```
+
+**JSON per created page**
+
+```sh
+tanit-cli service pages create page.md --json
 ```
 
 #### service pages create
@@ -2623,6 +3468,102 @@ tanit-cli service pages create input {}
 
 ```sh
 tanit-cli service pages create input '{}' --title 'foo' --slug 'foo' --description 'foo' --tags 'foo' --owner 'foo' --parent 'foo' --category-id '{}' --include-images --conflict 'if-newer' --private 'foo' --hidden 'foo' --server-url 'foo' --dump-raw-http
+```
+
+##### Examples
+
+
+
+`.md` becomes a markdown-text widget. `.page` uploads raw page JSON (`title`, `slug`, `owner`, `parent`, `tags`, `description` or `meta.description`, `is_public`, `visible`, `meta.categoryIds`). Quote globs so the CLI expands them. `--include-images` applies to `.md` only.
+
+**Front matter** is a `---` YAML block at the start of the file (a UTF-8 BOM is fine). That block is removed before the markdown is stored.
+
+A flag wins when both are set. Front matter fills what the command left empty.
+
+| Key | Also accepted | Effect |
+|---|---|---|
+| `slug` | | Page URL slug when `--slug` is omitted. If this is empty too, the filename stem is used, then the title. Lowercased, punctuation collapsed to `-`, at most 96 characters. |
+| `description` | `summary` | Meta description. |
+| `tags` | `keywords` | YAML list or one comma-separated string. |
+| `category-id` | `category_id`, `categoryIds`, `category-ids` | Slug, display name, or UUID. Same list shape as tags. Empty becomes `uncategorized`. |
+| `owner` | | Owner user UUID. |
+| `parent` | | Parent page UUID or slug. |
+| `private` | `is_public` | `private: true` sets `is_public` false. |
+| `hidden` | `visible` | Omitted: link-only. `hidden: false` or `visible: true` lists the page. |
+| `id` | `page_id`, `page-id` | Page UUID. Used on update to find the page. |
+| `new-slug` | `new_slug` | Replacement slug on update. |
+| `title` | | Applied on update. On create, the title comes from `--title`, otherwise from the filename (`product-tanit-viewer.md` becomes `product tanit viewer`). |
+
+Bools accept `true`/`yes`/`1` and `false`/`no`/`0`. A YAML block that does not parse is dropped from the body, and its fields are ignored.
+
+Creating a slug that owner already has updates that page's content, description, tags, and category. Pass `--hidden` or `--private` on that command when visibility should change too.
+
+**Public link.** Create and update emit `{server}/user/{username}/pages/{slug}` as the run artifact. The username comes from the login cache, otherwise the owner id. A public page is reachable at that URL. `hidden` leaves it out of navigation. `--private` keeps it to the owner. The finish toast labels the artifact with the page title or slug.
+
+`--include-images` probes image refs, uploads them to `home/public/{page-id-prefix}-{slug}/`, and rewrites the markdown to `./{folder}/file.png`. Render turns that into `{server}/api/vfs/get/{owner-uuid}/{folder}/file.png`. Image uploads use `--conflict if-newer` unless you pass `skip` or `overwrite`.
+
+Links inside the page are rewritten when the target exists: `page:slug` or a bare slug, `category:slug` / `cat:slug`, and a VFS path. Images and video become `/api/vfs/get/...`. Other files become a filebrowser URL. A relative path with no mount is looked up under `home/public`.
+
+**Flags, one file**
+
+```sh
+tanit-cli service pages create releases/web-docs/changelog.md \
+  --title "Changelog" \
+  --slug tanit-changelog \
+  --tags "changelog,release,tanit" \
+  --description "End-user release notes" \
+  --category-id knowlede-base
+```
+
+**Front matter** (listed page; create title still comes from `--title` or the filename)
+
+```yaml
+---
+title: Tanit Viewer
+slug: tanit-viewer
+tags: [tanit-viewer]
+category-id: [products]
+private: false
+hidden: false
+---
+```
+
+```sh
+tanit-cli service pages create releases/web-docs/products/tanit-viewer/product-tanit-viewer.md
+```
+
+**Many pages, upload images beside the markdown**
+
+```sh
+tanit-cli service pages create "releases/web-docs/llm/*.md" --include-images
+tanit-cli service pages create "releases/web-docs/products/**/*.md" --include-images
+```
+
+**Replace page images even when the remote copy is newer**
+
+```sh
+tanit-cli service pages create page.md --include-images --conflict overwrite
+```
+
+**Hidden companion page**
+
+```sh
+tanit-cli service pages create releases/web-docs/cli/llm_agent_more.md \
+  --slug llm_agent_more \
+  --hidden true \
+  --tags "llm,automation,cli"
+```
+
+**Private page**
+
+```sh
+tanit-cli service pages create draft.md --private --hidden true
+```
+
+**Raw `.page` JSON**
+
+```sh
+tanit-cli service pages create layout.page --slug layout-demo
 ```
 
 ---
@@ -2662,6 +3603,44 @@ tanit-cli service pages update input {}
 tanit-cli service pages update input '{}' --id 'foo' --slug 'foo' --owner 'foo' --title 'foo' --new-slug 'foo' --description 'foo' --tags 'foo' --parent 'foo' --category-id '{}' --include-images --conflict 'if-newer' --private 'foo' --hidden 'foo' --server-url 'foo' --dump-raw-http
 ```
 
+##### Examples
+
+
+
+A single file can be addressed with `--slug` or `--id`. Those flags are refused when more than one file matches. A batch reads `slug` or `id` (`page-id`) from each file's front matter or `.page` JSON, and reads `title`, `description`, `tags`, `category-id`, `parent`, and `new-slug` from that same block. `--hidden` and `--private` still apply to every file in the batch.
+
+On one file, a flag overrides the same front-matter field. The `---` block is removed from the stored markdown. `new-slug` renames the page. The run artifact is the same public page URL as create: `{server}/user/{username}/pages/{slug}`.
+
+**Update by slug**
+
+```sh
+tanit-cli service pages update releases/web-docs/changelog.md --slug tanit-changelog
+```
+
+**Update by page UUID**
+
+```sh
+tanit-cli service pages update page.md --id <page-uuid>
+```
+
+**Batch from front matter, refresh images**
+
+```sh
+tanit-cli service pages update "releases/web-docs/llm/*.md" --include-images
+```
+
+**Rename and list the page**
+
+```sh
+tanit-cli service pages update page.md --slug tanit-changelog --new-slug tanit-changes --hidden false
+```
+
+**Change category** (slug, display name, or UUID; repeat the flag)
+
+```sh
+tanit-cli service pages update page.md --slug tanit-changelog --category-id knowlede-base
+```
+
 ---
 
 #### service pages list
@@ -2683,6 +3662,28 @@ tanit-cli service pages list
 
 ```sh
 tanit-cli service pages list --user-id 'foo' --server-url 'foo'
+```
+
+##### Examples
+
+
+
+**Pages for the logged-in user**
+
+```sh
+tanit-cli service pages list
+```
+
+**JSON**
+
+```sh
+tanit-cli service pages list --json
+```
+
+**Another owner**
+
+```sh
+tanit-cli service pages list --user-id <user-uuid>
 ```
 
 ---
@@ -2712,6 +3713,40 @@ tanit-cli service pages get identifier <id>
 tanit-cli service pages get identifier 'foo' slug 'foo' --lang 'foo' --download --out 'foo' --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+**By owner and slug**
+
+```sh
+tanit-cli service pages get <owner> tanit-changelog
+```
+
+**By page id** (omit the slug)
+
+```sh
+tanit-cli service pages get <page-uuid>
+```
+
+**Download markdown** (`.md` when the page is markdown-text, otherwise `.page` JSON)
+
+```sh
+tanit-cli service pages get <owner> tanit-changelog --download
+```
+
+**Download into a directory**
+
+```sh
+tanit-cli service pages get <owner> tanit-changelog --download --out ./pages/
+```
+
+**Language and raw JSON**
+
+```sh
+tanit-cli service pages get <owner> tanit-changelog --lang en --json
+```
+
 ---
 
 #### service pages remove
@@ -2737,6 +3772,28 @@ tanit-cli service pages remove
 tanit-cli service pages remove ids '{}' --slug 'foo' --owner 'foo' --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+**By slug** (owner defaults to the logged-in user)
+
+```sh
+tanit-cli service pages remove --slug draft-page
+```
+
+**By page UUID**
+
+```sh
+tanit-cli service pages remove <page-uuid>
+```
+
+**Several ids**
+
+```sh
+tanit-cli service pages remove <uuid-a> <uuid-b> --json
+```
+
 ---
 
 #### service pictures
@@ -2753,6 +3810,22 @@ tanit-cli service pictures list
 
 ```sh
 tanit-cli service pictures list --user-id 'foo' --page 0 --limit 9999 --server-url 'foo'
+```
+
+##### Examples
+
+
+
+**List pictures for the logged-in user**
+
+```sh
+tanit-cli service pictures list --limit 20
+```
+
+**Fetch one record and download the asset**
+
+```sh
+tanit-cli service pictures get <picture-uuid> --download --out ./pictures/
 ```
 
 #### service pictures list
@@ -2776,6 +3849,28 @@ tanit-cli service pictures list
 
 ```sh
 tanit-cli service pictures list --user-id 'foo' --page 0 --limit 9999 --server-url 'foo'
+```
+
+##### Examples
+
+
+
+**First page of results**
+
+```sh
+tanit-cli service pictures list --page 0 --limit 20
+```
+
+**JSON**
+
+```sh
+tanit-cli service pictures list --json
+```
+
+**Another owner**
+
+```sh
+tanit-cli service pictures list --user-id <user-uuid> --limit 50
 ```
 
 ---
@@ -2803,6 +3898,28 @@ tanit-cli service pictures get id <id>
 tanit-cli service pictures get id 'foo' --download --out 'foo' --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+**Record only**
+
+```sh
+tanit-cli service pictures get <picture-uuid>
+```
+
+**Download the image** (`image_url` / `url` on the record)
+
+```sh
+tanit-cli service pictures get <picture-uuid> --download
+```
+
+**Download into a directory**
+
+```sh
+tanit-cli service pictures get <picture-uuid> --download --out ./pictures/ --json
+```
+
 ---
 
 #### service pictures remove
@@ -2826,6 +3943,22 @@ tanit-cli service pictures remove ids {}
 tanit-cli service pictures remove ids '{}' --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+**One picture**
+
+```sh
+tanit-cli service pictures remove <picture-uuid>
+```
+
+**Several records**
+
+```sh
+tanit-cli service pictures remove <picture-uuid-a> <picture-uuid-b> --json
+```
+
 ---
 
 #### service posts
@@ -2842,6 +3975,28 @@ tanit-cli service posts list
 
 ```sh
 tanit-cli service posts list --user-id 'foo' --page 0 --limit 9999 --visibility-filter 'foo' --server-url 'foo'
+```
+
+##### Examples
+
+
+
+**List posts**
+
+```sh
+tanit-cli service posts list --limit 20
+```
+
+**Create a post from images**
+
+```sh
+tanit-cli service posts create photo.png --title "Bench"
+```
+
+**Fetch one post and download its media**
+
+```sh
+tanit-cli service posts get <post-uuid> --download --out ./post-media/
 ```
 
 #### service posts list
@@ -2866,6 +4021,31 @@ tanit-cli service posts list
 
 ```sh
 tanit-cli service posts list --user-id 'foo' --page 0 --limit 9999 --visibility-filter 'foo' --server-url 'foo'
+```
+
+##### Examples
+
+
+
+Public posts are the default.
+
+**Logged-in user**
+
+```sh
+tanit-cli service posts list --page 0 --limit 20
+```
+
+**Private and unlisted**
+
+```sh
+tanit-cli service posts list --visibility-filter private
+tanit-cli service posts list --visibility-filter non-public --json
+```
+
+**Another owner**
+
+```sh
+tanit-cli service posts list --user-id <user-uuid> --limit 20
 ```
 
 ---
@@ -2896,6 +4076,28 @@ tanit-cli service posts get id <id>
 tanit-cli service posts get id 'foo' --sizes 'foo' --formats 'foo' --lang 'foo' --download --out 'foo' --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+**Post record**
+
+```sh
+tanit-cli service posts get <post-uuid>
+```
+
+**Responsive image query**
+
+```sh
+tanit-cli service posts get <post-uuid> --sizes 480,960 --formats webp,jpeg --lang en
+```
+
+**Download media into a directory**
+
+```sh
+tanit-cli service posts get <post-uuid> --download --out ./post-media/ --json
+```
+
 ---
 
 #### service posts remove
@@ -2917,6 +4119,22 @@ tanit-cli service posts remove ids {}
 
 ```sh
 tanit-cli service posts remove ids '{}' --server-url 'foo'
+```
+
+##### Examples
+
+
+
+**One post**
+
+```sh
+tanit-cli service posts remove <post-uuid>
+```
+
+**Several posts**
+
+```sh
+tanit-cli service posts remove <post-uuid-a> <post-uuid-b> --json
 ```
 
 ---
@@ -2947,6 +4165,36 @@ tanit-cli service posts create files {}
 tanit-cli service posts create files '{}' --title 'foo' --description 'foo' --visibility 'public' --server-url 'foo' --dump-raw-http --job-ui
 ```
 
+##### Examples
+
+
+
+Creates the post, uploads each file through `/api/images`, then attaches pictures. The default title is the first filename. Visibility is `public`, `listed`, or `private`.
+
+**One image**
+
+```sh
+tanit-cli service posts create photo.png --title "Bench" --description "Shop photo"
+```
+
+**Several images**
+
+```sh
+tanit-cli service posts create a.jpg b.png --visibility listed --json
+```
+
+**Private post**
+
+```sh
+tanit-cli service posts create draft.png --visibility private
+```
+
+**Windows share dialog** (Explorer `Share to Tanit...` verb)
+
+```sh
+tanit-cli service posts create photo.png --job-ui
+```
+
 ---
 
 #### service categories
@@ -2967,6 +4215,30 @@ tanit-cli service categories list
 
 ```sh
 tanit-cli service categories list --user-id 'foo' --all --parent-slug 'foo' --include-children --lang 'foo' --server-url 'foo'
+```
+
+##### Examples
+
+
+
+`categories` and `cats` are the same command. `--type` is set on the group and defaults to `pages`.
+
+**Your page categories**
+
+```sh
+tanit-cli service categories list
+```
+
+**Pages in a category**
+
+```sh
+tanit-cli service categories items knowlede-base
+```
+
+**Create a category**
+
+```sh
+tanit-cli service categories create "Release notes" --slug release-notes
 ```
 
 #### service categories list
@@ -2994,6 +4266,36 @@ tanit-cli service categories list
 tanit-cli service categories list --user-id 'foo' --all --parent-slug 'foo' --include-children --lang 'foo' --server-url 'foo'
 ```
 
+##### Examples
+
+
+
+Default type is `pages`, and the list is your own categories. `service cats` is the same command.
+
+**Own page categories**
+
+```sh
+tanit-cli service categories list
+```
+
+**Post categories, including ones you do not own**
+
+```sh
+tanit-cli service categories --type posts list --all
+```
+
+**Children of one parent, with nested children**
+
+```sh
+tanit-cli service categories list --parent-slug knowlede-base --include-children
+```
+
+**Translated names**
+
+```sh
+tanit-cli service categories list --lang en --json
+```
+
 ---
 
 #### service categories get
@@ -3015,6 +4317,22 @@ tanit-cli service categories get id <id>
 
 ```sh
 tanit-cli service categories get id 'foo' --server-url 'foo'
+```
+
+##### Examples
+
+
+
+**Category plus its parents and children**
+
+```sh
+tanit-cli service categories get <category-uuid>
+```
+
+**JSON**
+
+```sh
+tanit-cli service categories get <category-uuid> --json
 ```
 
 ---
@@ -3040,6 +4358,30 @@ tanit-cli service categories items slug <value>
 
 ```sh
 tanit-cli service categories items slug 'foo' --limit 9999 --no-descendants{false} --server-url 'foo'
+```
+
+##### Examples
+
+
+
+Lists pages in the category, including child categories unless `--no-descendants` is set.
+
+**Category slug**
+
+```sh
+tanit-cli service categories items knowlede-base
+```
+
+**Cap the list**
+
+```sh
+tanit-cli service categories items knowlede-base --limit 20
+```
+
+**This category only**
+
+```sh
+tanit-cli service categories items knowlede-base --no-descendants --json
 ```
 
 ---
@@ -3071,6 +4413,34 @@ tanit-cli service categories create name <value>
 tanit-cli service categories create name 'foo' --slug 'foo' --description 'foo' --visibility 'foo' --parent 'foo' --relation-type 'foo' --server-url 'foo' --dump-raw-http
 ```
 
+##### Examples
+
+
+
+`--type` on the parent selects the category meta type (`pages` by default).
+
+**Name only** (slug is derived from the name, visibility defaults to public)
+
+```sh
+tanit-cli service categories create "Release notes"
+```
+
+**Slug, description, and a parent**
+
+```sh
+tanit-cli service categories --type pages create "Release notes" \
+  --slug release-notes \
+  --description "End-user notes" \
+  --visibility public \
+  --parent <parent-category-uuid>
+```
+
+**Unlisted**
+
+```sh
+tanit-cli service categories create "Drafts" --visibility unlisted --json
+```
+
 ---
 
 #### service categories update
@@ -3099,6 +4469,22 @@ tanit-cli service categories update id <id>
 tanit-cli service categories update id 'foo' --name 'foo' --slug 'foo' --description 'foo' --visibility 'foo' --server-url 'foo' --dump-raw-http
 ```
 
+##### Examples
+
+
+
+**Rename**
+
+```sh
+tanit-cli service categories update <category-uuid> --name "Notes" --slug notes
+```
+
+**Visibility**
+
+```sh
+tanit-cli service categories update <category-uuid> --visibility unlisted --json
+```
+
 ---
 
 #### service categories remove
@@ -3120,6 +4506,22 @@ tanit-cli service categories remove ids {}
 
 ```sh
 tanit-cli service categories remove ids '{}' --server-url 'foo'
+```
+
+##### Examples
+
+
+
+**One category**
+
+```sh
+tanit-cli service categories remove <category-uuid>
+```
+
+**Several categories**
+
+```sh
+tanit-cli service categories remove <category-uuid-a> <category-uuid-b> --json
 ```
 
 ---
@@ -3512,7 +4914,7 @@ tanit-cli audio record --dst 'foo' --input 'foo' --input-source 'mic' --desktop 
 
 ##### Examples
 
-Hand-picked patterns beyond the auto-generated flags above.
+
 
 **Desktop loopback → WAV** (48 kHz stereo default; PCM spills to disk after ~30 s in RAM)
 
@@ -6826,6 +8228,31 @@ tanit-cli info tools
 tanit-cli info tools --dst 'releases/web-docs/cli/cli.md' --stdout --skill --author 'foo'
 ```
 
+---
+
+#### info compact
+
+Compact CLI stem list for agents, including custom commands. Each line is `stem (arg0,arg1,...)` plus a short description, and `=> return` when a result is named. Writes cli_compact.md and cli_compact.json (the other extension beside --dst). --stdout prints one of them (--json selects the JSON).
+
+Options:
+
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
+- `--stdout` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print to stdout instead of writing --dst.
+- `--skill` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
+- `--author` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
+
+**Example**
+
+```sh
+tanit-cli info compact
+```
+
+**Full example**
+
+```sh
+tanit-cli info compact --dst 'releases/web-docs/cli/cli.md' --stdout --skill --author 'foo'
+```
+
 ### LLM & Agents
 
 #### llama
@@ -7513,7 +8940,7 @@ tanit-cli media search pattern '*' --source-dir 'foo'
 
 #### mcp
 
-MCP utilities: run a foreground agent-tool server, or inspect/call external MCP servers.
+MCP utilities: run a foreground agent-tool server, or inspect, add, remove, and call external MCP servers.
 
 Options:
 
@@ -7536,7 +8963,7 @@ tanit-cli mcp --preset 'foo' --bind '127.0.0.1' --port 4444 --disable-tools 'foo
 
 #### mcp client
 
-Inspect and call external MCP servers configured in mcp.json.
+Inspect, add, remove, and call external MCP servers configured in mcp.json.
 
 Options:
 
@@ -7630,6 +9057,28 @@ tanit-cli mcp client call --server <value> --tool <value>
 tanit-cli mcp client call --server 'foo' --tool 'foo' --args '{}' --timeout-ms 0
 ```
 
+##### Examples
+
+Cached tools are also subcommands: `mcp client <server> <tool> --help`. Schema fields become flags. Hyphens in a flag name become underscores. `--args` is only for nested JSON; flags override those keys.
+
+**Flags, no JSON payload**
+
+```sh
+tanit-cli mcp client call --server Tanit --tool skillhub-search_skills --query pdf --limit 2
+```
+
+**Same call as a tool subcommand**
+
+```sh
+tanit-cli mcp client Tanit skillhub-search_skills --query pdf --limit 2
+```
+
+**Nested fields still go through `--args`**
+
+```sh
+tanit-cli mcp client call --server Tanit --tool skillhub-search_skills --args '{"query":"pdf","limit":2}'
+```
+
 ---
 
 #### mcp client query
@@ -7655,6 +9104,102 @@ tanit-cli mcp client query --filter 'foo' --input 'foo'
 
 ---
 
+#### mcp client add
+
+Add an MCP server to mcp.json. Non-interactive, same shapes Claude, Codex, and Hermes agents already use.
+
+Options:
+
+- `name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Server name (letters, digits, '_' or '-').
+- `target` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - URL, or the stdio command and args. Args that start with '-' go after --.
+- `--transport` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - stdio | http | sse. streamable-http is http. Default: http when a URL is given, otherwise stdio.
+- `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - HTTP or SSE endpoint (Hermes and Codex --url).
+- `--command` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Stdio executable (Hermes --command). Args follow -- or --args.
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - One stdio argv token. Repeat. Leading dashes: --args=-y.
+- `--env` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Stdio KEY=VALUE. Repeat. Not valid with a URL.
+- `--header` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - HTTP header "Name: value". Repeat.
+- `--bearer-token-env-var` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Env var read now and saved as Authorization: Bearer (Codex). HTTP and SSE only.
+- `--config` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Server object JSON, or {"mcpServers":{...}} (Claude add-json). Flags override.
+- `--force` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Replace an existing server with this name.
+
+**Example**
+
+```sh
+tanit-cli mcp client add name <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client add name 'foo' target '{}' --transport 'foo' --url 'foo' --command 'foo' --args '{}' --env '{}' --header '{}' --bearer-token-env-var 'foo' --config 'foo' --force
+```
+
+##### Examples
+
+**HTTP endpoint**
+
+```sh
+tanit-cli mcp client add --transport http notion https://mcp.notion.com/mcp
+tanit-cli mcp client add ink --url https://mcp.ml.ink/mcp
+```
+
+**stdio command** (args that start with `-` go after `--`, or use repeated `--args`)
+
+```sh
+tanit-cli mcp client add airtable --env AIRTABLE_API_KEY=KEY -- npx -y airtable-mcp-server
+tanit-cli mcp client add github --command npx --args=-y --args=@modelcontextprotocol/server-github
+```
+
+**Server object JSON** (flags override the same fields)
+
+```sh
+tanit-cli mcp client add myserver --config '{"type":"http","url":"https://example/mcp"}'
+```
+
+**Replace an existing name**
+
+```sh
+tanit-cli mcp client add notion https://mcp.notion.com/mcp --force
+```
+
+---
+
+#### mcp client remove
+
+Remove an MCP server from mcp.json. Non-interactive (Claude, Codex, and Hermes mcp remove).
+
+Options:
+
+- `name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Server name to remove.
+
+**Example**
+
+```sh
+tanit-cli mcp client remove name <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client remove name 'foo'
+```
+
+##### Examples
+
+**Drop one server** (missing name leaves `mcp.json` unchanged)
+
+```sh
+tanit-cli mcp client remove notion
+```
+
+**JSON, including the removed object**
+
+```sh
+tanit-cli mcp --json client remove notion
+```
+
+---
+
 #### mcp client Tanit
 
 MCP server from the tools cache.
@@ -7662,14 +9207,747 @@ MCP server from the tools cache.
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-source-languages
+tanit-cli mcp client Tanit serpapi-search_dashboard
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit deepl-get-source-languages --args '{}' --timeout-ms 0
+tanit-cli mcp client Tanit serpapi-search_dashboard --args '{}' --timeout-ms 0 --params 'foo'
 ```
+
+#### mcp client Tanit serpapi-search_dashboard
+
+Interactive dashboard variant of `search`: returns summary metrics, a source breakdown chart, and a results table with a click-to-expand detail panel, all rendered in the conversat
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_dashboard
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_dashboard --args '{}' --timeout-ms 0 --params 'foo'
+```
+
+---
+
+#### mcp client Tanit serpapi-search_table
+
+Interactive UI variant of `search`: returns organic results as a sortable, searchable table rendered in the conversation. Same params as `search`. Use when the host supports MCP Ap
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_table
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_table --args '{}' --timeout-ms 0 --params 'foo'
+```
+
+---
+
+#### mcp client Tanit serpapi-search
+
+Universal search tool supporting all SerpApi engines and result types.
+
+    When to use:
+        - Any query needing live, structured SERP data: web results, news, product listings
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Response mode (default: "complete")
+- "complete": Returns the full response
+- "compact": Removes metadata fields from JSON responses; Markdown is unchanged
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Dictionary of SerpApi engine-specific parameters. Common parameters include:
+- q: Search query (required for most engines)
+- engine: Search engine to use (default: "google_light")
+- location: Geographic location filter
+- output: Response format; omit for JSON or set to "md" for Markdown
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo' --params 'foo'
+```
+
+---
+
+#### mcp client Tanit tavily-tavily_search
+
+Search the web for current information on any topic. Use for news, facts, or data beyond your knowledge cutoff. Returns snippets and source URLs.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--country` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Boost search results from a specific country. Must be a full country name (e.g., 'United States', 'Japan', 'Germany'). ISO country codes (e.g., 'us', 'jp') are not supported. Available only if topic is general. See https://docs.tavily.com/documentation/api-reference/search for the full list of supported countries.
+- `--end_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results before the specified end date. Required to be written in the format YYYY-MM-DD
+- `--exact_match` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Only return results containing the exact phrase(s) in quotes in your query
+- `--exclude_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List of domains to specifically exclude, if the user asks to exclude a domain set this to the domain of the site
+- `--include_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - A list of domains to specifically include in the search results, if the user asks to search on specific sites set this to the domain of the site
+- `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to include the favicon URL for each result
+- `--include_image_descriptions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include a list of query-related images and their descriptions in the response
+- `--include_images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include a list of query-related images in the response
+- `--include_raw_content` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include the cleaned and parsed HTML content of each search result
+- `--max_results` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The maximum number of search results to return
+- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Search query
+- `--search_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The depth of the search. 'basic' for generic results, 'advanced' for more thorough search, 'fast' for optimized low latency with high relevance, 'ultra-fast' for prioritizing latency above all else
+- `--start_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results after the specified start date. Required to be written in the format YYYY-MM-DD.
+- `--time_range` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The time range back from the current date to include in the search results
+- `--topic` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The category of the search. This will determine which of our agents will be used for the search
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_search --query <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_search --args '{}' --timeout-ms 0 --country 'foo' --end_date 'foo' --exact_match 'foo' --exclude_domains '{}' --include_domains '{}' --include_favicon --include_image_descriptions --include_images --include_raw_content --max_results 'foo' --query 'foo' --search_depth 'foo' --start_date 'foo' --time_range 'foo' --topic 'foo'
+```
+
+---
+
+#### mcp client Tanit tavily-tavily_extract
+
+Extract content from URLs. Returns raw page content in markdown or text format.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--extract_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Use 'advanced' for LinkedIn, protected sites, or tables/embedded content
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output format
+- `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include favicon URLs
+- `--include_images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include images from pages
+- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Query to rerank content chunks by relevance
+- `--urls` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List of URLs to extract content from
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_extract
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_extract --args '{}' --timeout-ms 0 --extract_depth 'foo' --format 'foo' --include_favicon --include_images --query 'foo' --urls '{}'
+```
+
+---
+
+#### mcp client Tanit tavily-tavily_crawl
+
+Crawl a website starting from a URL. Extracts content from pages with configurable depth and breadth.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--allow_external` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to return external links in the final response
+- `--extract_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Advanced extraction retrieves more data, including tables and embedded content, with higher success but may increase latency
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.
+- `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to include the favicon URL for each result
+- `--instructions` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Natural language instructions for the crawler. Instructions specify which types of pages the crawler should return.
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Total number of links the crawler will process before stopping
+- `--max_breadth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max number of links to follow per level of the tree (i.e., per page)
+- `--max_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max depth of the crawl. Defines how far from the base URL the crawler can explore.
+- `--select_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to restrict crawling to specific domains or subdomains (e.g., ^docs\.example\.com$)
+- `--select_paths` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)
+- `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The root URL to begin the crawl
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_crawl --url <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_crawl --args '{}' --timeout-ms 0 --allow_external --extract_depth 'foo' --format 'foo' --include_favicon --instructions 'foo' --limit 'foo' --max_breadth 'foo' --max_depth 'foo' --select_domains '{}' --select_paths '{}' --url 'foo'
+```
+
+---
+
+#### mcp client Tanit tavily-tavily_map
+
+Map a website's structure. Returns a list of URLs found starting from the base URL.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--allow_external` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to return external links in the final response
+- `--instructions` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Natural language instructions for the crawler
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Total number of links the crawler will process before stopping
+- `--max_breadth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max number of links to follow per level of the tree (i.e., per page)
+- `--max_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max depth of the mapping. Defines how far from the base URL the crawler can explore
+- `--select_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to restrict crawling to specific domains or subdomains (e.g., ^docs\.example\.com$)
+- `--select_paths` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)
+- `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The root URL to begin the mapping
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_map --url <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_map --args '{}' --timeout-ms 0 --allow_external --instructions 'foo' --limit 'foo' --max_breadth 'foo' --max_depth 'foo' --select_domains '{}' --select_paths '{}' --url 'foo'
+```
+
+---
+
+#### mcp client Tanit tavily-tavily_research
+
+Perform comprehensive research on a given topic or question. Use this tool when you need to gather information from multiple sources, including web pages, documents, and other reso
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - A comprehensive description of the research task
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Defines the degree of depth of the research. 'mini' is good for narrow tasks with few subtopics. 'pro' is good for broad tasks with many subtopics
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_research --input <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit tavily-tavily_research --args '{}' --timeout-ms 0 --input 'foo' --model 'foo'
+```
+
+---
+
+#### mcp client Tanit skillhub-search_skills
+
+Search for Claude Code Skills using natural language. Returns relevant skills based on semantic matching.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--category` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Filter by category (optional)
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of results (1-20, default: 5)
+- `--min_score` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Minimum quality score 0-100 (optional)
+- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Natural language search query (e.g., 'PDF processing', 'code review', 'git workflow')
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-search_skills --query <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-search_skills --args '{}' --timeout-ms 0 --category 'foo' --limit 'foo' --min_score 'foo' --query 'foo'
+```
+
+##### Examples
+
+**Semantic search** (`--query` is required; `--limit` is 1–20)
+
+```sh
+tanit-cli mcp client Tanit skillhub-search_skills --query "pdf processing" --limit 5
+```
+
+**Category filter**
+
+```sh
+tanit-cli mcp client Tanit skillhub-search_skills --query pdf --category development --min_score 50
+```
+
+---
+
+#### mcp client Tanit skillhub-search_registry_skills
+
+Search an upstream skill registry, or paste a RedSkill install prompt/identifier to resolve the exact package even when registry search misses it. Results are not approved for inst
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - number
+- `--page` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - number
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Distribution registry. This is not a target agent.
+- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Registry search query, exact identifier, official URL, or copied RedSkill install prompt
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-search_registry_skills --query <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-search_registry_skills --args '{}' --timeout-ms 0 --limit 'foo' --page 'foo' --provider 'foo' --query 'foo'
+```
+
+---
+
+#### mcp client Tanit skillhub-resolve_registry_skill
+
+Resolve one upstream distribution by exact identifier without importing or executing it.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--identifier` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Exact canonical upstream identifier
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-resolve_registry_skill --identifier <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-resolve_registry_skill --args '{}' --timeout-ms 0 --identifier 'foo' --provider 'foo'
+```
+
+---
+
+#### mcp client Tanit skillhub-import_registry_skill
+
+Preview or confirm a private registry import. Confirmation normalizes the files and leaves them pending separate canonical security review; this tool never executes shell commands.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--confirm` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - First call with false for preview; true confirms the import after review.
+- `--expected_sha256` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - SHA-256 returned by the preview; required when confirm is true.
+- `--identifier_or_url` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Exact RedSkill identifier, official URL, or supported install prompt
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-import_registry_skill --identifier_or_url <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-import_registry_skill --args '{}' --timeout-ms 0 --confirm --expected_sha256 'foo' --identifier_or_url 'foo' --provider 'foo'
+```
+
+---
+
+#### mcp client Tanit skillhub-get_skill_detail
+
+Get detailed information about a specific skill including evaluation, pros/cons, and optionally the full SKILL.md content.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--include_content` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include full SKILL.md content (default: false)
+- `--skill_id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Skill ID or slug (e.g., 'pdf-processor' or UUID)
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-get_skill_detail --skill_id <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-get_skill_detail --args '{}' --timeout-ms 0 --include_content --skill_id 'foo'
+```
+
+##### Examples
+
+**Summary** (slug or UUID)
+
+```sh
+tanit-cli mcp client Tanit skillhub-get_skill_detail --skill_id anthropics-skills-pdf
+```
+
+**Include SKILL.md**
+
+```sh
+tanit-cli mcp client Tanit skillhub-get_skill_detail --skill_id anthropics-skills-pdf --include_content
+```
+
+---
+
+#### mcp client Tanit skillhub-install_skill
+
+Install a skill to the local filesystem. First call shows a preview, then call with confirm=true to install. Auto-detects current CLI environment (detected: claude).
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--accept_risk` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Explicitly acknowledge a caution decision. Does not override pending or blocked.
+- `--agents` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Target agents. Auto-detected: claude. Override to install for multiple agents.
+- `--confirm` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to confirm and execute installation. First call without confirm to preview.
+- `--expected_artifact_sha256` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Artifact SHA-256 returned by preflight; required with confirm=true.
+- `--expected_assessment_id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Immutable security assessment ID returned by preflight; required with confirm=true.
+- `--expected_policy_version` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Security policy version returned by preflight; required with confirm=true.
+- `--expected_scan_run_id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Full-artifact scan ID returned by preflight; required with confirm=true.
+- `--expected_source_revision` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Exact RedSkill revision returned by preflight.
+- `--expected_source_type` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Artifact source returned by preflight.
+- `--skill_id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Skill ID, slug, or redskill:<identifier> to install
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-install_skill --skill_id <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-install_skill --args '{}' --timeout-ms 0 --accept_risk --agents '{}' --confirm --expected_artifact_sha256 'foo' --expected_assessment_id 'foo' --expected_policy_version 'foo' --expected_scan_run_id 'foo' --expected_source_revision 'foo' --expected_source_type 'foo' --skill_id 'foo'
+```
+
+##### Examples
+
+`skillhub-install_skill` runs inside the Tanit MCP server. "Local filesystem" and the detected agent (`claude`) are that server, so a confirmed install never lands in this machine's `config_dir()/skills`. `skills add` is the local write: it only reads `get_skill_detail` over MCP, then saves `SKILL.md` here.
+
+**Preview** (no files written)
+
+```sh
+tanit-cli mcp client Tanit skillhub-install_skill --skill_id anthropics-skills-pdf
+```
+
+**Confirm** repeats the preflight hashes from that preview (`--expected_artifact_sha256`, `--expected_assessment_id`, `--expected_policy_version`, `--expected_scan_run_id`).
+
+```sh
+tanit-cli mcp client Tanit skillhub-install_skill --skill_id anthropics-skills-pdf --confirm --accept_risk --agents claude --expected_artifact_sha256 <sha256> --expected_assessment_id <uuid> --expected_policy_version <version> --expected_scan_run_id <uuid>
+```
+
+---
+
+#### mcp client Tanit skillhub-browse_catalog
+
+Browse the skill catalog with filtering and sorting options. Good for discovering skills by category or popularity.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--category` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Filter by category (optional)
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of results (1-50, default: 10)
+- `--min_score` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Minimum quality score 0-100 (optional)
+- `--offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Pagination offset (default: 0)
+- `--sort` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sort order (default: composite)
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-browse_catalog
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-browse_catalog --args '{}' --timeout-ms 0 --category 'foo' --limit 'foo' --min_score 'foo' --offset 'foo' --sort 'foo'
+```
+
+##### Examples
+
+**First page, default sort** (`composite`)
+
+```sh
+tanit-cli mcp client Tanit skillhub-browse_catalog --limit 10
+```
+
+**Recent skills in one category**
+
+```sh
+tanit-cli mcp client Tanit skillhub-browse_catalog --sort recent --category development --offset 10 --limit 10
+```
+
+---
+
+#### mcp client Tanit skillhub-recommend_skills
+
+Get skill recommendations based on what you're working on. Uses semantic matching to find relevant skills.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--context` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Description of your current task or project
+- `--current_skills` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Already installed skill IDs/slugs to exclude
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of recommendations (1-10, default: 5)
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-recommend_skills --context <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-recommend_skills --args '{}' --timeout-ms 0 --context 'foo' --current_skills '{}' --limit 'foo'
+```
+
+##### Examples
+
+**From a task description**
+
+```sh
+tanit-cli mcp client Tanit skillhub-recommend_skills --context "edit and merge PDF files" --limit 5
+```
+
+**Skip skills already installed** (`--current_skills` repeats)
+
+```sh
+tanit-cli mcp client Tanit skillhub-recommend_skills --context "edit PDFs" --current_skills anthropics-skills-pdf --limit 3
+```
+
+---
+
+#### mcp client Tanit skillhub-search_skill_stacks
+
+Search for SkillStacks — pre-configured collections of related skills for common workflows (e.g., sales, legal, finance). Each stack bundles multiple skills together for easy bat
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--featured` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Only show featured stacks (optional)
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of results (1-50, default: 10)
+- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Search query to filter stacks by name or description (optional)
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-search_skill_stacks
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-search_skill_stacks --args '{}' --timeout-ms 0 --featured --limit 'foo' --query 'foo'
+```
+
+---
+
+#### mcp client Tanit skillhub-install_skill_stack
+
+Install all skills from a SkillStack to the local filesystem. First call shows a preview of all skills, then call with confirm=true to batch install. Auto-detects CLI environment (
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--accept_risk` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Explicitly acknowledge caution decisions for every skill in the stack.
+- `--agents` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Target agents. Auto-detected: claude.
+- `--confirm` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to confirm and execute batch installation.
+- `--stack_id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - SkillStack ID (e.g., 'sales-workflow')
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-install_skill_stack --stack_id <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-install_skill_stack --args '{}' --timeout-ms 0 --accept_risk --agents '{}' --confirm --stack_id 'foo'
+```
+
+---
+
+#### mcp client Tanit skillhub-create_skill
+
+Create a new skill on SkillHub. Returns the skill ID and slug. Requires SKILLHUB_API_KEY.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--category` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Skill category (optional)
+- `--description` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Description of the skill
+- `--description_zh` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chinese description (optional)
+- `--name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Name of the skill
+- `--tags` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Tags for the skill (optional)
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-create_skill --description <value> --name <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-create_skill --args '{}' --timeout-ms 0 --category 'foo' --description 'foo' --description_zh 'foo' --name 'foo' --tags '{}'
+```
+
+---
+
+#### mcp client Tanit skillhub-push_skill
+
+Push files (e.g., SKILL.md) to an existing skill. Creates a new version. Requires SKILLHUB_API_KEY.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--change_summary` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Summary of changes (optional)
+- `--files` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Files to push
+- `--skill_id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Skill ID to push files to
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-push_skill --skill_id <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-push_skill --args '{}' --timeout-ms 0 --change_summary 'foo' --files '{}' --skill_id 'foo'
+```
+
+---
+
+#### mcp client Tanit skillhub-publish_skill
+
+Publish a skill to make it publicly visible on SkillHub. Requires SKILLHUB_API_KEY.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--skill_id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Skill ID to publish
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-publish_skill --skill_id <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-publish_skill --args '{}' --timeout-ms 0 --skill_id 'foo'
+```
+
+---
+
+#### mcp client Tanit skillhub-unpublish_skill
+
+Unpublish a skill to hide it from the public catalog. Requires SKILLHUB_API_KEY.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--skill_id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Skill ID to unpublish
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-unpublish_skill --skill_id <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-unpublish_skill --args '{}' --timeout-ms 0 --skill_id 'foo'
+```
+
+---
+
+#### mcp client Tanit skillhub-list_my_skills
+
+List all skills you own. Returns a table with name, slug, status, version, and last updated. Requires SKILLHUB_API_KEY.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-list_my_skills
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-list_my_skills --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit skillhub-generate_skill
+
+AI-generate a complete SKILL.md file from a natural language description. Uses streaming generation. Requires SKILLHUB_API_KEY.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--category` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Skill category (optional)
+- `--description` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Description of the skill to generate (be specific about what the skill should do)
+- `--language` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output language (default: en)
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-generate_skill --description <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit skillhub-generate_skill --args '{}' --timeout-ms 0 --category 'foo' --description 'foo' --language 'foo'
+```
+
+---
 
 #### mcp client Tanit deepl-get-source-languages
 
@@ -7677,8 +9955,8 @@ Get list of available source languages for translation
 
 Options:
 
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
 
 **Example**
 
@@ -7998,245 +10276,6 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --instructionId <value> 
 
 ```sh
 tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms 0 --instructionId 'foo' --styleId 'foo'
-```
-
----
-
-#### mcp client Tanit tavily-tavily_search
-
-Search the web for current information on any topic. Use for news, facts, or data beyond your knowledge cutoff. Returns snippets and source URLs.
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--country` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Boost search results from a specific country. Must be a full country name (e.g., 'United States', 'Japan', 'Germany'). ISO country codes (e.g., 'us', 'jp') are not supported. Available only if topic is general. See https://docs.tavily.com/documentation/api-reference/search for the full list of supported countries.
-- `--end_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results before the specified end date. Required to be written in the format YYYY-MM-DD
-- `--exact_match` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Only return results containing the exact phrase(s) in quotes in your query
-- `--exclude_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List of domains to specifically exclude, if the user asks to exclude a domain set this to the domain of the site
-- `--include_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - A list of domains to specifically include in the search results, if the user asks to search on specific sites set this to the domain of the site
-- `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to include the favicon URL for each result
-- `--include_image_descriptions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include a list of query-related images and their descriptions in the response
-- `--include_images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include a list of query-related images in the response
-- `--include_raw_content` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include the cleaned and parsed HTML content of each search result
-- `--max_results` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The maximum number of search results to return
-- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Search query
-- `--search_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The depth of the search. 'basic' for generic results, 'advanced' for more thorough search, 'fast' for optimized low latency with high relevance, 'ultra-fast' for prioritizing latency above all else
-- `--start_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results after the specified start date. Required to be written in the format YYYY-MM-DD.
-- `--time_range` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The time range back from the current date to include in the search results
-- `--topic` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The category of the search. This will determine which of our agents will be used for the search
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit tavily-tavily_search --query <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit tavily-tavily_search --args '{}' --timeout-ms 0 --country 'foo' --end_date 'foo' --exact_match 'foo' --exclude_domains '{}' --include_domains '{}' --include_favicon --include_image_descriptions --include_images --include_raw_content --max_results 'foo' --query 'foo' --search_depth 'foo' --start_date 'foo' --time_range 'foo' --topic 'foo'
-```
-
----
-
-#### mcp client Tanit tavily-tavily_extract
-
-Extract content from URLs. Returns raw page content in markdown or text format.
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--extract_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Use 'advanced' for LinkedIn, protected sites, or tables/embedded content
-- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output format
-- `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include favicon URLs
-- `--include_images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include images from pages
-- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Query to rerank content chunks by relevance
-- `--urls` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List of URLs to extract content from
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit tavily-tavily_extract
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit tavily-tavily_extract --args '{}' --timeout-ms 0 --extract_depth 'foo' --format 'foo' --include_favicon --include_images --query 'foo' --urls '{}'
-```
-
----
-
-#### mcp client Tanit tavily-tavily_crawl
-
-Crawl a website starting from a URL. Extracts content from pages with configurable depth and breadth.
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--allow_external` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to return external links in the final response
-- `--extract_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Advanced extraction retrieves more data, including tables and embedded content, with higher success but may increase latency
-- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.
-- `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to include the favicon URL for each result
-- `--instructions` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Natural language instructions for the crawler. Instructions specify which types of pages the crawler should return.
-- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Total number of links the crawler will process before stopping
-- `--max_breadth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max number of links to follow per level of the tree (i.e., per page)
-- `--max_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max depth of the crawl. Defines how far from the base URL the crawler can explore.
-- `--select_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to restrict crawling to specific domains or subdomains (e.g., ^docs\.example\.com$)
-- `--select_paths` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)
-- `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The root URL to begin the crawl
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit tavily-tavily_crawl --url <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit tavily-tavily_crawl --args '{}' --timeout-ms 0 --allow_external --extract_depth 'foo' --format 'foo' --include_favicon --instructions 'foo' --limit 'foo' --max_breadth 'foo' --max_depth 'foo' --select_domains '{}' --select_paths '{}' --url 'foo'
-```
-
----
-
-#### mcp client Tanit tavily-tavily_map
-
-Map a website's structure. Returns a list of URLs found starting from the base URL.
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--allow_external` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to return external links in the final response
-- `--instructions` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Natural language instructions for the crawler
-- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Total number of links the crawler will process before stopping
-- `--max_breadth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max number of links to follow per level of the tree (i.e., per page)
-- `--max_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max depth of the mapping. Defines how far from the base URL the crawler can explore
-- `--select_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to restrict crawling to specific domains or subdomains (e.g., ^docs\.example\.com$)
-- `--select_paths` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)
-- `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The root URL to begin the mapping
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit tavily-tavily_map --url <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit tavily-tavily_map --args '{}' --timeout-ms 0 --allow_external --instructions 'foo' --limit 'foo' --max_breadth 'foo' --max_depth 'foo' --select_domains '{}' --select_paths '{}' --url 'foo'
-```
-
----
-
-#### mcp client Tanit tavily-tavily_research
-
-Perform comprehensive research on a given topic or question. Use this tool when you need to gather information from multiple sources, including web pages, documents, and other reso
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - A comprehensive description of the research task
-- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Defines the degree of depth of the research. 'mini' is good for narrow tasks with few subtopics. 'pro' is good for broad tasks with many subtopics
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit tavily-tavily_research --input <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit tavily-tavily_research --args '{}' --timeout-ms 0 --input 'foo' --model 'foo'
-```
-
----
-
-#### mcp client Tanit serpapi-search_dashboard
-
-Interactive dashboard variant of `search`: returns summary metrics, a source breakdown chart, and a results table with a click-to-expand detail panel, all rendered in the conversat
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_dashboard
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_dashboard --args '{}' --timeout-ms 0 --params 'foo'
-```
-
----
-
-#### mcp client Tanit serpapi-search_table
-
-Interactive UI variant of `search`: returns organic results as a sortable, searchable table rendered in the conversation. Same params as `search`. Use when the host supports MCP Ap
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_table
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_table --args '{}' --timeout-ms 0 --params 'foo'
-```
-
----
-
-#### mcp client Tanit serpapi-search
-
-Universal search tool supporting all SerpApi engines and result types.
-
-    When to use:
-        - Any query needing live, structured SERP data: web results, news, product listings
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Response mode (default: "complete")
-- "complete": Returns the full response
-- "compact": Removes metadata fields from JSON responses; Markdown is unchanged
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Dictionary of SerpApi engine-specific parameters. Common parameters include:
-- q: Search query (required for most engines)
-- engine: Search engine to use (default: "google_light")
-- location: Geographic location filter
-- output: Response format; omit for JSON or set to "md" for Markdown
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo' --params 'foo'
 ```
 
 ## Custom Commands

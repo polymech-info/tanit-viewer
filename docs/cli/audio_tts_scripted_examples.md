@@ -1,6 +1,6 @@
 ##### Examples
 
-Hand-picked patterns beyond the auto-generated flags above.
+
 
 Scripted TTS places an SRT / VTT / transcribe-JSON script onto a **48 kHz mono**
 WAV. It is a timed voice-over bed, not `audio tts` (speak a string) and not

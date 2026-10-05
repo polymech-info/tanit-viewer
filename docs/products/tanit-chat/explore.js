@@ -117,6 +117,7 @@
   var tourTimer = null;
   var idleTimer = null;
   var suppressIdle = false;
+  var spyLockUntil = 0;
 
   var elBrandLogo = document.getElementById('brandLogo');
   var elBrandTitle = document.getElementById('brandTitle');
@@ -304,6 +305,7 @@
       if (elTourLabel) elTourLabel.textContent = modeLabel;
       if (elTourHint) elTourHint.textContent = hint;
     });
+    syncNavSelection();
   }
 
   function navItemHtml(f, i, mediaKind) {
@@ -315,6 +317,34 @@
       '<span class="si">' + icon(f.icon) + '</span><span class="sl">' + esc(f.label) + '</span>' +
       '<span class="tour-mark" aria-hidden="true"></span>' +
       '<span class="tour-bar" aria-hidden="true"><i></i></span></button>';
+  }
+
+  /** Highlight the current feature in the sidebar without rebuilding it. */
+  function syncNavSelection() {
+    if (!elNav) return;
+    var mediaKind = slideMediaKind(slide());
+    var current = null;
+    elNav.querySelectorAll('.side-item').forEach(function (btn) {
+      var i = Number(btn.getAttribute('data-i'));
+      var on = i === selected;
+      btn.setAttribute('aria-current', on ? 'true' : 'false');
+      if (on && tourMode !== 'stopped') {
+        btn.setAttribute('data-tour', tourMode);
+        btn.setAttribute('data-media', mediaKind);
+        btn.style.setProperty('--tour-ms', IMAGE_MS + 'ms');
+        current = btn;
+      } else {
+        btn.removeAttribute('data-tour');
+        btn.removeAttribute('data-media');
+        btn.style.removeProperty('--tour-ms');
+      }
+    });
+    if (current) {
+      var navRect = elNav.getBoundingClientRect();
+      var btnRect = current.getBoundingClientRect();
+      if (btnRect.top < navRect.top) elNav.scrollTop -= navRect.top - btnRect.top;
+      else if (btnRect.bottom > navRect.bottom) elNav.scrollTop += btnRect.bottom - navRect.bottom;
+    }
   }
 
   function renderNav() {
@@ -1223,6 +1253,7 @@
       return;
     }
     elStage.classList.remove('is-stack');
+    if (stackIo) { stackIo.disconnect(); stackIo = null; }
     elStage.innerHTML = featureBodyHtml(f, selected, { stack: false });
     syncTourUi();
     bindMediaFallback(elStage);
@@ -1264,6 +1295,7 @@
     syncMediaPlayback();
     if (tourMode === 'playing') scheduleAdvance();
     scrollSelectedCard(false);
+    bindStackObserver();
   }
 
   function syncStackSelection() {
@@ -1272,6 +1304,7 @@
       var fi = Number(card.getAttribute('data-feat'));
       card.setAttribute('aria-current', fi === selected ? 'true' : 'false');
     });
+    syncNavSelection();
   }
 
   function motionOk() {
@@ -1315,6 +1348,8 @@
     var shell = document.querySelector('.shell');
     if (document.documentElement.getAttribute('data-pm-embed') && shell) return shell;
     if (isNarrow() && shell) return shell;
+    // Desktop stack scrolls on html (overflow:auto), not window.
+    if (isStackMode()) return document.scrollingElement || document.documentElement;
     return window;
   }
   function playFrame() {
@@ -1362,6 +1397,7 @@
     var tour = elStage.querySelector('.stack-tour');
     var margin = tour ? tour.getBoundingClientRect().height : 0;
     var ms = smooth === false ? 0 : SLIDE_MS;
+    spyLockUntil = Date.now() + ms + 120;
     var scroller = playScrollRoot();
     if (scroller === window) {
       var y = card.getBoundingClientRect().top + (window.scrollY || window.pageYOffset || 0) - margin;
@@ -1376,6 +1412,45 @@
       fitPlayViewport();
       requestAnimationFrame(function () { fitPlayViewport(); });
     }
+  }
+
+  var stackIo = null;
+
+  /** Visible share of the scrollport. Slide-height ratio never hits 50% when the card is taller than the view. */
+  function bindStackObserver() {
+    if (stackIo) { stackIo.disconnect(); stackIo = null; }
+    if (!isStackMode() || !elStage || typeof IntersectionObserver === 'undefined') return;
+    var ofView = {};
+    var steps = [];
+    for (var i = 0; i <= 20; i++) steps.push(i / 20);
+    var root = playScrollRoot();
+    if (!root || root === window || root === document.documentElement || root === document.body) root = null;
+    stackIo = new IntersectionObserver(function (entries) {
+      if (!isStackMode() || Date.now() < spyLockUntil) return;
+      entries.forEach(function (en) {
+        var fi = Number(en.target.getAttribute('data-feat'));
+        var rh = en.rootBounds && en.rootBounds.height ? en.rootBounds.height : 0;
+        if (!(rh > 0)) rh = (root && root.clientHeight) || window.innerHeight;
+        ofView[fi] = rh > 0 ? (en.intersectionRect.height / rh) : 0;
+      });
+      var best = -1;
+      var bestR = 0.5;
+      for (var k in ofView) {
+        if (ofView[k] >= bestR) {
+          bestR = ofView[k];
+          best = Number(k);
+        }
+      }
+      if (best < 0 || best === selected || !isEnabled(features[best])) return;
+      selected = best;
+      syncStackSelection();
+      syncTourUi();
+      syncMediaPlayback();
+      if (tourMode === 'playing') scheduleAdvance();
+    }, { root: root, threshold: steps });
+    elStage.querySelectorAll('.feature-card').forEach(function (card) {
+      stackIo.observe(card);
+    });
   }
 
   /** Patch one stack card after a slide change (keeps scroll position). */
