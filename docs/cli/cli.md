@@ -74,6 +74,7 @@ Options:
 - `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Same as positional output; directory if multiple inputs
 - `--max-width` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Target / max width (0 = no limit)
 - `--max-height` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Target / max height (0 = no limit)
+- `--aspect` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target ratio W:H (4:5, 1:1, 16:9). Sets the unset side from --max-width or --max-height
 - `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output format (default: from extension)
 - `--fit` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">inside</span></span></span>) - inside|cover|contain|fill|outside (see Sharp resize.fit)
 - `--position` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">centre</span></span></span>) - For cover: centre|attention|entropy|...
@@ -82,6 +83,7 @@ Options:
 - `--png-compression` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">6</span></span></span>) - PNG DEFLATE 0-9
 - `--background` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Letterbox colour #rrggbb (contain)
 - `--rotate` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Rotate 0|90|180|270 after EXIF autorotate
+- `--auto-rotate` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Rotate 90 when image orientation does not match the target box (after EXIF autorotate)
 - `--flip` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Vertical flip
 - `--flop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Horizontal flop
 - `--no-autorotate` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable EXIF orientation
@@ -101,7 +103,47 @@ tanit-cli resize
 **Full example**
 
 ```sh
-tanit-cli resize input 'foo' output 'foo' --src '{}' --dst 'foo' --max-width 0 --max-height 0 --format 'foo' --fit 'inside' --position 'centre' --kernel 'lanczos3' -q 85 --png-compression 6 --background '#ffffff' --rotate 0 --flip --flop --no-autorotate --no-strip --allow-enlargement --no-cache --cache-dir 'foo' --url-timeout 5 --url-max-redirects 20
+tanit-cli resize input 'foo' output 'foo' --src '{}' --dst 'foo' --max-width 0 --max-height 0 --aspect 'foo' --format 'foo' --fit 'inside' --position 'centre' --kernel 'lanczos3' -q 85 --png-compression 6 --background '#ffffff' --rotate 0 --auto-rotate --flip --flop --no-autorotate --no-strip --allow-enlargement --no-cache --cache-dir 'foo' --url-timeout 5 --url-max-redirects 20
+```
+
+##### Examples
+
+Hand-picked resize patterns. Default `--fit inside` keeps aspect and does not enlarge. `--aspect` fills the unset side from `--max-width` or `--max-height`. `--auto-rotate` turns the image 90° when its orientation does not match that box. EXIF orientation stays on unless you pass `--no-autorotate`.
+
+**Longest edge** (both sides at most 2048; output size still follows the photo)
+
+```sh
+tanit-cli resize "D:/pictures/test/*.{jpg,jpeg,png}" out/ --max-width 2048 --max-height 2048
+```
+
+**Ratio from width** (`4:5` → 1080×1350). Same for `1:1`, `16:9`, or `9:16`.
+
+```sh
+tanit-cli resize "D:/pictures/test/*.{jpg,jpeg,png}" out/ --max-width 1080 --aspect 4:5
+```
+
+**Social folder, nothing cropped** (same canvas, centered, white bars). `--allow-enlargement` scales small files up to the box.
+
+```sh
+tanit-cli resize "D:/pictures/test/*.{jpg,jpeg,png}" out/ --max-width 1080 --aspect 4:5 --fit contain --background "#ffffff" --allow-enlargement --auto-rotate --format jpg -q 85
+```
+
+**Full-bleed crop** (center crop; `attention` follows the subject)
+
+```sh
+tanit-cli resize "D:/pictures/test/*.{jpg,jpeg,png}" out/ --max-width 1080 --aspect 4:5 --fit cover --auto-rotate --format jpg -q 85
+```
+
+**Stories / reels** (`9:16` → 1080×1920)
+
+```sh
+tanit-cli resize "D:/pictures/test/*.{jpg,jpeg,png}" out/ --max-width 1080 --aspect 9:16 --fit cover --auto-rotate --format jpg
+```
+
+**Several files from Explorer** (`--dst` is a directory)
+
+```sh
+tanit-cli resize --src a.jpg --src b.jpg --dst out/ --max-width 1080 --aspect 1:1 --fit contain --background "#111111" --auto-rotate
 ```
 
 #### compress
@@ -1175,6 +1217,116 @@ tanit-cli search action
 tanit-cli search action input '{}' --log-level 'info' --mode '{}' --content '{}' --backend '{}' --sort 'auto' -q 'foo' --type 'foo' --indexer 'own' --grep --names-only --regex --case-sensitive --whole-word --no-recursive --include-hidden --follow-symlinks --no-skip-binary -C 0 -B 0 -A 0 --multiline --output-mode 'content' --head-limit 0 --offset 0 --max 0 --max-per-file 0 --max-file-size 0 --include '{}' --exclude '{}' --exclude-dir '{}' --dry-run --stream --md --markdown 'auto' --markdown-color 'auto' --action 'replace' --replacement 'foo' --reference-image '{}'
 ```
 
+#### [duplicates](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/duplicates_more)
+
+Group duplicate / near-duplicate images offline (file size or perceptual fingerprint). Default is fingerprint: one libvips thumbnail, then dHash / pHash / edge hash. No LLM.
+
+Options:
+
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Input file(s), folder(s) or glob(s); repeatable (omit with --load-session)
+- `--by` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">fingerprint</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">size</span> <span data-cli="choice">fingerprint</span> <span data-cli="choice">meta</span></span></span>) - size | fingerprint | meta
+- `--no-recursive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not recurse into directory inputs
+- `--min-group` (<span data-cli="meta"><span data-cli="type">INT:INT in [2 - 1000000]</span>, <span data-cli="default">default <span data-cli="value">2</span></span></span>) - Only show groups with at least this many files (>=2)
+- `--max-hamming` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 64]</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - fingerprint: max dHash Hamming 0..64 (0 = exact dHash only)
+- `--min-similarity` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - fingerprint: extra composite score 0..1 (0 = Hamming + aspect only)
+- `--analyze-max-side` (<span data-cli="meta"><span data-cli="type">INT:INT in [16 - 1024]</span>, <span data-cli="default">default <span data-cli="value">128</span></span></span>) - fingerprint thumbnail longest side (same decode as find --junk)
+- `--no-phash` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - fingerprint: skip pHash (faster, dHash + edge only)
+- `--fingerprint-same-size-only` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - fingerprint: only compare files with equal byte size (faster for --max-hamming > 0)
+- `--no-md` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - meta: ignore <stem>.md
+- `--no-json` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - meta: ignore <stem>.json
+- `--no-exif` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - meta: do not include libvips EXIF in the hash
+- `--meta-prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - meta: when set, prepended to the sidecar+EXIF corpus before hashing (same prompt => same bucket)
+- `--meta-compare-json-llm` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - meta: compare <stem>.json fields with the chat LLM and group by similarity. Requires FEATURE_COMMAND_LLM. Offline fingerprint/size/meta-hash do not use this.
+- `--meta-json-implicit-generate` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - with --meta-compare-json-llm: generate missing .json sidecars via Meta first
+- `--meta-json-min-sim` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 10]</span>, <span data-cli="default">default <span data-cli="value">7</span></span></span>) - meta+LLM: min pairwise similarity 0..10 to link images (default 7)
+- `--meta-json-compare-prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - meta+LLM: optional extra instruction text (preamble) for the compare call
+- `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id; loads router/model for --meta-compare-json-llm. Explicit --provider/--model override.
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat router for --meta-compare-json-llm (openrouter, openai, …); omit = from --preset / app Chat
+- `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat model for --meta-compare-json-llm; omit = from --preset / app Chat
+- `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key (optional; default from app provider settings)
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - meta+LLM: HTTP timeout per compare (ms, 0 = from settings or 60000)
+- `--report-md` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write a detailed per-category report (markdown) to this file; turns on full internal diagnostics
+- `--report-json` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write the same full diagnostic payload as JSON to this file (see also --report-md)
+- `--save-session` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write a reopenable session file (full report JSON, v2). Implies full diagnostics. Same as --report-json to this path for tooling.
+- `--load-session` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Load a session JSON from a prior --save-session / --report-json (validate + summary; no scan). --action applies to the saved groups.
+- `--action` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">none</span></span></span>) - Follow-up on each group: none | delete | recyclebin (remove = delete). Keeps the first path; removes the rest (default none)
+- `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - With --action, report removals without deleting or recycling
+
+**Example**
+
+```sh
+tanit-cli duplicates
+```
+
+**Full example**
+
+```sh
+tanit-cli duplicates input '{}' --by 'fingerprint' --no-recursive --min-group 2 --max-hamming 8 --min-similarity '0' --analyze-max-side 128 --no-phash --fingerprint-same-size-only --no-md --no-json --no-exif --meta-prompt 'foo' --meta-compare-json-llm --meta-json-implicit-generate --meta-json-min-sim 7 --meta-json-compare-prompt 'foo' --preset 'foo' --provider 'foo' --model 'foo' --api-key 'foo' --timeout-ms 0 --report-md 'foo' --report-json 'foo' --save-session 'foo' --load-session 'foo' --action 'none' --dry-run
+```
+
+##### Examples
+
+Hand-picked offline duplicate patterns. Default `--by fingerprint` uses one libvips thumbnail, then dHash / pHash / edge hash. No LLM. Tanit Viewer builds keep this path.
+
+**Near-duplicates in a folder** (default Hamming ≤ 8)
+
+```sh
+tanit-cli duplicates "D:/pictures/test"
+```
+
+**Exact dHash only** (same pixel structure after the 128px thumb)
+
+```sh
+tanit-cli duplicates "D:/pictures/test" --max-hamming 0
+```
+
+**Same file size** (byte-size buckets; not a content hash)
+
+```sh
+tanit-cli duplicates "D:/pictures/test" --by size
+```
+
+**JSON groups on stdout** (exit 1 when no group)
+
+```sh
+tanit-cli duplicates "D:/pictures/test" --json
+```
+
+**Quoted glob**
+
+```sh
+tanit-cli duplicates "D:/pictures/**/*.{jpg,jpeg,png}"
+```
+
+**Faster scan** (skip pHash; only compare equal file sizes)
+
+```sh
+tanit-cli duplicates "D:/pictures/100MSDCF" --no-phash --fingerprint-same-size-only
+```
+
+**Sidecar + EXIF hash** (offline; same `.md` / `.json` corpus)
+
+```sh
+tanit-cli duplicates "D:/pictures/test" --by meta
+```
+
+**Save a session, reopen later** (no second scan)
+
+```sh
+tanit-cli duplicates "D:/pictures/test" --save-session dups.json --report-md dups.md
+tanit-cli duplicates --load-session dups.json --json
+```
+
+**Remove extras** (keeps the first path in each group)
+
+```sh
+tanit-cli duplicates "D:/pictures/test" --action recyclebin --dry-run
+tanit-cli duplicates "D:/pictures/test" --action recyclebin
+tanit-cli duplicates --load-session dups.json --action delete
+```
+
+[Read more](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/duplicates_more)
+
 ### Setup
 
 #### settings
@@ -1835,7 +1987,7 @@ One request is one state plus many questions. That is the batch this endpoint ac
 
 Instructions name `` `item` `` / `` `item.field` `` for `--selector`, and `` `pair.left` `` / `` `pair.right` `` / `` `pair` `` for pairs. The model is `~typesafe/jev-latest` when `--model` is omitted. OpenRouter credentials come from app settings when `--api-key` is omitted.
 
-### Primary case: one question per selected object
+###### Primary case: one question per selected object
 
 `items[]` is the usual shape. Each object needs a string `id` (otherwise ids are `i0`, `i1`, …). Answers are written onto that object.
 
@@ -1877,7 +2029,7 @@ tanit-cli llm agent decide \
 
 Each item gains a `decisions` object: `fit.choice` and `supports.noul` (0..1). `--json` also prints request count, token usage, and the resolved model.
 
-### Pairs
+###### Pairs
 
 `--pairs` selects objects with `left` / `right` (or a 2-element array). `--left-key` / `--right-key` rename those fields. `--left` and `--right` zip two selectors; answers land on the parent of each left value.
 
@@ -1892,7 +2044,7 @@ tanit-cli llm agent decide \
 
 Pair questions may say `` `pair.left` `` and `` `pair.right` ``. `--dry-run` uses the stub: equal sides score as the same, everything else as different. No network.
 
-### Whole document
+###### Whole document
 
 No `--selector` and no pair flags. Questions are sent as written. The answer object is written at the root `--target`.
 
@@ -1904,7 +2056,7 @@ tanit-cli llm agent decide \
   -o doc.out.json
 ```
 
-### Large sets
+###### Large sets
 
 Independent values are packed until the next one would pass `--chunk` or `--max-tokens`, then another request starts. The estimate is the JSON body length divided by 3. Pass `--max-tokens 0` to disable the ceiling.
 
@@ -1919,7 +2071,7 @@ tanit-cli llm agent decide \
   --json
 ```
 
-### Direct Jev
+###### Direct Jev
 
 `--provider jev` sends the same JSON body and requires `--base-url`. `openai` is reserved and fails before the call.
 
@@ -1987,7 +2139,7 @@ tanit-cli llm agent each -i 'foo' --selector 'foo' --target 'foo' --merge-json -
 
 Path roles: `--source` / `--dst` are whole JSON **files**; `--selector` is a **jq** leaf picker (JSONPath-ish `$.a[*].b` → `.a[].b`); `--target` is an optional **sibling key** (omit = in-place overwrite). Provider flags (`--router`, `--model`, `--api-key`, `--preset`, …) work on `each` or on the parent: `llm agent --router openai each …`.
 
-### Primary case: `dist/data/commands.json`
+###### Primary case: `dist/data/commands.json`
 
 Ribbon UI copy lives under `.ribbon.groups[]` — item `label` / `description` / `tooltip`, nested submenu items (`.items[].items[]?`), group titles, and a few `extension_maps[].description` strings. Typical shape after a multi-language pass:
 
@@ -2058,7 +2210,7 @@ tanit-cli llm agent each \
 
 Tiny fixture with the same ribbon nesting (CI / quick probes): `tests/orchestrator/fixtures/iterator-commands-mini.json`.
 
-### Changelog leaves (one `each` pass)
+###### Changelog leaves (one `each` pass)
 
 `npm run build:post:changelog` discovers surface bundles, reads headers / labels / CLI registrations into `stemp/changelog-each/phrase.json`, and runs **one** `each` pass. Prompt is `releases/web-docs/changelog.instructions.txt`. No `--router` / `--model`. Merge is additive.
 
@@ -10286,6 +10438,8 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms
 | `file.prev` | Previous | Navigation | `app:previousfile` |  |
 | `custom.command-mtlnivuv-4aae3` | Explorer | Navigation | `app:togglefiletree` |  |
 | `file.next` | Next | Navigation | `app:nextfile` |  |
+| `custom.command-muv7nnf5-a9744` | Next (copy) | Navigation | `app:nextfile` |  |
+| `custom.command-muv7sxie-292fd` | Report | Report | `app:createreport` |  |
 | `custom.dropdown-msx1rszr-19148` | New | New | `metadata` |  |
 | `custom.command-mulazcgl-a19cb` | New Chat | New | `app:togglechat` |  |
 | `custom.command-msx1rszr-32ae1` | XBlox Script | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |

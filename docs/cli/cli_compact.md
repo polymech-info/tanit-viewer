@@ -45,7 +45,7 @@ bluetooth set-default (id) - Set an audio endpoint as the default device for all
 bluetooth unpair (id) - Remove (unpair) a Bluetooth device.
 commands - List registered pm-image CLI commands for UI/custom-command pickers and scripts.
 compress (input,output,src,dst,...) - Compress images: MozJPEG re-encode or optimised PNG (+ libimagequant / zopfli)
-cp (paths,s,d,conflict,...) => dest - Copy files or folders through the VFS queue (local, ssh://, ftp://, vfs://).
+cp (paths,s,d,conflict,...) - Copy files or folders through the VFS queue (local, ssh://, ftp://, vfs://).
 create (output,p,provider,model,...) - AI text-to-image (Gemini / Google, no input file)
 custom.command-224bc88db575c7763fbcb9eb96399fcf (--headless,--convert-to,pdf,--outdir,...) - Convert each selected Office document to PDF beside the source file using LibreOffice.
 custom.command-6a11b0a8acce258600f5e6dbcd5780cc (-y,-i,${CURRENT_FILE},-vn,...) - Extract MP3 audio beside each selected MP4 using FFMPEG.
@@ -119,6 +119,8 @@ custom.command-mujkxt3w-4af40 (record,--from-wav,${CURRENT_FILE},--stt,...) - Cr
 custom.command-mujlyke2-1c42f (-y,-i,${CURRENT_FILE},-vn,...) - Extract WAV audio beside each selected MP4 using FFMPEG.
 custom.command-mulazcgl-a19cb - New Chat
 custom.command-mulbk22p-b16a6 - Open setup wizard
+custom.command-muv7nnf5-a9744 - navigates to next file
+custom.command-muv7sxie-292fd - Report an issue
 custom.command-video-social-hq (run,--src,${TANIT_SCRIPTS}/video-encode-social-hq.xblox,--CURRENT_FILE,...) - Create a high-quality 1080p60 H.264 social-media master from the selected screen capture using...
 custom.dropdown-msaj5qk5-78a6b - Help
 custom.dropdown-msx1rszr-19148 - New
@@ -145,6 +147,7 @@ daemon run - Run the foreground hotkey daemon (default action).
 daemon stop - Windows: stop the running daemon for this user session.
 daemon tray - Run the user-session tray daemon with global hotkeys and a notification-area menu.
 daemon unregister - Windows: remove the daemon HKLM Run entry (requires elevation).
+duplicates (input,by,min-group,max-hamming,...) - Group duplicate / near-duplicate images offline (file size or perceptual fingerprint). Default...
 file.next - navigates to next file
 file.prev - navigates to previous file
 find (input,p,junk-kinds,min-score,...) - Find images by name/folder, semantic LLM prompt, or junk (dark/blur/flat/blown/tiny).
@@ -233,8 +236,8 @@ mcp client tools (server) - List tools on an MCP server (name and description).
 media probe (path,magic-db) - Probe file MIME type, likely extensions, and Tanit media kind.
 media search (pattern,source-dir) - Search raw file(1) Magdir source lines with wildcards; useful when a type has no !:ext...
 media types (pattern,kind,ext,source-dir) - List MIME types and extensions from file(1) Magdir annotations; supports wildcards like...
-mkdir (paths,s,d) => path - Create folders through the VFS queue (local, ssh://, ftp://, vfs://). Existing folders succeed.
-mv (paths,s,d,conflict,...) => dest - Move files or folders through the VFS queue (copy then delete source).
+mkdir (paths,s,d) - Create folders through the VFS queue (local, ssh://, ftp://, vfs://). Existing folders succeed.
+mv (paths,s,d,conflict,...) - Move files or folders through the VFS queue (copy then delete source).
 pdf info (path,password) - Print page count and page sizes.
 pdf md (path,pages,o,output-dir,...) - Extract document text to Markdown via modular PDFium pipeline.
 pdf render (path,pages,dpi,rotation,...) - Rasterize pages to image files (all, ranges, or specific pages).
@@ -356,7 +359,7 @@ test core tokenize (vocab,input,max-len) - ModernBERT byte-level BPE parity prob
 test core url-schemes parse (uri) - Validate and parse a tanit:// URI, including fragment/locate data.
 test core url-schemes variables (input) - Expand ${VAR} templates using the URI-safe restricted VariableMap (no ENV:, no session context).
 test screenshot (o,wait-ms) - Start the main window, wait, capture it to a PNG, then exit.
-touch (paths,s,d,conflict) => path - Create empty files through the VFS queue. Existing files conflict unless --skip / --overwrite.
+touch (paths,s,d,conflict) - Create empty files through the VFS queue. Existing files conflict unless --skip / --overwrite.
 transform (input,src,output,p,...) - AI image editing (Gemini / Google)
 understand (input,p,dst,provider,...) - OCR / markdown extraction for one image (local llama VLM, Paddle ONNX, or a cloud vision...
 video create (output,p,provider,model,...) - AI text-to-video / image-to-video (Tanit LiteLLM /v1/videos, or Replicate).

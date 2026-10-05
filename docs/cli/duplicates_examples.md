@@ -50,3 +50,11 @@ tanit-cli duplicates "D:/pictures/test" --by meta
 tanit-cli duplicates "D:/pictures/test" --save-session dups.json --report-md dups.md
 tanit-cli duplicates --load-session dups.json --json
 ```
+
+**Remove extras** (keeps the first path in each group)
+
+```sh
+tanit-cli duplicates "D:/pictures/test" --action recyclebin --dry-run
+tanit-cli duplicates "D:/pictures/test" --action recyclebin
+tanit-cli duplicates --load-session dups.json --action delete
+```

@@ -4,7 +4,7 @@
 
 Path roles: `--source` / `--dst` are whole JSON **files**; `--selector` is a **jq** leaf picker (JSONPath-ish `$.a[*].b` → `.a[].b`); `--target` is an optional **sibling key** (omit = in-place overwrite). Provider flags (`--router`, `--model`, `--api-key`, `--preset`, …) work on `each` or on the parent: `llm agent --router openai each …`.
 
-### Primary case: `dist/data/commands.json`
+###### Primary case: `dist/data/commands.json`
 
 Ribbon UI copy lives under `.ribbon.groups[]` — item `label` / `description` / `tooltip`, nested submenu items (`.items[].items[]?`), group titles, and a few `extension_maps[].description` strings. Typical shape after a multi-language pass:
 
@@ -75,7 +75,7 @@ tanit-cli llm agent each \
 
 Tiny fixture with the same ribbon nesting (CI / quick probes): `tests/orchestrator/fixtures/iterator-commands-mini.json`.
 
-### Changelog leaves (one `each` pass)
+###### Changelog leaves (one `each` pass)
 
 `npm run build:post:changelog` discovers surface bundles, reads headers / labels / CLI registrations into `stemp/changelog-each/phrase.json`, and runs **one** `each` pass. Prompt is `releases/web-docs/changelog.instructions.txt`. No `--router` / `--model`. Merge is additive.
 

@@ -3564,7 +3564,8 @@ Params:
 
 **dimensions**
 - `maxWidth` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Target/max width. 0 = unconstrained.
-- `maxHeight` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Target/max height. 0 = unconstrained.
+- `maxHeight` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-100000</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Target/max height. 0 = unconstrained. Filled from aspect when width is set.
+- `aspect` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Target ratio W:H (4:5, 1:1, 16:9). Sets the unset side from maxWidth or maxHeight.
 - `allowEnlargement` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Allow upscaling.
 
 **format**
@@ -3581,6 +3582,7 @@ Params:
 
 **transform**
 - `rotate` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">0-270</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Rotate 0, 90, 180, or 270 degrees after autorotate.
+- `autoRotate` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Rotate 90 when image orientation does not match the target box.
 - `flip` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Vertical flip.
 - `flop` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Horizontal flop.
 - `autorotate` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Apply EXIF orientation.
@@ -3603,6 +3605,8 @@ Default block:
 ```json
 {
   "allowEnlargement": false,
+  "aspect": "",
+  "autoRotate": false,
   "autorotate": true,
   "background": "#ffffff",
   "cache": true,
@@ -7494,6 +7498,8 @@ Default block:
 | `file.prev` | Previous | `app:previousfile` |  |
 | `custom.command-mtlnivuv-4aae3` | Explorer | `app:togglefiletree` |  |
 | `file.next` | Next | `app:nextfile` |  |
+| `custom.command-muv7nnf5-a9744` | Next (copy) | `app:nextfile` |  |
+| `custom.command-muv7sxie-292fd` | Report | `app:createreport` |  |
 | `custom.dropdown-msx1rszr-19148` | New | `metadata` |  |
 | `custom.command-mulazcgl-a19cb` | New Chat | `app:togglechat` |  |
 | `custom.command-msx1rszr-32ae1` | XBlox Script | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |

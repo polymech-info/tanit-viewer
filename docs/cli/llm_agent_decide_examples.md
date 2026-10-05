@@ -8,7 +8,7 @@ One request is one state plus many questions. That is the batch this endpoint ac
 
 Instructions name `` `item` `` / `` `item.field` `` for `--selector`, and `` `pair.left` `` / `` `pair.right` `` / `` `pair` `` for pairs. The model is `~typesafe/jev-latest` when `--model` is omitted. OpenRouter credentials come from app settings when `--api-key` is omitted.
 
-### Primary case: one question per selected object
+###### Primary case: one question per selected object
 
 `items[]` is the usual shape. Each object needs a string `id` (otherwise ids are `i0`, `i1`, …). Answers are written onto that object.
 
@@ -50,7 +50,7 @@ tanit-cli llm agent decide \
 
 Each item gains a `decisions` object: `fit.choice` and `supports.noul` (0..1). `--json` also prints request count, token usage, and the resolved model.
 
-### Pairs
+###### Pairs
 
 `--pairs` selects objects with `left` / `right` (or a 2-element array). `--left-key` / `--right-key` rename those fields. `--left` and `--right` zip two selectors; answers land on the parent of each left value.
 
@@ -65,7 +65,7 @@ tanit-cli llm agent decide \
 
 Pair questions may say `` `pair.left` `` and `` `pair.right` ``. `--dry-run` uses the stub: equal sides score as the same, everything else as different. No network.
 
-### Whole document
+###### Whole document
 
 No `--selector` and no pair flags. Questions are sent as written. The answer object is written at the root `--target`.
 
@@ -77,7 +77,7 @@ tanit-cli llm agent decide \
   -o doc.out.json
 ```
 
-### Large sets
+###### Large sets
 
 Independent values are packed until the next one would pass `--chunk` or `--max-tokens`, then another request starts. The estimate is the JSON body length divided by 3. Pass `--max-tokens 0` to disable the ceiling.
 
@@ -92,7 +92,7 @@ tanit-cli llm agent decide \
   --json
 ```
 
-### Direct Jev
+###### Direct Jev
 
 `--provider jev` sends the same JSON body and requires `--base-url`. `openai` is reserved and fails before the call.
 
