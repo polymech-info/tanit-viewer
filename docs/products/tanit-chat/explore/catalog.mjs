@@ -1,5 +1,6 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import { resolve, dirname, basename, join, extname } from 'node:path'
+import { marked } from 'marked'
 
 function isPlainObject(v) {
 	return Boolean(v) && typeof v === 'object' && !Array.isArray(v)
@@ -108,7 +109,56 @@ export function loadProduct(path, lang) {
 		data.lang = data.lang || 'en'
 	}
 
+	const intro = loadIntro(abs, data.lang)
+	if (intro) {
+		data.intro = intro
+		console.log(`  intro: ${intro.file}`)
+	}
+
 	return data
+}
+
+function splitFrontMatter(src) {
+	const text = String(src || '').replace(/^\uFEFF/, '')
+	if (!text.startsWith('---')) return { meta: {}, body: text }
+	const end = text.indexOf('\n---', 3)
+	if (end < 0) return { meta: {}, body: text }
+	const raw = text.slice(3, end).trim()
+	const body = text.slice(end + 4).replace(/^\r?\n/, '')
+	const meta = {}
+	for (const line of raw.split(/\r?\n/)) {
+		const m = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/)
+		if (!m) continue
+		meta[m[1]] = m[2].trim().replace(/^["']|["']$/g, '')
+	}
+	return { meta, body }
+}
+
+function firstHeading(md) {
+	const m = String(md || '').match(/^#{1,6}\s+(.+)$/m)
+	if (!m) return ''
+	return m[1].replace(/[#*_`[\]]/g, '').trim()
+}
+
+/** intro.md for en; intro_<lang>.md (or intro-<lang>.md) otherwise, then intro.md. */
+export function resolveIntroPath(productPath, lang) {
+	const dir = dirname(resolve(productPath))
+	const code = String(lang || 'en').toLowerCase()
+	const localized = code && code !== 'en'
+		? [join(dir, `intro_${code}.md`), join(dir, `intro-${code}.md`)]
+		: []
+	const candidates = [...localized, join(dir, 'intro.md')]
+	return candidates.find((p) => existsSync(p)) || null
+}
+
+export function loadIntro(productPath, lang) {
+	const path = resolveIntroPath(productPath, lang)
+	if (!path) return null
+	const { meta, body } = splitFrontMatter(readFileSync(path, 'utf8'))
+	const html = marked.parse(body, { async: false, gfm: true })
+	if (!String(html || '').trim()) return null
+	const label = meta.label || firstHeading(body) || 'Intro'
+	return { html: String(html), label, file: basename(path) }
 }
 
 export function outNameFor({ inline, lang }) {

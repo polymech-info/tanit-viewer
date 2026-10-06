@@ -3,10 +3,36 @@
 Catalog for `features.html` (classic sidebar + stage by default; `?layout=scroll` expands every feature).
 
 ```
-node explore.mjs --serve --lang en
+npm install
+npm run dev
 ```
 
 Then open http://localhost:5177/
+
+`npm run build` writes `features.html` and every `features.<lang>.html`. `npm run build:inline` writes the embed fragments.
+
+## Intro
+
+Opening copy is Markdown, rendered at build time with [marked](https://github.com/markedjs/marked) (same library as the chat app). Showdown is not used.
+
+On the standalone page, `/` is the intro. A feature’s slides are at `/` plus the label slug (`Files` → `/files`, `Browser Use` → `/browser-use`). The inline embed does not change the host URL.
+
+| File | Lang |
+|---|---|
+| `intro.md` | English, and the fallback when a translation is missing |
+| `intro_de.md` | German (`intro_<lang>.md` or `intro-<lang>.md`) |
+
+Optional front matter sets the sidebar label:
+
+```md
+---
+label: Intro
+---
+
+# Tanit Chat
+
+Many tools. One workspace. Local first.
+```
 
 ## Create a new skin
 
@@ -75,6 +101,7 @@ A skin is a token file. Layout stays in `explore.css`. Do not put palette hexes 
 | `explore_<id>.css` | A skin |
 | `explore.js` | Behavior |
 | `product.json` / `product_<lang>.json` | Copy, screenshots, CTAs |
+| `intro.md` / `intro_<lang>.md` | Opening copy. `label` in front matter is the sidebar name |
 | `explore/fragments/` | HTML chrome |
 | `explore.mjs` | CLI: discover, bundle, serve |
 

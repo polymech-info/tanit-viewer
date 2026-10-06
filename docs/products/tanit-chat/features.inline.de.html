@@ -2,64 +2,46 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<div class="tv-explore" data-theme="light" data-lang="de">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
+<div class="tv-explore" data-theme="light" data-skin="plex" data-lang="de">
 <style>
-/* Theme surface constants — flip here to revert (prev light #fafbfd, dark #0b0f17).
-   Also on .tv-lightbox: overlay is appended to body (outside .tv-explore embeds). */
+/* Layout + chrome. Palettes live in explore_<name>.css (data-skin). */
 .tv-explore,.tv-lightbox{
-  --tv-bg-light:#F7F6F5;
-  --tv-bg-dark:#282828;
-}
-.tv-explore,.tv-explore[data-theme="light"]{
-  color-scheme:light;
-  --bg:var(--tv-bg-light); --ink:#0f172a; --muted:#64748b; --dim:#94a3b8;
-  --accent:#2563eb; --accent-hover:#1d4ed8;
-  --accent-soft:rgba(37,99,235,.08);
-  --amber:#d97706;
-  --panel:#ffffff; --panel-2:#f1f0ee;
-  --line:rgba(15,23,42,.09); --line-strong:rgba(15,23,42,.14);
-  --media:var(--tv-bg-light);
-  --shadow:0 1px 2px rgba(15,23,42,.04);
-  --shadow-lg:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.05);
-  --side-w:240px; --radius:12px;
-  --sel-bg:rgba(37,99,235,.08);
-}
-.tv-explore[data-theme="dark"]{
-  color-scheme:dark;
-  --bg:var(--tv-bg-dark); --ink:#e8eef8; --muted:#8b9bb3; --dim:#64748b;
-  --accent:#3b82f6; --accent-hover:#60a5fa;
-  --accent-soft:rgba(59,130,246,.14);
-  --amber:#fbbf24;
-  --panel:#1f1f1f; --panel-2:#242424;
-  --line:rgba(148,163,184,.14); --line-strong:rgba(148,163,184,.22);
-  --media:var(--tv-bg-dark);
-  --shadow:0 1px 2px rgba(0,0,0,.25);
-  --shadow-lg:0 1px 2px rgba(0,0,0,.25),0 10px 28px rgba(0,0,0,.28);
-  --side-w:240px; --radius:12px;
-  --sel-bg:rgba(59,130,246,.12);
+  --side-w:240px;
+  --radius:12px;
+  --tv-font:"IBM Plex Sans",system-ui,sans-serif;
 }.tv-explore,.tv-explore *{box-sizing:border-box}
-.tv-explore{height:auto;min-height:480px;margin:0}
+.tv-explore{height:100%;min-height:0;margin:0}
 .tv-explore{
   color:var(--ink);background:var(--bg);
-  font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;line-height:1.45;
+  font-family:var(--tv-font);font-size:13.5px;line-height:1.45;
   -webkit-font-smoothing:antialiased;overflow:hidden;
   letter-spacing:-.01em;
 }
 
-/* Parent iframe-widget (?embed=1): size to content, never lock to 100dvh (mobile clip) */
-html[data-pm-embed],html[data-pm-embed] body,
-.tv-explore[data-pm-embed]{
-  height:auto!important;min-height:0!important;overflow:visible!important;
+/* Fill the host slot (iframe / inline ~400px). Scroll inside; do not use 100dvh. */
+.tv-explore[data-pm-embed],.tv-explore[data-pm-embed] .tv-explore{
+  height:100%!important;min-height:0!important;overflow:hidden!important;
 }
-html[data-pm-embed] .shell,
+.tv-explore[data-pm-embed]{
+  height:100%!important;min-height:0!important;max-height:100%!important;
+  overflow:auto!important;
+}
+/* Standalone iframe: shell is the scroller. Inline .tv-explore: widget scrolls. */
 .tv-explore[data-pm-embed] .shell{
-  height:auto!important;min-height:0!important;max-height:none!important;
+  height:100%!important;min-height:0!important;max-height:none!important;
+  overflow:auto!important;
+}
+.tv-explore[data-pm-embed] .shell{
+  height:auto!important;min-height:100%!important;max-height:none!important;
   overflow:visible!important;
 }
-html[data-pm-embed] .sidebar,
-.tv-explore[data-pm-embed] .sidebar{max-height:none!important}
-html[data-pm-embed] .stage-media,
-.tv-explore[data-pm-embed] .stage-media{min-height:220px}.tv-explore button,.tv-explore input{font:inherit;color:inherit}.tv-explore button{cursor:pointer;border:none;background:none}.tv-explore img,.tv-explore video{display:block;max-width:100%}.tv-explore a{color:inherit;text-decoration:none}
+.tv-explore[data-pm-embed] .sidebar,
+.tv-explore[data-pm-embed] .sidebar{
+  max-height:100%;
+}
+.tv-explore[data-pm-embed] .stage-media,
+.tv-explore[data-pm-embed] .stage-media{min-height:160px}.tv-explore button,.tv-explore input{font:inherit;color:inherit}.tv-explore button{cursor:pointer;border:none;background:none}.tv-explore img,.tv-explore video{display:block;max-width:100%}.tv-explore a{color:inherit;text-decoration:none}
 @media (prefers-reduced-motion:reduce){.tv-explore *,.tv-explore *::before,.tv-explore *::after{animation:none!important;transition:none!important}}
 
 .shell{
@@ -83,7 +65,12 @@ html[data-pm-embed] .stage-media,
 .side-brand strong{
   font-size:.88rem;font-weight:600;letter-spacing:-.02em;
 }
-.side-nav{flex:1;overflow:auto;padding:2px 8px 12px;scrollbar-width:thin}
+.side-nav{flex:1;overflow:auto;padding:2px 8px 12px;scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--ink) 16%,transparent) transparent}
+.side-nav::-webkit-scrollbar{width:6px}
+.side-nav::-webkit-scrollbar-track{background:transparent}
+.side-nav::-webkit-scrollbar-thumb{
+  background:color-mix(in srgb,var(--ink) 16%,transparent);border-radius:99px;
+}
 .side-sec{
   margin:12px 0 4px;padding:0 10px;
   font-size:.72rem;font-weight:600;letter-spacing:-.01em;color:var(--dim);
@@ -104,7 +91,7 @@ html[data-pm-embed] .stage-media,
 .side-item .sl{font-size:.88rem;font-weight:500;line-height:1.3;min-width:0}
 .side-item .tour-mark{
   margin-left:auto;width:8px;height:8px;border-radius:50%;flex-shrink:0;
-  background:var(--accent);opacity:0;box-shadow:0 0 0 0 rgba(37,99,235,.45);
+  background:var(--accent);opacity:0;box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 45%,transparent);
   transition:opacity .15s;
 }
 .side-item[aria-current="true"][data-tour="playing"] .tour-mark{
@@ -113,7 +100,7 @@ html[data-pm-embed] .stage-media,
 .side-item[aria-current="true"][data-tour="paused"] .tour-mark{opacity:.55;background:var(--amber)}
 .side-item .tour-bar{
   position:absolute;left:12px;right:12px;bottom:3px;height:2px;border-radius:999px;
-  background:rgba(37,99,235,.12);overflow:hidden;opacity:0;pointer-events:none;
+  background:var(--accent-soft);overflow:hidden;opacity:0;pointer-events:none;
 }
 .side-item[aria-current="true"][data-tour="playing"] .tour-bar{opacity:1}
 .side-item .tour-bar > i{
@@ -126,9 +113,9 @@ html[data-pm-embed] .stage-media,
   width:40%;animation:tour-indeterminate 1.2s ease-in-out infinite;
 }
 @keyframes tour-pulse{
-  0%{box-shadow:0 0 0 0 rgba(37,99,235,.45)}
-  70%{box-shadow:0 0 0 8px rgba(37,99,235,0)}
-  100%{box-shadow:0 0 0 0 rgba(37,99,235,0)}
+  0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 45%,transparent)}
+  70%{box-shadow:0 0 0 8px color-mix(in srgb,var(--accent) 0%,transparent)}
+  100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 0%,transparent)}
 }
 @keyframes tour-fill{from{width:0}to{width:100%}}
 @keyframes tour-indeterminate{
@@ -151,8 +138,8 @@ html[data-pm-embed] .stage-media,
   color:var(--accent);background:var(--sel-bg);
   border-color:color-mix(in srgb,var(--accent) 28%,var(--line));
 }
-html.tv-stack .layout-btn .ico-scroll{display:none}
-html.tv-stack .layout-btn .ico-classic{display:block}
+.tv-explore.tv-stack .layout-btn .ico-scroll{display:none}
+.tv-explore.tv-stack .layout-btn .ico-classic{display:block}
 
 /* ── main stage ── */
 .main{min-width:0;display:flex;flex-direction:column;min-height:0;gap:10px}
@@ -160,6 +147,8 @@ html.tv-stack .layout-btn .ico-classic{display:block}
   flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;
   border-radius:var(--radius);border:1px solid var(--line);
   background:var(--panel);box-shadow:var(--shadow);
+  /* Keep the 1px frame outside overflow clipping */
+  padding:1px;
   /* Vertical page scroll OK; horizontal reserved for feature/slide swipe */
   touch-action:pan-y;
 }
@@ -170,6 +159,19 @@ html.tv-stack .layout-btn .ico-classic{display:block}
 .stage-main{
   min-width:0;min-height:0;flex:1;display:flex;flex-direction:column;overflow:auto;
 }
+/* Classic: one viewport-tall slide. Media shrinks to leftover; chrome never leaves the pane. */
+.stage:not(.is-stack) .stage-body,
+.stage:not(.is-stack) .stage-main{
+  overflow:hidden;
+}
+.stage:not(.is-stack) .stage-media{
+  flex:1 1 auto;min-height:0;overflow:hidden;
+}
+.stage:not(.is-stack) .stage-below,
+.stage:not(.is-stack) .metrics{
+  flex:0 0 auto;overflow:visible;
+}
+.stage:not(.is-stack) .media-ctas{flex-shrink:0}
 .media-heading{
   flex-shrink:0;
   padding:16px 20px 10px;
@@ -189,7 +191,7 @@ html.tv-stack .layout-btn .ico-classic{display:block}
 }
 .stage-below{
   flex-shrink:0;
-  padding:14px 20px 16px;
+  padding:16px 20px 18px;
   background:var(--panel);
   border-top:1px solid var(--line);
 }
@@ -202,7 +204,7 @@ html.tv-stack .layout-btn .ico-classic{display:block}
 .feature-card .stage-below .highlights{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:6px 24px;
+  gap:10px 28px;
   padding-bottom:0;
   width:100%;
 }
@@ -215,9 +217,9 @@ html.tv-stack .layout-btn .ico-classic{display:block}
   }
 }
 .hl{
-  position:relative;display:flex;align-items:flex-start;gap:10px;
+  position:relative;display:flex;align-items:flex-start;gap:12px;
   width:100%;min-width:0;max-width:100%;box-sizing:border-box;
-  padding:8px 6px;border-radius:0;text-align:left;color:var(--ink);
+  padding:12px 10px;border-radius:0;text-align:left;color:var(--ink);
   border:0;border-left:2px solid transparent;background:transparent;
   cursor:pointer;
   transition:color .12s,background .12s,border-color .12s;
@@ -229,17 +231,17 @@ html.tv-stack .layout-btn .ico-classic{display:block}
 }
 .hl[aria-current="true"] strong{color:var(--accent)}
 .hl-ico{
-  flex:0 0 28px;width:28px;height:28px;min-width:28px;max-width:28px;
-  aspect-ratio:1;border-radius:7px;margin-top:1px;box-sizing:border-box;
+  flex:0 0 32px;width:32px;height:32px;min-width:32px;max-width:32px;
+  aspect-ratio:1;border-radius:8px;margin-top:1px;box-sizing:border-box;
   border:1px solid var(--line);background:var(--panel-2);
-  display:grid;place-items:center;padding:5px;color:var(--muted);
+  display:grid;place-items:center;padding:6px;color:var(--muted);
   overflow:hidden;pointer-events:none;
 }
 .hl[aria-current="true"] .hl-ico{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 35%,var(--line))}
-.hl-ico svg{width:16px;height:16px;display:block;flex:none}
+.hl-ico svg{width:18px;height:18px;display:block;flex:none}
 .hl-body{min-width:0;flex:1 1 auto;text-align:left}
-.hl-body strong{display:block;font-size:.78rem;font-weight:600;margin-bottom:1px;letter-spacing:-.015em;color:inherit}
-.hl-body span{display:block;font-size:.68rem;line-height:1.4;color:var(--muted)}
+.hl-body strong{display:block;font-size:.88rem;font-weight:600;margin-bottom:3px;letter-spacing:-.015em;color:inherit}
+.hl-body span{display:block;font-size:.78rem;line-height:1.45;color:var(--muted)}
 /* Quiet toolbar under media — content-sized, never full-bleed */
 .media-ctas{
   display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;
@@ -277,16 +279,33 @@ html.tv-stack .layout-btn .ico-classic{display:block}
 
 .stage-media{
   position:relative;flex:1 1 auto;min-height:220px;
-  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;overflow:visible;
   /* Allow host-page scroll/pan; only lock gestures when zoomed */
   padding:16px 20px;touch-action:pan-y pinch-zoom;user-select:none;background:var(--media);
 }
-.stage-media[data-zoomed]{cursor:grab;touch-action:none}
+.stage-media[data-zoomed]{cursor:grab;touch-action:none;overflow:hidden}
 .stage-media[data-panning]{cursor:grabbing}
 .media-surface{
-  position:relative;flex:1;width:100%;height:100%;min-width:0;min-height:0;
-  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  position:relative;flex:1;width:100%;height:auto;min-width:0;min-height:0;
+  display:flex;align-items:center;justify-content:center;overflow:visible;
   margin:0;box-sizing:border-box;
+}
+/* Classic: contain-fit. Keep overflow visible so the screenshot's own
+   window chrome (bottom 1px) is not clipped by subpixel rounding. */
+.stage:not(.is-stack) .stage-media{overflow:hidden}
+.stage:not(.is-stack) .media-surface,
+.stage:not(.is-stack) .media-xform{
+  height:100%;max-height:100%;min-height:0;overflow:visible;
+}
+.stage:not(.is-stack) .stage-media[data-zoomed],
+.stage:not(.is-stack) .stage-media[data-zoomed] .media-surface,
+.stage:not(.is-stack) .stage-media[data-zoomed] .media-xform{
+  overflow:hidden;
+}
+.stage:not(.is-stack) .stage-media img.media-el,
+.stage:not(.is-stack) .stage-media video.media-el{
+  width:auto;height:auto;max-width:100%;max-height:100%;
+  border-radius:0;
 }
 /* Zoom pans via translate3d only — never CSS scale (bilinear softens UI text) */
 .media-xform{
@@ -301,11 +320,10 @@ html.tv-stack .layout-btn .ico-classic{display:block}
 }
 .stage-media img.media-el,.stage-media video.media-el{
   display:block;box-sizing:border-box;flex:none;
-  /* Fit (1×): one contain shrink. Zoomed: JS sets exact px from naturalWidth. */
-  width:auto;height:auto;
-  max-width:100%;max-height:100%;
+  width:100%;height:auto;
+  max-width:100%;max-height:none;
   object-fit:contain;object-position:center;
-  border-radius:4px;
+  border-radius:0;
   image-rendering:auto;
   -webkit-user-drag:none;user-drag:none;
   pointer-events:auto;
@@ -337,7 +355,9 @@ html.tv-stack .layout-btn .ico-classic{display:block}
 
 .stage-foot{
   display:flex;align-items:center;justify-content:space-between;gap:14px;
+  flex-shrink:0;flex-wrap:wrap;
   padding:8px 14px;border-top:1px solid var(--line);background:var(--panel);
+  z-index:3;
 }
 .tour-controls{
   display:flex;flex-direction:row;align-items:center;gap:10px;
@@ -371,6 +391,9 @@ html.tv-stack .layout-btn .ico-classic{display:block}
 .tour-controls[data-mode="playing"] .tour-meta b{color:var(--accent)}
 .tour-controls[data-mode="paused"] .tour-meta b{color:var(--amber)}
 .tour-meta span{font-size:.65rem;color:var(--muted);line-height:1.25;white-space:nowrap;max-width:22ch;overflow:hidden;text-overflow:ellipsis}
+.tour-controls .theme-btn{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;margin-left:auto;
+}
 .slide-nav{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto}
 .slide-nav button{
   height:32px;padding:0 11px;border-radius:8px;border:1px solid var(--line);
@@ -392,26 +415,28 @@ html.tv-stack .layout-btn .ico-classic{display:block}
   .shell{grid-template-columns:200px minmax(0,1fr)}
   .metrics{grid-template-columns:repeat(2,1fr)}
 }
-/* Stack: all features scroll; slides via buttons + horizontal swipe only */
+/* Narrow: nav off. Classic fills the leftover viewport; stack still page-scrolls. */
 @media(max-width:900px){
-  html,.tv-explore{height:auto;overflow:auto}
-  .tv-explore,.tv-explore.tv-stack{
-    height:auto!important;min-height:0!important;overflow:visible!important;
+  .tv-explore.tv-stack,.tv-explore.tv-stack .tv-explore{height:100%;overflow:hidden}
+  .tv-explore.tv-stack .tv-explore,.tv-explore.tv-stack.tv-explore{
+    height:100%!important;min-height:0!important;overflow:auto!important;
   }
+  html:not(.tv-stack),html:not(.tv-stack) .tv-explore{height:100%;overflow:hidden}
 
   .shell{
     display:flex;flex-direction:column;
-    height:auto;min-height:0;overflow:visible;
     gap:8px;
     padding:8px;
     padding-left:max(8px,env(safe-area-inset-left));
     padding-right:max(8px,env(safe-area-inset-right));
     padding-bottom:max(12px,env(safe-area-inset-bottom));
   }
+  .tv-explore.tv-stack .shell{height:100%;min-height:0;overflow:auto}
+  html:not(.tv-stack) .shell{height:100%;min-height:0;overflow:hidden}
 
-  /* Compact brand bar */
+  /* Compact brand bar — nav hidden */
   .sidebar{
-    width:100%;max-height:none;
+    width:100%;max-height:none;flex:0 0 auto;
     display:grid;
     grid-template-columns:1fr auto;
     grid-template-areas:"brand foot";
@@ -428,7 +453,12 @@ html.tv-stack .layout-btn .ico-classic{display:block}
   .theme-btn,.layout-btn{width:36px;height:36px;border-radius:9px}
   .side-nav{display:none!important}
 
-  .main,.stage{overflow:visible;min-height:0;flex:none;height:auto}
+  .tv-explore.tv-stack .main,.tv-explore.tv-stack .stage{
+    overflow:visible;min-height:0;flex:none;height:auto;
+  }
+  html:not(.tv-stack) .main,html:not(.tv-stack) .stage{
+    flex:1 1 auto;min-height:0;height:auto;overflow:hidden;
+  }
   .stage.is-stack{
     background:transparent;border:0;box-shadow:none;
     overflow:visible;touch-action:pan-y;
@@ -436,14 +466,17 @@ html.tv-stack .layout-btn .ico-classic{display:block}
 
   /* Solid sticky tour chrome — no gradient wash */
   .stack-tour{
-    position:sticky;top:0;z-index:5;
-    margin:0 0 8px;
-    padding:0;
+    position:sticky;top:0;z-index:6;
+    margin:0;
+    padding:0 0 1rem;
     background:var(--bg);
-    padding-top:env(safe-area-inset-top,0);
   }
   .stack-tour .tour-controls{
     width:100%;
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;
+    justify-content:stretch;
     padding:8px 10px;gap:10px;
     border-radius:10px;
     background:var(--panel);
@@ -451,6 +484,10 @@ html.tv-stack .layout-btn .ico-classic{display:block}
   }
   .stack-tour .tour-btn{width:40px;height:40px;border-radius:9px}
   .stack-tour .tour-btn svg{width:16px;height:16px}
+  .stack-tour .tour-controls .theme-btn{
+    width:40px;height:40px;border-radius:9px;margin-left:0;
+  }
+  .stack-tour .tour-meta{align-items:center;text-align:center}
   .stack-tour .tour-meta b{font-size:.72rem}
   .stack-tour .tour-meta span{white-space:normal;max-width:none;font-size:.68rem}
 
@@ -459,9 +496,14 @@ html.tv-stack .layout-btn .ico-classic{display:block}
     border-radius:10px;border:1px solid var(--line);
     background:var(--panel);box-shadow:none;
     overflow:hidden;touch-action:pan-y;
+    padding:1px;
+    opacity:.82;
+    transition:opacity .4s ease,border-color .25s ease,box-shadow .4s ease;
   }
   .feature-card[aria-current="true"]{
+    opacity:1;
     border-color:color-mix(in srgb,var(--accent) 40%,var(--line));
+    box-shadow:var(--shadow);
   }
   .feature-cat{
     padding:8px 14px 0;
@@ -483,8 +525,8 @@ html.tv-stack .layout-btn .ico-classic{display:block}
   .feature-card .media-desc{font-size:.74rem}
   .feature-card .stage-media{
     flex:none;
-    min-height:min(52vw,280px);
-    max-height:min(62vh,420px);
+    min-height:0;max-height:none;height:auto;
+    overflow:visible;
     padding:8px;
     touch-action:pan-y pinch-zoom;
     background:var(--media);
@@ -512,14 +554,14 @@ html.tv-stack .layout-btn .ico-classic{display:block}
     border-top:1px solid var(--line);
   }
   .feature-card .metric{padding:7px 8px;border-radius:8px}
-  .feature-card .hl{padding:7px 4px;gap:10px}
+  .feature-card .hl{padding:10px 6px;gap:12px}
   .feature-card .hl-ico{
-    flex:0 0 24px;width:24px;height:24px;min-width:24px;max-width:24px;
-    padding:3px;border-radius:6px;
+    flex:0 0 30px;width:30px;height:30px;min-width:30px;max-width:30px;
+    padding:5px;border-radius:7px;
   }
-  .feature-card .hl-ico svg{width:14px;height:14px}
-  .feature-card .hl-body strong{font-size:.76rem}
-  .feature-card .hl-body span{font-size:.66rem}
+  .feature-card .hl-ico svg{width:16px;height:16px}
+  .feature-card .hl-body strong{font-size:.84rem}
+  .feature-card .hl-body span{font-size:.74rem}
 
   .feature-card .stage-foot{
     flex-direction:row;flex-wrap:nowrap;align-items:center;justify-content:stretch;
@@ -535,57 +577,88 @@ html.tv-stack .layout-btn .ico-classic{display:block}
   .feature-card .slide-dots button{width:8px;height:8px}
 }
 
-/* Desktop continuous-scroll: keep the classic sidebar, expand every feature in the stage */
+/* Desktop continuous-scroll: classic sidebar + stacked features.
+   One scrollport (html). Body/stage overflow:visible so sticky chrome can pin. */
 @media(min-width:901px){
-  html.tv-stack .stage.is-stack{
-    background:transparent;border:0;box-shadow:none;
-    overflow:auto;touch-action:pan-y;
+  .tv-explore.tv-stack{
+    height:100%;overflow:auto;
   }
-  html.tv-stack .stack-tour{
-    position:sticky;top:0;z-index:5;
-    margin:0 0 10px;padding:0;
+  .tv-explore.tv-stack .tv-explore{
+    height:auto;min-height:100%;overflow:visible;
+  }
+  .tv-explore.tv-stack .shell{
+    height:auto;min-height:100%;overflow:visible;align-items:start;
+  }
+  .tv-explore.tv-stack .sidebar{
+    position:sticky;top:12px;z-index:4;align-self:start;
+    height:calc(100dvh - 24px);max-height:calc(100dvh - 24px);
+  }
+  .tv-explore.tv-stack .main,
+  .tv-explore.tv-stack .stage,
+  .tv-explore.tv-stack .stage.is-stack{
+    height:auto;min-height:0;flex:none;overflow:visible;
+  }
+  .tv-explore.tv-stack .stage.is-stack{
+    background:transparent;border:0;box-shadow:none;
+    touch-action:pan-y;
+  }
+  .tv-explore.tv-stack .stack-tour{
+    position:sticky;top:12px;z-index:6;
+    margin:0;padding:0 0 1rem;
     background:var(--bg);
   }
-  html.tv-stack .stack-tour .tour-controls{
+  .tv-explore.tv-stack .stack-tour .tour-controls{
     width:100%;
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;
+    justify-content:stretch;
     background:var(--panel);box-shadow:var(--shadow);
   }
-  html.tv-stack .feature-stack{display:flex;flex-direction:column;gap:12px;padding-bottom:8px}
-  html.tv-stack .feature-card{
+  .tv-explore.tv-stack .stack-tour .tour-controls .theme-btn{margin-left:0}
+  .tv-explore.tv-stack .feature-stack{display:flex;flex-direction:column;gap:12px;padding-bottom:8px}
+  .tv-explore.tv-stack .feature-card{
     border-radius:12px;border:1px solid var(--line);
     background:var(--panel);overflow:hidden;
+    padding:1px;
+    scroll-margin-top:var(--tour-h,72px);
+    opacity:.78;
+    transition:opacity .4s ease,border-color .25s ease,box-shadow .4s ease;
   }
-  html.tv-stack .feature-card[aria-current="true"]{
+  .tv-explore.tv-stack .feature-card[aria-current="true"]{
+    opacity:1;
     border-color:color-mix(in srgb,var(--accent) 40%,var(--line));
+    box-shadow:var(--shadow-lg);
   }
-  html.tv-stack .feature-cat{
+  .tv-explore.tv-stack .feature-cat{
     padding:10px 18px 0;
     font-size:.7rem;font-weight:600;letter-spacing:-.01em;color:var(--dim);
   }
-  html.tv-stack .feature-card .stage-body,
-  html.tv-stack .feature-card .stage-main{
+  .tv-explore.tv-stack .feature-card .stage-body,
+  .tv-explore.tv-stack .feature-card .stage-main{
     display:flex;flex-direction:column;
     min-height:0;overflow:visible;flex:none;
     background:var(--media);
   }
-  html.tv-stack .feature-card .media-heading{
+  .tv-explore.tv-stack .feature-card .media-heading{
     padding:16px 20px 10px;
     background:var(--panel);border-bottom:1px solid var(--line);
   }
-  html.tv-stack .feature-card .stage-media{
+  .tv-explore.tv-stack .feature-card .stage-media{
     flex:none;
-    min-height:380px;max-height:min(74vh,780px);
+    min-height:0;max-height:none;height:auto;
+    overflow:visible;
     padding:18px 22px;
     background:var(--media);
   }
-  html.tv-stack .feature-card .media-ctas{
+  .tv-explore.tv-stack .feature-card .media-ctas{
     padding:10px 20px;border-top:1px solid var(--line);background:var(--panel);
   }
-  html.tv-stack .feature-card .stage-below{
-    padding:14px 20px 12px;
+  .tv-explore.tv-stack .feature-card .stage-below{
+    padding:16px 20px 16px;
     border-top:1px solid var(--line);background:var(--panel);
   }
-  html.tv-stack .feature-card .stage-foot{
+  .tv-explore.tv-stack .feature-card .stage-foot{
     padding:8px 14px 12px;background:var(--panel);
   }
 }
@@ -597,26 +670,68 @@ html.tv-stack .layout-btn .ico-classic{display:block}
   .stage-media[data-zoomed][data-panning]{cursor:grabbing}
 }
 
+.tv-explore.tv-stack .feature-card{scroll-margin-top:var(--tour-h,72px)}
+.tv-explore.tv-stack .intro-card{scroll-margin-top:var(--tour-h,72px)}
+
+@keyframes tv-slide-in{
+  from{opacity:0;transform:translate3d(0,14px,0)}
+  to{opacity:1;transform:none}
+}
+@keyframes tv-slide-in-up{
+  from{opacity:0;transform:translate3d(0,-14px,0)}
+  to{opacity:1;transform:none}
+}
+.stage.is-slide-next .stage-body,
+.stage.is-slide-prev .stage-body,
+.feature-card.is-slide-next .stage-body,
+.feature-card.is-slide-prev .stage-body{
+  animation:tv-slide-in .52s cubic-bezier(.22,1,.36,1);
+}
+.stage.is-slide-prev .stage-body,
+.feature-card.is-slide-prev .stage-body{
+  animation-name:tv-slide-in-up;
+}
+
+/* During play, the active card is one viewport-fit slide (media + chrome + controls). */
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"]{
+  display:flex;flex-direction:column;
+  max-height:var(--play-fit,calc(100% - 4.5rem));
+  overflow:hidden;
+}
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"] .feature-cat,
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"] .media-heading,
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"] .media-ctas,
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"] .stage-foot{
+  flex-shrink:0;
+}
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"] .stage-body,
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"] .stage-main{
+  flex:1 1 auto;min-height:0;overflow:hidden;
+}
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"] .stage-media{
+  flex:1 1 auto;min-height:0;max-height:none;height:auto;overflow:hidden;
+}
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"] .media-surface,
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"] .media-xform{
+  height:100%;max-height:100%;min-height:0;overflow:hidden;
+}
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"] .stage-media img.media-el,
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"] .stage-media video.media-el{
+  width:auto;height:auto;max-width:100%;max-height:100%;
+}
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"] .stage-below,
+.tv-explore.tv-playing.tv-stack .feature-card[aria-current="true"] .metrics{
+  flex:0 1 auto;min-height:0;max-height:30%;overflow:auto;
+}
+
 /* Lightbox — full-bleed overlay (themed light/dark).
    Appended to document.body (outside .tv-explore) — must carry its own type + tokens. */
 html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
 .tv-lightbox{
-  --tv-bg-light:#F7F6F5;
-  --tv-bg-dark:#282828;
-  --lb-scrim:color-mix(in srgb,var(--tv-bg-dark) 92%,transparent);
-  --lb-card:rgba(31,31,31,.82);
-  --lb-line:rgba(148,163,184,.22);
-  --lb-ink:#e8eef8;
-  --lb-muted:#8b9bb3;
-  --lb-dim:rgba(232,238,248,.55);
-  --lb-btn:rgba(31,31,31,.82);
-  --lb-btn-hover:rgba(40,40,40,.94);
-  --lb-shadow:0 10px 32px rgba(0,0,0,.35);
-  --accent:#3b82f6; --accent-soft:rgba(59,130,246,.22); --amber:#fbbf24;
   position:fixed;inset:0;z-index:9999;
   display:flex;align-items:center;justify-content:center;
   background:var(--lb-scrim);color:var(--lb-ink);
-  font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-family:var(--tv-font);
   font-size:13.5px;line-height:1.45;letter-spacing:-.01em;
   -webkit-font-smoothing:antialiased;
   touch-action:none;
@@ -625,18 +740,6 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
 .tv-lightbox input,
 .tv-lightbox a{
   font:inherit;color:inherit;letter-spacing:inherit;
-}
-.tv-lightbox[data-theme="light"]{
-  --lb-scrim:color-mix(in srgb,var(--tv-bg-light) 94%,transparent);
-  --lb-card:rgba(255,255,255,.92);
-  --lb-line:rgba(15,23,42,.12);
-  --lb-ink:#0f172a;
-  --lb-muted:#64748b;
-  --lb-dim:rgba(15,23,42,.48);
-  --lb-btn:rgba(255,255,255,.92);
-  --lb-btn-hover:#fff;
-  --lb-shadow:0 10px 32px rgba(15,23,42,.14);
-  --accent:#2563eb; --accent-soft:rgba(37,99,235,.14); --amber:#d97706;
 }
 .tv-lightbox[hidden]{display:none!important}
 .tv-lb-stage{
@@ -812,6 +915,150 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   .tv-lightbox .tour-meta span{max-width:none;white-space:normal}
 }
 
+.intro-body{
+  padding:18px 20px 22px;color:var(--ink);max-width:68ch;
+}
+.intro-body h1{
+  margin:0 0 8px;font-size:1.25rem;font-weight:600;letter-spacing:-.03em;line-height:1.2;
+}
+.intro-body h2{
+  margin:16px 0 6px;font-size:1rem;font-weight:600;letter-spacing:-.02em;
+}
+.intro-body h3{margin:12px 0 4px;font-size:.9rem;font-weight:600}
+.intro-body p,.intro-body li{color:var(--muted);font-size:.84rem;line-height:1.5}
+.intro-body p{margin:0 0 10px}
+.intro-body ul,.intro-body ol{margin:0 0 12px;padding-left:1.2em}
+.intro-body li{margin:3px 0}
+.intro-body a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+.intro-body code{font-size:.84em}
+.intro-body img,.intro-body video{
+  border-radius:10px;margin:8px 0 12px;border:1px solid var(--line);max-width:100%;
+}
+.intro-card .intro-body{background:var(--panel)}
+
+/* explore_plex.css */
+/**
+ * @explore-theme plex
+ * @explore-font https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap
+ *
+ * Default explorer skin (IBM Plex + blue). Light/dark via data-theme.
+ * Activate with data-skin="plex" (the generator default).
+ */
+.tv-explore[data-skin="plex"]{
+  --tv-font:"IBM Plex Sans",system-ui,sans-serif;
+  --tv-bg-light:#F7F6F5;
+  --tv-bg-dark:#282828;
+  --side-w:240px;
+  --radius:12px;
+}
+.tv-explore[data-skin="plex"],
+.tv-explore[data-skin="plex"][data-theme="light"]{
+  color-scheme:light;
+  --bg:var(--tv-bg-light); --ink:#0f172a; --muted:#64748b; --dim:#94a3b8;
+  --accent:#2563eb; --accent-hover:#1d4ed8;
+  --accent-soft:rgba(37,99,235,.08);
+  --amber:#d97706;
+  --panel:#ffffff; --panel-2:#f1f0ee;
+  --line:rgba(15,23,42,.09); --line-strong:rgba(15,23,42,.14);
+  --media:var(--tv-bg-light);
+  --shadow:0 1px 2px rgba(15,23,42,.04);
+  --shadow-lg:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.05);
+  --sel-bg:rgba(37,99,235,.08);
+  --lb-scrim:color-mix(in srgb,var(--tv-bg-light) 94%,transparent);
+  --lb-card:rgba(255,255,255,.92);
+  --lb-line:rgba(15,23,42,.12);
+  --lb-ink:#0f172a;
+  --lb-muted:#64748b;
+  --lb-dim:rgba(15,23,42,.48);
+  --lb-btn:rgba(255,255,255,.92);
+  --lb-btn-hover:#fff;
+  --lb-shadow:0 10px 32px rgba(15,23,42,.14);
+}
+.tv-explore[data-skin="plex"][data-theme="dark"]{
+  color-scheme:dark;
+  --bg:var(--tv-bg-dark); --ink:#e8eef8; --muted:#8b9bb3; --dim:#64748b;
+  --accent:#3b82f6; --accent-hover:#60a5fa;
+  --accent-soft:rgba(59,130,246,.14);
+  --amber:#fbbf24;
+  --panel:#1f1f1f; --panel-2:#242424;
+  --line:rgba(148,163,184,.14); --line-strong:rgba(148,163,184,.22);
+  --media:var(--tv-bg-dark);
+  --shadow:0 1px 2px rgba(0,0,0,.25);
+  --shadow-lg:0 1px 2px rgba(0,0,0,.25),0 10px 28px rgba(0,0,0,.28);
+  --sel-bg:rgba(59,130,246,.12);
+  --lb-scrim:color-mix(in srgb,var(--tv-bg-dark) 92%,transparent);
+  --lb-card:rgba(31,31,31,.82);
+  --lb-line:rgba(148,163,184,.22);
+  --lb-ink:#e8eef8;
+  --lb-muted:#8b9bb3;
+  --lb-dim:rgba(232,238,248,.55);
+  --lb-btn:rgba(31,31,31,.82);
+  --lb-btn-hover:rgba(40,40,40,.94);
+  --lb-shadow:0 10px 32px rgba(0,0,0,.35);
+}
+
+/* explore_shell.css */
+/**
+ * @explore-theme shell
+ * @explore-font https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap
+ *
+ * DESIGN.md hardware world on the explorer chrome.
+ * Two themes, one shell: neutrals invert; #c8362b never changes.
+ * Activate: ?skin=shell  (or localStorage tv-explore-skin)
+ */
+.tv-explore[data-skin="shell"]{
+  --tv-font:"Public Sans",system-ui,sans-serif;
+  --tv-bg-light:#f4f0e6;
+  --tv-bg-dark:#14130f;
+  --side-w:240px;
+  --radius:10px;
+}
+.tv-explore[data-skin="shell"],
+.tv-explore[data-skin="shell"][data-theme="light"]{
+  color-scheme:light;
+  --bg:var(--tv-bg-light); --ink:#1b1a17; --muted:#5a564c; --dim:#5a564c;
+  --accent:#c8362b; --accent-hover:#9e2a22;
+  --accent-soft:rgba(200,54,43,.10);
+  --amber:#9e2a22;
+  --panel:#fffdf7; --panel-2:#f3ead8;
+  --line:#dcd3bf; --line-strong:#b3a994;
+  --media:var(--tv-bg-light);
+  --shadow:0 1px 2px rgba(27,26,23,.05);
+  --shadow-lg:0 1px 2px rgba(27,26,23,.05),0 8px 24px rgba(27,26,23,.06);
+  --sel-bg:rgba(200,54,43,.10);
+  --lb-scrim:color-mix(in srgb,var(--tv-bg-light) 94%,transparent);
+  --lb-card:rgba(255,253,247,.94);
+  --lb-line:#dcd3bf;
+  --lb-ink:#1b1a17;
+  --lb-muted:#5a564c;
+  --lb-dim:rgba(27,26,23,.48);
+  --lb-btn:rgba(255,253,247,.94);
+  --lb-btn-hover:#ffffff;
+  --lb-shadow:0 10px 32px rgba(27,26,23,.12);
+}
+.tv-explore[data-skin="shell"][data-theme="dark"]{
+  color-scheme:dark;
+  --bg:var(--tv-bg-dark); --ink:#ece8df; --muted:#a7a299; --dim:#a7a299;
+  --accent:#c8362b; --accent-hover:#e8635a;
+  --accent-soft:rgba(200,54,43,.16);
+  --amber:#e8635a;
+  --panel:#1c1b16; --panel-2:#14130f;
+  --line:#3a3830; --line-strong:#5a564c;
+  --media:var(--tv-bg-dark);
+  --shadow:0 1px 2px rgba(0,0,0,.28);
+  --shadow-lg:0 1px 2px rgba(0,0,0,.28),0 10px 28px rgba(0,0,0,.32);
+  --sel-bg:rgba(200,54,43,.16);
+  --lb-scrim:color-mix(in srgb,var(--tv-bg-dark) 92%,transparent);
+  --lb-card:rgba(28,27,22,.88);
+  --lb-line:#3a3830;
+  --lb-ink:#ece8df;
+  --lb-muted:#a7a299;
+  --lb-dim:rgba(236,232,223,.55);
+  --lb-btn:rgba(28,27,22,.88);
+  --lb-btn-hover:#1c1b16;
+  --lb-shadow:0 10px 32px rgba(0,0,0,.4);
+}
+
 </style>
 <div class="shell">
   <aside class="sidebar">
@@ -835,11 +1082,10 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     <section class="stage" id="stage" aria-live="polite"></section>
   </div>
 </div>
-<script type="application/json" id="data">{"product":{"title":"Tanit Chat","subtitle":"Viele Werkzeuge. Ein Arbeitsplatz. Zuerst lokal.","tip":"Dateien in Tanit oder Explorer auswählen — sie werden zum Chat-Kontext.","features":[{"id":"files","label":"Dateien","icon":"documents","description":"Dateien in Tanit oder dem Windows-Explorer auswählen und sofort damit arbeiten — ohne separaten Upload. Ein Filmstrip zeigt genau, was Chat sehen kann, bevor du sendest.","slides":[{"id":"overview","title":"Die Auswahl wird zum Kontext","description":"Ablegen, einfügen oder per @ referenzieren. Der Filmstrip ist die Wahrheit darüber, was das Modell sieht.","media":{"type":"image","src":"./screenshots/filemanager.jpg"},"highlights":[{"icon":"documents","title":"Filmstrip-Kontext","text":"Genau sehen, was Chat sieht, bevor du sendest"},{"icon":"documents","title":"Ablegen, einfügen, @-Referenz","text":"Dateien aus Tanit oder Explorer, kein Upload-Tab"},{"icon":"markdown","title":"Markdown, Tabellen, Code, Mermaid","text":"Antworten bleiben bei den Dateien, aus denen sie stammen"},{"icon":"command","title":"Lokale Dateilinks","text":"Ergebnisse und Live-Shell-Ausgabe an Ort und Stelle öffnen"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"ai","label":"KI","icon":"command","description":"Direktanbieter verbinden, eigenen Schlüssel mitbringen, kompatible Endpunkte nutzen, einen Aggregator wählen oder unterstützte Modelle lokal mit llama.cpp betreiben. Modelle wechseln, wenn sich der Bedarf ändert.","slides":[{"id":"overview","title":"Jede Fähigkeit zum passenden Modell","description":"Text, Planung, Vision, OCR, Bildgenerierung, Transkription und Sprache nutzen jeweils einen lokalen oder Cloud-Anbieter — nie ein Vendor für alles.","media":{"type":"image","src":"./screenshots/chat.jpg"},"highlights":[{"icon":"command","title":"Lokales llama.cpp + GGUF","text":"Unterstützte Modelle auf dem Gerät"},{"icon":"network","title":"Cloud & BYOK","text":"Direktanbieter, kompatible Endpunkte, Aggregatoren"},{"icon":"command","title":"Routing pro Fähigkeit","text":"Modell pro Aufgabe wählen, nicht pro App"},{"icon":"command","title":"Agent als Preset speichern","text":"Anbieter, Werkzeuge, Skills und MCP in einem Setup"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"voice","label":"Sprache","icon":"audio","description":"Aufnahmen und Spracheingabe offline mit whisper.cpp transkribieren. Lokale Sprachsynthese kann Antworten vorlesen, ohne sie an einen Cloud-Sprachdienst zu senden.","slides":[{"id":"overview","title":"Sprechen statt tippen","description":"Sprache ist zuerst lokal. Cloud-Realtime ist optional, wenn du es willst.","media":{"type":"image","src":"./screenshots/audio.jpg"},"highlights":[{"icon":"audio","title":"whisper.cpp offline","text":"Aufnahmen und Eingabe auf dem Gerät transkribieren"},{"icon":"rt-audio","title":"Lokale Sprachsynthese","text":"Antworten vorlesen ohne Cloud-Stimme"},{"icon":"rt-audio","title":"Realtime-Routing","text":"Einschalten, wenn eine Live-Session sich lohnt"},{"icon":"command","title":"Sprachbefehle","text":"Den Arbeitsplatz freihändig steuern"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"images","label":"Bilder","icon":"images-raw","description":"Bilder durchsuchen und prüfen, Medien umwandeln, Metadaten bearbeiten. Lokale Vision-Language-Modelle für privates Bildverstehen, ONNX für OCR und Layout, oder Bildgenerierung an einen Cloud-Anbieter.","slides":[{"id":"overview","title":"Prüfen, stapeln, erzeugen","description":"Vision kann auf dem Gerät bleiben. Generierung kann in die Cloud. Du entscheidest pro Aufgabe.","media":{"type":"image","src":"./screenshots/image-ops.jpg"},"highlights":[{"icon":"images-raw","title":"Ansicht & Stapel","text":"Prüfen, umwandeln, Metadaten"},{"icon":"images-raw","title":"Lokale VLM-Vision","text":"Privates Bildverstehen auf dem Gerät"},{"icon":"command","title":"ONNX OCR & Layout","text":"Dokumente lesen, ohne Seiten zu senden"},{"icon":"network","title":"Cloud-Bildgenerierung","text":"Generierung routen, wenn ein Remote-Modell passt"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"video","label":"Video","icon":"video","description":"Video wiedergeben und prüfen, Webcam oder Bildschirm aufnehmen, Formate stapelweise wandeln. Sitzungs-MP4 und xblox-Record-Blöcke — nur nutzergestartet oder selbst geplante Abläufe, niemals verdeckte Aufnahme.","slides":[{"id":"overview","title":"Abspielen, aufnehmen, wandeln","description":"Clips an Ort und Stelle prüfen, aufnehmen wenn du es startest, stapelweise wandeln — derselbe Arbeitsplatz wie Chat.","media":{"type":"image","src":"./screenshots/chat-video-gen.jpg"},"highlights":[{"icon":"video","title":"Wiedergabe & Prüfung","text":"Scrubben ohne Chat zu verlassen"},{"icon":"rt-video","title":"Webcam / Bildschirm","text":"Nur nutzergestartet — Windows-Zustimmung beim ersten Mal"},{"icon":"command","title":"Stapelwandlung","text":"FFmpeg, HandBrake und andere Tools über Befehle"},{"icon":"video","title":"Sitzungsaufnahme","text":"MP4 und xblox-Record-Blöcke, die du selbst anlegst"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"markdown","label":"Markdown","icon":"markdown","description":"Antworten mit Markdown, Tabellen, Code-Highlighting, KaTeX, Mermaid, lokalen Dateilinks, erzeugten Bildern und Live-Shell-Ausgabe. Live-XBlox-Blöcke in der Antwort; Versionsverlauf hält Änderungen fest.","slides":[{"id":"overview","title":"Reiche Antworten, mit Verlauf","description":"Die Antwort ist ein Arbeitsdokument — Diagramme, Mathematik, live Blöcke und eine Spur dessen, was sich geändert hat.","media":{"type":"image","src":"./screenshots/office-docs.jpg"},"highlights":[{"icon":"markdown","title":"Markdown + Tabellen + Code","text":"Struktur in der Antwortspalte"},{"icon":"markdown","title":"KaTeX & Mermaid","text":"Mathematik und Diagramme ohne Extra-Tool"},{"icon":"xblox","title":"Live-XBlox-Blöcke","text":"Ausführbare Blöcke in der Antwort"},{"icon":"command","title":"Versionsverlauf","text":"Keine Änderung geht verloren, auch KI-Edits"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"automation","label":"Automatisierung","icon":"xblox","description":"Den Ablauf als XBlox-Flow festhalten — LLM-Agent mit Dateieingabe, Modellen, OCR, Vision, Audio, Bedingungen, Schleifen und gespeicherter Ausgabe. Veröffentlichen in Ribbon, Launcher, Tanit oder dem Explorer-Kontextmenü.","slides":[{"id":"overview","title":"Aus einem Chat wird ein Befehl","description":"Wenn die Aufgabe sich wiederholt, den erfolgreichen Ablauf speichern und auf der nächsten Auswahl ausführen.","media":{"type":"image","src":"./screenshots/automation.jpg"},"highlights":[{"icon":"xblox","title":"Visuelle XBlox-Flows","text":"Agent + Dateien + Modelle + Bedingungen in einem Graphen","slide":"overview"},{"icon":"command","title":"Überall veröffentlichen","text":"Ribbon, Launcher, Tanit oder Explorer-Kontextmenü","slide":"launcher"},{"icon":"html","title":"Browser-Use-Flows","text":"Ein Formular oder eine Seite aus einem gespeicherten Befehl steuern","slide":"browser"},{"icon":"command","title":"Ein-Klick-Wiederholung","text":"Die nächste Datei läuft denselben geprüften Prozess","slide":"overview"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]},{"id":"launcher","title":"Im Launcher veröffentlicht","description":"Ein fertiger Flow wird ein Befehl, den du ohne Editor starten kannst.","media":{"type":"image","src":"./screenshots/launcher.jpg"}},{"id":"browser","title":"Browser-Use aus einem Befehl","description":"Eine Seite oder ein Formular mit demselben Flow steuern, der als Chat begann.","media":{"type":"image","src":"./screenshots/forms-browser-use.jpg"}}]},{"id":"security","label":"Sicherheit","icon":"command","description":"Profile Light, Strict oder Developer. Aktion, Ziel und Risiko prüfen, dann einmal, für eine Aufgabe, für eine Sitzung, zeitlich begrenzt, immer oder nie freigeben. Administratoren setzen Richtlinie über Gruppenrichtlinie, Intune MDM oder Registry; Maschinenrichtlinie überschreibt Benutzereinstellungen.","slides":[{"id":"overview","title":"Jede Aktion freigeben","description":"Nützliche KI-Abläufe, ohne jedem Assistenten uneingeschränkten Zugriff auf Dateien, Werkzeuge oder das Netz zu geben.","highlights":[{"icon":"command","title":"Light / Strict / Developer","text":"Ein Profil dafür, wie viel der Assistent tun darf"},{"icon":"command","title":"Freigabe pro Aktion","text":"Einmal, Aufgabe, Sitzung, begrenzt, immer oder nie"},{"icon":"network","title":"Gruppenrichtlinie & Intune","text":"Maschinenrichtlinie überschreibt den Benutzer"},{"icon":"command","title":"Sandbox-Befehle","text":"Geschützte Anforderungen kann ein Nicht-Admin nicht senken"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]}],"lang":"de"},"features":[{"id":"files","label":"Dateien","icon":"documents","description":"Dateien in Tanit oder dem Windows-Explorer auswählen und sofort damit arbeiten — ohne separaten Upload. Ein Filmstrip zeigt genau, was Chat sehen kann, bevor du sendest.","slides":[{"id":"overview","title":"Die Auswahl wird zum Kontext","description":"Ablegen, einfügen oder per @ referenzieren. Der Filmstrip ist die Wahrheit darüber, was das Modell sieht.","media":{"type":"image","src":"./screenshots/filemanager.jpg"},"highlights":[{"icon":"documents","title":"Filmstrip-Kontext","text":"Genau sehen, was Chat sieht, bevor du sendest"},{"icon":"documents","title":"Ablegen, einfügen, @-Referenz","text":"Dateien aus Tanit oder Explorer, kein Upload-Tab"},{"icon":"markdown","title":"Markdown, Tabellen, Code, Mermaid","text":"Antworten bleiben bei den Dateien, aus denen sie stammen"},{"icon":"command","title":"Lokale Dateilinks","text":"Ergebnisse und Live-Shell-Ausgabe an Ort und Stelle öffnen"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"ai","label":"KI","icon":"command","description":"Direktanbieter verbinden, eigenen Schlüssel mitbringen, kompatible Endpunkte nutzen, einen Aggregator wählen oder unterstützte Modelle lokal mit llama.cpp betreiben. Modelle wechseln, wenn sich der Bedarf ändert.","slides":[{"id":"overview","title":"Jede Fähigkeit zum passenden Modell","description":"Text, Planung, Vision, OCR, Bildgenerierung, Transkription und Sprache nutzen jeweils einen lokalen oder Cloud-Anbieter — nie ein Vendor für alles.","media":{"type":"image","src":"./screenshots/chat.jpg"},"highlights":[{"icon":"command","title":"Lokales llama.cpp + GGUF","text":"Unterstützte Modelle auf dem Gerät"},{"icon":"network","title":"Cloud & BYOK","text":"Direktanbieter, kompatible Endpunkte, Aggregatoren"},{"icon":"command","title":"Routing pro Fähigkeit","text":"Modell pro Aufgabe wählen, nicht pro App"},{"icon":"command","title":"Agent als Preset speichern","text":"Anbieter, Werkzeuge, Skills und MCP in einem Setup"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"voice","label":"Sprache","icon":"audio","description":"Aufnahmen und Spracheingabe offline mit whisper.cpp transkribieren. Lokale Sprachsynthese kann Antworten vorlesen, ohne sie an einen Cloud-Sprachdienst zu senden.","slides":[{"id":"overview","title":"Sprechen statt tippen","description":"Sprache ist zuerst lokal. Cloud-Realtime ist optional, wenn du es willst.","media":{"type":"image","src":"./screenshots/audio.jpg"},"highlights":[{"icon":"audio","title":"whisper.cpp offline","text":"Aufnahmen und Eingabe auf dem Gerät transkribieren"},{"icon":"rt-audio","title":"Lokale Sprachsynthese","text":"Antworten vorlesen ohne Cloud-Stimme"},{"icon":"rt-audio","title":"Realtime-Routing","text":"Einschalten, wenn eine Live-Session sich lohnt"},{"icon":"command","title":"Sprachbefehle","text":"Den Arbeitsplatz freihändig steuern"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"images","label":"Bilder","icon":"images-raw","description":"Bilder durchsuchen und prüfen, Medien umwandeln, Metadaten bearbeiten. Lokale Vision-Language-Modelle für privates Bildverstehen, ONNX für OCR und Layout, oder Bildgenerierung an einen Cloud-Anbieter.","slides":[{"id":"overview","title":"Prüfen, stapeln, erzeugen","description":"Vision kann auf dem Gerät bleiben. Generierung kann in die Cloud. Du entscheidest pro Aufgabe.","media":{"type":"image","src":"./screenshots/image-ops.jpg"},"highlights":[{"icon":"images-raw","title":"Ansicht & Stapel","text":"Prüfen, umwandeln, Metadaten"},{"icon":"images-raw","title":"Lokale VLM-Vision","text":"Privates Bildverstehen auf dem Gerät"},{"icon":"command","title":"ONNX OCR & Layout","text":"Dokumente lesen, ohne Seiten zu senden"},{"icon":"network","title":"Cloud-Bildgenerierung","text":"Generierung routen, wenn ein Remote-Modell passt"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"video","label":"Video","icon":"video","description":"Video wiedergeben und prüfen, Webcam oder Bildschirm aufnehmen, Formate stapelweise wandeln. Sitzungs-MP4 und xblox-Record-Blöcke — nur nutzergestartet oder selbst geplante Abläufe, niemals verdeckte Aufnahme.","slides":[{"id":"overview","title":"Abspielen, aufnehmen, wandeln","description":"Clips an Ort und Stelle prüfen, aufnehmen wenn du es startest, stapelweise wandeln — derselbe Arbeitsplatz wie Chat.","media":{"type":"image","src":"./screenshots/chat-video-gen.jpg"},"highlights":[{"icon":"video","title":"Wiedergabe & Prüfung","text":"Scrubben ohne Chat zu verlassen"},{"icon":"rt-video","title":"Webcam / Bildschirm","text":"Nur nutzergestartet — Windows-Zustimmung beim ersten Mal"},{"icon":"command","title":"Stapelwandlung","text":"FFmpeg, HandBrake und andere Tools über Befehle"},{"icon":"video","title":"Sitzungsaufnahme","text":"MP4 und xblox-Record-Blöcke, die du selbst anlegst"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"markdown","label":"Markdown","icon":"markdown","description":"Antworten mit Markdown, Tabellen, Code-Highlighting, KaTeX, Mermaid, lokalen Dateilinks, erzeugten Bildern und Live-Shell-Ausgabe. Live-XBlox-Blöcke in der Antwort; Versionsverlauf hält Änderungen fest.","slides":[{"id":"overview","title":"Reiche Antworten, mit Verlauf","description":"Die Antwort ist ein Arbeitsdokument — Diagramme, Mathematik, live Blöcke und eine Spur dessen, was sich geändert hat.","media":{"type":"image","src":"./screenshots/office-docs.jpg"},"highlights":[{"icon":"markdown","title":"Markdown + Tabellen + Code","text":"Struktur in der Antwortspalte"},{"icon":"markdown","title":"KaTeX & Mermaid","text":"Mathematik und Diagramme ohne Extra-Tool"},{"icon":"xblox","title":"Live-XBlox-Blöcke","text":"Ausführbare Blöcke in der Antwort"},{"icon":"command","title":"Versionsverlauf","text":"Keine Änderung geht verloren, auch KI-Edits"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"automation","label":"Automatisierung","icon":"xblox","description":"Den Ablauf als XBlox-Flow festhalten — LLM-Agent mit Dateieingabe, Modellen, OCR, Vision, Audio, Bedingungen, Schleifen und gespeicherter Ausgabe. Veröffentlichen in Ribbon, Launcher, Tanit oder dem Explorer-Kontextmenü.","slides":[{"id":"overview","title":"Aus einem Chat wird ein Befehl","description":"Wenn die Aufgabe sich wiederholt, den erfolgreichen Ablauf speichern und auf der nächsten Auswahl ausführen.","media":{"type":"image","src":"./screenshots/automation.jpg"},"highlights":[{"icon":"xblox","title":"Visuelle XBlox-Flows","text":"Agent + Dateien + Modelle + Bedingungen in einem Graphen","slide":"overview"},{"icon":"command","title":"Überall veröffentlichen","text":"Ribbon, Launcher, Tanit oder Explorer-Kontextmenü","slide":"launcher"},{"icon":"html","title":"Browser-Use-Flows","text":"Ein Formular oder eine Seite aus einem gespeicherten Befehl steuern","slide":"browser"},{"icon":"command","title":"Ein-Klick-Wiederholung","text":"Die nächste Datei läuft denselben geprüften Prozess","slide":"overview"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]},{"id":"launcher","title":"Im Launcher veröffentlicht","description":"Ein fertiger Flow wird ein Befehl, den du ohne Editor starten kannst.","media":{"type":"image","src":"./screenshots/launcher.jpg"},"highlights":[]},{"id":"browser","title":"Browser-Use aus einem Befehl","description":"Eine Seite oder ein Formular mit demselben Flow steuern, der als Chat begann.","media":{"type":"image","src":"./screenshots/forms-browser-use.jpg"},"highlights":[]}]},{"id":"security","label":"Sicherheit","icon":"command","description":"Profile Light, Strict oder Developer. Aktion, Ziel und Risiko prüfen, dann einmal, für eine Aufgabe, für eine Sitzung, zeitlich begrenzt, immer oder nie freigeben. Administratoren setzen Richtlinie über Gruppenrichtlinie, Intune MDM oder Registry; Maschinenrichtlinie überschreibt Benutzereinstellungen.","slides":[{"id":"overview","title":"Jede Aktion freigeben","description":"Nützliche KI-Abläufe, ohne jedem Assistenten uneingeschränkten Zugriff auf Dateien, Werkzeuge oder das Netz zu geben.","highlights":[{"icon":"command","title":"Light / Strict / Developer","text":"Ein Profil dafür, wie viel der Assistent tun darf"},{"icon":"command","title":"Freigabe pro Aktion","text":"Einmal, Aufgabe, Sitzung, begrenzt, immer oder nie"},{"icon":"network","title":"Gruppenrichtlinie & Intune","text":"Maschinenrichtlinie überschreibt den Benutzer"},{"icon":"command","title":"Sandbox-Befehle","text":"Geschützte Anforderungen kann ein Nicht-Admin nicht senken"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}],"media":null}]}]}</script>
+<script type="application/json" id="data">{"product":{"title":"Tanit Chat","subtitle":"Viele Werkzeuge. Ein Arbeitsplatz. Zuerst lokal.","tip":"Dateien in Tanit oder Explorer auswählen — sie werden zum Chat-Kontext.","features":[{"id":"files","label":"Dateien","icon":"documents","description":"Dateien in Tanit oder dem Windows-Explorer auswählen und sofort damit arbeiten — ohne separaten Upload. Ein Filmstrip zeigt genau, was Chat sehen kann, bevor du sendest.","slides":[{"id":"overview","title":"Die Auswahl wird zum Kontext","description":"Ablegen, einfügen oder per @ referenzieren. Der Filmstrip ist die Wahrheit darüber, was das Modell sieht.","media":{"type":"image","src":"./screenshots/filemanager.jpg"},"highlights":[{"icon":"documents","title":"Filmstrip-Kontext","text":"Genau sehen, was Chat sieht, bevor du sendest"},{"icon":"documents","title":"Ablegen, einfügen, @-Referenz","text":"Dateien aus Tanit oder Explorer, kein Upload-Tab"},{"icon":"markdown","title":"Markdown, Tabellen, Code, Mermaid","text":"Antworten bleiben bei den Dateien, aus denen sie stammen"},{"icon":"command","title":"Lokale Dateilinks","text":"Ergebnisse und Live-Shell-Ausgabe an Ort und Stelle öffnen"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"ai","label":"KI","icon":"command","description":"Direktanbieter verbinden, eigenen Schlüssel mitbringen, kompatible Endpunkte nutzen, einen Aggregator wählen oder unterstützte Modelle lokal mit llama.cpp betreiben. Modelle wechseln, wenn sich der Bedarf ändert.","slides":[{"id":"overview","title":"Jede Fähigkeit zum passenden Modell","description":"Text, Planung, Vision, OCR, Bildgenerierung, Transkription und Sprache nutzen jeweils einen lokalen oder Cloud-Anbieter — nie ein Vendor für alles.","media":{"type":"image","src":"./screenshots/chat.jpg"},"highlights":[{"icon":"command","title":"Lokales llama.cpp + GGUF","text":"Unterstützte Modelle auf dem Gerät"},{"icon":"network","title":"Cloud & BYOK","text":"Direktanbieter, kompatible Endpunkte, Aggregatoren"},{"icon":"command","title":"Routing pro Fähigkeit","text":"Modell pro Aufgabe wählen, nicht pro App"},{"icon":"command","title":"Agent als Preset speichern","text":"Anbieter, Werkzeuge, Skills und MCP in einem Setup"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"voice","label":"Sprache","icon":"audio","description":"Aufnahmen und Spracheingabe offline mit whisper.cpp transkribieren. Lokale Sprachsynthese kann Antworten vorlesen, ohne sie an einen Cloud-Sprachdienst zu senden.","slides":[{"id":"overview","title":"Sprechen statt tippen","description":"Sprache ist zuerst lokal. Cloud-Realtime ist optional, wenn du es willst.","media":{"type":"image","src":"./screenshots/audio.jpg"},"highlights":[{"icon":"audio","title":"whisper.cpp offline","text":"Aufnahmen und Eingabe auf dem Gerät transkribieren"},{"icon":"rt-audio","title":"Lokale Sprachsynthese","text":"Antworten vorlesen ohne Cloud-Stimme"},{"icon":"rt-audio","title":"Realtime-Routing","text":"Einschalten, wenn eine Live-Session sich lohnt"},{"icon":"command","title":"Sprachbefehle","text":"Den Arbeitsplatz freihändig steuern"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"images","label":"Bilder","icon":"images-raw","description":"Bilder durchsuchen und prüfen, Medien umwandeln, Metadaten bearbeiten. Lokale Vision-Language-Modelle für privates Bildverstehen, ONNX für OCR und Layout, oder Bildgenerierung an einen Cloud-Anbieter.","slides":[{"id":"overview","title":"Prüfen, stapeln, erzeugen","_description":"Vision can stay on the device. Generation can go to the cloud. You choose per job.","media":{"type":"image","src":"./screenshots/image-ops.jpg"},"highlights":[{"icon":"images-raw","title":"Ansicht & Stapel","text":"Prüfen, umwandeln, Metadaten"},{"icon":"images-raw","title":"Lokale VLM-Vision","text":"Privates Bildverstehen auf dem Gerät"},{"icon":"images-raw","title":"ONNX OCR & Layout","text":"Dokumente lesen, ohne Seiten zu senden"},{"icon":"command","title":"Cloud-Bildgenerierung","text":"Generierung routen, wenn ein Remote-Modell passt"},{"icon":"images-raw","title":"Advanced screenshots","text":"Integrated screenshot taking, monitor, fullscreen, window or a picked region"},{"icon":"network","title":"Share as posts","text":"Share images as posts or articles"}],"description":"Vision kann auf dem Gerät bleiben. Generierung kann in die Cloud. Du entscheidest pro Aufgabe.","actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"3d","icon":"cad","label":"3D","_description":"Preview common meshes & CAD","slides":[{"id":"overview","title":"Blazing fast 3D preview, opens 40MB STEP in less than 2 seconds","description":"Supports STEP, STL, FBX, VTK, USD, DXF, FreeCAD, OBJ, GLTF, GLB, and OpenSCAD","media":{"type":"image","src":"./screenshots/3d.png"},"highlights":[{"icon":"command","title":"Custom commands","text":"Build your own optimized workflows using XBLOX and batch operations."}]}]},{"id":"office","label":"Office","icon":"documents","description":"Create and edit Word, Excel, PowerPoint, and PDF. Batch translate and create","slides":[{"id":"overview","title":"Office and PDF","description":"Open a spreadsheet or a deck without a separate office suite.","media":{"type":"image","src":"./screenshots/office-docs.jpg"},"highlights":[{"icon":"documents","title":"Built-in viewer","text":"Word, Excel, PowerPoint, and PDF in the centre pane"},{"icon":"command","title":"Batch translate or transform","text":"Run the same job across a folder of documents"},{"icon":"documents","title":"Index and search","text":"Find text inside Office files and PDFs"},{"icon":"images-raw","title":"Convert to images","text":"Export pages from any of those formats"}]}]},{"id":"video","label":"Video","icon":"video","description":"Video wiedergeben und prüfen, Webcam oder Bildschirm aufnehmen, Formate stapelweise wandeln. Sitzungs-MP4 und xblox-Record-Blöcke — nur nutzergestartet oder selbst geplante Abläufe, niemals verdeckte Aufnahme.","slides":[{"id":"overview","title":"Abspielen, aufnehmen, wandeln","description":"Clips an Ort und Stelle prüfen, aufnehmen wenn du es startest, stapelweise wandeln — derselbe Arbeitsplatz wie Chat.","media":{"type":"image","src":"./screenshots/chat-video-gen.jpg"},"highlights":[{"icon":"video","title":"Wiedergabe & Prüfung","text":"Scrubben ohne Chat zu verlassen"},{"icon":"rt-video","title":"Webcam / Bildschirm","text":"Nur nutzergestartet — Windows-Zustimmung beim ersten Mal"},{"icon":"command","title":"Stapelwandlung","text":"FFmpeg, HandBrake und andere Tools über Befehle"},{"icon":"video","title":"Sitzungsaufnahme","text":"MP4 und xblox-Record-Blöcke, die du selbst anlegst"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"browser-use","label":"Browser Use","icon":"html","description":"Search, research, fill forms, translate, talk, summarize, create subtitles, and run Tanit workflows directly beside the web.","slides":[{"id":"overview","title":"Open Tanit beside any page","description":"Search, read, fill, translate, and talk without leaving the page. A task can start in Chrome and finish in a local file or an XBlox flow.","media":{"type":"image","src":"./screenshots/chrome.png"},"highlights":[{"icon":"html","title":"Research without tab chaos","text":"Search, open results, compare sources, and keep the useful parts together"},{"icon":"documents","title":"Forms from files you have","text":"Fill from a PDF, invoice, or spreadsheet. It stops when you need to decide"},{"icon":"audio","title":"Translate, talk, subtitle","text":"A page, a reply, or a video: transcript, subtitles, or a dubbed version"},{"icon":"command","title":"Point, then finish the job","text":"Use a chart, field, or paragraph. Save the result, or continue as a workflow"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-chrome"}]}]},{"id":"share","label":"Share","icon":"cms","description":"Create and share reports, articles, posts, pictures, and files directly from Tanit.","slides":[{"id":"overview","title":"Create and share from Tanit","description":"Publish a report, an article, a set of pictures, or a file. Tanit uploads it to your account and gives you a link you can send.","media":{"type":"image","src":"./screenshots/cms.png"},"highlights":[{"icon":"markdown","title":"Reports and articles","text":"Any chat and becomes a page"},{"icon":"documents","title":"Share files","text":"PDFs, CAD, archives, and media from home/public, with a link to copy"},{"icon":"images-raw","title":"Posts and pictures","text":"A title and pictures, public, listed, or private"},{"icon":"command","title":"App or command line","text":"Sharing actions in the app, or tanit-cli service for pages, files, posts, and pictures"}]}]},{"id":"automation","label":"Automatisierung","icon":"xblox","description":"Den Ablauf als XBlox-Flow festhalten — LLM-Agent mit Dateieingabe, Modellen, OCR, Vision, Audio, Bedingungen, Schleifen und gespeicherter Ausgabe. Veröffentlichen in Ribbon, Launcher, Tanit oder dem Explorer-Kontextmenü.","slides":[{"id":"overview","title":"Aus einem Chat wird ein Befehl","description":"Wenn die Aufgabe sich wiederholt, den erfolgreichen Ablauf speichern und auf der nächsten Auswahl ausführen.","media":{"type":"image","src":"./screenshots/automation.jpg"},"highlights":[{"icon":"xblox","title":"Visuelle XBlox-Flows","text":"Agent + Dateien + Modelle + Bedingungen in einem Graphen","slide":"overview"},{"icon":"command","title":"Überall veröffentlichen","text":"Ribbon, Launcher, Tanit oder Explorer-Kontextmenü","slide":"launcher"},{"icon":"html","title":"Browser-Use-Flows","text":"Ein Formular oder eine Seite aus einem gespeicherten Befehl steuern","slide":"browser"},{"icon":"command","title":"Ein-Klick-Wiederholung","text":"Die nächste Datei läuft denselben geprüften Prozess","slide":"overview"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]},{"id":"launcher","title":"Im Launcher veröffentlicht","description":"Ein fertiger Flow wird ein Befehl, den du ohne Editor starten kannst.","media":{"type":"image","src":"./screenshots/launcher.jpg"}},{"id":"browser","title":"Browser-Use aus einem Befehl","description":"Eine Seite oder ein Formular mit demselben Flow steuern, der als Chat begann.","media":{"type":"image","src":"./screenshots/forms-browser-use.jpg"}}]},{"id":"security","label":"Sicherheit","icon":"command","description":"Profile Light, Strict oder Developer. Aktion, Ziel und Risiko prüfen, dann einmal, für eine Aufgabe, für eine Sitzung, zeitlich begrenzt, immer oder nie freigeben. Administratoren setzen Richtlinie über Gruppenrichtlinie, Intune MDM oder Registry; Maschinenrichtlinie überschreibt Benutzereinstellungen.","slides":[{"id":"overview","title":"Jede Aktion freigeben","description":"Nützliche KI-Abläufe, ohne jedem Assistenten uneingeschränkten Zugriff auf Dateien, Werkzeuge oder das Netz zu geben.","highlights":[{"icon":"command","title":"Light / Strict / Developer","text":"Ein Profil dafür, wie viel der Assistent tun darf"},{"icon":"command","title":"Freigabe pro Aktion","text":"Einmal, Aufgabe, Sitzung, begrenzt, immer oder nie"},{"icon":"network","title":"Gruppenrichtlinie & Intune","text":"Maschinenrichtlinie überschreibt den Benutzer"},{"icon":"command","title":"Sandbox-Befehle","text":"Geschützte Anforderungen kann ein Nicht-Admin nicht senken"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"markdown","label":"Markdown","description":"Antworten mit Markdown, Tabellen, Code-Highlighting, KaTeX, Mermaid, lokalen Dateilinks, erzeugten Bildern und Live-Shell-Ausgabe. Live-XBlox-Blöcke in der Antwort; Versionsverlauf hält Änderungen fest.","slides":[{"id":"overview","title":"Reiche Antworten, mit Verlauf","description":"Die Antwort ist ein Arbeitsdokument — Diagramme, Mathematik, live Blöcke und eine Spur dessen, was sich geändert hat.","highlights":[{"title":"Markdown + Tabellen + Code","text":"Struktur in der Antwortspalte"},{"title":"KaTeX & Mermaid","text":"Mathematik und Diagramme ohne Extra-Tool"},{"title":"Live-XBlox-Blöcke","text":"Ausführbare Blöcke in der Antwort"},{"title":"Versionsverlauf","text":"Keine Änderung geht verloren, auch KI-Edits"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]}],"lang":"de","intro":{"html":"\u003ch1>Tanit Chat\u003c/h1>\n\u003cp>Viele Werkzeuge. Ein Arbeitsplatz. Zuerst lokal.\u003c/p>\n\u003cp>Dateien in Tanit oder Explorer auswählen — sie werden zum Chat-Kontext.\u003c/p>\n","label":"Einführung","file":"intro_de.md"}},"features":[{"id":"files","label":"Dateien","icon":"documents","description":"Dateien in Tanit oder dem Windows-Explorer auswählen und sofort damit arbeiten — ohne separaten Upload. Ein Filmstrip zeigt genau, was Chat sehen kann, bevor du sendest.","slides":[{"id":"overview","title":"Die Auswahl wird zum Kontext","description":"Ablegen, einfügen oder per @ referenzieren. Der Filmstrip ist die Wahrheit darüber, was das Modell sieht.","media":{"type":"image","src":"./screenshots/filemanager.jpg"},"highlights":[{"icon":"documents","title":"Filmstrip-Kontext","text":"Genau sehen, was Chat sieht, bevor du sendest"},{"icon":"documents","title":"Ablegen, einfügen, @-Referenz","text":"Dateien aus Tanit oder Explorer, kein Upload-Tab"},{"icon":"markdown","title":"Markdown, Tabellen, Code, Mermaid","text":"Antworten bleiben bei den Dateien, aus denen sie stammen"},{"icon":"command","title":"Lokale Dateilinks","text":"Ergebnisse und Live-Shell-Ausgabe an Ort und Stelle öffnen"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"ai","label":"KI","icon":"command","description":"Direktanbieter verbinden, eigenen Schlüssel mitbringen, kompatible Endpunkte nutzen, einen Aggregator wählen oder unterstützte Modelle lokal mit llama.cpp betreiben. Modelle wechseln, wenn sich der Bedarf ändert.","slides":[{"id":"overview","title":"Jede Fähigkeit zum passenden Modell","description":"Text, Planung, Vision, OCR, Bildgenerierung, Transkription und Sprache nutzen jeweils einen lokalen oder Cloud-Anbieter — nie ein Vendor für alles.","media":{"type":"image","src":"./screenshots/chat.jpg"},"highlights":[{"icon":"command","title":"Lokales llama.cpp + GGUF","text":"Unterstützte Modelle auf dem Gerät"},{"icon":"network","title":"Cloud & BYOK","text":"Direktanbieter, kompatible Endpunkte, Aggregatoren"},{"icon":"command","title":"Routing pro Fähigkeit","text":"Modell pro Aufgabe wählen, nicht pro App"},{"icon":"command","title":"Agent als Preset speichern","text":"Anbieter, Werkzeuge, Skills und MCP in einem Setup"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"voice","label":"Sprache","icon":"audio","description":"Aufnahmen und Spracheingabe offline mit whisper.cpp transkribieren. Lokale Sprachsynthese kann Antworten vorlesen, ohne sie an einen Cloud-Sprachdienst zu senden.","slides":[{"id":"overview","title":"Sprechen statt tippen","description":"Sprache ist zuerst lokal. Cloud-Realtime ist optional, wenn du es willst.","media":{"type":"image","src":"./screenshots/audio.jpg"},"highlights":[{"icon":"audio","title":"whisper.cpp offline","text":"Aufnahmen und Eingabe auf dem Gerät transkribieren"},{"icon":"rt-audio","title":"Lokale Sprachsynthese","text":"Antworten vorlesen ohne Cloud-Stimme"},{"icon":"rt-audio","title":"Realtime-Routing","text":"Einschalten, wenn eine Live-Session sich lohnt"},{"icon":"command","title":"Sprachbefehle","text":"Den Arbeitsplatz freihändig steuern"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"images","label":"Bilder","icon":"images-raw","description":"Bilder durchsuchen und prüfen, Medien umwandeln, Metadaten bearbeiten. Lokale Vision-Language-Modelle für privates Bildverstehen, ONNX für OCR und Layout, oder Bildgenerierung an einen Cloud-Anbieter.","slides":[{"id":"overview","title":"Prüfen, stapeln, erzeugen","_description":"Vision can stay on the device. Generation can go to the cloud. You choose per job.","media":{"type":"image","src":"./screenshots/image-ops.jpg"},"highlights":[{"icon":"images-raw","title":"Ansicht & Stapel","text":"Prüfen, umwandeln, Metadaten"},{"icon":"images-raw","title":"Lokale VLM-Vision","text":"Privates Bildverstehen auf dem Gerät"},{"icon":"images-raw","title":"ONNX OCR & Layout","text":"Dokumente lesen, ohne Seiten zu senden"},{"icon":"command","title":"Cloud-Bildgenerierung","text":"Generierung routen, wenn ein Remote-Modell passt"},{"icon":"images-raw","title":"Advanced screenshots","text":"Integrated screenshot taking, monitor, fullscreen, window or a picked region"},{"icon":"network","title":"Share as posts","text":"Share images as posts or articles"}],"description":"Vision kann auf dem Gerät bleiben. Generierung kann in die Cloud. Du entscheidest pro Aufgabe.","actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"3d","icon":"cad","label":"3D","_description":"Preview common meshes & CAD","slides":[{"id":"overview","title":"Blazing fast 3D preview, opens 40MB STEP in less than 2 seconds","description":"Supports STEP, STL, FBX, VTK, USD, DXF, FreeCAD, OBJ, GLTF, GLB, and OpenSCAD","media":{"type":"image","src":"./screenshots/3d.png"},"highlights":[{"icon":"command","title":"Custom commands","text":"Build your own optimized workflows using XBLOX and batch operations."}]}]},{"id":"office","label":"Office","icon":"documents","description":"Create and edit Word, Excel, PowerPoint, and PDF. Batch translate and create","slides":[{"id":"overview","title":"Office and PDF","description":"Open a spreadsheet or a deck without a separate office suite.","media":{"type":"image","src":"./screenshots/office-docs.jpg"},"highlights":[{"icon":"documents","title":"Built-in viewer","text":"Word, Excel, PowerPoint, and PDF in the centre pane"},{"icon":"command","title":"Batch translate or transform","text":"Run the same job across a folder of documents"},{"icon":"documents","title":"Index and search","text":"Find text inside Office files and PDFs"},{"icon":"images-raw","title":"Convert to images","text":"Export pages from any of those formats"}]}]},{"id":"video","label":"Video","icon":"video","description":"Video wiedergeben und prüfen, Webcam oder Bildschirm aufnehmen, Formate stapelweise wandeln. Sitzungs-MP4 und xblox-Record-Blöcke — nur nutzergestartet oder selbst geplante Abläufe, niemals verdeckte Aufnahme.","slides":[{"id":"overview","title":"Abspielen, aufnehmen, wandeln","description":"Clips an Ort und Stelle prüfen, aufnehmen wenn du es startest, stapelweise wandeln — derselbe Arbeitsplatz wie Chat.","media":{"type":"image","src":"./screenshots/chat-video-gen.jpg"},"highlights":[{"icon":"video","title":"Wiedergabe & Prüfung","text":"Scrubben ohne Chat zu verlassen"},{"icon":"rt-video","title":"Webcam / Bildschirm","text":"Nur nutzergestartet — Windows-Zustimmung beim ersten Mal"},{"icon":"command","title":"Stapelwandlung","text":"FFmpeg, HandBrake und andere Tools über Befehle"},{"icon":"video","title":"Sitzungsaufnahme","text":"MP4 und xblox-Record-Blöcke, die du selbst anlegst"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"browser-use","label":"Browser Use","icon":"html","description":"Search, research, fill forms, translate, talk, summarize, create subtitles, and run Tanit workflows directly beside the web.","slides":[{"id":"overview","title":"Open Tanit beside any page","description":"Search, read, fill, translate, and talk without leaving the page. A task can start in Chrome and finish in a local file or an XBlox flow.","media":{"type":"image","src":"./screenshots/chrome.png"},"highlights":[{"icon":"html","title":"Research without tab chaos","text":"Search, open results, compare sources, and keep the useful parts together"},{"icon":"documents","title":"Forms from files you have","text":"Fill from a PDF, invoice, or spreadsheet. It stops when you need to decide"},{"icon":"audio","title":"Translate, talk, subtitle","text":"A page, a reply, or a video: transcript, subtitles, or a dubbed version"},{"icon":"command","title":"Point, then finish the job","text":"Use a chart, field, or paragraph. Save the result, or continue as a workflow"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-chrome"}]}]},{"id":"share","label":"Share","icon":"cms","description":"Create and share reports, articles, posts, pictures, and files directly from Tanit.","slides":[{"id":"overview","title":"Create and share from Tanit","description":"Publish a report, an article, a set of pictures, or a file. Tanit uploads it to your account and gives you a link you can send.","media":{"type":"image","src":"./screenshots/cms.png"},"highlights":[{"icon":"markdown","title":"Reports and articles","text":"Any chat and becomes a page"},{"icon":"documents","title":"Share files","text":"PDFs, CAD, archives, and media from home/public, with a link to copy"},{"icon":"images-raw","title":"Posts and pictures","text":"A title and pictures, public, listed, or private"},{"icon":"command","title":"App or command line","text":"Sharing actions in the app, or tanit-cli service for pages, files, posts, and pictures"}]}]},{"id":"automation","label":"Automatisierung","icon":"xblox","description":"Den Ablauf als XBlox-Flow festhalten — LLM-Agent mit Dateieingabe, Modellen, OCR, Vision, Audio, Bedingungen, Schleifen und gespeicherter Ausgabe. Veröffentlichen in Ribbon, Launcher, Tanit oder dem Explorer-Kontextmenü.","slides":[{"id":"overview","title":"Aus einem Chat wird ein Befehl","description":"Wenn die Aufgabe sich wiederholt, den erfolgreichen Ablauf speichern und auf der nächsten Auswahl ausführen.","media":{"type":"image","src":"./screenshots/automation.jpg"},"highlights":[{"icon":"xblox","title":"Visuelle XBlox-Flows","text":"Agent + Dateien + Modelle + Bedingungen in einem Graphen","slide":"overview"},{"icon":"command","title":"Überall veröffentlichen","text":"Ribbon, Launcher, Tanit oder Explorer-Kontextmenü","slide":"launcher"},{"icon":"html","title":"Browser-Use-Flows","text":"Ein Formular oder eine Seite aus einem gespeicherten Befehl steuern","slide":"browser"},{"icon":"command","title":"Ein-Klick-Wiederholung","text":"Die nächste Datei läuft denselben geprüften Prozess","slide":"overview"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]},{"id":"launcher","title":"Im Launcher veröffentlicht","description":"Ein fertiger Flow wird ein Befehl, den du ohne Editor starten kannst.","media":{"type":"image","src":"./screenshots/launcher.jpg"},"highlights":[]},{"id":"browser","title":"Browser-Use aus einem Befehl","description":"Eine Seite oder ein Formular mit demselben Flow steuern, der als Chat begann.","media":{"type":"image","src":"./screenshots/forms-browser-use.jpg"},"highlights":[]}]},{"id":"security","label":"Sicherheit","icon":"command","description":"Profile Light, Strict oder Developer. Aktion, Ziel und Risiko prüfen, dann einmal, für eine Aufgabe, für eine Sitzung, zeitlich begrenzt, immer oder nie freigeben. Administratoren setzen Richtlinie über Gruppenrichtlinie, Intune MDM oder Registry; Maschinenrichtlinie überschreibt Benutzereinstellungen.","slides":[{"id":"overview","title":"Jede Aktion freigeben","description":"Nützliche KI-Abläufe, ohne jedem Assistenten uneingeschränkten Zugriff auf Dateien, Werkzeuge oder das Netz zu geben.","highlights":[{"icon":"command","title":"Light / Strict / Developer","text":"Ein Profil dafür, wie viel der Assistent tun darf"},{"icon":"command","title":"Freigabe pro Aktion","text":"Einmal, Aufgabe, Sitzung, begrenzt, immer oder nie"},{"icon":"network","title":"Gruppenrichtlinie & Intune","text":"Maschinenrichtlinie überschreibt den Benutzer"},{"icon":"command","title":"Sandbox-Befehle","text":"Geschützte Anforderungen kann ein Nicht-Admin nicht senken"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}],"media":null}]},{"id":"markdown","label":"Markdown","description":"Antworten mit Markdown, Tabellen, Code-Highlighting, KaTeX, Mermaid, lokalen Dateilinks, erzeugten Bildern und Live-Shell-Ausgabe. Live-XBlox-Blöcke in der Antwort; Versionsverlauf hält Änderungen fest.","slides":[{"id":"overview","title":"Reiche Antworten, mit Verlauf","description":"Die Antwort ist ein Arbeitsdokument — Diagramme, Mathematik, live Blöcke und eine Spur dessen, was sich geändert hat.","highlights":[{"title":"Markdown + Tabellen + Code","text":"Struktur in der Antwortspalte"},{"title":"KaTeX & Mermaid","text":"Mathematik und Diagramme ohne Extra-Tool"},{"title":"Live-XBlox-Blöcke","text":"Ausführbare Blöcke in der Antwort"},{"title":"Versionsverlauf","text":"Keine Änderung geht verloren, auch KI-Edits"}],"actions":[{"label":"Tanit Chat holen — kostenlos","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}],"media":null}]}]}</script>
 <script type="application/json" id="icons">{"audio":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" aria-hidden=\"true\">\u003cpath d=\"M14 32v0M20 24v16M26 18v28M32 22v20M38 16v32M44 24v16M50 30v4\"/>\u003c/svg>","avatar":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" aria-hidden=\"true\">\n  \u003ccircle cx=\"32\" cy=\"14\" r=\"5.8\" stroke=\"currentColor\" stroke-width=\"2.8\"/>\n  \u003cpath d=\"M32 21.5c-5.2 5.8-9.8 13.2-11.2 21.2 4.6-1.4 7.8-1.8 11.2-1.8s6.6.4 11.2 1.8C41.8 34.7 37.2 27.3 32 21.5z\" fill=\"currentColor\"/>\n  \u003cpath d=\"M24.5 29c-4.2-2.8-7.6-7.2-8.4-12.8\" stroke=\"currentColor\" stroke-width=\"2.8\" stroke-linecap=\"round\"/>\n  \u003cpath d=\"M39.5 29c4.2-2.8 7.6-7.2 8.4-12.8\" stroke=\"currentColor\" stroke-width=\"2.8\" stroke-linecap=\"round\"/>\n  \u003cpath d=\"M18 48c6-2.2 22-2.2 28 0\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n\u003c/svg>","cad":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003cpath d=\"M32 10l18 10v20L32 50 14 40V20z\"/>\u003cpath d=\"M32 30l18-10M32 30v20M32 30L14 20\"/>\u003cpath d=\"M22 24l10 6 10-6\" opacity=\".5\"/>\u003c/svg>","cms":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"8\" y=\"12\" width=\"48\" height=\"40\" rx=\"4\"/>\u003cpath d=\"M8 22h48\"/>\u003crect x=\"14\" y=\"28\" width=\"14\" height=\"18\" rx=\"1\"/>\u003cpath d=\"M34 28h16v4H34zM34 36h16v4H34zM34 44h10v2H34z\"/>\u003ctext x=\"16\" y=\"19.5\" fill=\"currentColor\" stroke=\"none\" font-size=\"6\" font-family=\"system-ui,sans-serif\" font-weight=\"700\">CMS\u003c/text>\u003c/svg>","command":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"8\" y=\"10\" width=\"48\" height=\"44\" rx=\"4\"/>\u003cpath d=\"M8 20h48\"/>\u003cpath d=\"M16 28h20\"/>\u003ccircle cx=\"42\" cy=\"28\" r=\"3\"/>\u003cpath d=\"M16 38h12\"/>\u003crect x=\"34\" y=\"34\" width=\"14\" height=\"8\" rx=\"2\"/>\u003cpath d=\"M16 48h8M28 48h8\"/>\u003c/svg>","documents":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003cpath d=\"M14 12h16l8 8v32H14z\"/>\u003cpath d=\"M30 12v8h8\"/>\u003ctext x=\"18\" y=\"40\" fill=\"currentColor\" stroke=\"none\" font-size=\"8\" font-family=\"system-ui,sans-serif\" font-weight=\"700\">PDF\u003c/text>\u003cpath d=\"M26 8h16l8 8v32H26z\" opacity=\".55\"/>\u003cpath d=\"M38 20h14l6 6v28H38z\" opacity=\".35\"/>\u003c/svg>","html":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"8\" y=\"12\" width=\"48\" height=\"40\" rx=\"4\"/>\u003cpath d=\"M8 22h48\"/>\u003ccircle cx=\"16\" cy=\"17\" r=\"1.5\" fill=\"currentColor\" stroke=\"none\"/>\u003ccircle cx=\"22\" cy=\"17\" r=\"1.5\" fill=\"currentColor\" stroke=\"none\"/>\u003ccircle cx=\"28\" cy=\"17\" r=\"1.5\" fill=\"currentColor\" stroke=\"none\"/>\u003crect x=\"14\" y=\"28\" width=\"18\" height=\"16\" rx=\"1\"/>\u003cpath d=\"M38 30h12M38 36h10M38 42h8\"/>\u003c/svg>","images-raw":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"28\" y=\"22\" width=\"28\" height=\"22\" rx=\"3\"/>\u003ccircle cx=\"42\" cy=\"33\" r=\"5\"/>\u003cpath d=\"M32 28h4\"/>\u003crect x=\"8\" y=\"18\" width=\"22\" height=\"16\" rx=\"2\"/>\u003ccircle cx=\"16\" cy=\"24\" r=\"2.5\"/>\u003cpath d=\"M8 30l5-5 4 3 5-6 8 8\"/>\u003c/svg>","markdown":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003cpath d=\"M16 10h24l8 8v36H16z\"/>\u003cpath d=\"M40 10v8h8\"/>\u003cpath d=\"M26 28l-4 8-4-8\"/>\u003cpath d=\"M36 28v8\"/>\u003cpath d=\"M34 32h4\"/>\u003cpath d=\"M42 28l6 4-6 4\"/>\u003c/svg>","network":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003ccircle cx=\"32\" cy=\"14\" r=\"5\"/>\u003ccircle cx=\"14\" cy=\"40\" r=\"5\"/>\u003ccircle cx=\"50\" cy=\"40\" r=\"5\"/>\u003ccircle cx=\"32\" cy=\"50\" r=\"5\"/>\u003cpath d=\"M32 19v10M28 28L18 36M36 28l10 8M32 39v6M18 42h10M36 42h10\"/>\u003c/svg>","rt-audio":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" aria-hidden=\"true\">\u003cpath d=\"M18 32v0M26 22v20M34 14v36M42 22v20M50 30v4\"/>\u003ccircle cx=\"34\" cy=\"32\" r=\"22\" stroke-dasharray=\"4 6\" opacity=\".35\"/>\u003c/svg>","rt-video":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"8\" y=\"18\" width=\"36\" height=\"28\" rx=\"4\"/>\u003cpath d=\"M44 28l12-6v20l-12-6z\"/>\u003ccircle cx=\"20\" cy=\"28\" r=\"3\"/>\u003cpath d=\"M14 38h16\"/>\u003c/svg>","video":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"10\" y=\"16\" width=\"44\" height=\"32\" rx=\"8\"/>\u003cpath d=\"M28 26l14 6-14 6z\" fill=\"currentColor\" stroke=\"none\"/>\u003c/svg>","xblox":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003ccircle cx=\"12\" cy=\"20\" r=\"4\"/>\u003ccircle cx=\"12\" cy=\"44\" r=\"4\"/>\u003ccircle cx=\"32\" cy=\"32\" r=\"5\"/>\u003ccircle cx=\"52\" cy=\"18\" r=\"4\"/>\u003ccircle cx=\"52\" cy=\"46\" r=\"4\"/>\u003cpath d=\"M16 22l11 8M16 42l11-6M37 30l11-9M37 34l11 9\"/>\u003c/svg>"}</script>
-<script>
-(function(){var k='tv-explore-theme';var q=null;var sp=null;try{sp=new URLSearchParams(location.search);q=sp.get('theme')}catch(e){}var host=null;try{var cl=document.documentElement.classList;if(cl.contains('dark'))host='dark';else if(cl.contains('light'))host='light'}catch(e){}var t=(q==='light'||q==='dark')?q:(host||localStorage.getItem(k)||'light');var r=document.currentScript&&document.currentScript.closest('.tv-explore');if(r)r.setAttribute('data-theme',t);var lq=null;try{lq=(sp&&(sp.get('layout')||sp.get('mode')))||localStorage.getItem('tv-explore-layout')}catch(e){}if(lq==='scroll'||lq==='stack'){document.documentElement.classList.add('tv-stack');if(r)r.classList.add('tv-stack')}})();
-</script>
+<script>window.TV_EXPLORE_SKINS=["plex","shell"];window.TV_EXPLORE_SKIN="plex";</script>
+<script>(function(){var skins=window.TV_EXPLORE_SKINS||['plex'];var def=window.TV_EXPLORE_SKIN||skins[0]||'plex';var k='tv-explore-theme';var ks='tv-explore-skin';var q=null;var sp=null;try{sp=new URLSearchParams(location.search);q=sp.get('theme')}catch(e){}var host=null;try{var cl=document.documentElement.classList;if(cl.contains('dark'))host='dark';else if(cl.contains('light'))host='light'}catch(e){}var t=(q==='light'||q==='dark')?q:(host||localStorage.getItem(k)||'light');var r=document.currentScript&&document.currentScript.closest('.tv-explore');if(r){r.setAttribute('data-theme',t);r.setAttribute('data-pm-embed','1')}var qs=null;try{qs=sp&&sp.get('skin')}catch(e){}var skin=(qs&&skins.indexOf(qs)>=0)?qs:(function(){try{return localStorage.getItem(ks)}catch(e){return null}})()||def;if(skins.indexOf(skin)<0)skin=def;if(r)r.setAttribute('data-skin',skin);var lq=null;try{lq=(sp&&(sp.get('layout')||sp.get('mode')))||localStorage.getItem('tv-explore-layout')}catch(e){}if(lq==='scroll'||lq==='stack'){if(r)r.classList.add('tv-stack')}})();</script>
 <script>
 (function () {
   var DATA = JSON.parse(document.getElementById('data').textContent);
@@ -847,10 +1093,14 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   var product = DATA.product;
   var features = DATA.features;
   var selected = 0;
+  /** Sidebar intro (intro.md) is showing instead of the selected feature. */
+  var showingIntro = false;
   /** Per-feature slide index (stack mode keeps each card independent). */
   var slideByFeat = {};
   var IMAGE_MS = 4000;
   var IDLE_MS = 2000;
+  var SLIDE_MS = 560;
+  var enterFxReady = false;
   var TOUR_KEY = 'tv-explore-tour';
   /**
    * Zoom by CSS pixel width on the <img> (not CSS scale, not % ladders).
@@ -958,6 +1208,7 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   var tourTimer = null;
   var idleTimer = null;
   var suppressIdle = false;
+  var spyLockUntil = 0;
 
   var elBrandLogo = document.getElementById('brandLogo');
   var elBrandTitle = document.getElementById('brandTitle');
@@ -1012,6 +1263,10 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
           '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h12v12H6z"/></svg></button>' +
       '</div>' +
       '<div class="tour-meta"><b class="tour-label">Auto</b><span class="tour-hint">Images 4s · videos to end</span></div>' +
+      '<button type="button" class="theme-btn" data-act="theme" aria-label="Toggle theme" title="Theme">' +
+        '<span class="moon" aria-hidden="true">◐</span>' +
+        '<span class="sun" aria-hidden="true">☀</span>' +
+      '</button>' +
     '</div>';
   }
 
@@ -1122,10 +1377,15 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     else if (tourMode === 'paused') hint = idleTimer ? 'Resumes in 2s if idle' : 'Paused · press play';
     else hint = 'Tour off · press play';
 
+    document.documentElement.classList.toggle('tv-playing', tourMode === 'playing');
+    var explore = document.querySelector('.tv-explore');
+    if (explore) explore.classList.toggle('tv-playing', tourMode === 'playing');
+    fitPlayViewport();
     document.querySelectorAll('.tour-controls').forEach(function (elTour) {
       elTour.setAttribute('data-mode', tourMode);
       elTour.querySelectorAll('[data-act]').forEach(function (btn) {
         var act = btn.getAttribute('data-act');
+        if (act === 'theme') return;
         var on = (act === 'play' && tourMode === 'playing') ||
           (act === 'pause' && tourMode === 'paused') ||
           (act === 'stop' && tourMode === 'stopped');
@@ -1136,10 +1396,29 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
       if (elTourLabel) elTourLabel.textContent = modeLabel;
       if (elTourHint) elTourHint.textContent = hint;
     });
+    syncNavSelection();
+  }
+
+  function introHtml() {
+    var intro = product.intro;
+    return intro && intro.html ? intro.html : '';
+  }
+  function introLabel() {
+    var intro = product.intro;
+    return (intro && intro.label) || 'Intro';
+  }
+  function introNavHtml() {
+    if (!introHtml()) return '';
+    var on = showingIntro;
+    return '<button type="button" class="side-item" data-intro="1" aria-current="' + (on ? 'true' : 'false') + '">' +
+      '<span class="si">' + icon('markdown') + '</span><span class="sl">' + esc(introLabel()) + '</span></button>';
+  }
+  function introBodyHtml() {
+    return '<div class="intro-body">' + introHtml() + '</div>';
   }
 
   function navItemHtml(f, i, mediaKind) {
-    var on = i === selected;
+    var on = !showingIntro && i === selected;
     var tourAttr = on && tourMode !== 'stopped'
       ? ' data-tour="' + tourMode + '" data-media="' + mediaKind + '" style="--tour-ms:' + IMAGE_MS + 'ms"'
       : '';
@@ -1149,9 +1428,40 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
       '<span class="tour-bar" aria-hidden="true"><i></i></span></button>';
   }
 
+  /** Highlight the current feature in the sidebar without rebuilding it. */
+  function syncNavSelection() {
+    if (!elNav) return;
+    var mediaKind = slideMediaKind(slide());
+    var current = null;
+    var introBtn = elNav.querySelector('[data-intro]');
+    if (introBtn) introBtn.setAttribute('aria-current', showingIntro ? 'true' : 'false');
+    elNav.querySelectorAll('.side-item[data-i]').forEach(function (btn) {
+      var i = Number(btn.getAttribute('data-i'));
+      var on = !showingIntro && i === selected;
+      btn.setAttribute('aria-current', on ? 'true' : 'false');
+      if (on && tourMode !== 'stopped') {
+        btn.setAttribute('data-tour', tourMode);
+        btn.setAttribute('data-media', mediaKind);
+        btn.style.setProperty('--tour-ms', IMAGE_MS + 'ms');
+        current = btn;
+      } else {
+        btn.removeAttribute('data-tour');
+        btn.removeAttribute('data-media');
+        btn.style.removeProperty('--tour-ms');
+      }
+    });
+    if (showingIntro && introBtn) current = introBtn;
+    if (current) {
+      var navRect = elNav.getBoundingClientRect();
+      var btnRect = current.getBoundingClientRect();
+      if (btnRect.top < navRect.top) elNav.scrollTop -= navRect.top - btnRect.top;
+      else if (btnRect.bottom > navRect.bottom) elNav.scrollTop += btnRect.bottom - navRect.bottom;
+    }
+  }
+
   function renderNav() {
     var mediaKind = slideMediaKind(slide());
-    var html = '';
+    var html = introNavHtml();
     var cats = product.categories || [];
     var visible = visibleFeatures();
     if (cats.length) {
@@ -1178,15 +1488,42 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   function themeName() {
     return themeRoot().getAttribute('data-theme') === 'light' ? 'light' : 'dark';
   }
+  function knownSkins() {
+    var list = window.TV_EXPLORE_SKINS;
+    return Array.isArray(list) && list.length ? list : ['plex'];
+  }
+  function defaultSkin() {
+    return window.TV_EXPLORE_SKIN || knownSkins()[0] || 'plex';
+  }
+  function skinName() {
+    var s = themeRoot().getAttribute('data-skin');
+    return knownSkins().indexOf(s) >= 0 ? s : defaultSkin();
+  }
+  function applySkin(next, persist) {
+    var ids = knownSkins();
+    var n = ids.indexOf(next) >= 0 ? next : defaultSkin();
+    var root = themeRoot();
+    root.setAttribute('data-skin', n);
+    if (lb && lb.el) lb.el.setAttribute('data-skin', n);
+    if (persist !== false) {
+      try { localStorage.setItem('tv-explore-skin', n); } catch (e) { /* ignore */ }
+    }
+  }
   function applyTheme(next, persist) {
     var n = next === 'light' ? 'light' : 'dark';
     var root = themeRoot();
     root.setAttribute('data-theme', n);
-    if (lb && lb.el) lb.el.setAttribute('data-theme', n);
+    if (lb && lb.el) {
+      lb.el.setAttribute('data-theme', n);
+      lb.el.setAttribute('data-skin', skinName());
+    }
     if (persist !== false) localStorage.setItem('tv-explore-theme', n);
     // Rebuild media so _light / _dark assets swap with the theme
     if (typeof paint === 'function') paint();
     if (lb && lb.open && typeof renderLightboxContent === 'function') renderLightboxContent();
+  }
+  function toggleTheme() {
+    applyTheme(themeName() === 'dark' ? 'light' : 'dark', true);
   }
   /** True when hosted in pm iframe-widget (?embed=1 or nested). */
   function isEmbed() {
@@ -1196,39 +1533,23 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     } catch (e) { return window.parent !== window; }
   }
   function enableEmbedLayout() {
-    if (!isEmbed()) return;
-    document.documentElement.setAttribute('data-pm-embed', '1');
     var explore = document.querySelector('.tv-explore');
     if (explore) explore.setAttribute('data-pm-embed', '1');
+    try {
+      if (window.parent !== window) document.documentElement.setAttribute('data-pm-embed', '1');
+      else if (!explore && new URLSearchParams(location.search).get('embed') === '1') {
+        document.documentElement.setAttribute('data-pm-embed', '1');
+      }
+    } catch (e) { /* ignore */ }
   }
   /**
-   * Measure CONTENT height, not the clipped iframe viewport.
-   * getBoundingClientRect is wrong when parent height < content (classic mobile clip).
+   * Host slot height. Do not report content scrollHeight — that grows the
+   * iframe to the phone viewport and unsticks the tour chrome.
    */
   function measureHeight() {
     enableEmbedLayout();
-    var doc = document.documentElement;
-    var body = document.body;
-    var root = document.querySelector('.tv-explore') || body;
-    var shell = document.querySelector('.shell');
-    var h = Math.max(
-      root.scrollHeight || 0,
-      root.offsetHeight || 0,
-      shell ? shell.scrollHeight : 0,
-      shell ? shell.offsetHeight : 0,
-      body ? body.scrollHeight : 0,
-      body ? body.offsetHeight : 0,
-      doc ? doc.scrollHeight : 0,
-      doc ? doc.offsetHeight : 0
-    );
-    // Sum in-flow children if shell collapsed under a previous clip
-    if (shell && h < 200) {
-      var sum = 0;
-      for (var i = 0; i < shell.children.length; i++) {
-        sum += shell.children[i].getBoundingClientRect().height;
-      }
-      h = Math.max(h, Math.ceil(sum + 24));
-    }
+    var frame = playFrame();
+    var h = frame && frame.clientHeight > 40 ? frame.clientHeight : 400;
     return Math.ceil(h);
   }
   var _heightReportTimer = null;
@@ -1560,6 +1881,7 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     el.setAttribute('role', 'dialog');
     el.setAttribute('aria-modal', 'true');
     el.setAttribute('data-theme', themeName());
+    el.setAttribute('data-skin', skinName());
     el.innerHTML =
       '<button type="button" class="tv-lb-close" aria-label="Close">×</button>' +
       '<div class="tv-lb-stage">' +
@@ -1601,6 +1923,10 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
       e.stopPropagation();
       playClick();
       var act = btn.getAttribute('data-act');
+      if (act === 'theme') {
+        toggleTheme();
+        return;
+      }
       suppressIdle = true;
       if (act === 'play') setTourMode('playing');
       else if (act === 'pause') setTourMode('paused');
@@ -1910,6 +2236,7 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     selected = fi;
     ensureLightbox();
     lb.el.setAttribute('data-theme', themeName());
+    lb.el.setAttribute('data-skin', skinName());
     lb.open = true;
     lb.el.hidden = false;
     document.documentElement.classList.add('tv-lb-open');
@@ -2031,18 +2358,27 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     );
   }
 
-  function renderStage() {
+  function renderStage(dir) {
+    if (showingIntro && introHtml()) {
+      elStage.classList.remove('is-stack');
+      if (stackIo) { stackIo.disconnect(); stackIo = null; }
+      elStage.innerHTML = '<div class="stage-body">' + introBodyHtml() + '</div>';
+      syncTourUi();
+      return;
+    }
     var f = feat();
     if (!f) {
       elStage.innerHTML = '<div class="stage-below"><p class="lead">Select a feature</p></div>';
       return;
     }
     elStage.classList.remove('is-stack');
+    if (stackIo) { stackIo.disconnect(); stackIo = null; }
     elStage.innerHTML = featureBodyHtml(f, selected, { stack: false });
     syncTourUi();
     bindMediaFallback(elStage);
     bindLazyMedia(elStage);
     bindMediaZoom(elStage);
+    markSlideEnter(elStage, dir == null ? 1 : dir);
     if (tourMode === 'playing') scheduleAdvance();
     else syncMediaPlayback();
   }
@@ -2055,6 +2391,9 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
       elStage.innerHTML = '<div class="stack-empty"><p class="lead">No matches</p></div>';
       return;
     }
+    var introCard = introHtml()
+      ? '<article class="feature-card intro-card" data-feat="-1" id="feature-intro">' + introBodyHtml() + '</article>'
+      : '';
     var cards = visible.map(function (f) {
       var fi = features.indexOf(f);
       var cat = f.categoryLabel ? '<div class="feature-cat">' + esc(f.categoryLabel) + '</div>' : '';
@@ -2067,7 +2406,7 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     }).join('');
     elStage.innerHTML =
       '<div class="stack-tour">' + tourControlsHtml() + '</div>' +
-      '<div class="feature-stack">' + cards + '</div>';
+      '<div class="feature-stack">' + introCard + cards + '</div>';
     syncTourUi();
     elStage.querySelectorAll('.feature-card').forEach(function (card) {
       bindMediaFallback(card);
@@ -2078,30 +2417,179 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     syncMediaPlayback();
     if (tourMode === 'playing') scheduleAdvance();
     scrollSelectedCard(false);
+    bindStackObserver();
   }
 
   function syncStackSelection() {
     if (!isStackMode()) return;
     elStage.querySelectorAll('.feature-card').forEach(function (card) {
       var fi = Number(card.getAttribute('data-feat'));
-      card.setAttribute('aria-current', fi === selected ? 'true' : 'false');
+      var on = fi === -1 ? showingIntro : (!showingIntro && fi === selected);
+      card.setAttribute('aria-current', on ? 'true' : 'false');
     });
+    syncNavSelection();
+  }
+
+  function motionOk() {
+    try { return !window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+    catch (e) { return true; }
+  }
+  function markSlideEnter(el, dir) {
+    if (!el) return;
+    el.classList.remove('is-slide-next', 'is-slide-prev');
+    if (!enterFxReady || !motionOk()) return;
+    void el.offsetWidth;
+    el.classList.add(dir < 0 ? 'is-slide-prev' : 'is-slide-next');
+  }
+  var _scrollRaf = 0;
+  function animateScrollY(target, to, ms) {
+    var isWin = target === window;
+    var from = isWin ? (window.scrollY || window.pageYOffset || 0) : target.scrollTop;
+    if (_scrollRaf) cancelAnimationFrame(_scrollRaf);
+    if (!ms || !motionOk() || Math.abs(to - from) < 2) {
+      if (isWin) window.scrollTo(0, to);
+      else target.scrollTop = to;
+      _scrollRaf = 0;
+      return;
+    }
+    var start = performance.now();
+    function frame(now) {
+      var t = Math.min(1, (now - start) / ms);
+      var e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      var y = from + (to - from) * e;
+      if (isWin) window.scrollTo(0, y);
+      else target.scrollTop = y;
+      if (t < 1) _scrollRaf = requestAnimationFrame(frame);
+      else _scrollRaf = 0;
+    }
+    _scrollRaf = requestAnimationFrame(frame);
+  }
+
+  function playScrollRoot() {
+    var explore = document.querySelector('.tv-explore');
+    if (explore && explore.getAttribute('data-pm-embed')) return explore;
+    var shell = document.querySelector('.shell');
+    if (document.documentElement.getAttribute('data-pm-embed') && shell) return shell;
+    if (isNarrow() && shell) return shell;
+    // Desktop stack scrolls on html (overflow:auto), not window.
+    if (isStackMode()) return document.scrollingElement || document.documentElement;
+    return window;
+  }
+  function playFrame() {
+    var root = playScrollRoot();
+    if (root && root !== window) return root;
+    return document.querySelector('.tv-explore') || document.querySelector('.shell') || document.documentElement;
+  }
+
+  /** Size the playing card to the host frame, not the phone viewport. */
+  function fitPlayViewport() {
+    var root = document.documentElement;
+    var tokenRoot = document.querySelector('.tv-explore') || root;
+    var tour = (elStage && elStage.querySelector('.stack-tour')) || document.querySelector('.stack-tour');
+    var tourH = 56;
+    if (tour) {
+      var tr = tour.getBoundingClientRect();
+      tourH = Math.max(40, Math.ceil(tr.height));
+    }
+    tokenRoot.style.setProperty('--tour-h', tourH + 'px');
+    if (tokenRoot !== root) root.style.setProperty('--tour-h', tourH + 'px');
+    if (tourMode !== 'playing' || !isStackMode()) {
+      tokenRoot.style.removeProperty('--play-fit');
+      if (tokenRoot !== root) root.style.removeProperty('--play-fit');
+      return;
+    }
+    var frame = playFrame();
+    var fh = (frame && frame.clientHeight > 40) ? frame.clientHeight : 400;
+    var padB = 8;
+    var shell = document.querySelector('.shell');
+    if (shell) {
+      var cs = getComputedStyle(shell);
+      padB = parseFloat(cs.paddingBottom) || 8;
+    }
+    var h = Math.floor(fh - tourH - padB - 8);
+    var fit = Math.max(120, h) + 'px';
+    tokenRoot.style.setProperty('--play-fit', fit);
+    if (tokenRoot !== root) root.style.setProperty('--play-fit', fit);
   }
 
   function scrollSelectedCard(smooth) {
     if (!isStackMode()) return;
     syncStackSelection();
-    var card = elStage.querySelector('.feature-card[data-feat="' + selected + '"]');
+    var card = (showingIntro && tourMode !== 'playing')
+      ? elStage.querySelector('.intro-card')
+      : elStage.querySelector('.feature-card[data-feat="' + selected + '"]');
     if (!card) return;
-    try {
-      card.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'nearest' });
-    } catch (e) {
-      card.scrollIntoView(true);
+    var tour = elStage.querySelector('.stack-tour');
+    var margin = tour ? tour.getBoundingClientRect().height : 0;
+    var ms = smooth === false ? 0 : SLIDE_MS;
+    spyLockUntil = Date.now() + ms + 120;
+    var scroller = playScrollRoot();
+    if (scroller === window) {
+      var y = card.getBoundingClientRect().top + (window.scrollY || window.pageYOffset || 0) - margin;
+      animateScrollY(window, Math.max(0, y), ms);
+    } else {
+      var sRect = scroller.getBoundingClientRect();
+      var cRect = card.getBoundingClientRect();
+      var to = scroller.scrollTop + (cRect.top - sRect.top) - margin;
+      animateScrollY(scroller, Math.max(0, to), ms);
+    }
+    if (tourMode === 'playing') {
+      fitPlayViewport();
+      requestAnimationFrame(function () { fitPlayViewport(); });
     }
   }
 
+  var stackIo = null;
+
+  /** Visible share of the scrollport. Slide-height ratio never hits 50% when the card is taller than the view. */
+  function bindStackObserver() {
+    if (stackIo) { stackIo.disconnect(); stackIo = null; }
+    if (!isStackMode() || !elStage || typeof IntersectionObserver === 'undefined') return;
+    var ofView = {};
+    var steps = [];
+    for (var i = 0; i <= 20; i++) steps.push(i / 20);
+    var root = playScrollRoot();
+    if (!root || root === window || root === document.documentElement || root === document.body) root = null;
+    stackIo = new IntersectionObserver(function (entries) {
+      if (!isStackMode() || Date.now() < spyLockUntil) return;
+      entries.forEach(function (en) {
+        var fi = Number(en.target.getAttribute('data-feat'));
+        var rh = en.rootBounds && en.rootBounds.height ? en.rootBounds.height : 0;
+        if (!(rh > 0)) rh = (root && root.clientHeight) || window.innerHeight;
+        ofView[fi] = rh > 0 ? (en.intersectionRect.height / rh) : 0;
+      });
+      var best = null;
+      var bestR = 0.5;
+      for (var k in ofView) {
+        if (ofView[k] >= bestR) {
+          bestR = ofView[k];
+          best = Number(k);
+        }
+      }
+      if (best == null) return;
+      if (best === -1) {
+        if (tourMode === 'playing' || showingIntro) return;
+        showingIntro = true;
+        syncStackSelection();
+        syncNavSelection();
+        return;
+      }
+      if (!isEnabled(features[best])) return;
+      if (best === selected && !showingIntro) return;
+      showingIntro = false;
+      selected = best;
+      syncStackSelection();
+      syncTourUi();
+      syncMediaPlayback();
+      if (tourMode === 'playing') scheduleAdvance();
+    }, { root: root, threshold: steps });
+    elStage.querySelectorAll('.feature-card').forEach(function (card) {
+      stackIo.observe(card);
+    });
+  }
+
   /** Patch one stack card after a slide change (keeps scroll position). */
-  function refreshFeatureCard(fi) {
+  function refreshFeatureCard(fi, dir) {
     var card = elStage.querySelector('.feature-card[data-feat="' + fi + '"]');
     var f = features[fi];
     if (!card || !f) return;
@@ -2110,7 +2598,11 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     bindMediaFallback(card);
     bindLazyMedia(card);
     bindMediaZoom(card);
-    if (fi === selected) syncMediaPlayback();
+    markSlideEnter(card, dir == null ? 1 : dir);
+    if (fi === selected) {
+      syncMediaPlayback();
+      if (tourMode === 'playing') fitPlayViewport();
+    }
     reportHeightSoon();
   }
 
@@ -2139,9 +2631,8 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     var si = slideIndex(selected);
     if (si < list.length - 1) {
       setSlideIndex(selected, si + 1);
-      if (isStackMode()) refreshFeatureCard(selected);
-      else if (!lb.open) paint();
-      else { renderNav(); renderStage(); }
+      if (isStackMode()) refreshFeatureCard(selected, 1);
+      else { renderNav(); renderStage(1); }
       syncLightboxFromState();
       if (tourMode === 'playing') scheduleAdvance();
       return;
@@ -2154,16 +2645,19 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     selected = features.indexOf(nextF);
     setSlideIndex(selected, 0);
     if (isStackMode()) {
-      refreshFeatureCard(selected);
+      refreshFeatureCard(selected, 1);
       scrollSelectedCard(true);
       syncTourUi();
       syncLightboxFromState();
       if (tourMode === 'playing') scheduleAdvance();
     } else if (!lb.open) {
-      paint();
+      renderNav();
+      renderStage(1);
+      syncLightboxFromState();
+      if (tourMode === 'playing') scheduleAdvance();
     } else {
       renderNav();
-      renderStage();
+      renderStage(1);
       syncTourUi();
       syncLightboxFromState();
       if (tourMode === 'playing') scheduleAdvance();
@@ -2221,11 +2715,16 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     clearIdleTimer();
     clearTourTimer();
     tourGen += 1;
+    var resumeFeature = mode === 'playing' && showingIntro;
+    if (resumeFeature) showingIntro = false;
     tourMode = mode;
     // Remember hard stop across reloads; play clears it. Pause is session-only.
     if (mode === 'stopped' || mode === 'playing') persistTourMode(mode);
     syncTourUi();
-    if (!isStackMode()) renderNav();
+    if (!isStackMode()) {
+      renderNav();
+      if (resumeFeature) renderStage();
+    } else scrollSelectedCard(false);
     syncMediaPlayback();
     syncLightboxPlayback();
     if (mode === 'playing') scheduleAdvance();
@@ -2247,9 +2746,23 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     setTourMode('paused', { idleResume: true });
   }
 
+  function showIntro() {
+    if (!introHtml()) return;
+    showingIntro = true;
+    noteInteraction();
+    if (isStackMode()) {
+      syncStackSelection();
+      scrollSelectedCard(true);
+      syncTourUi();
+    } else {
+      paint();
+    }
+  }
+
   function selectFeature(i, fromTour) {
     if (i < 0 || i >= features.length) return;
     if (!isEnabled(features[i])) return;
+    showingIntro = false;
     selected = i;
     setSlideIndex(i, 0);
     if (!fromTour) noteInteraction();
@@ -2269,18 +2782,20 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     if (fi == null) fi = selected;
     var n = slidesOf(fi).length;
     if (i < 0 || i >= n) return;
+    var prev = slideIndex(fi);
     setSlideIndex(fi, i);
+    var dir = i >= prev ? 1 : -1;
     if (!fromTour) {
       selected = fi;
       noteInteraction();
     }
     if (isStackMode()) {
-      refreshFeatureCard(fi);
+      refreshFeatureCard(fi, dir);
       syncTourUi();
       if (tourMode === 'playing' && fi === selected) scheduleAdvance();
     } else {
       renderNav();
-      renderStage();
+      renderStage(dir);
     }
     syncLightboxFromState();
   }
@@ -2298,17 +2813,23 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     }
     syncLayoutUi();
     reportHeightSoon();
+    enterFxReady = true;
   }
 
   elNav.addEventListener('click', function (e) {
+    if (e.target.closest('[data-intro]')) {
+      playClick();
+      showIntro();
+      return;
+    }
     var btn = e.target.closest('[data-i]');
     if (!btn) return;
     playClick();
     selectFeature(Number(btn.getAttribute('data-i')));
   });
 
-  /** Step slides; in stack mode stay inside the feature. Desktop wraps to next/prev feature. */
-  function stepSlide(dir, fi) {
+  /** Step slides. wrap=true (PageDown / wheel / classic) crosses features. */
+  function stepSlide(dir, fi, wrap) {
     if (fi == null) fi = selected;
     var list = slidesOf(fi);
     if (!list.length) return;
@@ -2317,7 +2838,8 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
       setSlide(next, false, fi);
       return;
     }
-    if (isStackMode()) return; // clamp — scroll the page for other features
+    var allowWrap = wrap || !isStackMode();
+    if (!allowWrap) return;
     var visible = visibleFeatures();
     if (!visible.length) return;
     var vi = visible.indexOf(features[fi] || feat());
@@ -2328,7 +2850,18 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     setSlideIndex(nfi, dir < 0 ? Math.max(0, nSlides - 1) : 0);
     selected = nfi;
     noteInteraction();
-    paint();
+    if (isStackMode()) {
+      if (dir < 0) refreshFeatureCard(nfi, dir);
+      var arrive = elStage.querySelector('.feature-card[data-feat="' + nfi + '"]');
+      markSlideEnter(arrive, dir);
+      syncStackSelection();
+      scrollSelectedCard(true);
+      syncTourUi();
+      syncMediaPlayback();
+    } else {
+      renderNav();
+      renderStage(dir);
+    }
     syncLightboxFromState();
   }
 
@@ -2397,6 +2930,10 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     if (tourBtn) {
       playClick();
       var act = tourBtn.getAttribute('data-act');
+      if (act === 'theme') {
+        toggleTheme();
+        return;
+      }
       suppressIdle = true;
       if (act === 'play') setTourMode('playing');
       else if (act === 'pause') setTourMode('paused');
@@ -2420,9 +2957,30 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     if (e.target.closest('.stage-media')) noteInteraction();
   });
 
-  elStage.addEventListener('wheel', function (e) {
-    if (e.target.closest('.stage-media')) noteInteraction();
-  }, { passive: true });
+  var wheelLockUntil = 0;
+  var wheelAcc = 0;
+  function onExploreWheel(e) {
+    if (lb.open) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.target.closest('input, textarea, select, video')) return;
+    if (e.target.closest('.stage-media[data-zoomed]')) return;
+    if (isStackMode()) return;
+    e.preventDefault();
+    var dy = e.deltaY;
+    if (e.deltaMode === 1) dy *= 16;
+    else if (e.deltaMode === 2) dy *= 480;
+    wheelAcc += dy;
+    var now = Date.now();
+    if (now < wheelLockUntil) return;
+    if (Math.abs(wheelAcc) < 48) return;
+    var dir = wheelAcc > 0 ? 1 : -1;
+    wheelAcc = 0;
+    wheelLockUntil = now + SLIDE_MS;
+    playClick();
+    stepSlide(dir, selected, true);
+  }
+  var exploreRoot = document.querySelector('.tv-explore') || document.querySelector('.shell') || document;
+  exploreRoot.addEventListener('wheel', onExploreWheel, { passive: false });
 
   if (layoutBtn) {
     layoutBtn.addEventListener('click', function () {
@@ -2433,7 +2991,7 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   if (themeBtn) {
     themeBtn.addEventListener('click', function () {
       playClick();
-      applyTheme(themeName() === 'dark' ? 'light' : 'dark', true);
+      toggleTheme();
     });
   }
 
@@ -2455,6 +3013,8 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
       var hostT = hostDocumentTheme();
       if (hostT) applyTheme(hostT, false);
     }
+    var qSkin = new URLSearchParams(location.search).get('skin');
+    if (qSkin) applySkin(qSkin, false);
   } catch (e) { /* ignore */ }
   window.addEventListener('message', function (ev) {
     var d = ev && ev.data;
@@ -2479,14 +3039,15 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     hostThemeMo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
   }
   if (typeof ResizeObserver !== 'undefined') {
-    var roRoot = document.querySelector('.shell') || document.querySelector('.tv-explore') || document.body;
+    var roRoot = playFrame();
     if (roRoot) {
-      var ro = new ResizeObserver(function () { reportHeightSoon(); });
+      var ro = new ResizeObserver(function () { reportHeightSoon(); fitPlayViewport(); });
       ro.observe(roRoot);
     }
   }
   window.addEventListener('load', reportHeightSoon);
-  window.addEventListener('orientationchange', reportHeightSoon);
+  window.addEventListener('orientationchange', function () { reportHeightSoon(); fitPlayViewport(); });
+  window.addEventListener('resize', fitPlayViewport);
   try {
     var mqStack = window.matchMedia('(max-width:900px)');
     var onStackMq = function () { paint(); };
@@ -2504,6 +3065,8 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     if (lb.open) {
       if (e.key === 'Escape') { e.preventDefault(); closeLightbox(); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); noteInteraction(); lightboxNav(-1); }
+      else if (e.key === 'PageDown') { e.preventDefault(); noteInteraction(); lightboxNav(1); }
+      else if (e.key === 'PageUp') { e.preventDefault(); noteInteraction(); lightboxNav(-1); }
       else if (e.key === 'ArrowRight') { e.preventDefault(); noteInteraction(); lightboxNav(1); }
       else if (e.key === ' ') {
         e.preventDefault();
@@ -2542,6 +3105,8 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     }
     else if (e.key === 'ArrowRight') { e.preventDefault(); playClick(); stepSlide(1); }
     else if (e.key === 'ArrowLeft') { e.preventDefault(); playClick(); stepSlide(-1); }
+    else if (e.key === 'PageDown') { e.preventDefault(); playClick(); stepSlide(1, selected, true); }
+    else if (e.key === 'PageUp') { e.preventDefault(); playClick(); stepSlide(-1, selected, true); }
     else if (e.key === ' ') {
       e.preventDefault();
       playClick();

@@ -4,6 +4,8 @@
   var product = DATA.product;
   var features = DATA.features;
   var selected = 0;
+  /** Sidebar intro (intro.md) is showing instead of the selected feature. */
+  var showingIntro = false;
   /** Per-feature slide index (stack mode keeps each card independent). */
   var slideByFeat = {};
   var IMAGE_MS = 4000;
@@ -161,7 +163,7 @@
     } catch (_) {}
   }
 
-  function tourControlsHtml(extraClass) {
+  function tourControlsHtml(extraClass, compact) {
     return '<div class="tour-controls' + (extraClass ? ' ' + extraClass : '') + '" data-mode="' + tourMode + '">' +
       '<div class="tour-btns">' +
         '<button type="button" class="tour-btn" data-act="play" aria-label="Play tour" title="Play" aria-pressed="' + (tourMode === 'playing' ? 'true' : 'false') + '">' +
@@ -171,12 +173,21 @@
         '<button type="button" class="tour-btn" data-act="stop" aria-label="Stop tour" title="Stop" aria-pressed="' + (tourMode === 'stopped' ? 'true' : 'false') + '">' +
           '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h12v12H6z"/></svg></button>' +
       '</div>' +
-      '<div class="tour-meta"><b class="tour-label">Auto</b><span class="tour-hint">Images 4s · videos to end</span></div>' +
-      '<button type="button" class="theme-btn" data-act="theme" aria-label="Toggle theme" title="Theme">' +
-        '<span class="moon" aria-hidden="true">◐</span>' +
-        '<span class="sun" aria-hidden="true">☀</span>' +
-      '</button>' +
+      (compact ? '' :
+        '<div class="tour-meta"><b class="tour-label">Auto</b><span class="tour-hint">Images 4s · videos to end</span></div>' +
+        '<button type="button" class="theme-btn" data-act="theme" aria-label="Toggle theme" title="Theme">' +
+          '<span class="moon" aria-hidden="true">◐</span>' +
+          '<span class="sun" aria-hidden="true">☀</span>' +
+        '</button>') +
     '</div>';
+  }
+  function onTourAct(act) {
+    if (act === 'theme') { toggleTheme(); return; }
+    suppressIdle = true;
+    if (act === 'play') setTourMode('playing');
+    else if (act === 'pause') setTourMode('paused');
+    else if (act === 'stop') setTourMode('stopped');
+    suppressIdle = false;
   }
 
   function esc(s) {
@@ -308,8 +319,51 @@
     syncNavSelection();
   }
 
+  function introHtml() {
+    var intro = product.intro;
+    return intro && intro.html ? intro.html : '';
+  }
+  function introBodyHtml() {
+    var html = introHtml();
+    return html ? '<div class="intro-body">' + html + '</div>' : '';
+  }
+  function slideThumbSrc(s) {
+    var m = s && s.media;
+    if (!m) return '';
+    if (typeof m === 'string') return m;
+    return m.src || '';
+  }
+  function introJumpsHtml() {
+    var html = '';
+    features.forEach(function (f, fi) {
+      if (!isEnabled(f)) return;
+      var list = slidesOf(fi);
+      list.forEach(function (s, si) {
+        var src = slideThumbSrc(s);
+        var label = list.length > 1
+          ? ((f.label || '') + (s.title ? ' · ' + s.title : ''))
+          : (f.label || s.title || '');
+        var media = '';
+        if (src && isVideoSrc(src)) {
+          media = '<video muted playsinline preload="metadata" src="' + esc(assetUrl(src)) + '"></video>';
+        } else if (src) {
+          media = '<img src="' + esc(assetUrl(src)) + '" alt="" draggable="false"/>';
+        } else {
+          media = '<span class="intro-jump-fallback">' + icon(f.icon) + '</span>';
+        }
+        html += '<button type="button" class="intro-jump" data-jump-feat="' + fi + '" data-jump-slide="' + si + '">' +
+          media +
+          '<span class="intro-jump-label">' + esc(label) + '</span></button>';
+      });
+    });
+    return html ? '<div class="intro-jumps">' + html + '</div>' : '';
+  }
+  function introPageHtml() {
+    return '<div class="intro-page">' + introBodyHtml() + introJumpsHtml() + '</div>';
+  }
+
   function navItemHtml(f, i, mediaKind) {
-    var on = i === selected;
+    var on = !showingIntro && i === selected;
     var tourAttr = on && tourMode !== 'stopped'
       ? ' data-tour="' + tourMode + '" data-media="' + mediaKind + '" style="--tour-ms:' + IMAGE_MS + 'ms"'
       : '';
@@ -324,9 +378,11 @@
     if (!elNav) return;
     var mediaKind = slideMediaKind(slide());
     var current = null;
-    elNav.querySelectorAll('.side-item').forEach(function (btn) {
+    var brandBtn = document.getElementById('brandBtn');
+    if (brandBtn) brandBtn.setAttribute('aria-current', showingIntro ? 'true' : 'false');
+    elNav.querySelectorAll('.side-item[data-i]').forEach(function (btn) {
       var i = Number(btn.getAttribute('data-i'));
-      var on = i === selected;
+      var on = !showingIntro && i === selected;
       btn.setAttribute('aria-current', on ? 'true' : 'false');
       if (on && tourMode !== 'stopped') {
         btn.setAttribute('data-tour', tourMode);
@@ -339,6 +395,7 @@
         btn.style.removeProperty('--tour-ms');
       }
     });
+    syncUrl();
     if (current) {
       var navRect = elNav.getBoundingClientRect();
       var btnRect = current.getBoundingClientRect();
@@ -1247,6 +1304,13 @@
   }
 
   function renderStage(dir) {
+    if (showingIntro) {
+      elStage.classList.remove('is-stack');
+      if (stackIo) { stackIo.disconnect(); stackIo = null; }
+      elStage.innerHTML = '<div class="stage-body">' + introPageHtml() + '</div>';
+      syncTourUi();
+      return;
+    }
     var f = feat();
     if (!f) {
       elStage.innerHTML = '<div class="stage-below"><p class="lead">Select a feature</p></div>';
@@ -1272,6 +1336,7 @@
       elStage.innerHTML = '<div class="stack-empty"><p class="lead">No matches</p></div>';
       return;
     }
+    var introCard = '<article class="feature-card intro-card" data-feat="-1" id="feature-intro">' + introPageHtml() + '</article>';
     var cards = visible.map(function (f) {
       var fi = features.indexOf(f);
       var cat = f.categoryLabel ? '<div class="feature-cat">' + esc(f.categoryLabel) + '</div>' : '';
@@ -1284,7 +1349,7 @@
     }).join('');
     elStage.innerHTML =
       '<div class="stack-tour">' + tourControlsHtml() + '</div>' +
-      '<div class="feature-stack">' + cards + '</div>';
+      '<div class="feature-stack">' + introCard + cards + '</div>';
     syncTourUi();
     elStage.querySelectorAll('.feature-card').forEach(function (card) {
       bindMediaFallback(card);
@@ -1302,7 +1367,8 @@
     if (!isStackMode()) return;
     elStage.querySelectorAll('.feature-card').forEach(function (card) {
       var fi = Number(card.getAttribute('data-feat'));
-      card.setAttribute('aria-current', fi === selected ? 'true' : 'false');
+      var on = fi === -1 ? showingIntro : (!showingIntro && fi === selected);
+      card.setAttribute('aria-current', on ? 'true' : 'false');
     });
     syncNavSelection();
   }
@@ -1389,24 +1455,43 @@
     if (tokenRoot !== root) root.style.setProperty('--play-fit', fit);
   }
 
+  /** Viewport Y where a card top should land, under the sticky bar or tour. */
+  function cardScrollAnchor() {
+    if (isNarrow()) {
+      var bar = document.querySelector('.sidebar');
+      if (!bar) return 0;
+      var shell = document.querySelector('.shell');
+      var gap = shell ? (parseFloat(getComputedStyle(shell).rowGap || getComputedStyle(shell).gap) || 0) : 0;
+      return bar.getBoundingClientRect().bottom + gap;
+    }
+    var tour = elStage && elStage.querySelector('.stack-tour');
+    if (!tour || getComputedStyle(tour).display === 'none') return 0;
+    var top = parseFloat(getComputedStyle(tour).top);
+    if (!isFinite(top)) top = 0;
+    return top + tour.getBoundingClientRect().height;
+  }
+
   function scrollSelectedCard(smooth) {
     if (!isStackMode()) return;
     syncStackSelection();
-    var card = elStage.querySelector('.feature-card[data-feat="' + selected + '"]');
+    var card = (showingIntro && tourMode !== 'playing')
+      ? elStage.querySelector('.intro-card')
+      : elStage.querySelector('.feature-card[data-feat="' + selected + '"]');
     if (!card) return;
-    var tour = elStage.querySelector('.stack-tour');
-    var margin = tour ? tour.getBoundingClientRect().height : 0;
     var ms = smooth === false ? 0 : SLIDE_MS;
-    spyLockUntil = Date.now() + ms + 120;
+    spyLockUntil = Date.now() + ms + 280;
+    var anchor = cardScrollAnchor();
+    var delta = card.getBoundingClientRect().top - anchor;
     var scroller = playScrollRoot();
-    if (scroller === window) {
-      var y = card.getBoundingClientRect().top + (window.scrollY || window.pageYOffset || 0) - margin;
+    var isRoot = !scroller || scroller === window
+      || scroller === document.scrollingElement
+      || scroller === document.documentElement
+      || scroller === document.body;
+    if (isRoot) {
+      var y = (window.scrollY || window.pageYOffset || 0) + delta;
       animateScrollY(window, Math.max(0, y), ms);
     } else {
-      var sRect = scroller.getBoundingClientRect();
-      var cRect = card.getBoundingClientRect();
-      var to = scroller.scrollTop + (cRect.top - sRect.top) - margin;
-      animateScrollY(scroller, Math.max(0, to), ms);
+      animateScrollY(scroller, Math.max(0, scroller.scrollTop + delta), ms);
     }
     if (tourMode === 'playing') {
       fitPlayViewport();
@@ -1433,7 +1518,7 @@
         if (!(rh > 0)) rh = (root && root.clientHeight) || window.innerHeight;
         ofView[fi] = rh > 0 ? (en.intersectionRect.height / rh) : 0;
       });
-      var best = -1;
+      var best = null;
       var bestR = 0.5;
       for (var k in ofView) {
         if (ofView[k] >= bestR) {
@@ -1441,7 +1526,22 @@
           best = Number(k);
         }
       }
-      if (best < 0 || best === selected || !isEnabled(features[best])) return;
+      if (best == null) return;
+      var scrollerTop = 0;
+      var scrollEl = playScrollRoot();
+      if (!scrollEl || scrollEl === window) scrollerTop = window.scrollY || window.pageYOffset || 0;
+      else scrollerTop = scrollEl.scrollTop || 0;
+      if (ofView[-1] > 0 && scrollerTop < 24) best = -1;
+      if (best === -1) {
+        if (tourMode === 'playing' || showingIntro) return;
+        showingIntro = true;
+        syncStackSelection();
+        syncNavSelection();
+        return;
+      }
+      if (!isEnabled(features[best])) return;
+      if (best === selected && !showingIntro) return;
+      showingIntro = false;
       selected = best;
       syncStackSelection();
       syncTourUi();
@@ -1580,12 +1680,16 @@
     clearIdleTimer();
     clearTourTimer();
     tourGen += 1;
+    var resumeFeature = mode === 'playing' && showingIntro;
+    if (resumeFeature) showingIntro = false;
     tourMode = mode;
     // Remember hard stop across reloads; play clears it. Pause is session-only.
     if (mode === 'stopped' || mode === 'playing') persistTourMode(mode);
     syncTourUi();
-    if (!isStackMode()) renderNav();
-    else scrollSelectedCard(false);
+    if (!isStackMode()) {
+      renderNav();
+      if (resumeFeature) renderStage();
+    } else scrollSelectedCard(false);
     syncMediaPlayback();
     syncLightboxPlayback();
     if (mode === 'playing') scheduleAdvance();
@@ -1607,9 +1711,97 @@
     setTourMode('paused', { idleResume: true });
   }
 
+  /** Standalone page only. The inline widget must not rewrite the host URL. */
+  function pathRoutes() {
+    return !document.querySelector('.tv-explore');
+  }
+  function slugify(s) {
+    return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+  function featureSlug(f) {
+    return slugify(f && (f.label || f.id));
+  }
+  function pathForState() {
+    if (showingIntro || !feat()) return '/';
+    var slug = featureSlug(feat());
+    return slug ? '/' + slug : '/';
+  }
+  function routeToken() {
+    var parts = (location.pathname || '/').split('/').filter(Boolean);
+    var base = parts.length ? parts[parts.length - 1] : '';
+    if (!base || /\.html?$/i.test(base)) return '';
+    return base.toLowerCase();
+  }
+  function featureIndexBySlug(slug) {
+    for (var i = 0; i < features.length; i++) {
+      var f = features[i];
+      if (!isEnabled(f)) continue;
+      if (featureSlug(f) === slug || String(f.id || '').toLowerCase() === slug) return i;
+    }
+    return -1;
+  }
+  function applyRoute() {
+    if (!pathRoutes()) return;
+    var slug = routeToken();
+    if (!slug) {
+      showingIntro = true;
+      return;
+    }
+    var idx = featureIndexBySlug(slug);
+    if (idx >= 0) {
+      showingIntro = false;
+      selected = idx;
+      setSlideIndex(idx, 0);
+      return;
+    }
+    if (introHtml()) showingIntro = true;
+  }
+  var urlPush = false;
+  function syncUrl() {
+    if (!pathRoutes()) return;
+    var next = pathForState();
+    var raw = (location.pathname || '/').replace(/\/+$/, '') || '/';
+    var cur = /\.html?$/i.test(raw) ? '/' : raw;
+    if (cur === next && raw === cur) { urlPush = false; return; }
+    var url = next + location.search + location.hash;
+    try {
+      if (urlPush) history.pushState({ tv: 1 }, '', url);
+      else history.replaceState({ tv: 1 }, '', url);
+    } catch (e) { /* file:// or sandboxed */ }
+    urlPush = false;
+  }
+
+  function scrollToTop(smooth) {
+    var ms = smooth === false ? 0 : SLIDE_MS;
+    spyLockUntil = Date.now() + (ms || 0) + 280;
+    var scroller = playScrollRoot();
+    if (!scroller || scroller === window) animateScrollY(window, 0, ms);
+    else animateScrollY(scroller, 0, ms);
+    if (elStage && elStage.scrollTop) elStage.scrollTop = 0;
+    var page = elStage && elStage.querySelector('.intro-page');
+    if (page) page.scrollTop = 0;
+  }
+
+  function showIntro() {
+    urlPush = true;
+    showingIntro = true;
+    noteInteraction();
+    if (isStackMode()) {
+      syncStackSelection();
+      scrollToTop(true);
+      syncTourUi();
+    } else {
+      paint();
+      scrollToTop(false);
+    }
+  }
+
   function selectFeature(i, fromTour) {
     if (i < 0 || i >= features.length) return;
     if (!isEnabled(features[i])) return;
+    if (!fromTour) urlPush = true;
+    showingIntro = false;
     selected = i;
     setSlideIndex(i, 0);
     if (!fromTour) noteInteraction();
@@ -1621,6 +1813,9 @@
       if (tourMode === 'playing') scheduleAdvance();
     } else {
       paint();
+      if (elStage) elStage.scrollTop = 0;
+      var stageMain = elStage && elStage.querySelector('.stage-main');
+      if (stageMain) stageMain.scrollTop = 0;
     }
     syncLightboxFromState();
   }
@@ -1667,6 +1862,7 @@
     var btn = e.target.closest('[data-i]');
     if (!btn) return;
     playClick();
+    setNavOpen(false);
     selectFeature(Number(btn.getAttribute('data-i')));
   });
 
@@ -1768,19 +1964,23 @@
   bindStageSwipe();
 
   elStage.addEventListener('click', function (e) {
+    var jump = e.target.closest('[data-jump-feat]');
+    if (jump) {
+      playClick();
+      var jfi = Number(jump.getAttribute('data-jump-feat'));
+      var jsi = Number(jump.getAttribute('data-jump-slide') || 0);
+      selectFeature(jfi);
+      if (jsi > 0) setSlide(jsi, false, jfi);
+      if (isStackMode()) {
+        scrollSelectedCard(false);
+        requestAnimationFrame(function () { scrollSelectedCard(false); });
+      }
+      return;
+    }
     var tourBtn = e.target.closest('.tour-controls [data-act]');
     if (tourBtn) {
       playClick();
-      var act = tourBtn.getAttribute('data-act');
-      if (act === 'theme') {
-        toggleTheme();
-        return;
-      }
-      suppressIdle = true;
-      if (act === 'play') setTourMode('playing');
-      else if (act === 'pause') setTourMode('paused');
-      else if (act === 'stop') setTourMode('stopped');
-      suppressIdle = false;
+      onTourAct(tourBtn.getAttribute('data-act'));
       return;
     }
     var stepBtn = e.target.closest('[data-feat-step]');
@@ -1835,6 +2035,47 @@
       playClick();
       toggleTheme();
     });
+  }
+
+  var menuBtn = document.getElementById('menuBtn');
+  var brandBtn = document.getElementById('brandBtn');
+  var topTour = document.getElementById('topTour');
+  var navBackdrop = document.getElementById('navBackdrop');
+  if (topTour) topTour.innerHTML = tourControlsHtml('top-tour-controls', true);
+  function setNavOpen(open) {
+    var shell = document.querySelector('.shell');
+    var on = !!open && isNarrow();
+    if (shell) shell.classList.toggle('nav-open', on);
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
+    if (navBackdrop) {
+      if (on) navBackdrop.removeAttribute('hidden');
+      else navBackdrop.setAttribute('hidden', '');
+    }
+  }
+  if (menuBtn) {
+    menuBtn.addEventListener('click', function () {
+      playClick();
+      var shell = document.querySelector('.shell');
+      setNavOpen(!(shell && shell.classList.contains('nav-open')));
+    });
+  }
+  if (brandBtn) {
+    brandBtn.addEventListener('click', function () {
+      playClick();
+      setNavOpen(false);
+      showIntro();
+    });
+  }
+  if (topTour) {
+    topTour.addEventListener('click', function (e) {
+      var tourBtn = e.target.closest('[data-act]');
+      if (!tourBtn) return;
+      playClick();
+      onTourAct(tourBtn.getAttribute('data-act'));
+    });
+  }
+  if (navBackdrop) {
+    navBackdrop.addEventListener('click', function () { setNavOpen(false); });
   }
 
   // Host iframe (pm-pics iframe-widget): embed layout + theme + height pump
@@ -1892,7 +2133,10 @@
   window.addEventListener('resize', fitPlayViewport);
   try {
     var mqStack = window.matchMedia('(max-width:900px)');
-    var onStackMq = function () { paint(); };
+    var onStackMq = function () {
+      if (!isNarrow()) setNavOpen(false);
+      paint();
+    };
     if (mqStack.addEventListener) mqStack.addEventListener('change', onStackMq);
     else if (mqStack.addListener) mqStack.addListener(onStackMq);
   } catch (e) { /* ignore */ }
@@ -1904,6 +2148,11 @@
 
   document.addEventListener('keydown', function (e) {
     if (e.target.matches('input,textarea,select')) return;
+    if (e.key === 'Escape' && document.querySelector('.shell.nav-open')) {
+      e.preventDefault();
+      setNavOpen(false);
+      return;
+    }
     if (lb.open) {
       if (e.key === 'Escape') { e.preventDefault(); closeLightbox(); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); noteInteraction(); lightboxNav(-1); }
@@ -1960,5 +2209,12 @@
   // default: first enabled feature in product.json order
   var prefer = features.findIndex(isEnabled);
   selected = prefer >= 0 ? prefer : 0;
+  applyRoute();
   paint();
+  window.addEventListener('popstate', function () {
+    if (!pathRoutes()) return;
+    urlPush = false;
+    applyRoute();
+    paint();
+  });
 })();

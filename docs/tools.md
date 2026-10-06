@@ -28,6 +28,7 @@ Read a UTF-8 text file.
 Params:
 - `limit` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Max lines to return.
 - `offset` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  First line to return (1-based).
+- `options` (<span data-cli="meta"><span data-cli="type">object</span></span>)
 - `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  File path: absolute, or relative to the Explorer folder / selection base in-app.
 
 #### file_search

@@ -631,6 +631,69 @@ tanit-cli pdf md secure.pdf --password "secret"
 tanit-cli pdf md tests/pdf/OWASP-Top-10-for-Agentic-Applications-2026-12.6-1.pdf --pages 1 --stdout
 ```
 
+#### markdown
+
+Convert Word, PowerPoint, Excel, OpenDocument, RTF, EPUB, CSV, or PDF to Markdown.
+
+Options:
+
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Input path, glob (*, ?, **), or http(s):// URL
+- `output` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output file/dir, or ${SRC_DIR}/${SRC_NAME}${SRC_FILE_EXT} (&{SRC_*}). Omit to write <stem>.md next to each input. A directory receives <stem>.md per input.
+- `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Input (repeat for multiple); use with --dst; Explorer passes several files
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Same as positional output; directory if multiple inputs
+- `-f,--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Format name when the bytes have no signature (csv).
+- `--stdout` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write Markdown to stdout.
+
+**Example**
+
+```sh
+tanit-cli markdown
+```
+
+**Full example**
+
+```sh
+tanit-cli markdown input 'foo' output 'foo' --src '{}' --dst 'foo' -f 'foo' --stdout
+```
+
+##### Examples
+
+**Beside the source** (writes `report.md` next to the file)
+
+```sh
+tanit-cli markdown report.docx
+```
+
+**One output file**
+
+```sh
+tanit-cli markdown report.docx notes/report.md
+```
+
+**Glob into a directory** (each file becomes `<stem>.md`)
+
+```sh
+tanit-cli markdown "docs/**/*.{docx,pdf,pptx,xlsx}" out/
+```
+
+**Template** (`${SRC_DIR}`, `${SRC_NAME}`, `${SRC_FILE_EXT}`, or `&{SRC_*}`)
+
+```sh
+tanit-cli markdown "docs/*.docx" "${SRC_DIR}/${SRC_NAME}.md"
+```
+
+**Several files** (`--dst` is a directory)
+
+```sh
+tanit-cli markdown --src a.docx --src b.pdf --dst out/
+```
+
+**CSV** (no file signature; name the format)
+
+```sh
+tanit-cli markdown table.csv -f csv --stdout
+```
+
 ### Search
 
 #### [find](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/find_more)
@@ -1005,6 +1068,34 @@ tanit-cli search search
 tanit-cli search search input '{}' --log-level 'info' --mode '{}' --content '{}' --backend '{}' --sort 'auto' -q 'foo' --type 'foo' --indexer 'own' --grep --names-only --regex --case-sensitive --whole-word --no-recursive --include-hidden --follow-symlinks --no-skip-binary -C 0 -B 0 -A 0 --multiline --output-mode 'content' --head-limit 0 --offset 0 --max 0 --max-per-file 0 --max-file-size 0 --include '{}' --exclude '{}' --exclude-dir '{}' --dry-run --stream --md --markdown 'auto' --markdown-color 'auto' --index-policy 'same-dir' --index '{}' --model 'foo' --threads 4 --gpu-layers -1 --reindex --no-index-create --extract 'auto' --adapter 'foo' --fingerprint 'off' --chunk-size 500 --chunk-overlap 100 --meta-prompt 'foo' --resize-width 768 --no-resize --include-detail 'auto' --detail-max 0
 ```
 
+##### Examples
+
+`search` needs a subcommand. `action` is not implemented yet.
+
+**Find files by name**
+
+```sh
+tanit-cli search search docs/ -q report
+```
+
+**Grep inside Office files** (`.docx` / `.xlsx` / `.pptx` via officecli, `.odt` / `.ods` via anydoc)
+
+```sh
+tanit-cli search search docs/ --content office --mode grep --backend exact --query electrocultura --max 5 --json
+```
+
+**Index a folder**
+
+```sh
+tanit-cli search index docs/ --content office --index-policy specific-dir --index .pixlwiz/search
+```
+
+**Read one document**
+
+```sh
+tanit-cli search detail --path notes.odt --json
+```
+
 #### search search
 
 Search files with the unified search facade (exact first; semantic later).
@@ -1055,7 +1146,7 @@ Options:
 - `--reindex` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Force re-ingest before searching
 - `--no-index-create` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Fail if an index is needed but missing
 - `--extract` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">auto</span></span></span>) - auto | text | office | pdf
-- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Source adapter hint, e.g. image-sidecar | ocr-local | llm-meta | office-officecli
+- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Source adapter hint, e.g. image-sidecar | ocr-local | llm-meta | office-officecli | opendocument-anydoc
 - `--fingerprint` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">off</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">cheap</span></span></span>) - off | cheap
 - `--chunk-size` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">500</span></span></span>) - Semantic ingest chunk size
 - `--chunk-overlap` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">100</span></span></span>) - Semantic ingest chunk overlap
@@ -1075,6 +1166,38 @@ tanit-cli search search
 
 ```sh
 tanit-cli search search input '{}' --log-level 'info' --mode '{}' --content '{}' --backend '{}' --sort 'auto' -q 'foo' --type 'foo' --indexer 'own' --grep --names-only --regex --case-sensitive --whole-word --no-recursive --include-hidden --follow-symlinks --no-skip-binary -C 0 -B 0 -A 0 --multiline --output-mode 'content' --head-limit 0 --offset 0 --max 0 --max-per-file 0 --max-file-size 0 --include '{}' --exclude '{}' --exclude-dir '{}' --dry-run --stream --md --markdown 'auto' --markdown-color 'auto' --index-policy 'same-dir' --index '{}' --model 'foo' --threads 4 --gpu-layers -1 --reindex --no-index-create --extract 'auto' --adapter 'foo' --fingerprint 'off' --chunk-size 500 --chunk-overlap 100 --meta-prompt 'foo' --resize-width 768 --no-resize --include-detail 'auto' --detail-max 0
+```
+
+##### Examples
+
+**Name match** (no `--mode` is filename search)
+
+```sh
+tanit-cli search search docs/ -q report
+```
+
+**Text grep**
+
+```sh
+tanit-cli search search docs/ --content text --grep --query "vector store" -C 2
+```
+
+**Office and OpenDocument** (`.docx` / `.xlsx` / `.pptx` through officecli; `.odt` / `.ods` through anydoc). `--content any` does not open these files.
+
+```sh
+tanit-cli search search docs/ --content office --mode grep --backend exact --query electrocultura --max 5 --json
+```
+
+**One spreadsheet**
+
+```sh
+tanit-cli search search budget.ods --content office --mode grep --backend exact --query HarvestYield
+```
+
+**Force the OpenDocument adapter**
+
+```sh
+tanit-cli search search notes.odt --adapter opendocument-anydoc --mode grep --backend exact --query 1908
 ```
 
 ---
@@ -1099,7 +1222,7 @@ Options:
 - `--reindex` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Force re-ingest before searching
 - `--no-index-create` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Fail if an index is needed but missing
 - `--extract` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">auto</span></span></span>) - auto | text | office | pdf
-- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Source adapter hint, e.g. image-sidecar | ocr-local | llm-meta | office-officecli
+- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Source adapter hint, e.g. image-sidecar | ocr-local | llm-meta | office-officecli | opendocument-anydoc
 - `--fingerprint` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">off</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">cheap</span></span></span>) - off | cheap
 - `--chunk-size` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">500</span></span></span>) - Semantic ingest chunk size
 - `--chunk-overlap` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">100</span></span></span>) - Semantic ingest chunk overlap
@@ -1122,6 +1245,26 @@ tanit-cli search index
 tanit-cli search index input '{}' --log-level 'info' --mode '{}' --content '{}' --backend '{}' --sort 'auto' --index-policy 'same-dir' --index '{}' --model 'foo' --threads 4 --gpu-layers -1 --reindex --no-index-create --extract 'auto' --adapter 'foo' --fingerprint 'off' --chunk-size 500 --chunk-overlap 100 --meta-prompt 'foo' --resize-width 768 --no-resize --md --markdown 'auto' --markdown-color 'auto'
 ```
 
+##### Examples
+
+**Office folder** (`.docx` / `.xlsx` / `.pptx` and `.odt` / `.ods` land in `office.vstore`)
+
+```sh
+tanit-cli search index docs/ --content office --index-policy specific-dir --index .pixlwiz/search
+```
+
+**Default store beside the inputs**
+
+```sh
+tanit-cli search index docs/ --content any
+```
+
+**Rebuild**
+
+```sh
+tanit-cli search index docs/ --content office --index .pixlwiz/search/office.vstore --reindex
+```
+
 ---
 
 #### search detail
@@ -1131,7 +1274,7 @@ Expand a search hit through the owning source adapter.
 Options:
 
 - `--log-level` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">warning</span> <span data-cli="choice">error</span> <span data-cli="choice">err</span> <span data-cli="choice">critical</span> <span data-cli="choice">off</span> <span data-cli="choice">none</span></span></span>) - Log level for this search command: trace, debug, info, warn, error, critical, off
-- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owning source adapter ID, e.g. office-officecli
+- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owning source adapter ID, e.g. office-officecli | opendocument-anydoc
 - `--path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Source file path
 - `--selector` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Adapter-owned selector, e.g. officecli query selector
 - `--office-path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Office native/XML path, e.g. /Sheet1/row[6]
@@ -1155,6 +1298,24 @@ tanit-cli search detail --path <path>
 
 ```sh
 tanit-cli search detail --log-level 'info' --adapter 'foo' --path 'foo' --selector 'foo' --office-path 'foo' --include-detail 'auto' --meta-prompt 'foo' --resize-width 768 --no-resize --context-before 0 --context-after 0 --md --markdown 'auto' --markdown-color 'auto'
+```
+
+##### Examples
+
+**OpenDocument** (whole document; omit `--selector` and `--office-path`)
+
+```sh
+tanit-cli search detail --path notes.odt --json
+```
+
+```sh
+tanit-cli search detail --path budget.ods --md --markdown plain
+```
+
+**Excel row** (officecli)
+
+```sh
+tanit-cli search detail --adapter office-officecli --path invoice.xlsx --office-path /Sheet1/row[2] --include-detail row --context-before 1 --context-after 1 --md --markdown plain
 ```
 
 ---

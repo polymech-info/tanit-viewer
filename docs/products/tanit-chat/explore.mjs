@@ -28,6 +28,8 @@
  * Data:
  *   product.json              — base catalog (lang = en / default)
  *   product_<lang>.json       — overlays; auto-built when --lang omitted
+ *   intro.md                  — opening copy (en)
+ *   intro_<lang>.md           — localized intro (intro_de.md); falls back to intro.md
  *
  * --inline: no <!DOCTYPE>/html/head/body — CSS/JS/icons/product inlined; media paths stay relative
  */
@@ -98,7 +100,9 @@ Options:
   --port <n>          Port for --serve (default: 5177)
   -h, --help          Show help
 
-Edit: explore.css, explore_<name>.css, explore.js, icons/*.svg, product.json, product_<lang>.json
+Edit: explore.css, explore_<name>.css, explore.js, icons/*.svg, product.json, product_<lang>.json, intro.md, intro_<lang>.md
+
+Intro copy is Markdown, rendered at build time with marked (intro.md, or intro_<lang>.md such as intro_de.md).
 `)
 	process.exit(0)
 }
@@ -160,6 +164,7 @@ function runBuild(quiet) {
 					`, lang=${htmlLang}, skin=${skin}, themes=${themes.map((t) => t.id).join('+')}` +
 					(args.inline ? ', inline' : '') +
 					(assetUrl ? `, asset-url=${assetUrl}` : '') +
+					(product.intro ? `, intro=${product.intro.file}` : '') +
 					`)`,
 			)
 		}
