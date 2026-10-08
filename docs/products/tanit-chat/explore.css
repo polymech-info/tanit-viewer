@@ -34,6 +34,28 @@ html[data-pm-embed] .sidebar,
 .tv-explore[data-pm-embed] .sidebar{
   max-height:100%;
 }
+/* Inline embed (HtmlWidget): the host page scrolls. Pin the nav under the site header. */
+@media(min-width:901px){
+  .tv-explore[data-pm-embed]{
+    height:auto!important;max-height:none!important;overflow:visible!important;
+  }
+  .tv-explore[data-pm-embed] .shell{
+    height:auto!important;min-height:0!important;overflow:visible!important;
+    align-items:start;
+  }
+  .tv-explore[data-pm-embed] .main,
+  .tv-explore[data-pm-embed] .stage,
+  .tv-explore[data-pm-embed] .stage.is-stack,
+  .tv-explore[data-pm-embed] .stage-body,
+  .tv-explore[data-pm-embed] .stage-main{
+    height:auto;min-height:0;flex:none;overflow:visible;
+  }
+  .tv-explore[data-pm-embed] .sidebar{
+    position:sticky!important;top:3.5rem!important;z-index:4;align-self:start!important;
+    height:auto!important;max-height:calc(100svh - 3.5rem - 12px)!important;overflow:hidden;
+  }
+  .tv-explore[data-pm-embed] .side-nav{min-height:0}
+}
 html[data-pm-embed] .stage-media,
 .tv-explore[data-pm-embed] .stage-media{min-height:160px}
 button,input{font:inherit;color:inherit}

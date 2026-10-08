@@ -75,14 +75,14 @@ Options:
 - `--max-width` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Target / max width (0 = no limit)
 - `--max-height` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Target / max height (0 = no limit)
 - `--aspect` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Target ratio W:H (4:5, 1:1, 16:9). Sets the unset side from --max-width or --max-height
-- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output format (default: from extension)
-- `--fit` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">inside</span></span></span>) - inside|cover|contain|fill|outside (see Sharp resize.fit)
-- `--position` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">centre</span></span></span>) - For cover: centre|attention|entropy|...
-- `--kernel` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">lanczos3</span></span></span>) - nearest|cubic|mitchell|lanczos2|lanczos3
+- `--format` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">jpeg</span> <span data-cli="choice">jpg</span> <span data-cli="choice">png</span> <span data-cli="choice">webp</span> <span data-cli="choice">tiff</span> <span data-cli="choice">tif</span> <span data-cli="choice">avif</span> <span data-cli="choice">heic</span> <span data-cli="choice">heif</span></span></span>) - Output container. Omit to take it from the destination extension.
+- `--fit` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">inside</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">inside</span> <span data-cli="choice">cover</span> <span data-cli="choice">contain</span> <span data-cli="choice">fill</span> <span data-cli="choice">outside</span></span></span>) - How the image fits the target box
+- `--position` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">centre</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">centre</span> <span data-cli="choice">center</span> <span data-cli="choice">attention</span> <span data-cli="choice">entropy</span> <span data-cli="choice">low</span> <span data-cli="choice">high</span> <span data-cli="choice">left</span> <span data-cli="choice">right</span> <span data-cli="choice">top</span> <span data-cli="choice">bottom</span></span></span>) - Crop anchor for cover
+- `--kernel` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">lanczos3</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">nearest</span> <span data-cli="choice">cubic</span> <span data-cli="choice">mitchell</span> <span data-cli="choice">lanczos2</span> <span data-cli="choice">lanczos3</span></span></span>) - Resample kernel
 - `-q,--quality` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">85</span></span></span>) - JPEG/WebP/AVIF quality 1-100
 - `--png-compression` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">6</span></span></span>) - PNG DEFLATE 0-9
 - `--background` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Letterbox colour #rrggbb (contain)
-- `--rotate` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Rotate 0|90|180|270 after EXIF autorotate
+- `--rotate` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">0</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">0</span> <span data-cli="choice">90</span> <span data-cli="choice">180</span> <span data-cli="choice">270</span></span></span>) - Rotate after EXIF autorotate
 - `--auto-rotate` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Rotate 90 when image orientation does not match the target box (after EXIF autorotate)
 - `--flip` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Vertical flip
 - `--flop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Horizontal flop
@@ -103,7 +103,7 @@ tanit-cli resize
 **Full example**
 
 ```sh
-tanit-cli resize input 'foo' output 'foo' --src '{}' --dst 'foo' --max-width 0 --max-height 0 --aspect 'foo' --format 'foo' --fit 'inside' --position 'centre' --kernel 'lanczos3' -q 85 --png-compression 6 --background '#ffffff' --rotate 0 --auto-rotate --flip --flop --no-autorotate --no-strip --allow-enlargement --no-cache --cache-dir 'foo' --url-timeout 5 --url-max-redirects 20
+tanit-cli resize input 'foo' output 'foo' --src '{}' --dst 'foo' --max-width 0 --max-height 0 --aspect 'foo' --format 'jpeg' --fit 'inside' --position 'centre' --kernel 'lanczos3' -q 85 --png-compression 6 --background '#ffffff' --rotate 0 --auto-rotate --flip --flop --no-autorotate --no-strip --allow-enlargement --no-cache --cache-dir 'foo' --url-timeout 5 --url-max-redirects 20
 ```
 
 ##### Examples
@@ -2015,7 +2015,7 @@ Options:
 - `--planner-budget` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Maximum tool schemas the planner may pre-expand before falling back to the full catalog.
 - `--no-parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable concurrent tool dispatch and fall back to serial execution. Parallel dispatch (P6) is on by default; use this flag to opt out.
 - `--parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dispatch all tool calls in a single LLM response concurrently (std::async). On by default — this flag is accepted for compatibility but is a no-op unless --no-parallel-tools was previously applied.
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 - `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
 
 **Session**
@@ -2671,7 +2671,7 @@ Print resolved CMS, LLM, license, and Zitadel service URLs.
 
 Options:
 
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -2722,7 +2722,7 @@ Options:
 - `--formats` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma-separated responsive image formats.
 - `--visibility-filter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Filter authenticated results: invisible or private.
 - `--public` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Anonymous/global search without bearer token (public content only).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -2781,7 +2781,7 @@ AI gateway spend APIs on the CMS server (GET /api/ai-gateway/spend/me).
 
 Options:
 
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -2827,7 +2827,7 @@ Options:
 - `--sort-by` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sort column (default: startTime).
 - `--sort-order` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - asc or desc (default: desc).
 - `--all-pages` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Fetch and merge every page in range (CMS path; direct LiteLLM fallback when empty).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -2877,7 +2877,7 @@ GET /api/ai-gateway/balance/me - purchased credits minus synced spend.
 
 Options:
 
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -2917,7 +2917,7 @@ GET /api/ai-gateway/health - gateway configured/alive state.
 
 Options:
 
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -2956,7 +2956,7 @@ Deprecated alias for `service images upload`.
 Options:
 
 - `files` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Local image path(s); repeat or list several
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 - `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; each line also includes http_status and raw_body (exact /api/images response string).
 
 **Example**
@@ -3030,7 +3030,7 @@ POST /api/images?forward=vfs&original=true - multipart field "file" (same as upl
 Options:
 
 - `files` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Local image path(s); repeat or list several
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 - `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; each line also includes http_status and raw_body (exact /api/images response string).
 
 **Example**
@@ -3124,7 +3124,7 @@ Options:
 - `--remote-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">settings</span></span></span>) - Remote VFS directory under home mount (default: settings).
 - `--commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also upload commands.json when present.
 - `--mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also upload MCP config files/folder when present.
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -3174,7 +3174,7 @@ Options:
 - `--download-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Temporary/local directory for downloaded files before importing settings.json (default: cwd).
 - `--commands` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also import commands.json when present remotely.
 - `--mcp` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also import MCP config files/folder when present remotely.
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -3221,7 +3221,7 @@ Remove the remote settings sync directory from VFS.
 Options:
 
 - `--remote-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Remote VFS directory under home mount (default: settings).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -3320,7 +3320,7 @@ Options:
 - `--skip` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Skip when the remote file already exists (any age).
 - `--overwrite` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Always replace the remote file.
 - `--if-newer` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Overwrite remote only when the local file is newer (default).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 - `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; each uploaded-file line also includes http_status and raw_body from /api/vfs/upload.
 
 **Example**
@@ -3405,7 +3405,7 @@ Options:
 
 - `path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Directory path inside the mount. Default: root.
 - `--mount` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - VFS mount name (default: home).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -3464,7 +3464,7 @@ Options:
 - `--retries` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Per-file retry count (default: 3).
 - `--read-endpoint` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Use GET /api/vfs/read instead of /api/vfs/get.
 - `--progress` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Log download progress ([service-pull]).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -3527,7 +3527,7 @@ Options:
 - `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write raw bytes to this file and print JSON metadata. Default: write raw bytes to stdout.
 - `--download` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Save to current directory using this name; omit name to use the remote path basename. Refused for binary/large files when no destination is given.
 - `--download-as` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Save to this exact local path (creates parent directories automatically).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 - `--overwrite` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Re-download even when the local destination already exists (default: skip existing).
 
 **Example**
@@ -3591,7 +3591,7 @@ Options:
 - `--download` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Save to current directory using this name; omit name to use the remote path basename.
 - `--download-as` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Save to this exact local path (creates parent directories automatically).
 - `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Alias for --download-as: write raw bytes to this file and print metadata.
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 - `--overwrite` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Re-download even when the local destination already exists (default: skip existing).
 
 **Example**
@@ -3640,7 +3640,7 @@ Options:
 
 - `paths` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - VFS path(s) inside the mount.
 - `--mount` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - VFS mount name (default: home).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -3768,7 +3768,7 @@ Options:
 - `--conflict` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">if-newer</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">if-newer</span> <span data-cli="choice">skip</span> <span data-cli="choice">overwrite</span></span></span>) - Image upload policy with --include-images: if-newer (default), skip, or overwrite.
 - `--private` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Create with is_public=false. Optional value: true/false.
 - `--hidden` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set visible=false (default without flags: link-only / hidden).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 - `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; also includes http_raw_steps and raw /api/pages response.
 
 **Example**
@@ -3901,7 +3901,7 @@ Options:
 - `--conflict` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">if-newer</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">if-newer</span> <span data-cli="choice">skip</span> <span data-cli="choice">overwrite</span></span></span>) - Image upload policy with --include-images: if-newer (default), skip, or overwrite.
 - `--private` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set is_public=false. Optional value: true/false.
 - `--hidden` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set visible=false. Optional value: true/false.
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 - `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; also includes http_raw_steps and raw /api/pages response.
 
 **Example**
@@ -3963,7 +3963,7 @@ GET /api/pages?userId=... - list pages for a user.
 Options:
 
 - `--user-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owner user UUID (default: app_user_id from zitadel-oauth.json, then Tanit default).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -4012,7 +4012,7 @@ Options:
 - `--lang` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional page language query parameter.
 - `--download` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Export page content to disk. Writes markdown-text content as .md when present, otherwise raw .page JSON.
 - `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Destination file or directory for --download. Default: slug/title/id with .md or .page.
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -4042,7 +4042,7 @@ tanit-cli service pages get <owner> tanit-changelog
 tanit-cli service pages get <page-uuid>
 ```
 
-**Download markdown** (`.md` when the page is markdown-text, otherwise `.page` JSON)
+**Download** (`.md` only when the page is a single markdown-text widget; otherwise the bare `.page` document, including html-widget pages)
 
 ```sh
 tanit-cli service pages get <owner> tanit-changelog --download
@@ -4071,7 +4071,7 @@ Options:
 - `ids` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page UUID(s).
 - `--slug` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Existing page slug to remove.
 - `--owner` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owner user UUID or username for --slug lookup (default: app_user_id from zitadel-oauth.json).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -4150,7 +4150,7 @@ Options:
 - `--user-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owner user UUID (default: app_user_id from zitadel-oauth.json, then Tanit default).
 - `--page` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Page index (default: 0).
 - `--limit` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">9999</span></span></span>) - Page size (default: 9999).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -4197,7 +4197,7 @@ Options:
 - `id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Picture UUID.
 - `--download` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Download the picture asset referenced by image_url/url instead of printing the detail summary.
 - `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Destination file or directory for --download. Default: filename from URL in the current directory.
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -4242,7 +4242,7 @@ DELETE /api/pictures/{id} - remove one or more picture records.
 Options:
 
 - `ids` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Picture UUID(s).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -4322,7 +4322,7 @@ Options:
 - `--page` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Page index (default: 0).
 - `--limit` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">9999</span></span></span>) - Page size (default: 9999).
 - `--visibility-filter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owner-only filter: listed | unlisted | private | non-public | all (default: public only).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -4375,7 +4375,7 @@ Options:
 - `--lang` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional language query parameter.
 - `--download` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Download media assets referenced by the post detail response instead of printing the detail summary.
 - `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Destination file/directory for --download. Multiple post media files are written into this directory.
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -4420,7 +4420,7 @@ DELETE /api/posts/{id} - remove one or more posts.
 Options:
 
 - `ids` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Post UUID(s).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -4462,7 +4462,7 @@ Options:
 - `--title` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Post title (default: filename of the first image, e.g. photo.png).
 - `--description` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional post description.
 - `--visibility` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">public</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">public</span> <span data-cli="choice">listed</span> <span data-cli="choice">private</span></span></span>) - Post visibility: public | listed | private (JSON settings.visibility; default public).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 - `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; also includes http_raw_steps: label, http_status, body_raw for each API call.
 - `--job-ui` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Windows: list-style job window + Tanit post dialog (Explorer `Share to Tanit...` verb).
 
@@ -4565,7 +4565,7 @@ Options:
 - `--parent-slug` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Only list children of this parent category slug.
 - `--include-children` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Return only top-level categories with nested children.
 - `--lang` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional language for translated names.
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -4618,7 +4618,7 @@ GET /api/categories/{id} - fetch a category with its parents and children.
 Options:
 
 - `id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Category UUID.
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -4659,7 +4659,7 @@ Options:
 - `slug` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Category slug.
 - `--limit` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Max items (default: server default 50).
 - `--no-descendants{false}` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Exclude items from child categories.
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -4711,7 +4711,7 @@ Options:
 - `--visibility` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - public | unlisted | private (default: public).
 - `--parent` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional parent category UUID (creates a relation).
 - `--relation-type` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Relation type for --parent (default: generalization).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 - `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; also includes http_status and raw_body.
 
 **Example**
@@ -4767,7 +4767,7 @@ Options:
 - `--slug` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement slug.
 - `--description` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement description.
 - `--visibility` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replacement visibility: public | unlisted | private.
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 - `--dump-raw-http` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Implies JSON stdout; also includes http_status and raw_body.
 
 **Example**
@@ -4807,7 +4807,7 @@ DELETE /api/categories/{id} - remove one or more categories.
 Options:
 
 - `ids` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Category UUID(s).
-- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service base URL (default: env SERVER_URL, else VITE_SERVER_IMAGE_API_URL, else CLIENT_URL). No trailing slash.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
 **Example**
 
@@ -5096,6 +5096,7 @@ Options:
 - `--device-code` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Use RFC 8628 Device Authorization Grant (no loopback callback port).
 - `--decode-jwt` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Decode a JWT access token and explain `sub` vs app user id (optional value; if omitted, uses ZITADEL_TEST_ACCESS_TOKEN from the environment).
 - `--issuer` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override ZITADEL_ISSUER / VITE_ZITADEL_AUTHORITY.
+- `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host to sign in against and pin for later service calls. Omit to pin whichever host login resolves (stored pin, then env, then the compiled default). service --server-url overrides the pin for that invocation only.
 - `--client-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override ZITADEL_NATIVE_CLIENT_ID / ZITADEL_OIDC_CLIENT_ID.
 - `--oauth-port` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 65535]</span></span>) - Diagnostic fixed loopback port. Default 0 asks Windows for an ephemeral port; the ZITADEL application must be a Native client with http://127.0.0.1/callback registered.
 
@@ -5108,7 +5109,7 @@ tanit-cli login
 **Full example**
 
 ```sh
-tanit-cli login --probe --no-browser --device-code --decode-jwt 'foo' --issuer 'foo' --client-id 'foo' --oauth-port 0
+tanit-cli login --probe --no-browser --device-code --decode-jwt 'foo' --issuer 'foo' --server-url 'foo' --client-id 'foo' --oauth-port 0
 ```
 
 ### Media & Capture
@@ -9260,7 +9261,7 @@ Options:
 - `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
 - `--bind` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Interface/address for MCP HTTP. Default: 127.0.0.1 (loopback only).
 - `--port` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 65535]</span>, <span data-cli="default">default <span data-cli="value">4444</span></span></span>) - First TCP port to try for MCP HTTP (default 4444; next free port if busy)
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 
 **Example**
 
@@ -9607,6 +9608,337 @@ tanit-cli mcp client Tanit serpapi-search
 
 ```sh
 tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo' --params 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-source-languages
+
+Get list of available source languages for translation
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-source-languages
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-source-languages --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-get-target-languages
+
+Get list of available target languages for translation
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-target-languages
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-target-languages --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-translate-text
+
+Translate text to a target language using DeepL API. Review all available optional parameters and use those applicable to your scenario for best results. When the translation inclu
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--context` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Recommended: describe what this text is about (e.g., 'Technical documentation for a software API'). Improves translation accuracy but is not itself translated.
+- `--customInstructions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Array of custom instructions to guide translation style (max 10 instructions, 300 chars each)
+- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls formality: 'less' for informal, 'more' for formal/polite, 'prefer_less'/'prefer_more' to prefer but fall back to default
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Glossary ID to ensure consistent terminology translation
+- `--preserveFormatting` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to preserve original formatting - recommended for markdown, code blocks, HTML, or any structured text
+- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
+- `--splitSentences` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sentence splitting: '0' disables, '1' (default) splits on punctuation and newlines, 'nonewlines' preserves line breaks
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
+- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to translate, as a single string or an array of strings handled independently
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-text --targetLangCode <value> --text <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-text --args '{}' --timeout-ms 0 --context 'foo' --customInstructions '{}' --formality 'foo' --glossaryId 'foo' --preserveFormatting --sourceLangCode 'foo' --splitSentences 'foo' --styleId 'foo' --targetLangCode 'foo' --text 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-writing-styles
+
+Get list of writing styles the DeepL API can use while rephrasing text
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-styles
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-styles --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-get-writing-tones
+
+Get list of writing tones the DeepL API can use while rephrasing text
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-tones
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-tones --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-rephrase-text
+
+Rephrase text in the same language, or into a different language, using DeepL API
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--style` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing style for rephrasing
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr') to rephrase into a different language, or leave empty to keep the original language
+- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to rephrase, as a single string or an array of strings handled independently
+- `--tone` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing tone for rephrasing
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-rephrase-text --text <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-rephrase-text --args '{}' --timeout-ms 0 --style 'foo' --targetLangCode 'foo' --text 'foo' --tone 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-translate-document
+
+Translate a document file using DeepL API
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls whether translations should lean toward informal or formal language
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ID of glossary to use for translation
+- `--inputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to the input document file to translate
+- `--outputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path where the translated document will be saved (if not provided, will be auto-generated)
+- `--outputFormat` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Desired output file format (e.g. 'pdf'), or leave empty to keep the input format. Only some conversions are supported.
+- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-document --inputFile <value> --targetLangCode <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-document --args '{}' --timeout-ms 0 --formality 'foo' --glossaryId 'foo' --inputFile 'foo' --outputFile 'foo' --outputFormat 'foo' --sourceLangCode 'foo' --styleId 'foo' --targetLangCode 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-list-glossaries
+
+Get a list of all glossaries with metadata for each - name, dictionaries available, and creation time. This does not fetch any glossary entries. Use the get-glossary-dictionary-ent
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-glossaries
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-glossaries --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-get-glossary-info
+
+Given an id, get metadata about the glossary with that id - its name, available dictionaries, and creation time. This does not fetch any glossary entries. Use the get-glossary-dict
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-info --glossaryId <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-info --args '{}' --timeout-ms 0 --glossaryId 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-glossary-dictionary-entries
+
+Retrieve all the entries from a given glossary dictionary. (A glossary consists one of one or more dictionaries, each of which contains entries for a specific language pair, in one
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
+- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - source language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --glossaryId <value> --sourceLangCode <value> --targetLangCode <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --args '{}' --timeout-ms 0 --glossaryId 'foo' --sourceLangCode 'foo' --targetLangCode 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-list-style-rules
+
+Get a list of all style rules with metadata for each - id, name, language, and timestamps. Style rules can be applied when translating text or documents. Use the get-style-rule too
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--detailed` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to include the configured rules and custom instructions of each rule
+- `--page` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page number, 0-based
+- `--pageSize` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of style rules per page (max 10)
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-style-rules
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-style-rules --args '{}' --timeout-ms 0 --detailed --page 'foo' --pageSize 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-style-rule
+
+Given an id, get a single style rule with its full detail - configured rules and custom instructions.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-style-rule --styleId <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-style-rule --args '{}' --timeout-ms 0 --styleId 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-custom-instruction
+
+Get a single custom instruction belonging to a style rule. Use the get-style-rule tool to find out which custom instructions a style rule contains.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--instructionId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the custom instruction
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-custom-instruction --instructionId <value> --styleId <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms 0 --instructionId 'foo' --styleId 'foo'
 ```
 
 ---
@@ -10260,438 +10592,107 @@ tanit-cli mcp client Tanit skillhub-generate_skill --description <value>
 tanit-cli mcp client Tanit skillhub-generate_skill --args '{}' --timeout-ms 0 --category 'foo' --description 'foo' --language 'foo'
 ```
 
----
-
-#### mcp client Tanit deepl-get-source-languages
-
-Get list of available source languages for translation
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-source-languages
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-source-languages --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-get-target-languages
-
-Get list of available target languages for translation
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-target-languages
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-target-languages --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-translate-text
-
-Translate text to a target language using DeepL API. Review all available optional parameters and use those applicable to your scenario for best results. When the translation inclu
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--context` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Recommended: describe what this text is about (e.g., 'Technical documentation for a software API'). Improves translation accuracy but is not itself translated.
-- `--customInstructions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Array of custom instructions to guide translation style (max 10 instructions, 300 chars each)
-- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls formality: 'less' for informal, 'more' for formal/polite, 'prefer_less'/'prefer_more' to prefer but fall back to default
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Glossary ID to ensure consistent terminology translation
-- `--preserveFormatting` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to preserve original formatting - recommended for markdown, code blocks, HTML, or any structured text
-- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
-- `--splitSentences` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sentence splitting: '0' disables, '1' (default) splits on punctuation and newlines, 'nonewlines' preserves line breaks
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
-- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to translate, as a single string or an array of strings handled independently
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-translate-text --targetLangCode <value> --text <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-translate-text --args '{}' --timeout-ms 0 --context 'foo' --customInstructions '{}' --formality 'foo' --glossaryId 'foo' --preserveFormatting --sourceLangCode 'foo' --splitSentences 'foo' --styleId 'foo' --targetLangCode 'foo' --text 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-get-writing-styles
-
-Get list of writing styles the DeepL API can use while rephrasing text
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-writing-styles
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-writing-styles --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-get-writing-tones
-
-Get list of writing tones the DeepL API can use while rephrasing text
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-writing-tones
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-writing-tones --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-rephrase-text
-
-Rephrase text in the same language, or into a different language, using DeepL API
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--style` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing style for rephrasing
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr') to rephrase into a different language, or leave empty to keep the original language
-- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to rephrase, as a single string or an array of strings handled independently
-- `--tone` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing tone for rephrasing
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-rephrase-text --text <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-rephrase-text --args '{}' --timeout-ms 0 --style 'foo' --targetLangCode 'foo' --text 'foo' --tone 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-translate-document
-
-Translate a document file using DeepL API
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls whether translations should lean toward informal or formal language
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ID of glossary to use for translation
-- `--inputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to the input document file to translate
-- `--outputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path where the translated document will be saved (if not provided, will be auto-generated)
-- `--outputFormat` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Desired output file format (e.g. 'pdf'), or leave empty to keep the input format. Only some conversions are supported.
-- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-translate-document --inputFile <value> --targetLangCode <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-translate-document --args '{}' --timeout-ms 0 --formality 'foo' --glossaryId 'foo' --inputFile 'foo' --outputFile 'foo' --outputFormat 'foo' --sourceLangCode 'foo' --styleId 'foo' --targetLangCode 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-list-glossaries
-
-Get a list of all glossaries with metadata for each - name, dictionaries available, and creation time. This does not fetch any glossary entries. Use the get-glossary-dictionary-ent
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-list-glossaries
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-list-glossaries --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-get-glossary-info
-
-Given an id, get metadata about the glossary with that id - its name, available dictionaries, and creation time. This does not fetch any glossary entries. Use the get-glossary-dict
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-glossary-info --glossaryId <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-glossary-info --args '{}' --timeout-ms 0 --glossaryId 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-get-glossary-dictionary-entries
-
-Retrieve all the entries from a given glossary dictionary. (A glossary consists one of one or more dictionaries, each of which contains entries for a specific language pair, in one
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
-- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - source language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --glossaryId <value> --sourceLangCode <value> --targetLangCode <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --args '{}' --timeout-ms 0 --glossaryId 'foo' --sourceLangCode 'foo' --targetLangCode 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-list-style-rules
-
-Get a list of all style rules with metadata for each - id, name, language, and timestamps. Style rules can be applied when translating text or documents. Use the get-style-rule too
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--detailed` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to include the configured rules and custom instructions of each rule
-- `--page` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page number, 0-based
-- `--pageSize` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of style rules per page (max 10)
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-list-style-rules
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-list-style-rules --args '{}' --timeout-ms 0 --detailed --page 'foo' --pageSize 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-get-style-rule
-
-Given an id, get a single style rule with its full detail - configured rules and custom instructions.
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-style-rule --styleId <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-style-rule --args '{}' --timeout-ms 0 --styleId 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-get-custom-instruction
-
-Get a single custom instruction belonging to a style rule. Use the get-style-rule tool to find out which custom instructions a style rule contains.
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--instructionId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the custom instruction
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-custom-instruction --instructionId <value> --styleId <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms 0 --instructionId 'foo' --styleId 'foo'
-```
-
 ## Custom Commands
 
-| Exact ID | Label | Group | Action | Pre-configured Args |
-|:---|:---|:---|:---|:---|
-| `custom.command-mq6okpfh-b145b` | Home | Navigation | `app:showhome` |  |
-| `file.prev` | Previous | Navigation | `app:previousfile` |  |
-| `custom.command-mtlnivuv-4aae3` | Explorer | Navigation | `app:togglefiletree` |  |
-| `file.next` | Next | Navigation | `app:nextfile` |  |
-| `custom.command-muv7nnf5-a9744` | Next (copy) | Navigation | `app:nextfile` |  |
-| `custom.command-muv7sxie-292fd` | Report | Report | `app:createreport` |  |
-| `custom.dropdown-msx1rszr-19148` | New | New | `metadata` |  |
-| `custom.command-mulazcgl-a19cb` | New Chat | New | `app:togglechat` |  |
-| `custom.command-msx1rszr-32ae1` | XBlox Script | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |
-| `custom.command-msx1xf70-ed2f7` | Text File | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
-| `custom.command-mtfnk3hu-47302` | Markdown File | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
-| `custom.command-mtczu1xa-c605f` | File Tab | New | `app:newfiletab` |  |
-| `custom.command-mudse19e-edcc5` | Browser | New | `app:openurl` |  |
-| `custom.command-mtfpcfxj-e1333` | Screen Recording | New | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
-| `custom.command-mulbk22p-b16a6` | Wizard | Home | `app:settings` |  |
-| `custom.command-mpx9r1ur-8c6df` | Assistant | Home | `cli:llm` | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
-| `custom.command-mpxytlpz-bcde4` | Launcher | Home | `app:togglelauncher` |  |
-| `custom.command-712fbd00-f9ac4` | Product | Images | `cli:transform` | `--prompt`<br>`render this as product shooting, white background, studio`<br>`--json`<br>`${CURRENT_SELECTION}` |
-| `custom.command-mpch9gdx-44982` | Illustration | Images | `cli:transform` | `--src`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`as technical illustration`<br>`--model`<br>`image-generation-deep` |
-| `custom.image-understand-speak` | Speak | Images | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.command-mqj3feqz-72a1a` | Resize-HD | Images | `cli:resize` | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui` |
-| `custom.command-mszwq2g6-780cb` | To Markdown | Images | `cli:llm` | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--no-skills`<br>`--hud`<br>`--hud-mode`<br>`both` |
-| `custom.command-muib2fcm-b25cf` | OCR Local | Images | `cli:understand` | `--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16`<br>`${CURRENT_FILE}` |
-| `custom.command-mtun9312-7d0e1` | Share Post | Images | `cli:service` | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`private` |
-| `custom.command-mrcja3yb-306c8` | Region | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot.xblox` |
-| `custom.command-mpxzouxv-ab189` | App | Screenshots | `app:takescreenshot` |  |
-| `custom.command-mu4l7dsk-4b406` | Fullscreen Screenshot | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-full.xblox` |
-| `custom.command-mre4dk8y-7a985` | To Markdown | Screenshots | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-vision-md.xblox` |
-| `custom.command-mtlh4sop-a7c1b` | New | AI | `app:togglechat` |  |
-| `custom.command-mpohnfaf-26b0c` | TTS | AI | `app:setVariable` |  |
-| `custom.command-mpokt0hv-41237` | Funny | AI | `app:setVariable` |  |
-| `custom.command-mpokxo4w-0910a` | Serious | AI | `app:setVariable` |  |
-| `custom.command-mtloapd5-06baa` | MCP | AI | `cli:mcp` | `--json` |
-| `custom.command-mu1wob56-d1f45` | Share as Article (copy) | AI | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
-| `custom.command-mtva51l4-2e559` | Login | AI | `app:login` |  |
-| `custom.command-mtvdak7f-00d65` | Logout | AI | `app:logout` |  |
-| `custom.view-explorer` | Explorer | View | `app:togglefiletree` |  |
-| `custom.command-mpy7w3px-8a1e0` | Log | View | `app:togglelog` |  |
-| `custom.command-mqkxsx6y-56346` | Center | View | `app:togglecenterview` |  |
-| `custom.command-mtld2y23-123a4` | Chat | View | `app:togglechat` |  |
-| `custom.command-mpy7z14t-bcef8` | Queue | View | `app:togglequeue` |  |
-| `custom.command-mqkneqp7-3fcb0` | Console | View | `app:toggleconsole` |  |
-| `custom.command-mr5ebav3-ec35c` | Search | View | `app:togglesearchnative` |  |
-| `custom.command-mt8msflf-fe3b7` | Tabbed | View | `app:viewtabbed` |  |
-| `custom.command-msqfoqej-85fb5` | Performance | View | `app:toggleperf` |  |
-| `custom.command-mtwl51se-b7440` | 1269x846 | View | `app:setframesize` |  |
-| `custom.view-maximize` | Fullscreen | View | `app:togglefullscreen` |  |
-| `custom.command-mtoxzgrv-1f644` | Maximize | View | `app:setframesize` |  |
-| `custom.command-mtv9cd7k-7a458` | Reset | View | `app:resetlayout` |  |
-| `custom.command-70eabea6-957e6` | Spanish | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`Translate to Spanish`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_es.${SRC_EXT}`<br>`--hud` |
-| `custom.command-msyzmkcu-9b027` | English | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_en.${SRC_EXT}`<br>`--prompt`<br>`Translate to English`<br>`--no-tools`<br>`--preset`<br>`Tanit-Fast`<br>`--hud`<br>`--hud-mode`<br>`both` |
-| `custom.command-msyznegr-9190e` | German | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_de.${SRC_EXT}`<br>`--hud`<br>`--hud-mode`<br>`both`<br>`--prompt`<br>`Translate to German. Return raw response, no fences!` |
-| `custom.command-mt0dfzrn-665b0` | French | Translate | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--prompt`<br>`Translate to French`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_fr.${SRC_EXT}` |
-| `custom.command-ms0phpqj-d1ca3` | Chrome | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-chrome.xblox` |
-| `custom.command-ms33shnl-97127` | App | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-win32.xblox` |
-| `custom.text-speak` | Speak | Pickers | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
-| `custom.voice-cloner` | Voice Cloner | Audio | `cli:audio` | `voice-change`<br>`--remove-background-noise`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_cloned.wav`<br>`--style`<br>`0.5`<br>`--stability`<br>`1` |
-| `custom.command-mpxzk7g4-67590` | Voice Recorder | Audio | `cli:audio` | `record`<br>`--dst`<br>`${CONFIG_DIR}/recordings/tanit-${DD}-${HH}-${mm}.wav`<br>`--hud`<br>`--filter`<br>`deepfilter` |
-| `custom.command-mtk0rcb2-f401a` | Speech to Text | Audio | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/stt-paste-whisper.xblox` |
-| `custom.command-ms0q0j9j-92441` | Yamaha | Audio | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/bluetooth-yamaha.xblox` |
-| `custom.command-mtn0t1b3-722de` | Voice Commands | Audio | `app:togglevoicecommand` |  |
-| `custom.command-7201753fce13ac9f1c6b945856a73c94` | SRT->WAV | Audio | `cli:audio` | `tts-scripted`<br>`--srt`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
-| `custom.command-mrf5dhi8-76608` | 1:1 | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
-| `custom.command-ms4vl4ur-4569d` | 16:9 | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
-| `custom.command-msghb0e2-e8c47` | Fixed | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed.xblox` |
-| `custom.command-mubm8ayh-a6d58` | Fixed & Subs | Screen-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed-subs.xblox` |
-| `custom.video-start` | WebCam | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
-| `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | Video-Recorder | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox`<br>`--audioSource`<br>``<br>`--camera`<br>``<br>`--encoder`<br>`auto`<br>`--hud`<br>`true`<br>`--microphone`<br>`` |
-| `custom.handbrake-hq` | Handbrake | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.command-video-social-hq` | Social Video HQ | Converters | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.command-mujkog2v-f9c2b` | Swap MP4 audio | Converters | `external` | `-y`<br>`-i`<br>`${CURRENT_SELECTION_0}`<br>`-i`<br>`${CURRENT_SELECTION_1}`<br>`-map`<br>`0:v:0`<br>`-map`<br>`1:a:0`<br>`-c:v`<br>`copy`<br>`-c:a`<br>`aac`<br>`-shortest`<br>`${PATH_DIR:CURRENT_SELECTION_0}${PATH_SEP}${PATH_NAME:CURRENT_SELECTION_0}_with_${PATH_NAME:CURRENT_SELECTION_1}.mp4` |
-| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4->MP3 | Converters | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
-| `custom.command-mujlyke2-1c42f` | MP4->WAV | Converters | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-ac`<br>`1`<br>`-ar`<br>`16000`<br>`-c:a`<br>`pcm_s16le`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
-| `custom.command-7883566e75cb852699295a0cc2a574c5` | Video poster frame | Converters | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-frames:v`<br>`1`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.png` |
-| `custom.command-mr51514h-c34ec` | System | Default Prompts | `app:edit` |  |
-| `custom.command-mr50fk3n-1a7d7` | Realtime | Default Prompts | `app:edit` |  |
-| `custom.command-mppft700-137e9` | Planner | Default Prompts | `app:edit` |  |
-| `batch.start` | Start | Batch | `app:resumebatch` |  |
-| `batch.pause` | Pause | Batch | `app:resumebatch` |  |
-| `custom.command-mt06aefh-c364b` | Cancel | Batch | `app:cancelbatch` |  |
-| `custom.view-snap-up` | Snap Up | View Snap | `app:snapup` |  |
-| `custom.view-snap-down` | Snap Down | View Snap | `app:snapdown` |  |
-| `custom.view-snap-left` | Snap Left | View Snap | `app:snapleft` |  |
-| `custom.view-snap-right` | Snap Right | View Snap | `app:snapright` |  |
-| `custom.command-mt4msl99-55414` | Start | Scheduler | `app:schedulerstart` |  |
-| `custom.command-mt4munur-873bb` | Stop | Scheduler | `app:schedulerstop` |  |
-| `custom.command-mt7672eh-b7786` | To Images | PDF | `cli:pdf` | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
-| `custom.pdf-to-md` | To Markdown | PDF | `cli:pdf` | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--per-page`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16` |
-| `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | PDF | `external` | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
-| `custom.fs-copy` | Copy | Files | `app:fscopy` |  |
-| `custom.fs-move` | Move | Files | `app:fsmove` |  |
-| `custom.command-mu114s8q-17bff` | Share | Files | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--public` |
-| `custom.dropdown-msaj5qk5-78a6b` | Help | Files | `metadata` |  |
-| `custom.help-cli` | CLI-Manual | Files | `app:open` |  |
-| `custom.help-xblox` | XBlox | Files | `app:open` |  |
-| `custom.command-msakytc7-dd084` | Online Help | Files | `app:openurl` |  |
-| `custom.command-mujkxt3w-4af40` | Subtitles | Audio Converter | `cli:audio` | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt`<br>`--hud` |
+| Exact ID | Label | Group | Action | Description | Files | Pre-configured Args |
+|:---|:---|:---|:---|:---|:---|:---|
+| `custom.command-mq6okpfh-b145b` | Home | Navigation | `app:showhome` |  | selection |  |
+| `file.prev` | Previous | Navigation | `app:previousfile` | navigates to previous file | selection |  |
+| `custom.command-mtlnivuv-4aae3` | Explorer | Navigation | `app:togglefiletree` |  | selection |  |
+| `file.next` | Next | Navigation | `app:nextfile` | navigates to next file | selection |  |
+| `custom.command-muv7nnf5-a9744` | Next (copy) | Navigation | `app:nextfile` | navigates to next file | selection |  |
+| `custom.command-muv7sxie-292fd` | Report | Report | `app:createreport` | Report an issue | selection |  |
+| `custom.dropdown-msx1rszr-19148` | New | New | `metadata` |  | selection |  |
+| `custom.command-mulazcgl-a19cb` | New Chat | New | `app:togglechat` |  | selection |  |
+| `custom.command-msx1rszr-32ae1` | XBlox Script | New | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |
+| `custom.command-msx1xf70-ed2f7` | Text File | New | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
+| `custom.command-mtfnk3hu-47302` | Markdown File | New | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
+| `custom.command-mtczu1xa-c605f` | File Tab | New | `app:newfiletab` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
+| `custom.command-mudse19e-edcc5` | Browser | New | `app:openurl` |  | selection | `google.com` |
+| `custom.command-mtfpcfxj-e1333` | Screen Recording | New | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
+| `custom.command-mulbk22p-b16a6` | Wizard | Home | `app:settings` | Open setup wizard | selection | `wizard` |
+| `custom.command-mpx9r1ur-8c6df` | Assistant | Home | `cli:llm` | Activates real-time voice assistant in background | selection | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
+| `custom.command-mpxytlpz-bcde4` | Launcher | Home | `app:togglelauncher` | Open launcher menu | selection |  |
+| `custom.command-712fbd00-f9ac4` | Product | Images | `cli:transform` | Render current selection as a product photo using white studio background | selection; explorer:image; jpg->jpg | `--prompt`<br>`render this as product shooting, white background, studio`<br>`--json`<br>`${CURRENT_SELECTION}` |
+| `custom.command-mpch9gdx-44982` | Illustration | Images | `cli:transform` | description | files | `--src`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`as technical illustration`<br>`--model`<br>`image-generation-deep` |
+| `custom.image-understand-speak` | Speak | Images | `cli:xblox` | Speaks the content of an selected image over the speaker | files | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.command-mqj3feqz-72a1a` | Resize-HD | Images | `cli:resize` | Resize selection to 1920 | files; perItem | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui` |
+| `custom.command-mszwq2g6-780cb` | To Markdown | Images | `cli:llm` | Convert current selected image file to Markdown document, using selected image vision provider & model | selection; perItem; explorer:image; jpg,png->md | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--no-skills`<br>`--hud`<br>`--hud-mode`<br>`both` |
+| `custom.command-muib2fcm-b25cf` | OCR Local | Images | `cli:understand` | Convert current selected image file to Markdown document, using selected OCR local model | selection; perItem; explorer:image; jpg,png->md | `--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16`<br>`${CURRENT_FILE}` |
+| `custom.command-mtun9312-7d0e1` | Share Post | Images | `cli:service` | Share selected image file as article | selection | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`private` |
+| `custom.command-mrcja3yb-306c8` | Region | Screenshots | `cli:xblox` | Screenshot taking, pick any screen element | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot.xblox` |
+| `custom.command-mpxzouxv-ab189` | App | Screenshots | `app:takescreenshot` |  | selection |  |
+| `custom.command-mu4l7dsk-4b406` | Fullscreen Screenshot | Screenshots | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-full.xblox` |
+| `custom.command-mre4dk8y-7a985` | To Markdown | Screenshots | `cli:xblox` | Uses AI to convert selected image to Markdown | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-vision-md.xblox` |
+| `custom.command-mtlh4sop-a7c1b` | New | AI | `app:togglechat` |  | selection |  |
+| `custom.command-mpohnfaf-26b0c` | TTS | AI | `app:setVariable` |  | selection |  |
+| `custom.command-mpokt0hv-41237` | Funny | AI | `app:setVariable` |  | selection |  |
+| `custom.command-mpokxo4w-0910a` | Serious | AI | `app:setVariable` |  | selection |  |
+| `custom.command-mtloapd5-06baa` | MCP | AI | `cli:mcp` |  | selection | `--json` |
+| `custom.command-mu1wob56-d1f45` | Share as Article (copy) | AI | `cli:service` | Share selected Markdown file as article | selection | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
+| `custom.command-mtva51l4-2e559` | Login | AI | `app:login` | Login into Tanit | selection |  |
+| `custom.command-mtvdak7f-00d65` | Logout | AI | `app:logout` | Login into Tanit | selection |  |
+| `custom.view-explorer` | Explorer | View | `app:togglefiletree` |  | selection |  |
+| `custom.command-mpy7w3px-8a1e0` | Log | View | `app:togglelog` |  | selection |  |
+| `custom.command-mqkxsx6y-56346` | Center | View | `app:togglecenterview` |  | selection |  |
+| `custom.command-mtld2y23-123a4` | Chat | View | `app:togglechat` |  | selection |  |
+| `custom.command-mpy7z14t-bcef8` | Queue | View | `app:togglequeue` |  | selection |  |
+| `custom.command-mqkneqp7-3fcb0` | Console | View | `app:toggleconsole` |  | selection |  |
+| `custom.command-mr5ebav3-ec35c` | Search | View | `app:togglesearchnative` |  | selection |  |
+| `custom.command-mt8msflf-fe3b7` | Tabbed | View | `app:viewtabbed` | Enable Tabs | selection |  |
+| `custom.command-msqfoqej-85fb5` | Performance | View | `app:toggleperf` |  | selection | `800x600` |
+| `custom.command-mtwl51se-b7440` | 1269x846 | View | `app:setframesize` |  | selection | `1269x846` |
+| `custom.view-maximize` | Fullscreen | View | `app:togglefullscreen` |  | selection | `immersive`<br>`ribbon,statusbar,toolbar` |
+| `custom.command-mtoxzgrv-1f644` | Maximize | View | `app:setframesize` |  | selection | `max` |
+| `custom.command-mtv9cd7k-7a458` | Reset | View | `app:resetlayout` |  | selection |  |
+| `custom.command-70eabea6-957e6` | Spanish | Translate | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`Translate to Spanish`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_es.${SRC_EXT}`<br>`--hud` |
+| `custom.command-msyzmkcu-9b027` | English | Translate | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_en.${SRC_EXT}`<br>`--prompt`<br>`Translate to English`<br>`--no-tools`<br>`--preset`<br>`Tanit-Fast`<br>`--hud`<br>`--hud-mode`<br>`both` |
+| `custom.command-msyznegr-9190e` | German | Translate | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_de.${SRC_EXT}`<br>`--hud`<br>`--hud-mode`<br>`both`<br>`--prompt`<br>`Translate to German. Return raw response, no fences!` |
+| `custom.command-mt0dfzrn-665b0` | French | Translate | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--prompt`<br>`Translate to French`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_fr.${SRC_EXT}` |
+| `custom.command-ms0phpqj-d1ca3` | Chrome | Pickers | `cli:xblox` | Convert a picked region in Chrome to Markdown | selection; perItem; pdf,xlsx,docx->pdf,xlsx,docx | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-chrome.xblox` |
+| `custom.command-ms33shnl-97127` | App | Pickers | `cli:xblox` | Convert a picked application region to Markdown | selection; perItem; pdf,xlsx,docx->pdf,xlsx,docx | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-win32.xblox` |
+| `custom.text-speak` | Speak | Pickers | `cli:xblox` | Pick an element and send it over the speaker using text to speech. | selection; perItem; pdf,xlsx,docx->pdf,xlsx,docx | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
+| `custom.voice-cloner` | Voice Cloner | Audio | `cli:audio` | Run voice cloner on selected wav file, uses ElevenLabs | files | `voice-change`<br>`--remove-background-noise`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_cloned.wav`<br>`--style`<br>`0.5`<br>`--stability`<br>`1` |
+| `custom.command-mpxzk7g4-67590` | Voice Recorder | Audio | `cli:audio` | Starts voice recorder. See command settings for more. | selection | `record`<br>`--dst`<br>`${CONFIG_DIR}/recordings/tanit-${DD}-${HH}-${mm}.wav`<br>`--hud`<br>`--filter`<br>`deepfilter` |
+| `custom.command-mtk0rcb2-f401a` | Speech to Text | Audio | `cli:xblox` | Speech to text and clipboard, uses local Whisper model and external AI for correction. | files | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/stt-paste-whisper.xblox` |
+| `custom.command-ms0q0j9j-92441` | Yamaha | Audio | `cli:xblox` | Connect to Yamaha over Bluetooth | files | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/bluetooth-yamaha.xblox` |
+| `custom.command-mtn0t1b3-722de` | Voice Commands | Audio | `app:togglevoicecommand` | Start voice command mode - requires Whisper model and GPU | selection | `trigger`<br>`gtcrn`<br>`false`<br>`false`<br>`whisper`<br>`auto`<br>`en`<br>`mic`<br>`1`<br>`1`<br>`1`<br>`1` |
+| `custom.command-7201753fce13ac9f1c6b945856a73c94` | SRT->WAV | Audio | `cli:audio` | Generate timed speech from the selected SRT, VTT, or JSON cues file and save a sibling 48 kHz mono WAV using configured TTS settings. | selection; perItem | `tts-scripted`<br>`--srt`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
+| `custom.command-mrf5dhi8-76608` | 1:1 | Screen-Recorder | `cli:xblox` | Zoom and Follow Video Recorder 1:1 | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
+| `custom.command-ms4vl4ur-4569d` | 16:9 | Screen-Recorder | `cli:xblox` | Zoom and Follow Video Recorder 16:9 | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
+| `custom.command-msghb0e2-e8c47` | Fixed | Screen-Recorder | `cli:xblox` | Zoom and Follow Video Recorder 16:9 | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed.xblox` |
+| `custom.command-mubm8ayh-a6d58` | Fixed & Subs | Screen-Recorder | `cli:xblox` | Zoom and Follow Video Recorder 16:9 | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed-subs.xblox` |
+| `custom.video-start` | WebCam | Video-Recorder | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
+| `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | Video-Recorder | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox`<br>`--audioSource`<br>``<br>`--camera`<br>``<br>`--encoder`<br>`auto`<br>`--hud`<br>`true`<br>`--microphone`<br>`` |
+| `custom.handbrake-hq` | Handbrake | Converters | `cli:xblox` | Convert selected file with Handbrake | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.command-video-social-hq` | Social Video HQ | Converters | `cli:xblox` | Create a high-quality 1080p60 H.264 social-media master from the selected screen capture using Handbrake | selection; perItem | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.command-mujkog2v-f9c2b` | Swap MP4 audio | Converters | `external` | Replace the audio on the first selected MP4 with the second selected audio file. Writes a new MP4 beside the video. Select the video first, then the audio, in file-view order. Requires FFMPEG installed. | selection; aggregate | `-y`<br>`-i`<br>`${CURRENT_SELECTION_0}`<br>`-i`<br>`${CURRENT_SELECTION_1}`<br>`-map`<br>`0:v:0`<br>`-map`<br>`1:a:0`<br>`-c:v`<br>`copy`<br>`-c:a`<br>`aac`<br>`-shortest`<br>`${PATH_DIR:CURRENT_SELECTION_0}${PATH_SEP}${PATH_NAME:CURRENT_SELECTION_0}_with_${PATH_NAME:CURRENT_SELECTION_1}.mp4` |
+| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4->MP3 | Converters | `external` | Extract MP3 audio beside each selected MP4 using FFMPEG. | selection; perItem | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
+| `custom.command-mujlyke2-1c42f` | MP4->WAV | Converters | `external` | Extract WAV audio beside each selected MP4 using FFMPEG. | selection; perItem | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-ac`<br>`1`<br>`-ar`<br>`16000`<br>`-c:a`<br>`pcm_s16le`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
+| `custom.command-7883566e75cb852699295a0cc2a574c5` | Video poster frame | Converters | `external` | Extract the first video frame as a PNG beside the selected video using FFMPEG | selection; perItem; explorer:video | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-frames:v`<br>`1`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.png` |
+| `custom.command-mr51514h-c34ec` | System | Default Prompts | `app:edit` | Edit system prompt for Tanit agent | selection | `pm://config/prompts/system-prompt.md` |
+| `custom.command-mr50fk3n-1a7d7` | Realtime | Default Prompts | `app:edit` | Edit real-time prompt for Tanit agent | selection | `pm://config/prompts/realtime-prompt.md` |
+| `custom.command-mppft700-137e9` | Planner | Default Prompts | `app:edit` | Edit planner prompt for Tanit agent | selection | `pm://config/prompts/planner-prompt.md` |
+| `batch.start` | Start | Batch | `app:resumebatch` |  | selection |  |
+| `batch.pause` | Pause | Batch | `app:resumebatch` |  | selection |  |
+| `custom.command-mt06aefh-c364b` | Cancel | Batch | `app:cancelbatch` |  | selection |  |
+| `custom.view-snap-up` | Snap Up | View Snap | `app:snapup` |  | selection |  |
+| `custom.view-snap-down` | Snap Down | View Snap | `app:snapdown` |  | selection |  |
+| `custom.view-snap-left` | Snap Left | View Snap | `app:snapleft` |  | selection | `800x600` |
+| `custom.view-snap-right` | Snap Right | View Snap | `app:snapright` |  | selection | `800x600` |
+| `custom.command-mt4msl99-55414` | Start | Scheduler | `app:schedulerstart` |  | selection |  |
+| `custom.command-mt4munur-873bb` | Stop | Scheduler | `app:schedulerstop` |  | selection |  |
+| `custom.command-mt7672eh-b7786` | To Images | PDF | `cli:pdf` | Convert PDF into image slides | files; perItem; pdf->md | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
+| `custom.pdf-to-md` | To Markdown | PDF | `cli:pdf` | Extract PDF text and figures to a Markdown bundle (page_N.md + figures/) | files; perItem; pdf->md | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--per-page`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16` |
+| `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | PDF | `external` | Convert each selected Office document to PDF beside the source file using LibreOffice. | selection; perItem; explorer:text | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
+| `custom.fs-copy` | Copy | Files | `app:fscopy` |  | selection |  |
+| `custom.fs-move` | Move | Files | `app:fsmove` |  | selection |  |
+| `custom.command-mu114s8q-17bff` | Share | Files | `cli:service` | Share current file to your Tanit CMS (5 MB maximum) | selection; perItem | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--public` |
+| `custom.dropdown-msaj5qk5-78a6b` | Help | Files | `metadata` |  | selection |  |
+| `custom.help-cli` | CLI-Manual | Files | `app:open` | Open CLI documentation locally | selection | `${TANIT_SHARED}/help/en/cli.md` |
+| `custom.help-xblox` | XBlox | Files | `app:open` | Open XBlox documentation locally | selection | `${TANIT_SHARED}/help/en/xblox.md` |
+| `custom.command-msakytc7-dd084` | Online Help | Files | `app:openurl` |  | selection | `https://tanit.polymech.info/user/cgo/pages/documentation` |
+| `custom.command-mujkxt3w-4af40` | Subtitles | Audio Converter | `cli:audio` | Create sub titles from Microphone - using local Whisper model | selection | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt`<br>`--hud` |
 
 Call custom commands with the exact dotted ID shown above, e.g. `tanit-cli.exe custom.mic-start`.
 Pass `...` extra args after `--` to append them to the configured command without wrapper interception.

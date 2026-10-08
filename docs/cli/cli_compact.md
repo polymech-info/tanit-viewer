@@ -57,7 +57,7 @@ custom.command-mpch9gdx-44982 (--src,${CURRENT_FILE},--prompt,"as technical illu
 custom.command-mpohnfaf-26b0c - TTS
 custom.command-mpokt0hv-41237 - Funny
 custom.command-mpokxo4w-0910a - Serious
-custom.command-mppft700-137e9 - Edit planner prompt for Tanit agent
+custom.command-mppft700-137e9 (pm://config/prompts/planner-prompt.md) - Edit planner prompt for Tanit agent
 custom.command-mpx9r1ur-8c6df (agent,--consent-ui,win32,--realtime,...) - Activates real-time voice assistant in background
 custom.command-mpxytlpz-bcde4 - Open launcher menu
 custom.command-mpxzk7g4-67590 (record,--dst,${CONFIG_DIR}/recordings/tanit-${DD}-${HH}-${mm}...,--hud,...) - Starts voice recorder. See command settings for more.
@@ -68,19 +68,19 @@ custom.command-mq6okpfh-b145b - Home
 custom.command-mqj3feqz-72a1a (run,--CURRENT_FILE,${CURRENT_FILE},--max-width,...) - Resize selection to 1920
 custom.command-mqkneqp7-3fcb0 - Console
 custom.command-mqkxsx6y-56346 - Center
-custom.command-mr50fk3n-1a7d7 - Edit real-time prompt for Tanit agent
-custom.command-mr51514h-c34ec - Edit system prompt for Tanit agent
+custom.command-mr50fk3n-1a7d7 (pm://config/prompts/realtime-prompt.md) - Edit real-time prompt for Tanit agent
+custom.command-mr51514h-c34ec (pm://config/prompts/system-prompt.md) - Edit system prompt for Tanit agent
 custom.command-mr5ebav3-ec35c - Search
-custom.command-mrcja3yb-306c8 (run,--src,${TANIT_SCRIPTS}/screenshot.xblox) - Region
+custom.command-mrcja3yb-306c8 (run,--src,${TANIT_SCRIPTS}/screenshot.xblox) - Screenshot taking, pick any screen element
 custom.command-mre4dk8y-7a985 (run,--src,${TANIT_SCRIPTS}/screenshot-vision-md.xblox) - Uses AI to convert selected image to Markdown
-custom.command-mrf5dhi8-76608 (run,--src,${TANIT_SCRIPTS}/video-recorder-ex.xblox) - 1:1
+custom.command-mrf5dhi8-76608 (run,--src,${TANIT_SCRIPTS}/video-recorder-ex.xblox) - Zoom and Follow Video Recorder 1:1
 custom.command-ms0phpqj-d1ca3 (run,--src,${TANIT_SCRIPTS}/inspect-chrome.xblox) - Convert a picked region in Chrome to Markdown
 custom.command-ms0q0j9j-92441 (run,--src,${TANIT_SCRIPTS}/bluetooth-yamaha.xblox) - Connect to Yamaha over Bluetooth
 custom.command-ms33shnl-97127 (run,--src,${TANIT_SCRIPTS}/inspect-win32.xblox) - Convert a picked application region to Markdown
-custom.command-ms4vl4ur-4569d (run,--src,${TANIT_SCRIPTS}/video-recorder-16-9.xblox) - 16:9
-custom.command-msakytc7-dd084 - Online Help
-custom.command-msghb0e2-e8c47 (run,--src,${TANIT_SCRIPTS}/video-recorder-fixed.xblox) - Fixed
-custom.command-msqfoqej-85fb5 - Performance
+custom.command-ms4vl4ur-4569d (run,--src,${TANIT_SCRIPTS}/video-recorder-16-9.xblox) - Zoom and Follow Video Recorder 16:9
+custom.command-msakytc7-dd084 (https://tanit.polymech.info/user/cgo/pages/docum...) - Online Help
+custom.command-msghb0e2-e8c47 (run,--src,${TANIT_SCRIPTS}/video-recorder-fixed.xblox) - Zoom and Follow Video Recorder 16:9
+custom.command-msqfoqej-85fb5 (800x600) - Performance
 custom.command-msx1rszr-32ae1 (run,--src,${TANIT_SCRIPTS}/intern/new_file.xblox,--content,...) - XBlox Script
 custom.command-msx1xf70-ed2f7 (run,--src,${TANIT_SCRIPTS}/intern/new_file.xblox,--ext,...) - Text File
 custom.command-msyzmkcu-9b027 (agent,--embed,${CURRENT_FILE},--no-mcp,...) - Translate the currently selected file to Spanish via the LLM agent
@@ -91,8 +91,8 @@ custom.command-mt0dfzrn-665b0 (agent,--embed,${CURRENT_FILE},--no-mcp,...) - Tra
 custom.command-mt4msl99-55414 - Start
 custom.command-mt4munur-873bb - Stop
 custom.command-mt7672eh-b7786 (render,${CURRENT_FILE},--output-dir,${SRC_DIR}/${SRC_NAME}_images,...) - Convert PDF into image slides
-custom.command-mt8msflf-fe3b7 - Tabbed
-custom.command-mtczu1xa-c605f - File Tab
+custom.command-mt8msflf-fe3b7 - Enable Tabs
+custom.command-mtczu1xa-c605f (run,--src,${TANIT_SCRIPTS}/intern/new_file.xblox,--ext,...) - File Tab
 custom.command-mtfnk3hu-47302 (run,--src,${TANIT_SCRIPTS}/intern/new_file.xblox,--variable-public,...) - Markdown File
 custom.command-mtfpcfxj-e1333 (run,--src,${TANIT_SCRIPTS}/video-recorder-16-9.xblox) - Screen Recording
 custom.command-mtk0rcb2-f401a (run,--src,${TANIT_SCRIPTS}/stt-paste-whisper.xblox) - Speech to text and clipboard, uses local Whisper model and external AI for correction.
@@ -100,25 +100,25 @@ custom.command-mtld2y23-123a4 - Chat
 custom.command-mtlh4sop-a7c1b - New
 custom.command-mtlnivuv-4aae3 - Explorer
 custom.command-mtloapd5-06baa (--json) - MCP
-custom.command-mtn0t1b3-722de - Start voice command mode - requires Whisper model and GPU
-custom.command-mtoxzgrv-1f644 - Maximize
+custom.command-mtn0t1b3-722de (trigger,gtcrn,false,false,...) - Start voice command mode - requires Whisper model and GPU
+custom.command-mtoxzgrv-1f644 (max) - Maximize
 custom.command-mtun9312-7d0e1 (posts,create,${CURRENT_SELECTION},--visibility,...) - Share selected image file as article
 custom.command-mtv9cd7k-7a458 - Reset
 custom.command-mtva51l4-2e559 - Login into Tanit
 custom.command-mtvdak7f-00d65 - Login into Tanit
-custom.command-mtwl51se-b7440 - 1269x846
+custom.command-mtwl51se-b7440 (1269x846) - 1269x846
 custom.command-mu114s8q-17bff (files,upload,${CURRENT_SELECTION},--public) - Share current file to your Tanit CMS (5 MB maximum)
 custom.command-mu1wam8u-bfd55 (run,--src,${TANIT_SCRIPTS}/webcam.xblox,--audioSource,...) - WebCam Beautifier
 custom.command-mu1wob56-d1f45 (pages,create,--category-id,uncategorized,...) - Share selected Markdown file as article
 custom.command-mu4l7dsk-4b406 (run,--src,${TANIT_SCRIPTS}/screenshot-full.xblox) - Fullscreen Screenshot
-custom.command-mubm8ayh-a6d58 (run,--src,${TANIT_SCRIPTS}/video-recorder-fixed-subs.xblox) - Fixed & Subs
-custom.command-mudse19e-edcc5 - Browser
+custom.command-mubm8ayh-a6d58 (run,--src,${TANIT_SCRIPTS}/video-recorder-fixed-subs.xblox) - Zoom and Follow Video Recorder 16:9
+custom.command-mudse19e-edcc5 (google.com) - Browser
 custom.command-muib2fcm-b25cf (--dst,${SRC_DIR}/${SRC_NAME}.md,--prompt,"Create Markdown Document using the provided path...",...) - Convert current selected image file to Markdown document, using selected OCR local model
 custom.command-mujkog2v-f9c2b (-y,-i,${CURRENT_SELECTION_0},-i,...) - Replace the audio on the first selected MP4 with the second selected audio file. Writes a new...
 custom.command-mujkxt3w-4af40 (record,--from-wav,${CURRENT_FILE},--stt,...) - Create sub titles from Microphone - using local Whisper model
 custom.command-mujlyke2-1c42f (-y,-i,${CURRENT_FILE},-vn,...) - Extract WAV audio beside each selected MP4 using FFMPEG.
 custom.command-mulazcgl-a19cb - New Chat
-custom.command-mulbk22p-b16a6 - Open setup wizard
+custom.command-mulbk22p-b16a6 (wizard) - Open setup wizard
 custom.command-muv7nnf5-a9744 - navigates to next file
 custom.command-muv7sxie-292fd - Report an issue
 custom.command-video-social-hq (run,--src,${TANIT_SCRIPTS}/video-encode-social-hq.xblox,--CURRENT_FILE,...) - Create a high-quality 1080p60 H.264 social-media master from the selected screen capture using...
@@ -127,17 +127,17 @@ custom.dropdown-msx1rszr-19148 - New
 custom.fs-copy - Copy
 custom.fs-move - Move
 custom.handbrake-hq (run,--src,${TANIT_SCRIPTS}/video-encode-medium.xblox,--CURRENT_FILE,...) - Convert selected file with Handbrake
-custom.help-cli - Open CLI documentation locally
-custom.help-xblox - Open XBlox documentation locally
+custom.help-cli (${TANIT_SHARED}/help/en/cli.md) - Open CLI documentation locally
+custom.help-xblox (${TANIT_SHARED}/help/en/xblox.md) - Open XBlox documentation locally
 custom.image-understand-speak (run,--src,${TANIT_SCRIPTS}/vision-pipe-speak.xblox,--CURRENT_FILE,...) - Speaks the content of an selected image over the speaker
 custom.pdf-to-md (md,${CURRENT_FILE},--output-dir,${SRC_DIR}/${SRC_NAME}_md,...) - Extract PDF text and figures to a Markdown bundle (page_N.md + figures/)
 custom.text-speak (run,--src,${TANIT_SCRIPTS}/inspect-text-speak.xblox) - Pick an element and send it over the speaker using text to speech.
 custom.video-start (run,--src,${TANIT_SCRIPTS}/webcam.xblox) - WebCam
 custom.view-explorer - Explorer
-custom.view-maximize - Fullscreen
+custom.view-maximize (immersive,"ribbon,statusbar,toolbar") - Fullscreen
 custom.view-snap-down - Snap Down
-custom.view-snap-left - Snap Left
-custom.view-snap-right - Snap Right
+custom.view-snap-left (800x600) - Snap Left
+custom.view-snap-right (800x600) - Snap Right
 custom.view-snap-up - Snap Up
 custom.voice-cloner (voice-change,--remove-background-noise,${CURRENT_FILE},--dst,...) - Run voice cloner on selected wav file, uses ElevenLabs
 daemon (config) - Global shortcut daemon: hotkeys, UI presets, app commands, STT, and voice session.
@@ -186,7 +186,7 @@ llm info skills - List discovered agent skills from roaming and workspace roots 
 llm info tools - List all built-in path-mode agent tools (name + description). These are the tools available to...
 llm tools-call (name,args,image-file) - Invoke a tool by name with a JSON arguments envelope
 llm tools-list - Print the JSON-Schema tool catalog (one entry per tanit op)
-login (decode-jwt,issuer,client-id,oauth-port) - Sign in via OIDC PKCE or RFC 8628 device code, or use --probe / --decode-jwt.
+login (decode-jwt,issuer,server-url,client-id,...) - Sign in via OIDC PKCE or RFC 8628 device code, or use --probe / --decode-jwt.
 logout - Sign out and remove stored tokens from the app profile.
 markdown (input,output,src,dst,...) - Convert Word, PowerPoint, Excel, OpenDocument, RTF, EPUB, CSV, or PDF to Markdown.
 mcp (preset,bind,port,disable-tools) - MCP utilities: run a foreground agent-tool server, or inspect, add, remove, and call external...

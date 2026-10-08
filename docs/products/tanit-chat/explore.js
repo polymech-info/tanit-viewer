@@ -101,17 +101,17 @@
     xform.style.transform =
       'translate3d(' + Math.round(pan.x) + 'px,' + Math.round(pan.y) + 'px,0)';
   }
-  /** Hard stop only is persisted; soft pause does not survive reload. */
+  /** Autoplay is off until Play. Stop and Play are remembered; pause is session-only. */
   function readTourMode() {
     try {
-      if (localStorage.getItem(TOUR_KEY) === 'stopped') return 'stopped';
+      var s = localStorage.getItem(TOUR_KEY);
+      if (s === 'playing' || s === 'stopped') return s;
     } catch (_) {}
-    return 'playing';
+    return 'stopped';
   }
   function persistTourMode(mode) {
     try {
-      if (mode === 'stopped') localStorage.setItem(TOUR_KEY, 'stopped');
-      else if (mode === 'playing') localStorage.removeItem(TOUR_KEY);
+      if (mode === 'playing' || mode === 'stopped') localStorage.setItem(TOUR_KEY, mode);
     } catch (_) {}
   }
   var tourMode = readTourMode(); // playing | paused | stopped
@@ -138,9 +138,13 @@
   function assetUrl(path) {
     if (!path) return path;
     if (/^(https?:|data:|blob:|\/\/)/i.test(path)) return path;
-    var base = typeof TV_ASSET_URL === 'string' ? TV_ASSET_URL : '';
+    var base = '';
+    if (typeof window !== 'undefined' && typeof window.TV_ASSET_URL === 'string') base = window.TV_ASSET_URL;
+    else if (typeof TV_ASSET_URL === 'string') base = TV_ASSET_URL;
     if (!base) return path;
-    return base.replace(/\/?$/, '/') + String(path).replace(/^\.\//, '').replace(/^\//, '');
+    // screenshots/*.jpg is uploaded flat into the asset root (…/tanit-chat/chrome.jpg).
+    var rel = String(path).replace(/^\.\//, '').replace(/^\//, '').replace(/^screenshots\//, '');
+    return base.replace(/\/?$/, '/') + rel;
   }
 
   var clickSfxPool = [];
@@ -224,7 +228,7 @@
   function visibleFeatures() {
     return features.filter(isEnabled);
   }
-  var LAYOUT_KEY = 'tv-explore-layout';
+  var LAYOUT_KEY = 'tv-explore-layout-v2';
   function queryLayout() {
     try {
       var sp = new URLSearchParams(location.search);
@@ -242,7 +246,7 @@
     } catch (e) {}
     return null;
   }
-  /** classic = sidebar+stage (default on desktop). scroll = expand all. */
+  /** classic = sidebar+stage. scroll = expand all (default). */
   var layoutOverride = null;
   function layoutPref() {
     return layoutOverride || queryLayout() || storedLayout() || null;
@@ -250,12 +254,9 @@
   function isNarrow() {
     try { return window.matchMedia('(max-width:900px)').matches; } catch (e) { return false; }
   }
-  /** Mobile / forced scroll: all features stacked for page scroll; slides stay in-card. */
+  /** Scroll is the default. Classic only when asked (?layout=classic or the layout button). */
   function isStackMode() {
-    var pref = layoutPref();
-    if (pref === 'scroll') return true;
-    if (pref === 'classic') return false;
-    return isNarrow();
+    return layoutPref() !== 'classic';
   }
   function syncLayoutUi() {
     if (!layoutBtn) return;
@@ -1359,7 +1360,8 @@
     syncStackSelection();
     syncMediaPlayback();
     if (tourMode === 'playing') scheduleAdvance();
-    scrollSelectedCard(false);
+    // Stay on the intro. Scrolling here jumps the host page to the first feature.
+    if (!showingIntro || tourMode === 'playing') scrollSelectedCard(false);
     bindStackObserver();
   }
 
@@ -1408,9 +1410,30 @@
     _scrollRaf = requestAnimationFrame(frame);
   }
 
+  function isScrollBox(el) {
+    if (!el || el === window) return false;
+    var oy = getComputedStyle(el).overflowY;
+    if (oy !== 'auto' && oy !== 'scroll' && oy !== 'overlay') return false;
+    return el.scrollHeight > el.clientHeight + 2;
+  }
+  function scrollingAncestor(start) {
+    var n = start;
+    while (n && n !== document.documentElement && n !== document.body) {
+      if (isScrollBox(n)) return n;
+      n = n.parentElement;
+    }
+    var root = document.scrollingElement || document.documentElement;
+    if (isScrollBox(root)) return root;
+    return window;
+  }
   function playScrollRoot() {
     var explore = document.querySelector('.tv-explore');
-    if (explore && explore.getAttribute('data-pm-embed')) return explore;
+    // Inline embed: scroll the widget only when it is the scrollport.
+    // A host page that grows with the article scrolls outside the widget.
+    if (explore && explore.getAttribute('data-pm-embed')) {
+      if (isScrollBox(explore)) return explore;
+      return scrollingAncestor(explore.parentElement);
+    }
     var shell = document.querySelector('.shell');
     if (document.documentElement.getAttribute('data-pm-embed') && shell) return shell;
     if (isNarrow() && shell) return shell;
@@ -1683,7 +1706,7 @@
     var resumeFeature = mode === 'playing' && showingIntro;
     if (resumeFeature) showingIntro = false;
     tourMode = mode;
-    // Remember hard stop across reloads; play clears it. Pause is session-only.
+    // Play and stop survive reload. Pause does not. Missing key means stopped.
     if (mode === 'stopped' || mode === 'playing') persistTourMode(mode);
     syncTourUi();
     if (!isStackMode()) {
@@ -2007,6 +2030,7 @@
     if (e.target.closest('input, textarea, select, video')) return;
     if (e.target.closest('.stage-media[data-zoomed]')) return;
     if (isStackMode()) return;
+    if (!e.target.closest('.stage')) return;
     e.preventDefault();
     var dy = e.deltaY;
     if (e.deltaMode === 1) dy *= 16;
@@ -2209,6 +2233,7 @@
   // default: first enabled feature in product.json order
   var prefer = features.findIndex(isEnabled);
   selected = prefer >= 0 ? prefer : 0;
+  if (introHtml()) showingIntro = true;
   applyRoute();
   paint();
   window.addEventListener('popstate', function () {

@@ -1,9 +1,8 @@
-<!-- tanit-viewer explore (inline) lang=en -->
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
-<div class="tv-explore" data-theme="light" data-skin="plex" data-lang="en">
+<div class="tv-explore" data-explore="tanit-chat" data-theme="light" data-skin="plex" data-lang="en">
 <style>
 /* Layout + chrome. Palettes live in explore_<name>.css (data-skin). */
 .tv-explore,.tv-lightbox{
@@ -40,6 +39,28 @@
 .tv-explore[data-pm-embed] .sidebar{
   max-height:100%;
 }
+/* Inline embed (HtmlWidget): the host page scrolls. Pin the nav under the site header. */
+@media(min-width:901px){
+  .tv-explore[data-pm-embed]{
+    height:auto!important;max-height:none!important;overflow:visible!important;
+  }
+  .tv-explore[data-pm-embed] .shell{
+    height:auto!important;min-height:0!important;overflow:visible!important;
+    align-items:start;
+  }
+  .tv-explore[data-pm-embed] .main,
+  .tv-explore[data-pm-embed] .stage,
+  .tv-explore[data-pm-embed] .stage.is-stack,
+  .tv-explore[data-pm-embed] .stage-body,
+  .tv-explore[data-pm-embed] .stage-main{
+    height:auto;min-height:0;flex:none;overflow:visible;
+  }
+  .tv-explore[data-pm-embed] .sidebar{
+    position:sticky!important;top:3.5rem!important;z-index:4;align-self:start!important;
+    height:auto!important;max-height:calc(100svh - 3.5rem - 12px)!important;overflow:hidden;
+  }
+  .tv-explore[data-pm-embed] .side-nav{min-height:0}
+}
 .tv-explore[data-pm-embed] .stage-media,
 .tv-explore[data-pm-embed] .stage-media{min-height:160px}.tv-explore button,.tv-explore input{font:inherit;color:inherit}.tv-explore button{cursor:pointer;border:none;background:none}.tv-explore img,.tv-explore video{display:block;max-width:100%}.tv-explore a{color:inherit;text-decoration:none}
 @media (prefers-reduced-motion:reduce){.tv-explore *,.tv-explore *::before,.tv-explore *::after{animation:none!important;transition:none!important}}
@@ -55,7 +76,18 @@
   background:var(--panel);border:1px solid var(--line);
   box-shadow:var(--shadow);
 }
-.side-brand{display:flex;align-items:center;gap:12px;padding:16px 14px 12px}
+.side-brand{display:flex;align-items:center;gap:12px;padding:16px 14px 12px;width:100%;text-align:left;min-width:0}
+.side-brand[aria-current="true"] strong{color:var(--accent)}
+.menu-btn,.top-tour{display:none}
+.menu-btn{
+  width:34px;height:34px;border-radius:10px;place-items:center;
+  border:1px solid var(--line);background:var(--panel-2);color:var(--muted);
+}
+.menu-btn svg{width:16px;height:16px;display:block}
+.menu-btn .ico-close{display:none}
+.shell.nav-open .menu-btn .ico-menu{display:none}
+.shell.nav-open .menu-btn .ico-close{display:block}
+.nav-backdrop{display:none}
 .side-logo{
   width:32px;height:32px;border-radius:8px;flex-shrink:0;
   background:var(--panel-2);border:1px solid var(--line);
@@ -421,7 +453,7 @@
   .tv-explore.tv-stack .tv-explore,.tv-explore.tv-stack.tv-explore{
     height:100%!important;min-height:0!important;overflow:auto!important;
   }
-  html:not(.tv-stack),html:not(.tv-stack) .tv-explore{height:100%;overflow:hidden}
+  .tv-explore:not(.tv-stack),.tv-explore:not(.tv-stack) .tv-explore{height:100%;overflow:hidden}
 
   .shell{
     display:flex;flex-direction:column;
@@ -432,31 +464,67 @@
     padding-bottom:max(12px,env(safe-area-inset-bottom));
   }
   .tv-explore.tv-stack .shell{height:100%;min-height:0;overflow:auto}
-  html:not(.tv-stack) .shell{height:100%;min-height:0;overflow:hidden}
+  .tv-explore:not(.tv-stack) .shell{height:100%;min-height:0;overflow:hidden}
 
-  /* Compact brand bar — nav hidden */
+  .shell{position:relative}
+
+  /* Compact brand bar — feature list slides over the page */
   .sidebar{
+    position:sticky;
+    top:0;
+    z-index:40;
     width:100%;max-height:none;flex:0 0 auto;
     display:grid;
-    grid-template-columns:1fr auto;
-    grid-template-areas:"brand foot";
+    grid-template-columns:auto minmax(0,1fr) auto auto;
+    grid-template-areas:"menu brand tour foot";
     align-items:center;
     border-radius:10px;
   }
-  .side-brand{grid-area:brand;padding:10px 6px 10px 12px;gap:10px}
-  .side-brand strong{font-size:.82rem;font-weight:600;letter-spacing:-.02em}
+  .menu-btn{
+    display:grid;grid-area:menu;margin-left:8px;
+    width:36px;height:36px;border-radius:9px;position:relative;z-index:32;
+  }
+  .side-brand{grid-area:brand;padding:10px 6px 10px 8px;gap:10px;position:relative;z-index:32}
+  .side-brand strong{
+    font-size:.82rem;font-weight:600;letter-spacing:-.02em;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
   .side-logo{width:28px;height:28px;padding:5px;border-radius:7px}
+  .top-tour{display:flex;grid-area:tour;position:relative;z-index:32}
+  .top-tour .tour-controls{
+    padding:0;border:0;background:transparent;gap:4px;border-radius:0;
+  }
+  .top-tour .tour-btn{width:36px;height:36px;border-radius:9px}
   .side-foot{
-    grid-area:foot;border-top:0;padding:8px 10px;
-    justify-content:flex-end;
+    grid-area:foot;border-top:0;padding:8px 8px 8px 4px;
+    justify-content:flex-end;position:relative;z-index:32;
   }
   .theme-btn,.layout-btn{width:36px;height:36px;border-radius:9px}
-  .side-nav{display:none!important}
+  .side-nav{
+    display:flex;flex-direction:column;
+    position:fixed;z-index:31;
+    top:0;bottom:0;left:0;
+    width:min(280px,86vw);
+    margin:0;padding:4.25rem 8px 16px;
+    transform:translateX(-105%);
+    transition:transform .2s ease;
+    background:var(--panel);
+    border-right:1px solid var(--line);
+    box-shadow:var(--shadow-lg);
+    overflow:auto;
+  }
+  .shell.nav-open .side-nav{transform:none}
+  .shell.nav-open .nav-backdrop{
+    display:block;position:fixed;inset:0;z-index:30;
+    background:color-mix(in srgb, var(--ink) 32%, transparent);
+  }
+  .stack-tour{display:none}
+  .stage-foot > .tour-controls{display:none}
 
   .tv-explore.tv-stack .main,.tv-explore.tv-stack .stage{
     overflow:visible;min-height:0;flex:none;height:auto;
   }
-  html:not(.tv-stack) .main,html:not(.tv-stack) .stage{
+  .tv-explore:not(.tv-stack) .main,.tv-explore:not(.tv-stack) .stage{
     flex:1 1 auto;min-height:0;height:auto;overflow:hidden;
   }
   .stage.is-stack{
@@ -578,7 +646,7 @@
 }
 
 /* Desktop continuous-scroll: classic sidebar + stacked features.
-   One scrollport (html). Body/stage overflow:visible so sticky chrome can pin. */
+   One scrollport (.tv-explore). .tv-explore/stage overflow:visible so sticky chrome can pin. */
 @media(min-width:901px){
   .tv-explore.tv-stack{
     height:100%;overflow:auto;
@@ -726,7 +794,7 @@
 
 /* Lightbox — full-bleed overlay (themed light/dark).
    Appended to document.body (outside .tv-explore) — must carry its own type + tokens. */
-html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
+.tv-explore.tv-lb-open,.tv-explore.tv-lb-open .tv-explore{overflow:hidden!important}
 .tv-lightbox{
   position:fixed;inset:0;z-index:9999;
   display:flex;align-items:center;justify-content:center;
@@ -935,6 +1003,43 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   border-radius:10px;margin:8px 0 12px;border:1px solid var(--line);max-width:100%;
 }
 .intro-card .intro-body{background:var(--panel)}
+.intro-page{display:flex;flex-direction:column;min-height:0}
+.stage:not(.is-stack) .stage-body:has(.intro-page){display:flex;flex-direction:column;min-height:0}
+.stage:not(.is-stack) .intro-page{flex:1 1 auto;height:auto;min-height:0;overflow:auto}
+.intro-jumps{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  padding:4px 12px 16px;
+}
+@media(min-width:720px){
+  .intro-jumps{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(min-width:1100px){
+  .intro-jumps{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+.intro-jump{
+  position:relative;display:block;width:100%;
+  min-height:148px;aspect-ratio:16/10;
+  padding:0;border-radius:12px;overflow:hidden;
+  border:1px solid var(--line);background:var(--media);
+  text-align:left;color:#fff;
+}
+.intro-jump img,.intro-jump video{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.intro-jump-fallback{
+  display:grid;place-items:center;width:100%;height:100%;
+  color:var(--muted);background:var(--panel-2);
+}
+.intro-jump-fallback svg{width:40px;height:40px}
+.intro-jump-label{
+  position:absolute;left:0;right:0;bottom:0;
+  padding:36px 12px 10px;
+  background:linear-gradient(to top,rgba(0,0,0,.72),transparent);
+  color:#fff;font-weight:600;font-size:.92rem;letter-spacing:-.02em;
+  line-height:1.2;
+}
 
 /* explore_plex.css */
 /**
@@ -1062,10 +1167,15 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
 </style>
 <div class="shell">
   <aside class="sidebar">
-    <div class="side-brand">
+    <button type="button" class="menu-btn" id="menuBtn" aria-label="Features" aria-expanded="false" aria-controls="sideNav">
+      <svg class="ico-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="ico-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <button type="button" class="side-brand" id="brandBtn">
       <div class="side-logo" id="brandLogo"></div>
       <strong id="brandTitle"></strong>
-    </div>
+    </button>
+    <div class="top-tour" id="topTour"></div>
     <nav class="side-nav" id="sideNav" aria-label="Features"></nav>
     <div class="side-foot">
       <button type="button" class="layout-btn" id="layoutBtn" aria-label="Continuous scroll" title="Scroll" aria-pressed="false">
@@ -1078,14 +1188,16 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
       </button>
     </div>
   </aside>
+  <div class="nav-backdrop" id="navBackdrop" hidden></div>
   <div class="main">
     <section class="stage" id="stage" aria-live="polite"></section>
   </div>
 </div>
-<script type="application/json" id="data">{"product":{"title":"Tanit Chat","subtitle":"Many tools. One workspace. Local first.","tip":"Select files in Tanit or Explorer — they become the chat context.","features":[{"id":"files","label":"Files","icon":"documents","description":"Select files in Tanit or Windows Explorer and work with them immediately — no separate upload. A visual filmstrip shows exactly what Chat can see before you send.","slides":[{"id":"overview","title":"Your selection becomes the context","description":"Drop, paste, or @-reference a file. The filmstrip is the ground truth for what the model can see.","media":{"type":"image","src":"./screenshots/filemanager.jpg"},"highlights":[{"icon":"documents","title":"Filmstrip context","text":"See exactly what Chat can see before you send"},{"icon":"documents","title":"Drop, paste, or @-reference","text":"Files from Tanit or Windows Explorer, no upload tab"},{"icon":"markdown","title":"Markdown, tables, code, Mermaid","text":"Rich answers stay next to the files they came from"},{"icon":"command","title":"Local file links","text":"Open results and live shell output in place"}],"actions":[{"label":"Get Tanit Chat — free","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"ai","label":"AI","icon":"command","description":"Connect direct providers, bring your own key, use compatible endpoints, choose an aggregator, or run supported models locally with llama.cpp. Switch models as your needs change.","slides":[{"id":"overview","title":"Route each capability to the right model","description":"Text, planning, vision, OCR, image generation, transcription, and speech each use a different local or cloud provider — never one vendor for everything.","media":{"type":"image","src":"./screenshots/chat.jpg"},"highlights":[{"icon":"command","title":"Local llama.cpp + GGUF","text":"Run supported models on-device"},{"icon":"network","title":"Cloud & BYOK","text":"Direct providers, compatible endpoints, aggregators"},{"icon":"command","title":"Per-capability routing","text":"Pick a model per job, not per app"},{"icon":"command","title":"Save a full agent as a preset","text":"Provider, tools, skills, and MCP in one reusable setup"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/tanit-chat"}]}]},{"id":"voice","label":"Voice","icon":"audio","description":"Transcribe recordings and voice input offline with whisper.cpp. Local speech synthesis can read responses without sending them to a cloud voice provider.","slides":[{"id":"overview","title":"Talk instead of typing","description":"Voice is a local capability first. Cloud realtime routing is opt-in when you want it.","media":{"type":"image","src":"./screenshots/audio.jpg"},"highlights":[{"icon":"audio","title":"whisper.cpp offline","text":"Transcribe recordings and voice input on-device"},{"icon":"rt-audio","title":"Local speech synthesis","text":"Read answers without a cloud voice provider"},{"icon":"rt-audio","title":"Realtime voice routing","text":"Opt in when a live session is worth it"},{"icon":"command","title":"Voice commands","text":"Hands-free control of the workspace"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-audio"}]}]},{"id":"images","label":"Images","icon":"images-raw","description":"Browse and inspect images, transform media, work with metadata. Use local vision-language models for private image understanding, ONNX for OCR and layout, or route image generation to a cloud provider.","slides":[{"id":"overview","title":"Inspect, batch, generate","_description":"Vision can stay on the device. Generation can go to the cloud. You choose per job.","media":{"type":"image","src":"./screenshots/image-ops.jpg"},"highlights":[{"icon":"images-raw","title":"Batch create, resize, convert and transform","text":"Fully customizable workflows using visual automation and batch operations."},{"icon":"images-raw","title":"Duplicate finder and junk finder","text":"Group near-duplicates by fingerprint and remove junk image removale"},{"icon":"images-raw","title":"Image vision & OCR","text":"Ask what is in a photo, or read the text with OCR"},{"icon":"command","title":"Complete CLI","text":"find, duplicates, resize, compress, create, transform, and understand"},{"icon":"images-raw","title":"Advanced screenshots","text":"Integrated screenshot taking, monitor, fullscreen, window or a picked region"},{"icon":"network","title":"Share as posts","text":"Share images as posts or articles"}]}]},{"id":"3d","icon":"cad","label":"3D","_description":"Preview common meshes & CAD","slides":[{"id":"overview","title":"Blazing fast 3D preview, opens 40MB STEP in less than 2 seconds","description":"Supports STEP, STL, FBX, VTK, USD, DXF, FreeCAD, OBJ, GLTF, GLB, and OpenSCAD","media":{"type":"image","src":"./screenshots/3d.png"},"highlights":[{"icon":"command","title":"Custom commands","text":"Build your own optimized workflows using XBLOX and batch operations."}]}]},{"id":"office","label":"Office","icon":"documents","description":"Create and edit Word, Excel, PowerPoint, and PDF. Batch translate and create","slides":[{"id":"overview","title":"Office and PDF","description":"Open a spreadsheet or a deck without a separate office suite.","media":{"type":"image","src":"./screenshots/office-docs.jpg"},"highlights":[{"icon":"documents","title":"Built-in viewer","text":"Word, Excel, PowerPoint, and PDF in the centre pane"},{"icon":"command","title":"Batch translate or transform","text":"Run the same job across a folder of documents"},{"icon":"documents","title":"Index and search","text":"Find text inside Office files and PDFs"},{"icon":"images-raw","title":"Convert to images","text":"Export pages from any of those formats"}]}]},{"id":"video","label":"Video","icon":"video","description":"Playback and inspect video, capture webcam or screen, batch convert formats. Session MP4 recording and xblox record blocks — user-started or user-authored scheduled flows only, never covert capture.","slides":[{"id":"overview","title":"Play, capture, convert","description":"Review clips in place, capture when you start it, convert in batch — same workspace as chat.","media":{"type":"image","src":"./screenshots/chat-video-gen.jpg"},"highlights":[{"icon":"video","title":"Playback & inspect","text":"Scrub and review without leaving Chat"},{"icon":"rt-video","title":"Webcam / screen capture","text":"User-started only — Windows consent on first use"},{"icon":"command","title":"Batch convert","text":"FFmpeg, HandBrake, and other tools via commands"},{"icon":"video","title":"Session recording","text":"MP4 and xblox record blocks you author yourself"}],"actions":[{"label":"Get Tanit Chat — free","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"browser-use","label":"Browser Use","icon":"html","description":"Search, research, fill forms, translate, talk, summarize, create subtitles, and run Tanit workflows directly beside the web.","slides":[{"id":"overview","title":"Open Tanit beside any page","description":"Search, read, fill, translate, and talk without leaving the page. A task can start in Chrome and finish in a local file or an XBlox flow.","media":{"type":"image","src":"./screenshots/chrome.png"},"highlights":[{"icon":"html","title":"Research without tab chaos","text":"Search, open results, compare sources, and keep the useful parts together"},{"icon":"documents","title":"Forms from files you have","text":"Fill from a PDF, invoice, or spreadsheet. It stops when you need to decide"},{"icon":"audio","title":"Translate, talk, subtitle","text":"A page, a reply, or a video: transcript, subtitles, or a dubbed version"},{"icon":"command","title":"Point, then finish the job","text":"Use a chart, field, or paragraph. Save the result, or continue as a workflow"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-chrome"}]}]},{"id":"share","label":"Share","icon":"cms","description":"Create and share reports, articles, posts, pictures, and files directly from Tanit.","slides":[{"id":"overview","title":"Create and share from Tanit","description":"Publish a report, an article, a set of pictures, or a file. Tanit uploads it to your account and gives you a link you can send.","media":{"type":"image","src":"./screenshots/cms.png"},"highlights":[{"icon":"markdown","title":"Reports and articles","text":"Any chat and becomes a page"},{"icon":"documents","title":"Share files","text":"PDFs, CAD, archives, and media from home/public, with a link to copy"},{"icon":"images-raw","title":"Posts and pictures","text":"A title and pictures, public, listed, or private"},{"icon":"command","title":"App or command line","text":"Sharing actions in the app, or tanit-cli service for pages, files, posts, and pictures"}]}]},{"id":"automation","label":"Automation","icon":"xblox","description":"Capture the process as an XBlox flow — combine an LLM agent with file input, models, OCR, vision, audio, conditions, loops, and saved output. Publish it to the ribbon, launcher, Tanit, or the Windows Explorer context menu.","slides":[{"id":"overview","title":"Turn a chat into a command","description":"When the task repeats, save the successful process and run it on the next selection.","media":{"type":"image","src":"./screenshots/automation.jpg"},"highlights":[{"icon":"xblox","title":"Visual XBlox flows","text":"Agent + files + models + conditions in one graph","slide":"overview"},{"icon":"command","title":"Publish anywhere","text":"Ribbon, launcher, Tanit, or Explorer context menu","slide":"launcher"},{"icon":"html","title":"Browser-use flows","text":"Drive a form or page from a saved command","slide":"browser"},{"icon":"command","title":"One-click recurring work","text":"The next file runs the same reviewed process","slide":"overview"}]},{"id":"launcher","title":"Published in the launcher","description":"A finished flow becomes a command you can run without opening the editor.","media":{"type":"image","src":"./screenshots/launcher.jpg"}},{"id":"browser","title":"Browser-use from a command","description":"Drive a page or form with the same flow that started as a chat.","media":{"type":"image","src":"./screenshots/forms-browser-use.jpg"}}]},{"id":"security","label":"Security","icon":"command","description":"Light, Strict, or Developer profiles. Review the action, target, and risk, then approve once, for a task, for a session, for a limited time, always, or never. Administrators set policy via Windows Group Policy, Intune MDM, or registry; machine policy overrides user settings.","slides":[{"id":"overview","title":"Approve every action","description":"Useful AI workflows without giving every assistant unrestricted access to files, tools, or the network.","highlights":[{"icon":"command","title":"Light / Strict / Developer","text":"A profile for how much the assistant may do"},{"icon":"command","title":"Per-action approval","text":"Once, task, session, limited time, always, or never"},{"icon":"network","title":"Group Policy & Intune","text":"Machine policy overrides user settings"},{"icon":"command","title":"Sandboxed commands","text":"Protected requirements cannot be lowered by a non-admin"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-security"}]}]}],"lang":"en","intro":{"html":"\u003ch1>Tanit Chat\u003c/h1>\n\u003cp>Many tools. One workspace. Local first.\u003c/p>\n\u003cp>Select files in Tanit or Explorer — they become the chat context.\u003c/p>\n","label":"Intro","file":"intro.md"}},"features":[{"id":"files","label":"Files","icon":"documents","description":"Select files in Tanit or Windows Explorer and work with them immediately — no separate upload. A visual filmstrip shows exactly what Chat can see before you send.","slides":[{"id":"overview","title":"Your selection becomes the context","description":"Drop, paste, or @-reference a file. The filmstrip is the ground truth for what the model can see.","media":{"type":"image","src":"./screenshots/filemanager.jpg"},"highlights":[{"icon":"documents","title":"Filmstrip context","text":"See exactly what Chat can see before you send"},{"icon":"documents","title":"Drop, paste, or @-reference","text":"Files from Tanit or Windows Explorer, no upload tab"},{"icon":"markdown","title":"Markdown, tables, code, Mermaid","text":"Rich answers stay next to the files they came from"},{"icon":"command","title":"Local file links","text":"Open results and live shell output in place"}],"actions":[{"label":"Get Tanit Chat — free","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"ai","label":"AI","icon":"command","description":"Connect direct providers, bring your own key, use compatible endpoints, choose an aggregator, or run supported models locally with llama.cpp. Switch models as your needs change.","slides":[{"id":"overview","title":"Route each capability to the right model","description":"Text, planning, vision, OCR, image generation, transcription, and speech each use a different local or cloud provider — never one vendor for everything.","media":{"type":"image","src":"./screenshots/chat.jpg"},"highlights":[{"icon":"command","title":"Local llama.cpp + GGUF","text":"Run supported models on-device"},{"icon":"network","title":"Cloud & BYOK","text":"Direct providers, compatible endpoints, aggregators"},{"icon":"command","title":"Per-capability routing","text":"Pick a model per job, not per app"},{"icon":"command","title":"Save a full agent as a preset","text":"Provider, tools, skills, and MCP in one reusable setup"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/tanit-chat"}]}]},{"id":"voice","label":"Voice","icon":"audio","description":"Transcribe recordings and voice input offline with whisper.cpp. Local speech synthesis can read responses without sending them to a cloud voice provider.","slides":[{"id":"overview","title":"Talk instead of typing","description":"Voice is a local capability first. Cloud realtime routing is opt-in when you want it.","media":{"type":"image","src":"./screenshots/audio.jpg"},"highlights":[{"icon":"audio","title":"whisper.cpp offline","text":"Transcribe recordings and voice input on-device"},{"icon":"rt-audio","title":"Local speech synthesis","text":"Read answers without a cloud voice provider"},{"icon":"rt-audio","title":"Realtime voice routing","text":"Opt in when a live session is worth it"},{"icon":"command","title":"Voice commands","text":"Hands-free control of the workspace"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-audio"}]}]},{"id":"images","label":"Images","icon":"images-raw","description":"Browse and inspect images, transform media, work with metadata. Use local vision-language models for private image understanding, ONNX for OCR and layout, or route image generation to a cloud provider.","slides":[{"id":"overview","title":"Inspect, batch, generate","_description":"Vision can stay on the device. Generation can go to the cloud. You choose per job.","media":{"type":"image","src":"./screenshots/image-ops.jpg"},"highlights":[{"icon":"images-raw","title":"Batch create, resize, convert and transform","text":"Fully customizable workflows using visual automation and batch operations."},{"icon":"images-raw","title":"Duplicate finder and junk finder","text":"Group near-duplicates by fingerprint and remove junk image removale"},{"icon":"images-raw","title":"Image vision & OCR","text":"Ask what is in a photo, or read the text with OCR"},{"icon":"command","title":"Complete CLI","text":"find, duplicates, resize, compress, create, transform, and understand"},{"icon":"images-raw","title":"Advanced screenshots","text":"Integrated screenshot taking, monitor, fullscreen, window or a picked region"},{"icon":"network","title":"Share as posts","text":"Share images as posts or articles"}]}]},{"id":"3d","icon":"cad","label":"3D","_description":"Preview common meshes & CAD","slides":[{"id":"overview","title":"Blazing fast 3D preview, opens 40MB STEP in less than 2 seconds","description":"Supports STEP, STL, FBX, VTK, USD, DXF, FreeCAD, OBJ, GLTF, GLB, and OpenSCAD","media":{"type":"image","src":"./screenshots/3d.png"},"highlights":[{"icon":"command","title":"Custom commands","text":"Build your own optimized workflows using XBLOX and batch operations."}]}]},{"id":"office","label":"Office","icon":"documents","description":"Create and edit Word, Excel, PowerPoint, and PDF. Batch translate and create","slides":[{"id":"overview","title":"Office and PDF","description":"Open a spreadsheet or a deck without a separate office suite.","media":{"type":"image","src":"./screenshots/office-docs.jpg"},"highlights":[{"icon":"documents","title":"Built-in viewer","text":"Word, Excel, PowerPoint, and PDF in the centre pane"},{"icon":"command","title":"Batch translate or transform","text":"Run the same job across a folder of documents"},{"icon":"documents","title":"Index and search","text":"Find text inside Office files and PDFs"},{"icon":"images-raw","title":"Convert to images","text":"Export pages from any of those formats"}]}]},{"id":"video","label":"Video","icon":"video","description":"Playback and inspect video, capture webcam or screen, batch convert formats. Session MP4 recording and xblox record blocks — user-started or user-authored scheduled flows only, never covert capture.","slides":[{"id":"overview","title":"Play, capture, convert","description":"Review clips in place, capture when you start it, convert in batch — same workspace as chat.","media":{"type":"image","src":"./screenshots/chat-video-gen.jpg"},"highlights":[{"icon":"video","title":"Playback & inspect","text":"Scrub and review without leaving Chat"},{"icon":"rt-video","title":"Webcam / screen capture","text":"User-started only — Windows consent on first use"},{"icon":"command","title":"Batch convert","text":"FFmpeg, HandBrake, and other tools via commands"},{"icon":"video","title":"Session recording","text":"MP4 and xblox record blocks you author yourself"}],"actions":[{"label":"Get Tanit Chat — free","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"browser-use","label":"Browser Use","icon":"html","description":"Search, research, fill forms, translate, talk, summarize, create subtitles, and run Tanit workflows directly beside the web.","slides":[{"id":"overview","title":"Open Tanit beside any page","description":"Search, read, fill, translate, and talk without leaving the page. A task can start in Chrome and finish in a local file or an XBlox flow.","media":{"type":"image","src":"./screenshots/chrome.png"},"highlights":[{"icon":"html","title":"Research without tab chaos","text":"Search, open results, compare sources, and keep the useful parts together"},{"icon":"documents","title":"Forms from files you have","text":"Fill from a PDF, invoice, or spreadsheet. It stops when you need to decide"},{"icon":"audio","title":"Translate, talk, subtitle","text":"A page, a reply, or a video: transcript, subtitles, or a dubbed version"},{"icon":"command","title":"Point, then finish the job","text":"Use a chart, field, or paragraph. Save the result, or continue as a workflow"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-chrome"}]}]},{"id":"share","label":"Share","icon":"cms","description":"Create and share reports, articles, posts, pictures, and files directly from Tanit.","slides":[{"id":"overview","title":"Create and share from Tanit","description":"Publish a report, an article, a set of pictures, or a file. Tanit uploads it to your account and gives you a link you can send.","media":{"type":"image","src":"./screenshots/cms.png"},"highlights":[{"icon":"markdown","title":"Reports and articles","text":"Any chat and becomes a page"},{"icon":"documents","title":"Share files","text":"PDFs, CAD, archives, and media from home/public, with a link to copy"},{"icon":"images-raw","title":"Posts and pictures","text":"A title and pictures, public, listed, or private"},{"icon":"command","title":"App or command line","text":"Sharing actions in the app, or tanit-cli service for pages, files, posts, and pictures"}]}]},{"id":"automation","label":"Automation","icon":"xblox","description":"Capture the process as an XBlox flow — combine an LLM agent with file input, models, OCR, vision, audio, conditions, loops, and saved output. Publish it to the ribbon, launcher, Tanit, or the Windows Explorer context menu.","slides":[{"id":"overview","title":"Turn a chat into a command","description":"When the task repeats, save the successful process and run it on the next selection.","media":{"type":"image","src":"./screenshots/automation.jpg"},"highlights":[{"icon":"xblox","title":"Visual XBlox flows","text":"Agent + files + models + conditions in one graph","slide":"overview"},{"icon":"command","title":"Publish anywhere","text":"Ribbon, launcher, Tanit, or Explorer context menu","slide":"launcher"},{"icon":"html","title":"Browser-use flows","text":"Drive a form or page from a saved command","slide":"browser"},{"icon":"command","title":"One-click recurring work","text":"The next file runs the same reviewed process","slide":"overview"}]},{"id":"launcher","title":"Published in the launcher","description":"A finished flow becomes a command you can run without opening the editor.","media":{"type":"image","src":"./screenshots/launcher.jpg"},"highlights":[]},{"id":"browser","title":"Browser-use from a command","description":"Drive a page or form with the same flow that started as a chat.","media":{"type":"image","src":"./screenshots/forms-browser-use.jpg"},"highlights":[]}]},{"id":"security","label":"Security","icon":"command","description":"Light, Strict, or Developer profiles. Review the action, target, and risk, then approve once, for a task, for a session, for a limited time, always, or never. Administrators set policy via Windows Group Policy, Intune MDM, or registry; machine policy overrides user settings.","slides":[{"id":"overview","title":"Approve every action","description":"Useful AI workflows without giving every assistant unrestricted access to files, tools, or the network.","highlights":[{"icon":"command","title":"Light / Strict / Developer","text":"A profile for how much the assistant may do"},{"icon":"command","title":"Per-action approval","text":"Once, task, session, limited time, always, or never"},{"icon":"network","title":"Group Policy & Intune","text":"Machine policy overrides user settings"},{"icon":"command","title":"Sandboxed commands","text":"Protected requirements cannot be lowered by a non-admin"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-security"}],"media":null}]}]}</script>
+<script type="application/json" id="data">{"product":{"title":"Tanit Chat","subtitle":"Many tools. One workspace. Local first.","tip":"Select files in Tanit or Explorer — they become the chat context.","features":[{"id":"ai","label":"AI","icon":"command","description":"Connect direct providers, bring your own key, use compatible endpoints, choose an aggregator, or run supported models locally with llama.cpp. Switch models as your needs change.","slides":[{"id":"overview","title":"Route each capability to the right model","description":"Text, planning, vision, OCR, image generation, transcription, and speech each use a different local or cloud provider — never one vendor for everything.","media":{"type":"image","src":"./screenshots/chat.jpg"},"highlights":[{"icon":"command","title":"Local llama.cpp + GGUF","text":"Run supported models on-device"},{"icon":"network","title":"Cloud & BYOK","text":"Direct providers, compatible endpoints, aggregators"},{"icon":"command","title":"Per-capability routing","text":"Pick a model per job, not per app"},{"icon":"command","title":"Save a full agent as a preset","text":"Provider, tools, skills, and MCP in one reusable setup"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/tanit-chat"}]}]},{"id":"voice","label":"Voice","icon":"audio","description":"Transcribe recordings and voice input offline with whisper.cpp. Local speech synthesis can read responses without sending them to a cloud voice provider.","slides":[{"id":"overview","title":"Talk instead of typing","description":"Voice is a local capability first. Cloud realtime routing is opt-in when you want it.","media":{"type":"image","src":"./screenshots/audio.jpg"},"highlights":[{"icon":"audio","title":"whisper.cpp offline","text":"Transcribe recordings and voice input on-device"},{"icon":"rt-audio","title":"Local speech synthesis","text":"Read answers without a cloud voice provider"},{"icon":"rt-audio","title":"Realtime voice routing","text":"Opt in when a live session is worth it"},{"icon":"command","title":"Voice commands","text":"Hands-free control of the workspace"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-audio"}]}]},{"id":"images","label":"Images","icon":"images-raw","description":"Browse and inspect images, transform media, work with metadata. Use local vision-language models for private image understanding, ONNX for OCR and layout, or route image generation to a cloud provider.","slides":[{"id":"overview","title":"Inspect, batch, generate","_description":"Vision can stay on the device. Generation can go to the cloud. You choose per job.","media":{"type":"image","src":"./screenshots/image-ops.jpg"},"highlights":[{"icon":"images-raw","title":"Batch create, resize, convert and transform","text":"Fully customizable workflows using visual automation and batch operations."},{"icon":"images-raw","title":"Duplicate finder and junk finder","text":"Group near-duplicates by fingerprint and remove junk image removale"},{"icon":"images-raw","title":"Image vision & OCR","text":"Ask what is in a photo, or read the text with OCR"},{"icon":"command","title":"Complete CLI","text":"find, duplicates, resize, compress, create, transform, and understand"},{"icon":"images-raw","title":"Advanced screenshots","text":"Integrated screenshot taking, monitor, fullscreen, window or a picked region"},{"icon":"network","title":"Share as posts","text":"Share images as posts or articles"}]}]},{"id":"3d","icon":"cad","label":"3D","_description":"Preview common meshes & CAD","slides":[{"id":"overview","title":"Blazing fast 3D preview, opens 40MB STEP in less than 2 seconds","description":"Supports STEP, STL, FBX, VTK, USD, DXF, FreeCAD, OBJ, GLTF, GLB, and OpenSCAD","media":{"type":"image","src":"./screenshots/3d.jpg"},"highlights":[{"icon":"command","title":"Custom commands","text":"Build your own optimized workflows using XBLOX and batch operations."}]}]},{"id":"office","label":"Office","icon":"documents","description":"Create and edit Word, Excel, PowerPoint, and PDF. Batch translate and create","slides":[{"id":"overview","title":"Office and PDF","description":"Open a spreadsheet or a deck without a separate office suite.","media":{"type":"image","src":"./screenshots/office-docs.jpg"},"highlights":[{"icon":"documents","title":"Built-in viewer","text":"Word, Excel, PowerPoint, and PDF in the centre pane"},{"icon":"command","title":"Batch translate or transform","text":"Run the same job across a folder of documents"},{"icon":"documents","title":"Index and search","text":"Find text inside Office files and PDFs"},{"icon":"images-raw","title":"Convert to images","text":"Export pages from any of those formats"}]}]},{"id":"video","label":"Video","icon":"video","description":"Playback and inspect video, capture webcam or screen, batch convert formats. Session MP4 recording and xblox record blocks — user-started or user-authored scheduled flows only, never covert capture.","slides":[{"id":"overview","title":"Play, capture, convert","description":"Review clips in place, capture when you start it, convert in batch — same workspace as chat.","media":{"type":"image","src":"./screenshots/chat-video-gen.jpg"},"highlights":[{"icon":"video","title":"Playback & inspect","text":"Scrub and review without leaving Chat"},{"icon":"rt-video","title":"Webcam / screen capture","text":"User-started only — Windows consent on first use"},{"icon":"command","title":"Batch convert","text":"FFmpeg, HandBrake, and other tools via commands"},{"icon":"video","title":"Session recording","text":"MP4 and xblox record blocks you author yourself"}],"actions":[{"label":"Get Tanit Chat — free","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"browser-use","label":"Browser Use","icon":"html","description":"Search, research, fill forms, translate, talk, summarize, create subtitles, and run Tanit workflows directly beside the web.","slides":[{"id":"overview","title":"Open Tanit beside any page, publish browser work as articles","description":"Search, read, fill, translate, and talk without leaving the page. A task can start in Chrome and finish in a local file or an XBlox flow.","media":{"type":"image","src":"./screenshots/chrome.jpg"},"highlights":[{"icon":"html","title":"Research without tab chaos","text":"Search, open results, compare sources, and keep the useful parts together"},{"icon":"documents","title":"Forms from files you have","text":"Fill from a PDF, invoice, or spreadsheet. It stops when you need to decide"},{"icon":"audio","title":"Translate, talk, subtitle","text":"A page, a reply, or a video: transcript, subtitles, or a dubbed version"},{"icon":"command","title":"Point, then finish the job","text":"Use a chart, field, or paragraph. Save the result, or continue as a workflow"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-chrome"}]}]},{"id":"share","label":"Share","icon":"cms","description":"Create and share reports, articles, posts, pictures, and files directly from Tanit.","slides":[{"id":"overview","title":"Create and share from Tanit","description":"Publish a report, an article, a set of pictures, or a file. Tanit uploads it to your account and gives you a link you can send.","media":{"type":"image","src":"./screenshots/cms.jpg"},"highlights":[{"icon":"markdown","title":"Reports and articles","text":"Any chat and becomes a page"},{"icon":"documents","title":"Share files","text":"PDFs, CAD, archives, and media from home/public, with a link to copy"},{"icon":"images-raw","title":"Posts and pictures","text":"A title and pictures, public, listed, or private"},{"icon":"command","title":"App or command line","text":"Sharing actions in the app, or tanit-cli service for pages, files, posts, and pictures"}]}]},{"id":"automation","label":"Automation","icon":"xblox","description":"Capture the process as an XBlox flow — combine an LLM agent with file input, models, OCR, vision, audio, conditions, loops, and saved output. Publish it to the ribbon, launcher, Tanit, or the Windows Explorer context menu.","slides":[{"id":"overview","title":"Turn a chat into a command","description":"When the task repeats, save the successful process and run it on the next selection.","media":{"type":"image","src":"./screenshots/automation.jpg"},"highlights":[{"icon":"xblox","title":"Visual XBlox flows","text":"Agent + files + models + conditions in one graph","slide":"overview"},{"icon":"command","title":"Publish anywhere","text":"Ribbon, launcher, Tanit, or Explorer context menu","slide":"launcher"},{"icon":"html","title":"Browser-use flows","text":"Drive a form or page from a saved command","slide":"browser"},{"icon":"command","title":"One-click recurring work","text":"The next file runs the same reviewed process","slide":"overview"}]},{"id":"launcher","title":"Published in the launcher","description":"A finished flow becomes a command you can run without opening the editor.","media":{"type":"image","src":"./screenshots/launcher.jpg"}},{"id":"browser","title":"Browser-use from a command","description":"Drive a page or form with the same flow that started as a chat.","media":{"type":"image","src":"./screenshots/forms-browser-use.jpg"}}]},{"id":"security","label":"Security","icon":"command","description":"Tanit Chat is a secure and OWASP compliant AI assistant that meets the highest security standards.","slides":[{"id":"overview","title":"Approve every action","media":{"type":"image","src":"./screenshots/security.jpg"},"highlights":[{"icon":"command","title":"Complete GPO Support","text":"Lockdown providers,models and interface"},{"icon":"command","title":"Security Agent","text":"Once, task, session, limited time, always, or never"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-security"}]}]},{"id":"files","label":"Files","icon":"documents","description":"Browse local and remote files, move data between devices, search large folder trees, see what is taking up disk space, and let Tanit work directly with the files in front of you.","slides":[{"id":"overview","title":"The file panel beside the viewer","description":"Open a folder on this PC, connect a phone, browse SSH or FTP, preview files, copy between locations, or switch to a disk-usage view.","media":{"type":"image","src":"./screenshots/filemanager.jpg"},"highlights":[{"icon":"images-raw","title":"Icons, tiles, previews","text":"Complete keyboard support and fast folder size calculation"},{"icon":"network","title":"SSH, FTP, MTP","text":"Native file manager & custom commands for batch operations"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/feature-files"}]}]}],"lang":"en","intro":{"html":"\u003ch1>Tanit Chat\u003c/h1>\n\u003cp>Many tools. One workspace. Local first.\u003c/p>\n\u003cp>Select files in Tanit or Explorer — they become the chat context.\u003c/p>\n","label":"Intro","file":"intro.md"}},"features":[{"id":"ai","label":"AI","icon":"command","description":"Connect direct providers, bring your own key, use compatible endpoints, choose an aggregator, or run supported models locally with llama.cpp. Switch models as your needs change.","slides":[{"id":"overview","title":"Route each capability to the right model","description":"Text, planning, vision, OCR, image generation, transcription, and speech each use a different local or cloud provider — never one vendor for everything.","media":{"type":"image","src":"./screenshots/chat.jpg"},"highlights":[{"icon":"command","title":"Local llama.cpp + GGUF","text":"Run supported models on-device"},{"icon":"network","title":"Cloud & BYOK","text":"Direct providers, compatible endpoints, aggregators"},{"icon":"command","title":"Per-capability routing","text":"Pick a model per job, not per app"},{"icon":"command","title":"Save a full agent as a preset","text":"Provider, tools, skills, and MCP in one reusable setup"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/tanit-chat"}]}]},{"id":"voice","label":"Voice","icon":"audio","description":"Transcribe recordings and voice input offline with whisper.cpp. Local speech synthesis can read responses without sending them to a cloud voice provider.","slides":[{"id":"overview","title":"Talk instead of typing","description":"Voice is a local capability first. Cloud realtime routing is opt-in when you want it.","media":{"type":"image","src":"./screenshots/audio.jpg"},"highlights":[{"icon":"audio","title":"whisper.cpp offline","text":"Transcribe recordings and voice input on-device"},{"icon":"rt-audio","title":"Local speech synthesis","text":"Read answers without a cloud voice provider"},{"icon":"rt-audio","title":"Realtime voice routing","text":"Opt in when a live session is worth it"},{"icon":"command","title":"Voice commands","text":"Hands-free control of the workspace"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-audio"}]}]},{"id":"images","label":"Images","icon":"images-raw","description":"Browse and inspect images, transform media, work with metadata. Use local vision-language models for private image understanding, ONNX for OCR and layout, or route image generation to a cloud provider.","slides":[{"id":"overview","title":"Inspect, batch, generate","_description":"Vision can stay on the device. Generation can go to the cloud. You choose per job.","media":{"type":"image","src":"./screenshots/image-ops.jpg"},"highlights":[{"icon":"images-raw","title":"Batch create, resize, convert and transform","text":"Fully customizable workflows using visual automation and batch operations."},{"icon":"images-raw","title":"Duplicate finder and junk finder","text":"Group near-duplicates by fingerprint and remove junk image removale"},{"icon":"images-raw","title":"Image vision & OCR","text":"Ask what is in a photo, or read the text with OCR"},{"icon":"command","title":"Complete CLI","text":"find, duplicates, resize, compress, create, transform, and understand"},{"icon":"images-raw","title":"Advanced screenshots","text":"Integrated screenshot taking, monitor, fullscreen, window or a picked region"},{"icon":"network","title":"Share as posts","text":"Share images as posts or articles"}]}]},{"id":"3d","icon":"cad","label":"3D","_description":"Preview common meshes & CAD","slides":[{"id":"overview","title":"Blazing fast 3D preview, opens 40MB STEP in less than 2 seconds","description":"Supports STEP, STL, FBX, VTK, USD, DXF, FreeCAD, OBJ, GLTF, GLB, and OpenSCAD","media":{"type":"image","src":"./screenshots/3d.jpg"},"highlights":[{"icon":"command","title":"Custom commands","text":"Build your own optimized workflows using XBLOX and batch operations."}]}]},{"id":"office","label":"Office","icon":"documents","description":"Create and edit Word, Excel, PowerPoint, and PDF. Batch translate and create","slides":[{"id":"overview","title":"Office and PDF","description":"Open a spreadsheet or a deck without a separate office suite.","media":{"type":"image","src":"./screenshots/office-docs.jpg"},"highlights":[{"icon":"documents","title":"Built-in viewer","text":"Word, Excel, PowerPoint, and PDF in the centre pane"},{"icon":"command","title":"Batch translate or transform","text":"Run the same job across a folder of documents"},{"icon":"documents","title":"Index and search","text":"Find text inside Office files and PDFs"},{"icon":"images-raw","title":"Convert to images","text":"Export pages from any of those formats"}]}]},{"id":"video","label":"Video","icon":"video","description":"Playback and inspect video, capture webcam or screen, batch convert formats. Session MP4 recording and xblox record blocks — user-started or user-authored scheduled flows only, never covert capture.","slides":[{"id":"overview","title":"Play, capture, convert","description":"Review clips in place, capture when you start it, convert in batch — same workspace as chat.","media":{"type":"image","src":"./screenshots/chat-video-gen.jpg"},"highlights":[{"icon":"video","title":"Playback & inspect","text":"Scrub and review without leaving Chat"},{"icon":"rt-video","title":"Webcam / screen capture","text":"User-started only — Windows consent on first use"},{"icon":"command","title":"Batch convert","text":"FFmpeg, HandBrake, and other tools via commands"},{"icon":"video","title":"Session recording","text":"MP4 and xblox record blocks you author yourself"}],"actions":[{"label":"Get Tanit Chat — free","primary":true,"href":"https://apps.microsoft.com/detail/9N5F39064NPD"}]}]},{"id":"browser-use","label":"Browser Use","icon":"html","description":"Search, research, fill forms, translate, talk, summarize, create subtitles, and run Tanit workflows directly beside the web.","slides":[{"id":"overview","title":"Open Tanit beside any page, publish browser work as articles","description":"Search, read, fill, translate, and talk without leaving the page. A task can start in Chrome and finish in a local file or an XBlox flow.","media":{"type":"image","src":"./screenshots/chrome.jpg"},"highlights":[{"icon":"html","title":"Research without tab chaos","text":"Search, open results, compare sources, and keep the useful parts together"},{"icon":"documents","title":"Forms from files you have","text":"Fill from a PDF, invoice, or spreadsheet. It stops when you need to decide"},{"icon":"audio","title":"Translate, talk, subtitle","text":"A page, a reply, or a video: transcript, subtitles, or a dubbed version"},{"icon":"command","title":"Point, then finish the job","text":"Use a chart, field, or paragraph. Save the result, or continue as a workflow"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-chrome"}]}]},{"id":"share","label":"Share","icon":"cms","description":"Create and share reports, articles, posts, pictures, and files directly from Tanit.","slides":[{"id":"overview","title":"Create and share from Tanit","description":"Publish a report, an article, a set of pictures, or a file. Tanit uploads it to your account and gives you a link you can send.","media":{"type":"image","src":"./screenshots/cms.jpg"},"highlights":[{"icon":"markdown","title":"Reports and articles","text":"Any chat and becomes a page"},{"icon":"documents","title":"Share files","text":"PDFs, CAD, archives, and media from home/public, with a link to copy"},{"icon":"images-raw","title":"Posts and pictures","text":"A title and pictures, public, listed, or private"},{"icon":"command","title":"App or command line","text":"Sharing actions in the app, or tanit-cli service for pages, files, posts, and pictures"}]}]},{"id":"automation","label":"Automation","icon":"xblox","description":"Capture the process as an XBlox flow — combine an LLM agent with file input, models, OCR, vision, audio, conditions, loops, and saved output. Publish it to the ribbon, launcher, Tanit, or the Windows Explorer context menu.","slides":[{"id":"overview","title":"Turn a chat into a command","description":"When the task repeats, save the successful process and run it on the next selection.","media":{"type":"image","src":"./screenshots/automation.jpg"},"highlights":[{"icon":"xblox","title":"Visual XBlox flows","text":"Agent + files + models + conditions in one graph","slide":"overview"},{"icon":"command","title":"Publish anywhere","text":"Ribbon, launcher, Tanit, or Explorer context menu","slide":"launcher"},{"icon":"html","title":"Browser-use flows","text":"Drive a form or page from a saved command","slide":"browser"},{"icon":"command","title":"One-click recurring work","text":"The next file runs the same reviewed process","slide":"overview"}]},{"id":"launcher","title":"Published in the launcher","description":"A finished flow becomes a command you can run without opening the editor.","media":{"type":"image","src":"./screenshots/launcher.jpg"},"highlights":[]},{"id":"browser","title":"Browser-use from a command","description":"Drive a page or form with the same flow that started as a chat.","media":{"type":"image","src":"./screenshots/forms-browser-use.jpg"},"highlights":[]}]},{"id":"security","label":"Security","icon":"command","description":"Tanit Chat is a secure and OWASP compliant AI assistant that meets the highest security standards.","slides":[{"id":"overview","title":"Approve every action","media":{"type":"image","src":"./screenshots/security.jpg"},"highlights":[{"icon":"command","title":"Complete GPO Support","text":"Lockdown providers,models and interface"},{"icon":"command","title":"Security Agent","text":"Once, task, session, limited time, always, or never"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/cgo/pages/tanit-security"}]}]},{"id":"files","label":"Files","icon":"documents","description":"Browse local and remote files, move data between devices, search large folder trees, see what is taking up disk space, and let Tanit work directly with the files in front of you.","slides":[{"id":"overview","title":"The file panel beside the viewer","description":"Open a folder on this PC, connect a phone, browse SSH or FTP, preview files, copy between locations, or switch to a disk-usage view.","media":{"type":"image","src":"./screenshots/filemanager.jpg"},"highlights":[{"icon":"images-raw","title":"Icons, tiles, previews","text":"Complete keyboard support and fast folder size calculation"},{"icon":"network","title":"SSH, FTP, MTP","text":"Native file manager & custom commands for batch operations"}],"actions":[{"label":"Read more","primary":true,"href":"https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/feature-files"}]}]}]}</script>
 <script type="application/json" id="icons">{"audio":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" aria-hidden=\"true\">\u003cpath d=\"M14 32v0M20 24v16M26 18v28M32 22v20M38 16v32M44 24v16M50 30v4\"/>\u003c/svg>","avatar":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" aria-hidden=\"true\">\n  \u003ccircle cx=\"32\" cy=\"14\" r=\"5.8\" stroke=\"currentColor\" stroke-width=\"2.8\"/>\n  \u003cpath d=\"M32 21.5c-5.2 5.8-9.8 13.2-11.2 21.2 4.6-1.4 7.8-1.8 11.2-1.8s6.6.4 11.2 1.8C41.8 34.7 37.2 27.3 32 21.5z\" fill=\"currentColor\"/>\n  \u003cpath d=\"M24.5 29c-4.2-2.8-7.6-7.2-8.4-12.8\" stroke=\"currentColor\" stroke-width=\"2.8\" stroke-linecap=\"round\"/>\n  \u003cpath d=\"M39.5 29c4.2-2.8 7.6-7.2 8.4-12.8\" stroke=\"currentColor\" stroke-width=\"2.8\" stroke-linecap=\"round\"/>\n  \u003cpath d=\"M18 48c6-2.2 22-2.2 28 0\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n\u003c/svg>","cad":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003cpath d=\"M32 10l18 10v20L32 50 14 40V20z\"/>\u003cpath d=\"M32 30l18-10M32 30v20M32 30L14 20\"/>\u003cpath d=\"M22 24l10 6 10-6\" opacity=\".5\"/>\u003c/svg>","cms":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"8\" y=\"12\" width=\"48\" height=\"40\" rx=\"4\"/>\u003cpath d=\"M8 22h48\"/>\u003crect x=\"14\" y=\"28\" width=\"14\" height=\"18\" rx=\"1\"/>\u003cpath d=\"M34 28h16v4H34zM34 36h16v4H34zM34 44h10v2H34z\"/>\u003ctext x=\"16\" y=\"19.5\" fill=\"currentColor\" stroke=\"none\" font-size=\"6\" font-family=\"system-ui,sans-serif\" font-weight=\"700\">CMS\u003c/text>\u003c/svg>","command":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"8\" y=\"10\" width=\"48\" height=\"44\" rx=\"4\"/>\u003cpath d=\"M8 20h48\"/>\u003cpath d=\"M16 28h20\"/>\u003ccircle cx=\"42\" cy=\"28\" r=\"3\"/>\u003cpath d=\"M16 38h12\"/>\u003crect x=\"34\" y=\"34\" width=\"14\" height=\"8\" rx=\"2\"/>\u003cpath d=\"M16 48h8M28 48h8\"/>\u003c/svg>","documents":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003cpath d=\"M14 12h16l8 8v32H14z\"/>\u003cpath d=\"M30 12v8h8\"/>\u003ctext x=\"18\" y=\"40\" fill=\"currentColor\" stroke=\"none\" font-size=\"8\" font-family=\"system-ui,sans-serif\" font-weight=\"700\">PDF\u003c/text>\u003cpath d=\"M26 8h16l8 8v32H26z\" opacity=\".55\"/>\u003cpath d=\"M38 20h14l6 6v28H38z\" opacity=\".35\"/>\u003c/svg>","html":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"8\" y=\"12\" width=\"48\" height=\"40\" rx=\"4\"/>\u003cpath d=\"M8 22h48\"/>\u003ccircle cx=\"16\" cy=\"17\" r=\"1.5\" fill=\"currentColor\" stroke=\"none\"/>\u003ccircle cx=\"22\" cy=\"17\" r=\"1.5\" fill=\"currentColor\" stroke=\"none\"/>\u003ccircle cx=\"28\" cy=\"17\" r=\"1.5\" fill=\"currentColor\" stroke=\"none\"/>\u003crect x=\"14\" y=\"28\" width=\"18\" height=\"16\" rx=\"1\"/>\u003cpath d=\"M38 30h12M38 36h10M38 42h8\"/>\u003c/svg>","images-raw":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"28\" y=\"22\" width=\"28\" height=\"22\" rx=\"3\"/>\u003ccircle cx=\"42\" cy=\"33\" r=\"5\"/>\u003cpath d=\"M32 28h4\"/>\u003crect x=\"8\" y=\"18\" width=\"22\" height=\"16\" rx=\"2\"/>\u003ccircle cx=\"16\" cy=\"24\" r=\"2.5\"/>\u003cpath d=\"M8 30l5-5 4 3 5-6 8 8\"/>\u003c/svg>","markdown":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003cpath d=\"M16 10h24l8 8v36H16z\"/>\u003cpath d=\"M40 10v8h8\"/>\u003cpath d=\"M26 28l-4 8-4-8\"/>\u003cpath d=\"M36 28v8\"/>\u003cpath d=\"M34 32h4\"/>\u003cpath d=\"M42 28l6 4-6 4\"/>\u003c/svg>","network":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003ccircle cx=\"32\" cy=\"14\" r=\"5\"/>\u003ccircle cx=\"14\" cy=\"40\" r=\"5\"/>\u003ccircle cx=\"50\" cy=\"40\" r=\"5\"/>\u003ccircle cx=\"32\" cy=\"50\" r=\"5\"/>\u003cpath d=\"M32 19v10M28 28L18 36M36 28l10 8M32 39v6M18 42h10M36 42h10\"/>\u003c/svg>","rt-audio":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" aria-hidden=\"true\">\u003cpath d=\"M18 32v0M26 22v20M34 14v36M42 22v20M50 30v4\"/>\u003ccircle cx=\"34\" cy=\"32\" r=\"22\" stroke-dasharray=\"4 6\" opacity=\".35\"/>\u003c/svg>","rt-video":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"8\" y=\"18\" width=\"36\" height=\"28\" rx=\"4\"/>\u003cpath d=\"M44 28l12-6v20l-12-6z\"/>\u003ccircle cx=\"20\" cy=\"28\" r=\"3\"/>\u003cpath d=\"M14 38h16\"/>\u003c/svg>","video":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003crect x=\"10\" y=\"16\" width=\"44\" height=\"32\" rx=\"8\"/>\u003cpath d=\"M28 26l14 6-14 6z\" fill=\"currentColor\" stroke=\"none\"/>\u003c/svg>","xblox":"\u003csvg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\u003ccircle cx=\"12\" cy=\"20\" r=\"4\"/>\u003ccircle cx=\"12\" cy=\"44\" r=\"4\"/>\u003ccircle cx=\"32\" cy=\"32\" r=\"5\"/>\u003ccircle cx=\"52\" cy=\"18\" r=\"4\"/>\u003ccircle cx=\"52\" cy=\"46\" r=\"4\"/>\u003cpath d=\"M16 22l11 8M16 42l11-6M37 30l11-9M37 34l11 9\"/>\u003c/svg>"}</script>
+<script>window.TV_ASSET_URL="https://tanit.polymech.info/api/vfs/get/3bb4cfbf-318b-44d3-a9d3-35680e738421/tanit-chat/";</script>
 <script>window.TV_EXPLORE_SKINS=["plex","shell"];window.TV_EXPLORE_SKIN="plex";</script>
-<script>(function(){var skins=window.TV_EXPLORE_SKINS||['plex'];var def=window.TV_EXPLORE_SKIN||skins[0]||'plex';var k='tv-explore-theme';var ks='tv-explore-skin';var q=null;var sp=null;try{sp=new URLSearchParams(location.search);q=sp.get('theme')}catch(e){}var host=null;try{var cl=document.documentElement.classList;if(cl.contains('dark'))host='dark';else if(cl.contains('light'))host='light'}catch(e){}var t=(q==='light'||q==='dark')?q:(host||localStorage.getItem(k)||'light');var r=document.currentScript&&document.currentScript.closest('.tv-explore');if(r){r.setAttribute('data-theme',t);r.setAttribute('data-pm-embed','1')}var qs=null;try{qs=sp&&sp.get('skin')}catch(e){}var skin=(qs&&skins.indexOf(qs)>=0)?qs:(function(){try{return localStorage.getItem(ks)}catch(e){return null}})()||def;if(skins.indexOf(skin)<0)skin=def;if(r)r.setAttribute('data-skin',skin);var lq=null;try{lq=(sp&&(sp.get('layout')||sp.get('mode')))||localStorage.getItem('tv-explore-layout')}catch(e){}if(lq==='scroll'||lq==='stack'){if(r)r.classList.add('tv-stack')}})();</script>
+<script>(function(){var skins=window.TV_EXPLORE_SKINS||['plex'];var def=window.TV_EXPLORE_SKIN||skins[0]||'plex';var k='tv-explore-theme';var ks='tv-explore-skin';var q=null;var sp=null;try{sp=new URLSearchParams(location.search);q=sp.get('theme')}catch(e){}var host=null;try{var cl=document.documentElement.classList;if(cl.contains('dark'))host='dark';else if(cl.contains('light'))host='light'}catch(e){}var t=(q==='light'||q==='dark')?q:(host||localStorage.getItem(k)||'light');var r=document.currentScript&&document.currentScript.closest('.tv-explore');if(r){r.setAttribute('data-theme',t);r.setAttribute('data-pm-embed','1')}var qs=null;try{qs=sp&&sp.get('skin')}catch(e){}var skin=(qs&&skins.indexOf(qs)>=0)?qs:(function(){try{return localStorage.getItem(ks)}catch(e){return null}})()||def;if(skins.indexOf(skin)<0)skin=def;if(r)r.setAttribute('data-skin',skin);var lq=null;try{lq=(sp&&(sp.get('layout')||sp.get('mode')))||localStorage.getItem('tv-explore-layout-v2')}catch(e){}if(lq!=='classic'&&lq!=='stage'){if(r)r.classList.add('tv-stack')}})();</script>
 <script>
 (function () {
   var DATA = JSON.parse(document.getElementById('data').textContent);
@@ -1190,17 +1302,17 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     xform.style.transform =
       'translate3d(' + Math.round(pan.x) + 'px,' + Math.round(pan.y) + 'px,0)';
   }
-  /** Hard stop only is persisted; soft pause does not survive reload. */
+  /** Autoplay is off until Play. Stop and Play are remembered; pause is session-only. */
   function readTourMode() {
     try {
-      if (localStorage.getItem(TOUR_KEY) === 'stopped') return 'stopped';
+      var s = localStorage.getItem(TOUR_KEY);
+      if (s === 'playing' || s === 'stopped') return s;
     } catch (_) {}
-    return 'playing';
+    return 'stopped';
   }
   function persistTourMode(mode) {
     try {
-      if (mode === 'stopped') localStorage.setItem(TOUR_KEY, 'stopped');
-      else if (mode === 'playing') localStorage.removeItem(TOUR_KEY);
+      if (mode === 'playing' || mode === 'stopped') localStorage.setItem(TOUR_KEY, mode);
     } catch (_) {}
   }
   var tourMode = readTourMode(); // playing | paused | stopped
@@ -1227,9 +1339,13 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   function assetUrl(path) {
     if (!path) return path;
     if (/^(https?:|data:|blob:|\/\/)/i.test(path)) return path;
-    var base = typeof TV_ASSET_URL === 'string' ? TV_ASSET_URL : '';
+    var base = '';
+    if (typeof window !== 'undefined' && typeof window.TV_ASSET_URL === 'string') base = window.TV_ASSET_URL;
+    else if (typeof TV_ASSET_URL === 'string') base = TV_ASSET_URL;
     if (!base) return path;
-    return base.replace(/\/?$/, '/') + String(path).replace(/^\.\//, '').replace(/^\//, '');
+    // screenshots/*.jpg is uploaded flat into the asset root (…/tanit-chat/chrome.jpg).
+    var rel = String(path).replace(/^\.\//, '').replace(/^\//, '').replace(/^screenshots\//, '');
+    return base.replace(/\/?$/, '/') + rel;
   }
 
   var clickSfxPool = [];
@@ -1252,7 +1368,7 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     } catch (_) {}
   }
 
-  function tourControlsHtml(extraClass) {
+  function tourControlsHtml(extraClass, compact) {
     return '<div class="tour-controls' + (extraClass ? ' ' + extraClass : '') + '" data-mode="' + tourMode + '">' +
       '<div class="tour-btns">' +
         '<button type="button" class="tour-btn" data-act="play" aria-label="Play tour" title="Play" aria-pressed="' + (tourMode === 'playing' ? 'true' : 'false') + '">' +
@@ -1262,12 +1378,21 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
         '<button type="button" class="tour-btn" data-act="stop" aria-label="Stop tour" title="Stop" aria-pressed="' + (tourMode === 'stopped' ? 'true' : 'false') + '">' +
           '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h12v12H6z"/></svg></button>' +
       '</div>' +
-      '<div class="tour-meta"><b class="tour-label">Auto</b><span class="tour-hint">Images 4s · videos to end</span></div>' +
-      '<button type="button" class="theme-btn" data-act="theme" aria-label="Toggle theme" title="Theme">' +
-        '<span class="moon" aria-hidden="true">◐</span>' +
-        '<span class="sun" aria-hidden="true">☀</span>' +
-      '</button>' +
+      (compact ? '' :
+        '<div class="tour-meta"><b class="tour-label">Auto</b><span class="tour-hint">Images 4s · videos to end</span></div>' +
+        '<button type="button" class="theme-btn" data-act="theme" aria-label="Toggle theme" title="Theme">' +
+          '<span class="moon" aria-hidden="true">◐</span>' +
+          '<span class="sun" aria-hidden="true">☀</span>' +
+        '</button>') +
     '</div>';
+  }
+  function onTourAct(act) {
+    if (act === 'theme') { toggleTheme(); return; }
+    suppressIdle = true;
+    if (act === 'play') setTourMode('playing');
+    else if (act === 'pause') setTourMode('paused');
+    else if (act === 'stop') setTourMode('stopped');
+    suppressIdle = false;
   }
 
   function esc(s) {
@@ -1304,7 +1429,7 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   function visibleFeatures() {
     return features.filter(isEnabled);
   }
-  var LAYOUT_KEY = 'tv-explore-layout';
+  var LAYOUT_KEY = 'tv-explore-layout-v2';
   function queryLayout() {
     try {
       var sp = new URLSearchParams(location.search);
@@ -1322,7 +1447,7 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     } catch (e) {}
     return null;
   }
-  /** classic = sidebar+stage (default on desktop). scroll = expand all. */
+  /** classic = sidebar+stage. scroll = expand all (default). */
   var layoutOverride = null;
   function layoutPref() {
     return layoutOverride || queryLayout() || storedLayout() || null;
@@ -1330,12 +1455,9 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   function isNarrow() {
     try { return window.matchMedia('(max-width:900px)').matches; } catch (e) { return false; }
   }
-  /** Mobile / forced scroll: all features stacked for page scroll; slides stay in-card. */
+  /** Scroll is the default. Classic only when asked (?layout=classic or the layout button). */
   function isStackMode() {
-    var pref = layoutPref();
-    if (pref === 'scroll') return true;
-    if (pref === 'classic') return false;
-    return isNarrow();
+    return layoutPref() !== 'classic';
   }
   function syncLayoutUi() {
     if (!layoutBtn) return;
@@ -1403,18 +1525,43 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     var intro = product.intro;
     return intro && intro.html ? intro.html : '';
   }
-  function introLabel() {
-    var intro = product.intro;
-    return (intro && intro.label) || 'Intro';
-  }
-  function introNavHtml() {
-    if (!introHtml()) return '';
-    var on = showingIntro;
-    return '<button type="button" class="side-item" data-intro="1" aria-current="' + (on ? 'true' : 'false') + '">' +
-      '<span class="si">' + icon('markdown') + '</span><span class="sl">' + esc(introLabel()) + '</span></button>';
-  }
   function introBodyHtml() {
-    return '<div class="intro-body">' + introHtml() + '</div>';
+    var html = introHtml();
+    return html ? '<div class="intro-body">' + html + '</div>' : '';
+  }
+  function slideThumbSrc(s) {
+    var m = s && s.media;
+    if (!m) return '';
+    if (typeof m === 'string') return m;
+    return m.src || '';
+  }
+  function introJumpsHtml() {
+    var html = '';
+    features.forEach(function (f, fi) {
+      if (!isEnabled(f)) return;
+      var list = slidesOf(fi);
+      list.forEach(function (s, si) {
+        var src = slideThumbSrc(s);
+        var label = list.length > 1
+          ? ((f.label || '') + (s.title ? ' · ' + s.title : ''))
+          : (f.label || s.title || '');
+        var media = '';
+        if (src && isVideoSrc(src)) {
+          media = '<video muted playsinline preload="metadata" src="' + esc(assetUrl(src)) + '"></video>';
+        } else if (src) {
+          media = '<img src="' + esc(assetUrl(src)) + '" alt="" draggable="false"/>';
+        } else {
+          media = '<span class="intro-jump-fallback">' + icon(f.icon) + '</span>';
+        }
+        html += '<button type="button" class="intro-jump" data-jump-feat="' + fi + '" data-jump-slide="' + si + '">' +
+          media +
+          '<span class="intro-jump-label">' + esc(label) + '</span></button>';
+      });
+    });
+    return html ? '<div class="intro-jumps">' + html + '</div>' : '';
+  }
+  function introPageHtml() {
+    return '<div class="intro-page">' + introBodyHtml() + introJumpsHtml() + '</div>';
   }
 
   function navItemHtml(f, i, mediaKind) {
@@ -1433,8 +1580,8 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     if (!elNav) return;
     var mediaKind = slideMediaKind(slide());
     var current = null;
-    var introBtn = elNav.querySelector('[data-intro]');
-    if (introBtn) introBtn.setAttribute('aria-current', showingIntro ? 'true' : 'false');
+    var brandBtn = document.getElementById('brandBtn');
+    if (brandBtn) brandBtn.setAttribute('aria-current', showingIntro ? 'true' : 'false');
     elNav.querySelectorAll('.side-item[data-i]').forEach(function (btn) {
       var i = Number(btn.getAttribute('data-i'));
       var on = !showingIntro && i === selected;
@@ -1450,7 +1597,7 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
         btn.style.removeProperty('--tour-ms');
       }
     });
-    if (showingIntro && introBtn) current = introBtn;
+    syncUrl();
     if (current) {
       var navRect = elNav.getBoundingClientRect();
       var btnRect = current.getBoundingClientRect();
@@ -1461,7 +1608,7 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
 
   function renderNav() {
     var mediaKind = slideMediaKind(slide());
-    var html = introNavHtml();
+    var html = '';
     var cats = product.categories || [];
     var visible = visibleFeatures();
     if (cats.length) {
@@ -2359,10 +2506,10 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   }
 
   function renderStage(dir) {
-    if (showingIntro && introHtml()) {
+    if (showingIntro) {
       elStage.classList.remove('is-stack');
       if (stackIo) { stackIo.disconnect(); stackIo = null; }
-      elStage.innerHTML = '<div class="stage-body">' + introBodyHtml() + '</div>';
+      elStage.innerHTML = '<div class="stage-body">' + introPageHtml() + '</div>';
       syncTourUi();
       return;
     }
@@ -2391,9 +2538,7 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
       elStage.innerHTML = '<div class="stack-empty"><p class="lead">No matches</p></div>';
       return;
     }
-    var introCard = introHtml()
-      ? '<article class="feature-card intro-card" data-feat="-1" id="feature-intro">' + introBodyHtml() + '</article>'
-      : '';
+    var introCard = '<article class="feature-card intro-card" data-feat="-1" id="feature-intro">' + introPageHtml() + '</article>';
     var cards = visible.map(function (f) {
       var fi = features.indexOf(f);
       var cat = f.categoryLabel ? '<div class="feature-cat">' + esc(f.categoryLabel) + '</div>' : '';
@@ -2416,7 +2561,8 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     syncStackSelection();
     syncMediaPlayback();
     if (tourMode === 'playing') scheduleAdvance();
-    scrollSelectedCard(false);
+    // Stay on the intro. Scrolling here jumps the host page to the first feature.
+    if (!showingIntro || tourMode === 'playing') scrollSelectedCard(false);
     bindStackObserver();
   }
 
@@ -2465,9 +2611,30 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     _scrollRaf = requestAnimationFrame(frame);
   }
 
+  function isScrollBox(el) {
+    if (!el || el === window) return false;
+    var oy = getComputedStyle(el).overflowY;
+    if (oy !== 'auto' && oy !== 'scroll' && oy !== 'overlay') return false;
+    return el.scrollHeight > el.clientHeight + 2;
+  }
+  function scrollingAncestor(start) {
+    var n = start;
+    while (n && n !== document.documentElement && n !== document.body) {
+      if (isScrollBox(n)) return n;
+      n = n.parentElement;
+    }
+    var root = document.scrollingElement || document.documentElement;
+    if (isScrollBox(root)) return root;
+    return window;
+  }
   function playScrollRoot() {
     var explore = document.querySelector('.tv-explore');
-    if (explore && explore.getAttribute('data-pm-embed')) return explore;
+    // Inline embed: scroll the widget only when it is the scrollport.
+    // A host page that grows with the article scrolls outside the widget.
+    if (explore && explore.getAttribute('data-pm-embed')) {
+      if (isScrollBox(explore)) return explore;
+      return scrollingAncestor(explore.parentElement);
+    }
     var shell = document.querySelector('.shell');
     if (document.documentElement.getAttribute('data-pm-embed') && shell) return shell;
     if (isNarrow() && shell) return shell;
@@ -2512,6 +2679,22 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     if (tokenRoot !== root) root.style.setProperty('--play-fit', fit);
   }
 
+  /** Viewport Y where a card top should land, under the sticky bar or tour. */
+  function cardScrollAnchor() {
+    if (isNarrow()) {
+      var bar = document.querySelector('.sidebar');
+      if (!bar) return 0;
+      var shell = document.querySelector('.shell');
+      var gap = shell ? (parseFloat(getComputedStyle(shell).rowGap || getComputedStyle(shell).gap) || 0) : 0;
+      return bar.getBoundingClientRect().bottom + gap;
+    }
+    var tour = elStage && elStage.querySelector('.stack-tour');
+    if (!tour || getComputedStyle(tour).display === 'none') return 0;
+    var top = parseFloat(getComputedStyle(tour).top);
+    if (!isFinite(top)) top = 0;
+    return top + tour.getBoundingClientRect().height;
+  }
+
   function scrollSelectedCard(smooth) {
     if (!isStackMode()) return;
     syncStackSelection();
@@ -2519,19 +2702,20 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
       ? elStage.querySelector('.intro-card')
       : elStage.querySelector('.feature-card[data-feat="' + selected + '"]');
     if (!card) return;
-    var tour = elStage.querySelector('.stack-tour');
-    var margin = tour ? tour.getBoundingClientRect().height : 0;
     var ms = smooth === false ? 0 : SLIDE_MS;
-    spyLockUntil = Date.now() + ms + 120;
+    spyLockUntil = Date.now() + ms + 280;
+    var anchor = cardScrollAnchor();
+    var delta = card.getBoundingClientRect().top - anchor;
     var scroller = playScrollRoot();
-    if (scroller === window) {
-      var y = card.getBoundingClientRect().top + (window.scrollY || window.pageYOffset || 0) - margin;
+    var isRoot = !scroller || scroller === window
+      || scroller === document.scrollingElement
+      || scroller === document.documentElement
+      || scroller === document.body;
+    if (isRoot) {
+      var y = (window.scrollY || window.pageYOffset || 0) + delta;
       animateScrollY(window, Math.max(0, y), ms);
     } else {
-      var sRect = scroller.getBoundingClientRect();
-      var cRect = card.getBoundingClientRect();
-      var to = scroller.scrollTop + (cRect.top - sRect.top) - margin;
-      animateScrollY(scroller, Math.max(0, to), ms);
+      animateScrollY(scroller, Math.max(0, scroller.scrollTop + delta), ms);
     }
     if (tourMode === 'playing') {
       fitPlayViewport();
@@ -2567,6 +2751,11 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
         }
       }
       if (best == null) return;
+      var scrollerTop = 0;
+      var scrollEl = playScrollRoot();
+      if (!scrollEl || scrollEl === window) scrollerTop = window.scrollY || window.pageYOffset || 0;
+      else scrollerTop = scrollEl.scrollTop || 0;
+      if (ofView[-1] > 0 && scrollerTop < 24) best = -1;
       if (best === -1) {
         if (tourMode === 'playing' || showingIntro) return;
         showingIntro = true;
@@ -2718,7 +2907,7 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     var resumeFeature = mode === 'playing' && showingIntro;
     if (resumeFeature) showingIntro = false;
     tourMode = mode;
-    // Remember hard stop across reloads; play clears it. Pause is session-only.
+    // Play and stop survive reload. Pause does not. Missing key means stopped.
     if (mode === 'stopped' || mode === 'playing') persistTourMode(mode);
     syncTourUi();
     if (!isStackMode()) {
@@ -2746,22 +2935,96 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     setTourMode('paused', { idleResume: true });
   }
 
+  /** Standalone page only. The inline widget must not rewrite the host URL. */
+  function pathRoutes() {
+    return !document.querySelector('.tv-explore');
+  }
+  function slugify(s) {
+    return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+  function featureSlug(f) {
+    return slugify(f && (f.label || f.id));
+  }
+  function pathForState() {
+    if (showingIntro || !feat()) return '/';
+    var slug = featureSlug(feat());
+    return slug ? '/' + slug : '/';
+  }
+  function routeToken() {
+    var parts = (location.pathname || '/').split('/').filter(Boolean);
+    var base = parts.length ? parts[parts.length - 1] : '';
+    if (!base || /\.html?$/i.test(base)) return '';
+    return base.toLowerCase();
+  }
+  function featureIndexBySlug(slug) {
+    for (var i = 0; i < features.length; i++) {
+      var f = features[i];
+      if (!isEnabled(f)) continue;
+      if (featureSlug(f) === slug || String(f.id || '').toLowerCase() === slug) return i;
+    }
+    return -1;
+  }
+  function applyRoute() {
+    if (!pathRoutes()) return;
+    var slug = routeToken();
+    if (!slug) {
+      showingIntro = true;
+      return;
+    }
+    var idx = featureIndexBySlug(slug);
+    if (idx >= 0) {
+      showingIntro = false;
+      selected = idx;
+      setSlideIndex(idx, 0);
+      return;
+    }
+    if (introHtml()) showingIntro = true;
+  }
+  var urlPush = false;
+  function syncUrl() {
+    if (!pathRoutes()) return;
+    var next = pathForState();
+    var raw = (location.pathname || '/').replace(/\/+$/, '') || '/';
+    var cur = /\.html?$/i.test(raw) ? '/' : raw;
+    if (cur === next && raw === cur) { urlPush = false; return; }
+    var url = next + location.search + location.hash;
+    try {
+      if (urlPush) history.pushState({ tv: 1 }, '', url);
+      else history.replaceState({ tv: 1 }, '', url);
+    } catch (e) { /* file:// or sandboxed */ }
+    urlPush = false;
+  }
+
+  function scrollToTop(smooth) {
+    var ms = smooth === false ? 0 : SLIDE_MS;
+    spyLockUntil = Date.now() + (ms || 0) + 280;
+    var scroller = playScrollRoot();
+    if (!scroller || scroller === window) animateScrollY(window, 0, ms);
+    else animateScrollY(scroller, 0, ms);
+    if (elStage && elStage.scrollTop) elStage.scrollTop = 0;
+    var page = elStage && elStage.querySelector('.intro-page');
+    if (page) page.scrollTop = 0;
+  }
+
   function showIntro() {
-    if (!introHtml()) return;
+    urlPush = true;
     showingIntro = true;
     noteInteraction();
     if (isStackMode()) {
       syncStackSelection();
-      scrollSelectedCard(true);
+      scrollToTop(true);
       syncTourUi();
     } else {
       paint();
+      scrollToTop(false);
     }
   }
 
   function selectFeature(i, fromTour) {
     if (i < 0 || i >= features.length) return;
     if (!isEnabled(features[i])) return;
+    if (!fromTour) urlPush = true;
     showingIntro = false;
     selected = i;
     setSlideIndex(i, 0);
@@ -2774,6 +3037,9 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
       if (tourMode === 'playing') scheduleAdvance();
     } else {
       paint();
+      if (elStage) elStage.scrollTop = 0;
+      var stageMain = elStage && elStage.querySelector('.stage-main');
+      if (stageMain) stageMain.scrollTop = 0;
     }
     syncLightboxFromState();
   }
@@ -2817,14 +3083,10 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   }
 
   elNav.addEventListener('click', function (e) {
-    if (e.target.closest('[data-intro]')) {
-      playClick();
-      showIntro();
-      return;
-    }
     var btn = e.target.closest('[data-i]');
     if (!btn) return;
     playClick();
+    setNavOpen(false);
     selectFeature(Number(btn.getAttribute('data-i')));
   });
 
@@ -2926,19 +3188,23 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   bindStageSwipe();
 
   elStage.addEventListener('click', function (e) {
+    var jump = e.target.closest('[data-jump-feat]');
+    if (jump) {
+      playClick();
+      var jfi = Number(jump.getAttribute('data-jump-feat'));
+      var jsi = Number(jump.getAttribute('data-jump-slide') || 0);
+      selectFeature(jfi);
+      if (jsi > 0) setSlide(jsi, false, jfi);
+      if (isStackMode()) {
+        scrollSelectedCard(false);
+        requestAnimationFrame(function () { scrollSelectedCard(false); });
+      }
+      return;
+    }
     var tourBtn = e.target.closest('.tour-controls [data-act]');
     if (tourBtn) {
       playClick();
-      var act = tourBtn.getAttribute('data-act');
-      if (act === 'theme') {
-        toggleTheme();
-        return;
-      }
-      suppressIdle = true;
-      if (act === 'play') setTourMode('playing');
-      else if (act === 'pause') setTourMode('paused');
-      else if (act === 'stop') setTourMode('stopped');
-      suppressIdle = false;
+      onTourAct(tourBtn.getAttribute('data-act'));
       return;
     }
     var stepBtn = e.target.closest('[data-feat-step]');
@@ -2965,6 +3231,7 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
     if (e.target.closest('input, textarea, select, video')) return;
     if (e.target.closest('.stage-media[data-zoomed]')) return;
     if (isStackMode()) return;
+    if (!e.target.closest('.stage')) return;
     e.preventDefault();
     var dy = e.deltaY;
     if (e.deltaMode === 1) dy *= 16;
@@ -2993,6 +3260,47 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
       playClick();
       toggleTheme();
     });
+  }
+
+  var menuBtn = document.getElementById('menuBtn');
+  var brandBtn = document.getElementById('brandBtn');
+  var topTour = document.getElementById('topTour');
+  var navBackdrop = document.getElementById('navBackdrop');
+  if (topTour) topTour.innerHTML = tourControlsHtml('top-tour-controls', true);
+  function setNavOpen(open) {
+    var shell = document.querySelector('.shell');
+    var on = !!open && isNarrow();
+    if (shell) shell.classList.toggle('nav-open', on);
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
+    if (navBackdrop) {
+      if (on) navBackdrop.removeAttribute('hidden');
+      else navBackdrop.setAttribute('hidden', '');
+    }
+  }
+  if (menuBtn) {
+    menuBtn.addEventListener('click', function () {
+      playClick();
+      var shell = document.querySelector('.shell');
+      setNavOpen(!(shell && shell.classList.contains('nav-open')));
+    });
+  }
+  if (brandBtn) {
+    brandBtn.addEventListener('click', function () {
+      playClick();
+      setNavOpen(false);
+      showIntro();
+    });
+  }
+  if (topTour) {
+    topTour.addEventListener('click', function (e) {
+      var tourBtn = e.target.closest('[data-act]');
+      if (!tourBtn) return;
+      playClick();
+      onTourAct(tourBtn.getAttribute('data-act'));
+    });
+  }
+  if (navBackdrop) {
+    navBackdrop.addEventListener('click', function () { setNavOpen(false); });
   }
 
   // Host iframe (pm-pics iframe-widget): embed layout + theme + height pump
@@ -3050,7 +3358,10 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   window.addEventListener('resize', fitPlayViewport);
   try {
     var mqStack = window.matchMedia('(max-width:900px)');
-    var onStackMq = function () { paint(); };
+    var onStackMq = function () {
+      if (!isNarrow()) setNavOpen(false);
+      paint();
+    };
     if (mqStack.addEventListener) mqStack.addEventListener('change', onStackMq);
     else if (mqStack.addListener) mqStack.addListener(onStackMq);
   } catch (e) { /* ignore */ }
@@ -3062,6 +3373,11 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
 
   document.addEventListener('keydown', function (e) {
     if (e.target.matches('input,textarea,select')) return;
+    if (e.key === 'Escape' && document.querySelector('.shell.nav-open')) {
+      e.preventDefault();
+      setNavOpen(false);
+      return;
+    }
     if (lb.open) {
       if (e.key === 'Escape') { e.preventDefault(); closeLightbox(); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); noteInteraction(); lightboxNav(-1); }
@@ -3118,7 +3434,15 @@ html.tv-lb-open,html.tv-lb-open .tv-explore{overflow:hidden!important}
   // default: first enabled feature in product.json order
   var prefer = features.findIndex(isEnabled);
   selected = prefer >= 0 ? prefer : 0;
+  if (introHtml()) showingIntro = true;
+  applyRoute();
   paint();
+  window.addEventListener('popstate', function () {
+    if (!pathRoutes()) return;
+    urlPush = false;
+    applyRoute();
+    paint();
+  });
 })();
 
 </script>

@@ -14,7 +14,7 @@ tanit-cli service pages get <owner> tanit-changelog
 tanit-cli service pages get <page-uuid>
 ```
 
-**Download markdown** (`.md` when the page is markdown-text, otherwise `.page` JSON)
+**Download** (`.md` only when the page is a single markdown-text widget; otherwise the bare `.page` document, including html-widget pages)
 
 ```sh
 tanit-cli service pages get <owner> tanit-changelog --download

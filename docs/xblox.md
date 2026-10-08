@@ -7492,102 +7492,102 @@ Default block:
 
 ## Supported Custom Commands
 
-| Exact ID | Label | Action | Pre-configured Args |
-|:---|:---|:---|:---|
-| `custom.command-mq6okpfh-b145b` | Home | `app:showhome` |  |
-| `file.prev` | Previous | `app:previousfile` |  |
-| `custom.command-mtlnivuv-4aae3` | Explorer | `app:togglefiletree` |  |
-| `file.next` | Next | `app:nextfile` |  |
-| `custom.command-muv7nnf5-a9744` | Next (copy) | `app:nextfile` |  |
-| `custom.command-muv7sxie-292fd` | Report | `app:createreport` |  |
-| `custom.dropdown-msx1rszr-19148` | New | `metadata` |  |
-| `custom.command-mulazcgl-a19cb` | New Chat | `app:togglechat` |  |
-| `custom.command-msx1rszr-32ae1` | XBlox Script | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |
-| `custom.command-msx1xf70-ed2f7` | Text File | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
-| `custom.command-mtfnk3hu-47302` | Markdown File | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
-| `custom.command-mtczu1xa-c605f` | File Tab | `app:newfiletab` |  |
-| `custom.command-mudse19e-edcc5` | Browser | `app:openurl` |  |
-| `custom.command-mtfpcfxj-e1333` | Screen Recording | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
-| `custom.command-mulbk22p-b16a6` | Wizard | `app:settings` |  |
-| `custom.command-mpx9r1ur-8c6df` | Assistant | `cli:llm` | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
-| `custom.command-mpxytlpz-bcde4` | Launcher | `app:togglelauncher` |  |
-| `custom.command-712fbd00-f9ac4` | Product | `cli:transform` | `--prompt`<br>`render this as product shooting, white background, studio`<br>`--json`<br>`${CURRENT_SELECTION}` |
-| `custom.command-mpch9gdx-44982` | Illustration | `cli:transform` | `--src`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`as technical illustration`<br>`--model`<br>`image-generation-deep` |
-| `custom.image-understand-speak` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.command-mqj3feqz-72a1a` | Resize-HD | `cli:resize` | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui` |
-| `custom.command-mszwq2g6-780cb` | To Markdown | `cli:llm` | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--no-skills`<br>`--hud`<br>`--hud-mode`<br>`both` |
-| `custom.command-muib2fcm-b25cf` | OCR Local | `cli:understand` | `--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16`<br>`${CURRENT_FILE}` |
-| `custom.command-mtun9312-7d0e1` | Share Post | `cli:service` | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`private` |
-| `custom.command-mrcja3yb-306c8` | Region | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot.xblox` |
-| `custom.command-mpxzouxv-ab189` | App | `app:takescreenshot` |  |
-| `custom.command-mu4l7dsk-4b406` | Fullscreen Screenshot | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-full.xblox` |
-| `custom.command-mre4dk8y-7a985` | To Markdown | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-vision-md.xblox` |
-| `custom.command-mtlh4sop-a7c1b` | New | `app:togglechat` |  |
-| `custom.command-mpohnfaf-26b0c` | TTS | `app:setVariable` |  |
-| `custom.command-mpokt0hv-41237` | Funny | `app:setVariable` |  |
-| `custom.command-mpokxo4w-0910a` | Serious | `app:setVariable` |  |
-| `custom.command-mtloapd5-06baa` | MCP | `cli:mcp` | `--json` |
-| `custom.command-mu1wob56-d1f45` | Share as Article (copy) | `cli:service` | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
-| `custom.command-mtva51l4-2e559` | Login | `app:login` |  |
-| `custom.command-mtvdak7f-00d65` | Logout | `app:logout` |  |
-| `custom.view-explorer` | Explorer | `app:togglefiletree` |  |
-| `custom.command-mpy7w3px-8a1e0` | Log | `app:togglelog` |  |
-| `custom.command-mqkxsx6y-56346` | Center | `app:togglecenterview` |  |
-| `custom.command-mtld2y23-123a4` | Chat | `app:togglechat` |  |
-| `custom.command-mpy7z14t-bcef8` | Queue | `app:togglequeue` |  |
-| `custom.command-mqkneqp7-3fcb0` | Console | `app:toggleconsole` |  |
-| `custom.command-mr5ebav3-ec35c` | Search | `app:togglesearchnative` |  |
-| `custom.command-mt8msflf-fe3b7` | Tabbed | `app:viewtabbed` |  |
-| `custom.command-msqfoqej-85fb5` | Performance | `app:toggleperf` |  |
-| `custom.command-mtwl51se-b7440` | 1269x846 | `app:setframesize` |  |
-| `custom.view-maximize` | Fullscreen | `app:togglefullscreen` |  |
-| `custom.command-mtoxzgrv-1f644` | Maximize | `app:setframesize` |  |
-| `custom.command-mtv9cd7k-7a458` | Reset | `app:resetlayout` |  |
-| `custom.command-70eabea6-957e6` | Spanish | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`Translate to Spanish`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_es.${SRC_EXT}`<br>`--hud` |
-| `custom.command-msyzmkcu-9b027` | English | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_en.${SRC_EXT}`<br>`--prompt`<br>`Translate to English`<br>`--no-tools`<br>`--preset`<br>`Tanit-Fast`<br>`--hud`<br>`--hud-mode`<br>`both` |
-| `custom.command-msyznegr-9190e` | German | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_de.${SRC_EXT}`<br>`--hud`<br>`--hud-mode`<br>`both`<br>`--prompt`<br>`Translate to German. Return raw response, no fences!` |
-| `custom.command-mt0dfzrn-665b0` | French | `cli:llm` | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--prompt`<br>`Translate to French`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_fr.${SRC_EXT}` |
-| `custom.command-ms0phpqj-d1ca3` | Chrome | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-chrome.xblox` |
-| `custom.command-ms33shnl-97127` | App | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-win32.xblox` |
-| `custom.text-speak` | Speak | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
-| `custom.voice-cloner` | Voice Cloner | `cli:audio` | `voice-change`<br>`--remove-background-noise`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_cloned.wav`<br>`--style`<br>`0.5`<br>`--stability`<br>`1` |
-| `custom.command-mpxzk7g4-67590` | Voice Recorder | `cli:audio` | `record`<br>`--dst`<br>`${CONFIG_DIR}/recordings/tanit-${DD}-${HH}-${mm}.wav`<br>`--hud`<br>`--filter`<br>`deepfilter` |
-| `custom.command-mtk0rcb2-f401a` | Speech to Text | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/stt-paste-whisper.xblox` |
-| `custom.command-ms0q0j9j-92441` | Yamaha | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/bluetooth-yamaha.xblox` |
-| `custom.command-mtn0t1b3-722de` | Voice Commands | `app:togglevoicecommand` |  |
-| `custom.command-7201753fce13ac9f1c6b945856a73c94` | SRT->WAV | `cli:audio` | `tts-scripted`<br>`--srt`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
-| `custom.command-mrf5dhi8-76608` | 1:1 | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
-| `custom.command-ms4vl4ur-4569d` | 16:9 | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
-| `custom.command-msghb0e2-e8c47` | Fixed | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed.xblox` |
-| `custom.command-mubm8ayh-a6d58` | Fixed & Subs | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed-subs.xblox` |
-| `custom.video-start` | WebCam | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
-| `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox`<br>`--audioSource`<br>``<br>`--camera`<br>``<br>`--encoder`<br>`auto`<br>`--hud`<br>`true`<br>`--microphone`<br>`` |
-| `custom.handbrake-hq` | Handbrake | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.command-video-social-hq` | Social Video HQ | `cli:xblox` | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.command-mujkog2v-f9c2b` | Swap MP4 audio | `external` | `-y`<br>`-i`<br>`${CURRENT_SELECTION_0}`<br>`-i`<br>`${CURRENT_SELECTION_1}`<br>`-map`<br>`0:v:0`<br>`-map`<br>`1:a:0`<br>`-c:v`<br>`copy`<br>`-c:a`<br>`aac`<br>`-shortest`<br>`${PATH_DIR:CURRENT_SELECTION_0}${PATH_SEP}${PATH_NAME:CURRENT_SELECTION_0}_with_${PATH_NAME:CURRENT_SELECTION_1}.mp4` |
-| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4->MP3 | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
-| `custom.command-mujlyke2-1c42f` | MP4->WAV | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-ac`<br>`1`<br>`-ar`<br>`16000`<br>`-c:a`<br>`pcm_s16le`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
-| `custom.command-7883566e75cb852699295a0cc2a574c5` | Video poster frame | `external` | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-frames:v`<br>`1`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.png` |
-| `custom.command-mr51514h-c34ec` | System | `app:edit` |  |
-| `custom.command-mr50fk3n-1a7d7` | Realtime | `app:edit` |  |
-| `custom.command-mppft700-137e9` | Planner | `app:edit` |  |
-| `batch.start` | Start | `app:resumebatch` |  |
-| `batch.pause` | Pause | `app:resumebatch` |  |
-| `custom.command-mt06aefh-c364b` | Cancel | `app:cancelbatch` |  |
-| `custom.view-snap-up` | Snap Up | `app:snapup` |  |
-| `custom.view-snap-down` | Snap Down | `app:snapdown` |  |
-| `custom.view-snap-left` | Snap Left | `app:snapleft` |  |
-| `custom.view-snap-right` | Snap Right | `app:snapright` |  |
-| `custom.command-mt4msl99-55414` | Start | `app:schedulerstart` |  |
-| `custom.command-mt4munur-873bb` | Stop | `app:schedulerstop` |  |
-| `custom.command-mt7672eh-b7786` | To Images | `cli:pdf` | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
-| `custom.pdf-to-md` | To Markdown | `cli:pdf` | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--per-page`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16` |
-| `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | `external` | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
-| `custom.fs-copy` | Copy | `app:fscopy` |  |
-| `custom.fs-move` | Move | `app:fsmove` |  |
-| `custom.command-mu114s8q-17bff` | Share | `cli:service` | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--public` |
-| `custom.dropdown-msaj5qk5-78a6b` | Help | `metadata` |  |
-| `custom.help-cli` | CLI-Manual | `app:open` |  |
-| `custom.help-xblox` | XBlox | `app:open` |  |
-| `custom.command-msakytc7-dd084` | Online Help | `app:openurl` |  |
-| `custom.command-mujkxt3w-4af40` | Subtitles | `cli:audio` | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt`<br>`--hud` |
+| Exact ID | Label | Action | Description | Files | Pre-configured Args |
+|:---|:---|:---|:---|:---|:---|
+| `custom.command-mq6okpfh-b145b` | Home | `app:showhome` |  | selection |  |
+| `file.prev` | Previous | `app:previousfile` | navigates to previous file | selection |  |
+| `custom.command-mtlnivuv-4aae3` | Explorer | `app:togglefiletree` |  | selection |  |
+| `file.next` | Next | `app:nextfile` | navigates to next file | selection |  |
+| `custom.command-muv7nnf5-a9744` | Next (copy) | `app:nextfile` | navigates to next file | selection |  |
+| `custom.command-muv7sxie-292fd` | Report | `app:createreport` | Report an issue | selection |  |
+| `custom.dropdown-msx1rszr-19148` | New | `metadata` |  | selection |  |
+| `custom.command-mulazcgl-a19cb` | New Chat | `app:togglechat` |  | selection |  |
+| `custom.command-msx1rszr-32ae1` | XBlox Script | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--content`<br>`{}`<br>`--ext`<br>`xblox`<br>`--variable-public`<br>`{"ext":true}` |
+| `custom.command-msx1xf70-ed2f7` | Text File | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
+| `custom.command-mtfnk3hu-47302` | Markdown File | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--variable-public`<br>`{"ext":true}`<br>`--content`<br>`# Caption`<br>`--ext`<br>`md` |
+| `custom.command-mtczu1xa-c605f` | File Tab | `app:newfiletab` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
+| `custom.command-mudse19e-edcc5` | Browser | `app:openurl` |  | selection | `google.com` |
+| `custom.command-mtfpcfxj-e1333` | Screen Recording | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
+| `custom.command-mulbk22p-b16a6` | Wizard | `app:settings` | Open setup wizard | selection | `wizard` |
+| `custom.command-mpx9r1ur-8c6df` | Assistant | `cli:llm` | Activates real-time voice assistant in background | selection | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
+| `custom.command-mpxytlpz-bcde4` | Launcher | `app:togglelauncher` | Open launcher menu | selection |  |
+| `custom.command-712fbd00-f9ac4` | Product | `cli:transform` | Render current selection as a product photo using white studio background | selection; explorer:image; jpg->jpg | `--prompt`<br>`render this as product shooting, white background, studio`<br>`--json`<br>`${CURRENT_SELECTION}` |
+| `custom.command-mpch9gdx-44982` | Illustration | `cli:transform` | description | files | `--src`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`as technical illustration`<br>`--model`<br>`image-generation-deep` |
+| `custom.image-understand-speak` | Speak | `cli:xblox` | Speaks the content of an selected image over the speaker | files | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.command-mqj3feqz-72a1a` | Resize-HD | `cli:resize` | Resize selection to 1920 | files; perItem | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui` |
+| `custom.command-mszwq2g6-780cb` | To Markdown | `cli:llm` | Convert current selected image file to Markdown document, using selected image vision provider & model | selection; perItem; explorer:image; jpg,png->md | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--no-skills`<br>`--hud`<br>`--hud-mode`<br>`both` |
+| `custom.command-muib2fcm-b25cf` | OCR Local | `cli:understand` | Convert current selected image file to Markdown document, using selected OCR local model | selection; perItem; explorer:image; jpg,png->md | `--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16`<br>`${CURRENT_FILE}` |
+| `custom.command-mtun9312-7d0e1` | Share Post | `cli:service` | Share selected image file as article | selection | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`private` |
+| `custom.command-mrcja3yb-306c8` | Region | `cli:xblox` | Screenshot taking, pick any screen element | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot.xblox` |
+| `custom.command-mpxzouxv-ab189` | App | `app:takescreenshot` |  | selection |  |
+| `custom.command-mu4l7dsk-4b406` | Fullscreen Screenshot | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-full.xblox` |
+| `custom.command-mre4dk8y-7a985` | To Markdown | `cli:xblox` | Uses AI to convert selected image to Markdown | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/screenshot-vision-md.xblox` |
+| `custom.command-mtlh4sop-a7c1b` | New | `app:togglechat` |  | selection |  |
+| `custom.command-mpohnfaf-26b0c` | TTS | `app:setVariable` |  | selection |  |
+| `custom.command-mpokt0hv-41237` | Funny | `app:setVariable` |  | selection |  |
+| `custom.command-mpokxo4w-0910a` | Serious | `app:setVariable` |  | selection |  |
+| `custom.command-mtloapd5-06baa` | MCP | `cli:mcp` |  | selection | `--json` |
+| `custom.command-mu1wob56-d1f45` | Share as Article (copy) | `cli:service` | Share selected Markdown file as article | selection | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
+| `custom.command-mtva51l4-2e559` | Login | `app:login` | Login into Tanit | selection |  |
+| `custom.command-mtvdak7f-00d65` | Logout | `app:logout` | Login into Tanit | selection |  |
+| `custom.view-explorer` | Explorer | `app:togglefiletree` |  | selection |  |
+| `custom.command-mpy7w3px-8a1e0` | Log | `app:togglelog` |  | selection |  |
+| `custom.command-mqkxsx6y-56346` | Center | `app:togglecenterview` |  | selection |  |
+| `custom.command-mtld2y23-123a4` | Chat | `app:togglechat` |  | selection |  |
+| `custom.command-mpy7z14t-bcef8` | Queue | `app:togglequeue` |  | selection |  |
+| `custom.command-mqkneqp7-3fcb0` | Console | `app:toggleconsole` |  | selection |  |
+| `custom.command-mr5ebav3-ec35c` | Search | `app:togglesearchnative` |  | selection |  |
+| `custom.command-mt8msflf-fe3b7` | Tabbed | `app:viewtabbed` | Enable Tabs | selection |  |
+| `custom.command-msqfoqej-85fb5` | Performance | `app:toggleperf` |  | selection | `800x600` |
+| `custom.command-mtwl51se-b7440` | 1269x846 | `app:setframesize` |  | selection | `1269x846` |
+| `custom.view-maximize` | Fullscreen | `app:togglefullscreen` |  | selection | `immersive`<br>`ribbon,statusbar,toolbar` |
+| `custom.command-mtoxzgrv-1f644` | Maximize | `app:setframesize` |  | selection | `max` |
+| `custom.command-mtv9cd7k-7a458` | Reset | `app:resetlayout` |  | selection |  |
+| `custom.command-70eabea6-957e6` | Spanish | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`Translate to Spanish`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_es.${SRC_EXT}`<br>`--hud` |
+| `custom.command-msyzmkcu-9b027` | English | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_en.${SRC_EXT}`<br>`--prompt`<br>`Translate to English`<br>`--no-tools`<br>`--preset`<br>`Tanit-Fast`<br>`--hud`<br>`--hud-mode`<br>`both` |
+| `custom.command-msyznegr-9190e` | German | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_de.${SRC_EXT}`<br>`--hud`<br>`--hud-mode`<br>`both`<br>`--prompt`<br>`Translate to German. Return raw response, no fences!` |
+| `custom.command-mt0dfzrn-665b0` | French | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--prompt`<br>`Translate to French`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_fr.${SRC_EXT}` |
+| `custom.command-ms0phpqj-d1ca3` | Chrome | `cli:xblox` | Convert a picked region in Chrome to Markdown | selection; perItem; pdf,xlsx,docx->pdf,xlsx,docx | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-chrome.xblox` |
+| `custom.command-ms33shnl-97127` | App | `cli:xblox` | Convert a picked application region to Markdown | selection; perItem; pdf,xlsx,docx->pdf,xlsx,docx | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-win32.xblox` |
+| `custom.text-speak` | Speak | `cli:xblox` | Pick an element and send it over the speaker using text to speech. | selection; perItem; pdf,xlsx,docx->pdf,xlsx,docx | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/inspect-text-speak.xblox` |
+| `custom.voice-cloner` | Voice Cloner | `cli:audio` | Run voice cloner on selected wav file, uses ElevenLabs | files | `voice-change`<br>`--remove-background-noise`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_cloned.wav`<br>`--style`<br>`0.5`<br>`--stability`<br>`1` |
+| `custom.command-mpxzk7g4-67590` | Voice Recorder | `cli:audio` | Starts voice recorder. See command settings for more. | selection | `record`<br>`--dst`<br>`${CONFIG_DIR}/recordings/tanit-${DD}-${HH}-${mm}.wav`<br>`--hud`<br>`--filter`<br>`deepfilter` |
+| `custom.command-mtk0rcb2-f401a` | Speech to Text | `cli:xblox` | Speech to text and clipboard, uses local Whisper model and external AI for correction. | files | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/stt-paste-whisper.xblox` |
+| `custom.command-ms0q0j9j-92441` | Yamaha | `cli:xblox` | Connect to Yamaha over Bluetooth | files | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/bluetooth-yamaha.xblox` |
+| `custom.command-mtn0t1b3-722de` | Voice Commands | `app:togglevoicecommand` | Start voice command mode - requires Whisper model and GPU | selection | `trigger`<br>`gtcrn`<br>`false`<br>`false`<br>`whisper`<br>`auto`<br>`en`<br>`mic`<br>`1`<br>`1`<br>`1`<br>`1` |
+| `custom.command-7201753fce13ac9f1c6b945856a73c94` | SRT->WAV | `cli:audio` | Generate timed speech from the selected SRT, VTT, or JSON cues file and save a sibling 48 kHz mono WAV using configured TTS settings. | selection; perItem | `tts-scripted`<br>`--srt`<br>`${CURRENT_FILE}`<br>`--dst`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
+| `custom.command-mrf5dhi8-76608` | 1:1 | `cli:xblox` | Zoom and Follow Video Recorder 1:1 | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-ex.xblox` |
+| `custom.command-ms4vl4ur-4569d` | 16:9 | `cli:xblox` | Zoom and Follow Video Recorder 16:9 | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
+| `custom.command-msghb0e2-e8c47` | Fixed | `cli:xblox` | Zoom and Follow Video Recorder 16:9 | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed.xblox` |
+| `custom.command-mubm8ayh-a6d58` | Fixed & Subs | `cli:xblox` | Zoom and Follow Video Recorder 16:9 | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-fixed-subs.xblox` |
+| `custom.video-start` | WebCam | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox` |
+| `custom.command-mu1wam8u-bfd55` | WebCam Beautifier | `cli:xblox` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/webcam.xblox`<br>`--audioSource`<br>``<br>`--camera`<br>``<br>`--encoder`<br>`auto`<br>`--hud`<br>`true`<br>`--microphone`<br>`` |
+| `custom.handbrake-hq` | Handbrake | `cli:xblox` | Convert selected file with Handbrake | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-medium.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.command-video-social-hq` | Social Video HQ | `cli:xblox` | Create a high-quality 1080p60 H.264 social-media master from the selected screen capture using Handbrake | selection; perItem | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-encode-social-hq.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
+| `custom.command-mujkog2v-f9c2b` | Swap MP4 audio | `external` | Replace the audio on the first selected MP4 with the second selected audio file. Writes a new MP4 beside the video. Select the video first, then the audio, in file-view order. Requires FFMPEG installed. | selection; aggregate | `-y`<br>`-i`<br>`${CURRENT_SELECTION_0}`<br>`-i`<br>`${CURRENT_SELECTION_1}`<br>`-map`<br>`0:v:0`<br>`-map`<br>`1:a:0`<br>`-c:v`<br>`copy`<br>`-c:a`<br>`aac`<br>`-shortest`<br>`${PATH_DIR:CURRENT_SELECTION_0}${PATH_SEP}${PATH_NAME:CURRENT_SELECTION_0}_with_${PATH_NAME:CURRENT_SELECTION_1}.mp4` |
+| `custom.command-6a11b0a8acce258600f5e6dbcd5780cc` | MP4->MP3 | `external` | Extract MP3 audio beside each selected MP4 using FFMPEG. | selection; perItem | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-codec:a`<br>`libmp3lame`<br>`-q:a`<br>`2`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.mp3` |
+| `custom.command-mujlyke2-1c42f` | MP4->WAV | `external` | Extract WAV audio beside each selected MP4 using FFMPEG. | selection; perItem | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-vn`<br>`-ac`<br>`1`<br>`-ar`<br>`16000`<br>`-c:a`<br>`pcm_s16le`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.wav` |
+| `custom.command-7883566e75cb852699295a0cc2a574c5` | Video poster frame | `external` | Extract the first video frame as a PNG beside the selected video using FFMPEG | selection; perItem; explorer:video | `-y`<br>`-i`<br>`${CURRENT_FILE}`<br>`-frames:v`<br>`1`<br>`${PATH_DIR:CURRENT_FILE}${PATH_SEP}${PATH_NAME:CURRENT_FILE}.png` |
+| `custom.command-mr51514h-c34ec` | System | `app:edit` | Edit system prompt for Tanit agent | selection | `pm://config/prompts/system-prompt.md` |
+| `custom.command-mr50fk3n-1a7d7` | Realtime | `app:edit` | Edit real-time prompt for Tanit agent | selection | `pm://config/prompts/realtime-prompt.md` |
+| `custom.command-mppft700-137e9` | Planner | `app:edit` | Edit planner prompt for Tanit agent | selection | `pm://config/prompts/planner-prompt.md` |
+| `batch.start` | Start | `app:resumebatch` |  | selection |  |
+| `batch.pause` | Pause | `app:resumebatch` |  | selection |  |
+| `custom.command-mt06aefh-c364b` | Cancel | `app:cancelbatch` |  | selection |  |
+| `custom.view-snap-up` | Snap Up | `app:snapup` |  | selection |  |
+| `custom.view-snap-down` | Snap Down | `app:snapdown` |  | selection |  |
+| `custom.view-snap-left` | Snap Left | `app:snapleft` |  | selection | `800x600` |
+| `custom.view-snap-right` | Snap Right | `app:snapright` |  | selection | `800x600` |
+| `custom.command-mt4msl99-55414` | Start | `app:schedulerstart` |  | selection |  |
+| `custom.command-mt4munur-873bb` | Stop | `app:schedulerstop` |  | selection |  |
+| `custom.command-mt7672eh-b7786` | To Images | `cli:pdf` | Convert PDF into image slides | files; perItem; pdf->md | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
+| `custom.pdf-to-md` | To Markdown | `cli:pdf` | Extract PDF text and figures to a Markdown bundle (page_N.md + figures/) | files; perItem; pdf->md | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--per-page`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16` |
+| `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | `external` | Convert each selected Office document to PDF beside the source file using LibreOffice. | selection; perItem; explorer:text | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
+| `custom.fs-copy` | Copy | `app:fscopy` |  | selection |  |
+| `custom.fs-move` | Move | `app:fsmove` |  | selection |  |
+| `custom.command-mu114s8q-17bff` | Share | `cli:service` | Share current file to your Tanit CMS (5 MB maximum) | selection; perItem | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--public` |
+| `custom.dropdown-msaj5qk5-78a6b` | Help | `metadata` |  | selection |  |
+| `custom.help-cli` | CLI-Manual | `app:open` | Open CLI documentation locally | selection | `${TANIT_SHARED}/help/en/cli.md` |
+| `custom.help-xblox` | XBlox | `app:open` | Open XBlox documentation locally | selection | `${TANIT_SHARED}/help/en/xblox.md` |
+| `custom.command-msakytc7-dd084` | Online Help | `app:openurl` |  | selection | `https://tanit.polymech.info/user/cgo/pages/documentation` |
+| `custom.command-mujkxt3w-4af40` | Subtitles | `cli:audio` | Create sub titles from Microphone - using local Whisper model | selection | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt`<br>`--hud` |

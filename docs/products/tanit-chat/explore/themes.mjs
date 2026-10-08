@@ -91,4 +91,7 @@ export function cssForInline(css) {
 		.replace(/(^|})\s*a\{/g, '$1.tv-explore a{')
 		.replace(/height:100dvh/g, 'height:100%')
 		.replace(/min-height:100dvh/g, 'min-height:100%')
+		// Catch html:not(...) / html.tv-lb-open and any selector the specific passes missed.
+		.replace(/(?<![a-zA-Z0-9_.-])html\b/gi, '.tv-explore')
+		.replace(/(?<![a-zA-Z0-9_.-])body\b/gi, '.tv-explore')
 }
