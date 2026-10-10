@@ -642,6 +642,27 @@ html.tv-stack .layout-btn .ico-classic{display:block}
   .feature-card .slide-nav > button{display:none}
   .feature-card .slide-dots{margin:0;gap:7px;flex:0 0 auto}
   .feature-card .slide-dots button{width:8px;height:8px}
+
+  /* Let the browser pinch-zoom. pan-y and a locked document both block it. */
+  html,body,
+  html.tv-stack,html.tv-stack body,
+  html:not(.tv-stack),html:not(.tv-stack) body,
+  html[data-pm-embed],html[data-pm-embed] body{
+    height:auto!important;min-height:100%!important;overflow:visible!important;
+  }
+  .shell,
+  html.tv-stack .shell,
+  html:not(.tv-stack) .shell,
+  html[data-pm-embed] .shell{
+    height:auto!important;min-height:0!important;overflow:visible!important;
+  }
+  .stage,
+  .stage.is-stack,
+  .feature-card,
+  .stage-media,
+  .stage-media[data-zoomed]{
+    touch-action:manipulation;
+  }
 }
 
 /* Desktop continuous-scroll: classic sidebar + stacked features.

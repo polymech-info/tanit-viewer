@@ -515,7 +515,7 @@ tanit-cli pdf render tests/pdf/OWASP-Top-10-for-Agentic-Applications-2026-12.6-1
 
 #### pdf md
 
-Extract document text to Markdown via modular PDFium pipeline.
+Extract document text to Markdown. Default decoder is anydoc; pdfium runs the modular pipeline.
 
 Options:
 
@@ -525,7 +525,8 @@ Options:
 - `--per-page` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write one file per page, named like pdf render: stem_N.md (stem_N.json with --json).
 - `--output-dir` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output bundle directory: page_N.md files plus figures/page_N_fig_M.png embedded images.
 - `--dpi` (<span data-cli="meta"><span data-cli="type">FLOAT</span>, <span data-cli="default">default <span data-cli="value">300</span></span></span>) - Figure render DPI when using --output-dir (default 300).
-- `--pipe` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">default</span></span></span>) - Pipeline preset: default, text-only, with-struct, with-ocr, with-vlm. with-ocr and with-vlm OCR pages that have no extracted text.
+- `--decoder` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">anydoc</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">anydoc</span> <span data-cli="choice">pdfium</span></span></span>) - Converter: anydoc (default, same in-process library as `markdown`) or pdfium. pdfium runs --pipe and supports --pages, --json, --per-page, --output-dir, and --password.
+- `--pipe` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">default</span></span></span>) - PDFium pipeline preset (--decoder pdfium): default, text-only, with-struct, with-ocr, with-vlm. with-ocr and with-vlm OCR pages that have no extracted text.
 - `--password` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Document password, if encrypted.
 - `--stdout` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write Markdown/JSON to stdout.
 
@@ -544,7 +545,7 @@ tanit-cli pdf md path {}
 **Full example**
 
 ```sh
-tanit-cli pdf md path '{}' --pages 'all' -o 'foo' --per-page --output-dir 'foo' --dpi '300' --pipe 'default' --provider 'foo' --model 'foo' --prompt 'foo' --max-tokens 4096 --password 'foo' --stdout
+tanit-cli pdf md path '{}' --pages 'all' -o 'foo' --per-page --output-dir 'foo' --dpi '300' --decoder 'anydoc' --pipe 'default' --provider 'foo' --model 'foo' --prompt 'foo' --max-tokens 4096 --password 'foo' --stdout
 ```
 
 ##### Examples
@@ -2015,7 +2016,7 @@ Options:
 - `--planner-budget` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Maximum tool schemas the planner may pre-expand before falling back to the full catalog.
 - `--no-parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable concurrent tool dispatch and fall back to serial execution. Parallel dispatch (P6) is on by default; use this flag to opt out.
 - `--parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dispatch all tool calls in a single LLM response concurrently (std::async). On by default — this flag is accepted for compatibility but is a no-op unless --no-parallel-tools was previously applied.
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 - `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
 
 **Session**
@@ -4010,7 +4011,7 @@ Options:
 - `identifier` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Owner/username for route lookup, or page id when slug is omitted.
 - `slug` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page slug. Omit to fetch by page id.
 - `--lang` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optional page language query parameter.
-- `--download` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Export page content to disk. Writes markdown-text content as .md when present, otherwise raw .page JSON.
+- `--download` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Export page content to disk. A page with one markdown-text widget is saved as .md. A page with any other widget (html-widget, photo-card, …) is saved as the bare page document (.page).
 - `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Destination file or directory for --download. Default: slug/title/id with .md or .page.
 - `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host for this command only. Default: login pin, else env SERVER_URL / VITE_SERVER_IMAGE_API_URL / CLIENT_URL, else the compiled default. Does not change the pin.
 
@@ -9261,7 +9262,7 @@ Options:
 - `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
 - `--bind` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Interface/address for MCP HTTP. Default: 127.0.0.1 (loopback only).
 - `--port` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 65535]</span>, <span data-cli="default">default <span data-cli="value">4444</span></span></span>) - First TCP port to try for MCP HTTP (default 4444; next free port if busy)
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 
 **Example**
 
@@ -10600,7 +10601,6 @@ tanit-cli mcp client Tanit skillhub-generate_skill --args '{}' --timeout-ms 0 --
 | `file.prev` | Previous | Navigation | `app:previousfile` | navigates to previous file | selection |  |
 | `custom.command-mtlnivuv-4aae3` | Explorer | Navigation | `app:togglefiletree` |  | selection |  |
 | `file.next` | Next | Navigation | `app:nextfile` | navigates to next file | selection |  |
-| `custom.command-muv7nnf5-a9744` | Next (copy) | Navigation | `app:nextfile` | navigates to next file | selection |  |
 | `custom.command-muv7sxie-292fd` | Report | Report | `app:createreport` | Report an issue | selection |  |
 | `custom.dropdown-msx1rszr-19148` | New | New | `metadata` |  | selection |  |
 | `custom.command-mulazcgl-a19cb` | New Chat | New | `app:togglechat` |  | selection |  |
@@ -10617,6 +10617,7 @@ tanit-cli mcp client Tanit skillhub-generate_skill --args '{}' --timeout-ms 0 --
 | `custom.command-mpch9gdx-44982` | Illustration | Images | `cli:transform` | description | files | `--src`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`as technical illustration`<br>`--model`<br>`image-generation-deep` |
 | `custom.image-understand-speak` | Speak | Images | `cli:xblox` | Speaks the content of an selected image over the speaker | files | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
 | `custom.command-mqj3feqz-72a1a` | Resize-HD | Images | `cli:resize` | Resize selection to 1920 | files; perItem | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui` |
+| `custom.command-e6032eb78cd02485b3bdb4674ef68d5e` | Resize to Square | Images | `cli:resize` | Resize selected images to 1024 × 1024 squares | selection; perItem; explorer:image; jpg,png->jpg,png | `--max-width`<br>`1024`<br>`--aspect`<br>`1:1`<br>`--position`<br>`centre`<br>`--dst`<br>`${CURRENT_PATH}/out`<br>`--allow-enlargement`<br>`--src`<br>`${CURRENT_FILE}`<br>`--fit`<br>`contain` |
 | `custom.command-mszwq2g6-780cb` | To Markdown | Images | `cli:llm` | Convert current selected image file to Markdown document, using selected image vision provider & model | selection; perItem; explorer:image; jpg,png->md | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--no-skills`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-muib2fcm-b25cf` | OCR Local | Images | `cli:understand` | Convert current selected image file to Markdown document, using selected OCR local model | selection; perItem; explorer:image; jpg,png->md | `--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16`<br>`${CURRENT_FILE}` |
 | `custom.command-mtun9312-7d0e1` | Share Post | Images | `cli:service` | Share selected image file as article | selection | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`private` |

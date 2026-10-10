@@ -5,10 +5,10 @@
  *   node explore.mjs                 # all langs → features.html + features.<lang>.html
  *   node explore.mjs --inline        # all langs → features.inline.html (+ .inline.<lang>)
  *   node explore.mjs --lang de       # one lang only
- *   node explore.mjs --serve
+ *   node explore.mjs --serve --lang en
  *   node explore.mjs --skin shell    # default pack (still bundles every explore_*.css)
  *   node explore.mjs --theme plex    # same as --skin plex (not light/dark)
- *   node explore.mjs --publish tanit-chat-next
+ *   node explore.mjs --publish tanit-chat-next --lang en
  *       fetch the raw page, put the inline fragment in its html-widget, pages update
  *
  * Layout (runtime, also ?layout=classic|scroll):

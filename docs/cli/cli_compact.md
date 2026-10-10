@@ -53,6 +53,7 @@ custom.command-70eabea6-957e6 (agent,--embed,${CURRENT_FILE},--prompt,...) - Tra
 custom.command-712fbd00-f9ac4 (--prompt,"render this as product shooting, white backgroun...",--json,${CURRENT_SELECTION}) - Render current selection as a product photo using white studio background
 custom.command-7201753fce13ac9f1c6b945856a73c94 (tts-scripted,--srt,${CURRENT_FILE},--dst,...) - Generate timed speech from the selected SRT, VTT, or JSON cues file and save a sibling 48 kHz...
 custom.command-7883566e75cb852699295a0cc2a574c5 (-y,-i,${CURRENT_FILE},-frames:v,...) - Extract the first video frame as a PNG beside the selected video using FFMPEG
+custom.command-e6032eb78cd02485b3bdb4674ef68d5e (--max-width,1024,--aspect,1:1,...) - Resize selected images to 1024 × 1024 squares
 custom.command-mpch9gdx-44982 (--src,${CURRENT_FILE},--prompt,"as technical illustration",...) - description
 custom.command-mpohnfaf-26b0c - TTS
 custom.command-mpokt0hv-41237 - Funny
@@ -119,7 +120,6 @@ custom.command-mujkxt3w-4af40 (record,--from-wav,${CURRENT_FILE},--stt,...) - Cr
 custom.command-mujlyke2-1c42f (-y,-i,${CURRENT_FILE},-vn,...) - Extract WAV audio beside each selected MP4 using FFMPEG.
 custom.command-mulazcgl-a19cb - New Chat
 custom.command-mulbk22p-b16a6 (wizard) - Open setup wizard
-custom.command-muv7nnf5-a9744 - navigates to next file
 custom.command-muv7sxie-292fd - Report an issue
 custom.command-video-social-hq (run,--src,${TANIT_SCRIPTS}/video-encode-social-hq.xblox,--CURRENT_FILE,...) - Create a high-quality 1080p60 H.264 social-media master from the selected screen capture using...
 custom.dropdown-msaj5qk5-78a6b - Help
@@ -240,7 +240,7 @@ media types (pattern,kind,ext,source-dir) - List MIME types and extensions from 
 mkdir (paths,s,d) - Create folders through the VFS queue (local, ssh://, ftp://, vfs://). Existing folders succeed.
 mv (paths,s,d,conflict,...) - Move files or folders through the VFS queue (copy then delete source).
 pdf info (path,password) - Print page count and page sizes.
-pdf md (path,pages,o,output-dir,...) - Extract document text to Markdown via modular PDFium pipeline.
+pdf md (path,pages,o,output-dir,...) - Extract document text to Markdown. Default decoder is anydoc; pdfium runs the modular pipeline.
 pdf render (path,pages,dpi,rotation,...) - Rasterize pages to image files (all, ranges, or specific pages).
 provider models list (provider,api-key,base-url,limit,...) - List provider models and return full JSON payload
 register-explorer (group,media-bin) - Register Windows Explorer menus: convert / meta + Workbench + Viewer + Chat + Presets

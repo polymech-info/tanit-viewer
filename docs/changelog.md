@@ -4,6 +4,19 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
+## 1.0.73 - 10-10
+
+- All Markdown related tasks as PDF, XLSX, LibreOffice ... to Markdown now using [Anydoc](https://github.com/firecrawl/anydoc) by default. Agent automatically converts documents when processing those, eg. via Chrome extension, 'summarize this'
+- Support for archive browsing and editing in file panels (zip, tar (including gz, bz2, xz, and zstd), 7z, and most RAR and RAR5 )
+- Filepanels can be linked, eg primary panel drives second panel, as Windows explorer
+- CLI supports now multiple Poolypress based pages (VFS, pages, ...). `tanit-cli login' remembers --server-url for future 'tanit-cli service ...' actions
+- Support for OpenAI OAuth in chat presets
+- Thumb generation in native image browser's filmstrip as well file panels works now for larger folders
+- Tanit's MCP catalog includes now SerpAPI, accessible via CLI as well
+- LLM tools added: 'download_url' - robust downloading within Browser-Use
+- Commands added: 'Square Images' (resize to largest edge)
+- Compact command introspection for llms, `cli_compact.md'
+
 ## 1.0.71 - 04-10
 
 _Each change is dated DD-MM from the commit day. Newest first._

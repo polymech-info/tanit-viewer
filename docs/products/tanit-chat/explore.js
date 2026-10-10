@@ -712,6 +712,7 @@
     root.addEventListener('dragstart', function (e) { e.preventDefault(); });
 
     root.addEventListener('pointerdown', function (e) {
+      if (isNarrow()) return;
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       if (isChrome(e.target)) return;
       pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -791,8 +792,8 @@
         }
       }
       apply();
-      // Click image (not zoomed) → lightbox
-      if (wasClick && root.querySelector('img.media-el')) {
+      // Click image (not zoomed) → lightbox. Phones use the browser zoom instead.
+      if (wasClick && !isNarrow() && root.querySelector('img.media-el')) {
         var card = root.closest('.feature-card');
         var fi = card ? Number(card.getAttribute('data-feat')) : selected;
         openLightbox(fi);
@@ -802,6 +803,7 @@
     root.addEventListener('pointercancel', endPointer);
 
     root.addEventListener('dblclick', function (e) {
+      if (isNarrow()) return;
       if (isChrome(e.target)) return;
       if (zoomW > 0) {
         e.preventDefault();
@@ -1177,6 +1179,7 @@
   }
 
   function openLightbox(fi) {
+    if (isNarrow()) return;
     if (fi == null || isNaN(fi)) fi = selected;
     lb.fi = fi;
     selected = fi;
