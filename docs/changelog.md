@@ -4,6 +4,16 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
+## 1.0.74 - 11-10
+
+- Service / VFS upload files with 'public' enabled returns public file browser url
+- Copy, move, and delete share one dialog. Options and Filters each open on their own. Alt shows the underlined keys; Tab walks the open group
+- Filters follow project ignore files. `.gitignore` is on by default and is checked for every selected folder, including nested ignore files up to the repo. `.npmignore`, `.dockerignore`, and `.ignore` can be added. Extra include and exclude rules override those files; the later match wins
+- Delete flips the mask: ignored files are the ones removed, and a folder is still entered so ignored children go too
+- Options can wait until other copy or move jobs finish, and can skip errors instead of stopping. Speed limit and the preserve choices are saved with the job
+- `tanit-cli` copy, move, and `rm` take repeated `--include` and `--exclude`. `--mask gitignore` is the default; `--no-gitignore` turns it off
+- Fixes for ANSI/UTF in file names, for VFS operations and commands
+
 ## 1.0.73 - 10-10
 
 - All Markdown related tasks as PDF, XLSX, LibreOffice ... to Markdown now using [Anydoc](https://github.com/firecrawl/anydoc) by default. Agent automatically converts documents when processing those, eg. via Chrome extension, 'summarize this'

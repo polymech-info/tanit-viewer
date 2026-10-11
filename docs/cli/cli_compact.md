@@ -108,7 +108,7 @@ custom.command-mtv9cd7k-7a458 - Reset
 custom.command-mtva51l4-2e559 - Login into Tanit
 custom.command-mtvdak7f-00d65 - Login into Tanit
 custom.command-mtwl51se-b7440 (1269x846) - 1269x846
-custom.command-mu114s8q-17bff (files,upload,${CURRENT_SELECTION},--public) - Share current file to your Tanit CMS (5 MB maximum)
+custom.command-mu114s8q-17bff (files,upload,--public,${CURRENT_FILE}) - Share current file to your Tanit CMS (5 MB maximum)
 custom.command-mu1wam8u-bfd55 (run,--src,${TANIT_SCRIPTS}/webcam.xblox,--audioSource,...) - WebCam Beautifier
 custom.command-mu1wob56-d1f45 (pages,create,--category-id,uncategorized,...) - Share selected Markdown file as article
 custom.command-mu4l7dsk-4b406 (run,--src,${TANIT_SCRIPTS}/screenshot-full.xblox) - Fullscreen Screenshot
@@ -121,6 +121,7 @@ custom.command-mujlyke2-1c42f (-y,-i,${CURRENT_FILE},-vn,...) - Extract WAV audi
 custom.command-mulazcgl-a19cb - New Chat
 custom.command-mulbk22p-b16a6 (wizard) - Open setup wizard
 custom.command-muv7sxie-292fd - Report an issue
+custom.command-mv2mcqdb-2a8a3 - Create new Zip file from selection
 custom.command-video-social-hq (run,--src,${TANIT_SCRIPTS}/video-encode-social-hq.xblox,--CURRENT_FILE,...) - Create a high-quality 1080p60 H.264 social-media master from the selected screen capture using...
 custom.dropdown-msaj5qk5-78a6b - Help
 custom.dropdown-msx1rszr-19148 - New
@@ -247,6 +248,7 @@ register-explorer (group,media-bin) - Register Windows Explorer menus: convert /
 register-startmenu (folder,media-bin,install-root) - Register current-user Start Menu shortcuts for a zip/unpacked install.
 replay (path,replay-speed,size) - Start the UI and apply a saved session layout (snapshot.window_layout).
 resize (input,output,src,dst,...) - Resize / transform an image (libvips, Sharp-like options)
+rm (paths,s,include,exclude,...) - Delete files or folders. .gitignore applies in reverse: ignored paths are removed, the rest...
 run-ipc agents (target) - List ongoing agents (regular + realtime) from the cross-process registry, with cwd, command...
 run-ipc app-cmd (target,command,d,timeout-ms) - Send an app command to a live UI instance (e.g. replay, takescreenshot, togglequeue). Command...
 run-ipc app-cmds (target,timeout-ms) - List app commands accepted by a live UI instance over `run-ipc app-cmd`, including arg names...

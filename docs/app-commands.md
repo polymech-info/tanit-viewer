@@ -28,8 +28,11 @@ Commands that take args list them under the verb. Pass JSON with `tanit-cli.exe 
 - `nextfile` - Next file
 - `fscopy` - Copy (file panels)
 - `fsmove` - Move (file panels)
+- `fsdelete` - Delete (file panels)
 - `fsmkdir` - New folder
 - `fstouch` - New file
+- `fscompress` - Compress
+  - `name` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Zip or tar filename. Empty uses untitled.zip.
 - `fsrename` - Rename
 
 ### Recording
@@ -128,6 +131,9 @@ Commands that take args list them under the verb. Pass JSON with `tanit-cli.exe 
 - `togglecenterview` - Toggle centre view
 - `showcentrechat` - Show centre chat
 - `hidecentrechat` - Hide centre chat
+- `hidecentreview` - Hide centre view
+- `showcentreview` - Show centre view
+- `togglecentrevisible` - Toggle centre visibility
 
 ### Workbench
 

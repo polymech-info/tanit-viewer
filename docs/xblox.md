@@ -7532,7 +7532,7 @@ Default block:
 | `custom.command-mtvdak7f-00d65` | Logout | `app:logout` | Login into Tanit | selection |  |
 | `custom.view-explorer` | Explorer | `app:togglefiletree` |  | selection |  |
 | `custom.command-mpy7w3px-8a1e0` | Log | `app:togglelog` |  | selection |  |
-| `custom.command-mqkxsx6y-56346` | Center | `app:togglecenterview` |  | selection |  |
+| `custom.command-mqkxsx6y-56346` | Center | `app:togglecentrevisible` |  | selection |  |
 | `custom.command-mtld2y23-123a4` | Chat | `app:togglechat` |  | selection |  |
 | `custom.command-mpy7z14t-bcef8` | Queue | `app:togglequeue` |  | selection |  |
 | `custom.command-mqkneqp7-3fcb0` | Console | `app:toggleconsole` |  | selection |  |
@@ -7585,7 +7585,8 @@ Default block:
 | `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | `external` | Convert each selected Office document to PDF beside the source file using LibreOffice. | selection; perItem; explorer:text | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
 | `custom.fs-copy` | Copy | `app:fscopy` |  | selection |  |
 | `custom.fs-move` | Move | `app:fsmove` |  | selection |  |
-| `custom.command-mu114s8q-17bff` | Share | `cli:service` | Share current file to your Tanit CMS (5 MB maximum) | selection; perItem | `files`<br>`upload`<br>`${CURRENT_SELECTION}`<br>`--public` |
+| `custom.command-mu114s8q-17bff` | Share | `cli:service` | Share current file to your Tanit CMS (5 MB maximum) | selection; perItem | `files`<br>`upload`<br>`--public`<br>`${CURRENT_FILE}` |
+| `custom.command-mv2mcqdb-2a8a3` | Compress | `app:fscompress` | Create new Zip file from selection | selection; perItem |  |
 | `custom.dropdown-msaj5qk5-78a6b` | Help | `metadata` |  | selection |  |
 | `custom.help-cli` | CLI-Manual | `app:open` | Open CLI documentation locally | selection | `${TANIT_SHARED}/help/en/cli.md` |
 | `custom.help-xblox` | XBlox | `app:open` | Open XBlox documentation locally | selection | `${TANIT_SHARED}/help/en/xblox.md` |
