@@ -329,6 +329,148 @@ tanit-cli pdf md scan.pdf --pages 1 --pipe with-vlm --provider llama \
   --stdout
 ```
 
+### Subcommands
+
+#### tags
+
+Read and write EXIF, IPTC, and XMP. Does not call a model.
+
+**Example**
+
+```sh
+tanit-cli tags read path <path>
+```
+
+**Full example**
+
+```sh
+tanit-cli tags read path 'foo' --family 'foo' --sidecar
+```
+
+##### Examples
+
+`tags` reads and writes the metadata stored on an image. EXIF is the technical record. IPTC and XMP hold the caption, title, and subjects. `read` prints what is already there. `write` changes the keys you name and leaves the rest. `--dry-run` checks a write and does not touch the file. `--sidecar` stores the fields in `<stem>.xmp` and leaves the image bytes as they are.
+
+**Print what the file already has**
+
+```sh
+tanit-cli tags read "D:/pictures/test/press.jpg" --json
+```
+
+**Write a caption and two subjects** (description in EXIF, the words people read in IPTC and XMP)
+
+```sh
+tanit-cli tags write "D:/pictures/test/press.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=recycling" --add "Xmp.dc.subject=sheet press"
+```
+
+**Find the files that carry a subject** (`--tags` matches EXIF, IPTC, and XMP, including `<stem>.xmp`; the file name is left alone)
+
+```sh
+tanit-cli find "D:/pictures/test" --tags -p recycling --json
+```
+
+#### tags read
+
+Print tags from an image or its .xmp sidecar
+
+Options:
+
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Image path
+- `--family` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - exif, iptc, or xmp
+- `--sidecar` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Read <stem>.xmp instead of the image
+
+**Example**
+
+```sh
+tanit-cli tags read path <path>
+```
+
+**Full example**
+
+```sh
+tanit-cli tags read path 'foo' --family 'foo' --sidecar
+```
+
+##### Examples
+
+`read` prints each key and its value from the image. `--family` keeps one of `exif`, `iptc`, or `xmp`. `--sidecar` reads the sibling `.xmp` instead of the image. `--json` prints one object.
+
+**Whole file**
+
+```sh
+tanit-cli tags read "D:/pictures/test/press.jpg"
+```
+
+**One family** (captions and subjects live in XMP)
+
+```sh
+tanit-cli tags read "D:/pictures/test/press.jpg" --family xmp --json
+```
+
+**Sidecar** (the image file stays the pixel source; the words are in `press.xmp`)
+
+```sh
+tanit-cli tags read "D:/pictures/test/press.jpg" --sidecar
+```
+
+---
+
+#### tags write
+
+Set, add, or remove tags
+
+Options:
+
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Image path
+- `--set` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replace Key=Value (repeat the flag)
+- `--add` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Append Key=Value (repeat the flag)
+- `--unset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Remove a key (repeat the flag)
+- `--xmlns` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Register prefix=uri before writing XMP
+- `--sidecar` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write <stem>.xmp and leave the image unchanged
+- `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Validate the edits and print them; write nothing
+
+**Example**
+
+```sh
+tanit-cli tags write path <path>
+```
+
+**Full example**
+
+```sh
+tanit-cli tags write path 'foo' --set '{}' --add '{}' --unset '{}' --xmlns '{}' --sidecar --dry-run
+```
+
+##### Examples
+
+`write` changes the keys you name and keeps every other key. `--set` replaces one value. `--add` appends; a second `--add` on `Xmp.dc.subject` keeps both subjects. `--unset` removes one key. The image is updated in place. `--sidecar` writes `press.xmp` beside it and the image bytes stay as they were. `--dry-run` checks the keys and prints the edits; nothing is written. A custom XMP field needs `--xmlns prefix=uri` in the same command.
+
+**Caption and subjects** (technical line in EXIF, readable text in IPTC and XMP)
+
+```sh
+tanit-cli tags write "D:/pictures/test/press.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=recycling" --add "Xmp.dc.subject=sheet press"
+```
+
+**Check the edit before it lands**
+
+```sh
+tanit-cli tags write "D:/pictures/test/press.jpg" --dry-run --set "Exif.Image.Artist=Tanit"
+```
+
+**Remove one field** (the description stays)
+
+```sh
+tanit-cli tags write "D:/pictures/test/press.jpg" --unset Exif.Image.Artist
+```
+
+**Leave the JPEG bytes unchanged** (custom namespace on the sidecar)
+
+```sh
+tanit-cli tags write "D:/pictures/test/press.jpg" --sidecar --xmlns "tanit=http://ns.tanit.local/meta/1.0/" --set "Xmp.tanit.productType=Sheet press" --set "Xmp.dc.title=Press"
+```
+
+### Image
+
 #### pdf
 
 PDF tools: inspect documents, rasterize pages, and extract Markdown.
@@ -699,7 +841,7 @@ tanit-cli markdown table.csv -f csv --stdout
 
 #### [find](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/find_more)
 
-Find images by name/folder, semantic LLM prompt, or junk (dark/blur/flat/blown/tiny).
+Find images by name/folder, EXIF/IPTC/XMP tags, semantic LLM prompt, or junk (dark/blur/flat/blown/tiny).
 
 Options:
 
@@ -728,6 +870,7 @@ Options:
 - `--no-md` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - LLM: don't read sidecar .md
 - `--no-json` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - LLM: don't read sidecar .json
 - `--no-exif` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - LLM: don't read libvips EXIF tags
+- `--tags` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also match EXIF, IPTC, and XMP on the image and its <stem>.xmp
 - `--max` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Max results (0 = unlimited)
 - `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Resolve + scan; no LLM writes and no --action deletes
 - `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - AI provider for --llm meta/judge; omit = app Chat image_recognition_provider (aborts if unset when --llm)
@@ -748,7 +891,7 @@ tanit-cli find input {}
 **Full example**
 
 ```sh
-tanit-cli find input '{}' -p 'foo' --junk --junk-kinds 'foo' --min-score '0.7' --action 'none' --junk-opt '{}' --edge-energy-blur '12' --edge-energy-p90-blur '40' --edge-energy-p99-blur '88' --edge-orient-blur '0.2' --edge-density-lo '0.06' --analyze-max-side 128 --tiny-min-side 128 --edge-threshold 24 --llm --local-text --case-sensitive --no-folders --no-recursive --bypass-cache --no-generate --no-md --no-json --no-exif --max 0 --dry-run --provider 'foo' --model 'foo' --api-key 'foo' --judge-prompt 'foo' --meta-prompt 'foo' --no-resize --resize-width 512 -r '{}'
+tanit-cli find input '{}' -p 'foo' --junk --junk-kinds 'foo' --min-score '0.7' --action 'none' --junk-opt '{}' --edge-energy-blur '12' --edge-energy-p90-blur '40' --edge-energy-p99-blur '88' --edge-orient-blur '0.2' --edge-density-lo '0.06' --analyze-max-side 128 --tiny-min-side 128 --edge-threshold 24 --llm --local-text --case-sensitive --no-folders --no-recursive --bypass-cache --no-generate --no-md --no-json --no-exif --tags --max 0 --dry-run --provider 'foo' --model 'foo' --api-key 'foo' --judge-prompt 'foo' --meta-prompt 'foo' --no-resize --resize-width 512 -r '{}'
 ```
 
 ##### Examples
@@ -1151,7 +1294,7 @@ Options:
 - `--reindex` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Force re-ingest before searching
 - `--no-index-create` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Fail if an index is needed but missing
 - `--extract` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">auto</span></span></span>) - auto | text | office | pdf
-- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Source adapter hint, e.g. image-sidecar | ocr-local | llm-meta | office-officecli | opendocument-anydoc
+- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Source adapter hint, e.g. image-tags | ocr-local | llm-meta | office-officecli | opendocument-anydoc
 - `--fingerprint` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">off</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">cheap</span></span></span>) - off | cheap
 - `--chunk-size` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">500</span></span></span>) - Semantic ingest chunk size
 - `--chunk-overlap` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">100</span></span></span>) - Semantic ingest chunk overlap
@@ -1227,7 +1370,7 @@ Options:
 - `--reindex` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Force re-ingest before searching
 - `--no-index-create` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Fail if an index is needed but missing
 - `--extract` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">auto</span></span></span>) - auto | text | office | pdf
-- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Source adapter hint, e.g. image-sidecar | ocr-local | llm-meta | office-officecli | opendocument-anydoc
+- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Source adapter hint, e.g. image-tags | ocr-local | llm-meta | office-officecli | opendocument-anydoc
 - `--fingerprint` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">off</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">off</span> <span data-cli="choice">cheap</span></span></span>) - off | cheap
 - `--chunk-size` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">500</span></span></span>) - Semantic ingest chunk size
 - `--chunk-overlap` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">100</span></span></span>) - Semantic ingest chunk overlap
@@ -1279,7 +1422,7 @@ Expand a search hit through the owning source adapter.
 Options:
 
 - `--log-level` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">trace</span> <span data-cli="choice">debug</span> <span data-cli="choice">info</span> <span data-cli="choice">warn</span> <span data-cli="choice">warning</span> <span data-cli="choice">error</span> <span data-cli="choice">err</span> <span data-cli="choice">critical</span> <span data-cli="choice">off</span> <span data-cli="choice">none</span></span></span>) - Log level for this search command: trace, debug, info, warn, error, critical, off
-- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owning source adapter ID, e.g. office-officecli | opendocument-anydoc
+- `--adapter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Owning source adapter ID, e.g. image-tags | office-officecli | opendocument-anydoc
 - `--path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Source file path
 - `--selector` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Adapter-owned selector, e.g. officecli query selector
 - `--office-path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Office native/XML path, e.g. /Sheet1/row[6]

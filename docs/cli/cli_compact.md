@@ -151,7 +151,7 @@ daemon unregister - Windows: remove the daemon HKLM Run entry (requires elevatio
 duplicates (input,by,min-group,max-hamming,...) - Group duplicate / near-duplicate images offline (file size or perceptual fingerprint). Default...
 file.next - navigates to next file
 file.prev - navigates to previous file
-find (input,p,junk-kinds,min-score,...) - Find images by name/folder, semantic LLM prompt, or junk (dark/blur/flat/blown/tiny).
+find (input,p,junk-kinds,min-score,...) - Find images by name/folder, EXIF/IPTC/XMP tags, semantic LLM prompt, or junk...
 hg download (model,v,o) - Download one catalog variant into ${MODELS_DIR} (GGUF, its mmproj when the repo has one, and a...
 hg list - List built-in catalog aliases (GGUF + file models).
 hg meta (model) - Fetch Hugging Face model card JSON for a catalog alias or repo id.
@@ -238,6 +238,8 @@ mcp client tools (server) - List tools on an MCP server (name and description).
 media probe (path,magic-db) - Probe file MIME type, likely extensions, and Tanit media kind.
 media search (pattern,source-dir) - Search raw file(1) Magdir source lines with wildcards; useful when a type has no !:ext...
 media types (pattern,kind,ext,source-dir) - List MIME types and extensions from file(1) Magdir annotations; supports wildcards like...
+meta (input,out-dir,provider,model,...) - Generate description / JSON / EXIF for images (LLM, Google Gemini)
+meta gen (input,template,p,values,...) - Generate metadata from a template. Dry-run prints the tag plan. --write commits XMP, and IPTC...
 mkdir (paths,s,d) - Create folders through the VFS queue (local, ssh://, ftp://, vfs://). Existing folders succeed.
 mv (paths,s,d,conflict,...) - Move files or folders through the VFS queue (copy then delete source).
 pdf info (path,password) - Print page count and page sizes.
@@ -339,6 +341,8 @@ skills recommend (context,limit) - Recommend SkillHub skills (recommend_skills).
 skills remove (name) - Delete one skill folder from the roaming skills root. Workspace copies stay.
 skills search (query,limit,category) - Semantic search on SkillHub (search_skills).
 status (log-days) - Show Tanit credits and license status.
+tags read (path,family) - Print tags from an image or its .xmp sidecar
+tags write (path,set,add,unset,...) - Set, add, or remove tags
 terminal - Open PowerShell (Tanit Terminal). Uses pwsh if present, otherwise Windows PowerShell.
 test core commands - Command schema / registry probe: shared parameter dump, exact options_path, seeded app-command...
 test core context (scenario) - Windows OS context-store acceptance scenarios (synthetic Explorer/Desktop/drag).
