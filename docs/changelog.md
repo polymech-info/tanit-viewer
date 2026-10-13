@@ -4,6 +4,15 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
+## 1.0.76 - 13-10
+
+- The centre file viewer can show a command and Open with column beside the preview. The column takes its width from the preview, and it follows the file selected in the file panel ![](./screenshots/actions.png)
+- `tanit-cli tags` reads and writes EXIF, IPTC, and XMP on an image. `read` prints the fields. `write` changes the keys you name. Paths accept globs and brace groups (`*.jpg`, `*.{jpg,cr3}`). `--sidecar` stores the fields in `<stem>.xmp` and leaves the image bytes as they are
+- `tanit-cli meta gen` runs a template over a photo. A vision model fills the fields, then the template operations (`fill`, `replace`, `merge`, `append`) are applied. Dry-run prints the plan. `--write` commits the descriptive fields to `<stem>.xmp`. `--dst` names that sidecar and expands `${SRC_DIR}`, `${SRC_NAME}`, `${SRC_EXT}`, `${CONFIG_DIR}`, `${TEMP_DIR}`, and `${ENV:NAME}` per file. `--values` applies a JSON file and skips the model. Camera and technical EXIF stay as they are
+- `tanit-cli find --tags` matches a prompt against EXIF, IPTC, and XMP on the image and on `<stem>.xmp`, with no search index. `--junk` finds dark, blown, blurry, flat, and tiny shots
+- `tanit-cli search index --content image` stores tag fingerprints. `search search --adapter image-tags` queries that index. `ocr-local` and `llm-meta` stay separate choices. Index again after `tags write` or `meta gen --write` so a later query sees the new fields
+
+
 ## 1.0.75 - 12-10
 
 - Filter masks as managable presets for VFS/FS operations added, including archiving. ![](./screenshots/copy.png)

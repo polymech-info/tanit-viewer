@@ -129,6 +129,7 @@ Commands that take args list them under the verb. Pass JSON with `tanit-cli.exe 
 - `showperf` - Show perf overlay
 - `hideperf` - Hide perf overlay
 - `togglecenterview` - Toggle centre view
+- `toggleactionpane` - Toggle action pane
 - `showcentrechat` - Show centre chat
 - `hidecentrechat` - Hide centre chat
 - `hidecentreview` - Hide centre view

@@ -2,7 +2,7 @@
 title: Tanit Images
 slug: tanit-images
 description: Clean a shoot, catalog photos, create and edit with AI, resize without a model — in the app, CLI, and XBlox.
-tags: [tanit, images, photos, duplicates, junk, create, transform, search]
+tags: [tanit, images, photos, duplicates, junk, create, transform, search, exif, metadata]
 category-id: [knowlede-base]
 private: false
 hidden: false
@@ -13,9 +13,10 @@ hidden: false
 # Images: clean the shoot, then make the next one
 
 Tanit lives next to the folder. Cull accident shots. Group near-duplicates.
-Write a caption beside the file. Ask what is in a photo. Resize for the web
-without a model. Generate or edit when you need pixels that are not on disk
-yet.
+Read and write EXIF, IPTC, and XMP on the photo. Generate a title, caption,
+subjects, rating, and comment from a template. Ask what is in a photo. Resize
+for the web without a model. Generate or edit when you need pixels that are
+not on disk yet.
 
 The same jobs run in the file panel, Chat, the CLI, and XBlox. Chat settings
 pick default image / recognition providers; CLI flags and blocks override.
@@ -30,6 +31,9 @@ pick default image / recognition providers; CLI flags and blocks override.
   frames first — offline, no cloud.
 - People who keep three copies of the same product shot and want groups, not
   another duplicate app.
+- Photographers captioning a shoot, labs tagging samples, and libraries
+  recording subjects and a rating on the file, then finding those photos
+  again without an index.
 - Teams that catalog a folder (markdown / JSON / EXIF) and later search that
   text.
 - People who say “remove the watermark” or “make a 1:1 hero” next to the
@@ -83,10 +87,77 @@ More patterns: [find examples](../cli/find_examples.md) ·
 
 ---
 
+## Tags on the file
+
+**Tags** read and write EXIF, IPTC, and XMP. No model. A glob such as `*.jpg`
+is expanded by Tanit (PowerShell leaves it literal; quote brace groups).
+`--json` prints one JSON document. A successful write prints the path.
+
+```sh
+tanit-cli tags read shot.jpg
+tanit-cli tags write shot.jpg --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=recycling"
+tanit-cli tags write "*.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --add "Xmp.dc.subject=sheet press"
+```
+
+`--sidecar` writes `<stem>.xmp` and leaves the JPEG bytes unchanged. Without
+it, the tags are written into the image.
+
+```sh
+tanit-cli tags write shot.jpg --sidecar --set "Xmp.dc.title=Press"
+```
+
+**Find by those tags** is offline. `-p` is a substring of any tag key or
+value, on the image first and then on `<stem>.xmp`. It does not use the
+search index, and it cannot be combined with `--junk`.
+
+```sh
+tanit-cli find "D:/pictures/test" --tags -p recycling --json
+tanit-cli find "D:/pictures/test" --tags -p "front view" --json
+```
+
+There is no `field=value` filter. `-p 4` matches every tag that contains
+`4`, including dates and sizes, so it is not a rating search. `-p comments`
+does not match `Exif.Photo.UserComment`; `-p "front view"` does, because that
+text is the comment.
+
+[tags examples](../cli/tags_examples.md) ·
+[find examples](../cli/find_examples.md).
+
+---
+
 ## Catalog and ask
 
-**Meta** writes description sidecars next to the file (`.md` / `.json`) and
-can update EXIF. Needs a recognition provider (Chat image recognition).
+**Meta gen** asks a vision model for field values, then applies a template.
+The model does not write the file. Dry-run is the default. `--json` prints
+the plan and nothing else. `--write` commits and prints the written path.
+A name loads `config_dir()/templates/<name>.yaml`, `.yml`, or `.json`
+(`product` loads `product.yaml`). An existing file path is used as-is,
+including an absolute `.json` path.
+With no `--provider` and no `--model`, the default chat preset's image
+recognition model is used.
+
+Descriptive fields write to XMP. IPTC receives the same value only when the
+template `writeMode` is `embedded`. Camera EXIF (make, model, original date)
+is context and is not written. `rating` writes `Xmp.xmp.Rating` (and
+`Exif.Image.Rating` when embedded). `comments` writes `Xmp.exif.UserComment`
+(and `Exif.Photo.UserComment` when embedded). A field `value` is used as
+written; the model is not asked for that field. Category, materials, and alt
+text stay in the plan and are not written yet. If the image and the `.xmp`
+sidecar disagree, `onConflict: review` skips that field.
+
+```sh
+tanit-cli meta gen shot.jpg --template product --json
+tanit-cli meta gen shot.jpg --template "D:/templates/product.json" --json
+tanit-cli meta gen shot.jpg --template product --write --json
+tanit-cli meta gen shot.jpg --template product --resize-width 1024 --json
+```
+
+`--resize-width` is the longest edge of the preview sent to the model
+(default 512). The file on disk is not resized. `--no-resize` sends the
+image as it is.
+
+**Meta** (the older cataloguer) writes `.md` / `.json` beside the file and
+can update EXIF ImageDescription. Needs a recognition provider.
 `--dry-run` prints JSON and writes nothing.
 
 ```sh
@@ -120,7 +191,13 @@ tanit-cli find "D:/pictures/test" --llm --local-text -p "product shot"
 `search search` is unified **file** search (exact first; semantic after you
 index). It is not the junk scorer.
 
+Image tags have their own index. `--adapter image-tags` (or `--content image`)
+stores the EXIF, IPTC, and XMP text. It does not load an embedding model.
+`ocr-local` and `llm-meta` stay opt-in.
+
 ```sh
+tanit-cli search index "D:/pictures/test" --adapter image-tags --index "D:/pictures/test/.pixlwiz/search"
+tanit-cli search search "D:/pictures/test" --adapter image-tags --index "D:/pictures/test/.pixlwiz/search" --query recycling --json
 tanit-cli search search "D:/pictures" -p invoice
 tanit-cli search index "D:/pictures"
 ```
@@ -188,16 +265,20 @@ the current folder. Same capture stack as `video image`.
 |:--|:------------|
 | **File panel** | Browse, select, Search; Chat sees the current folder |
 | **Chat** | “What’s in this?”, “make a square webp”, “remove the cable” |
-| **CLI** | Scripts, Recycle Bin after a dry-run, duplicate sessions |
+| **CLI** | Scripts, tags and meta gen, Recycle Bin after a dry-run, duplicate sessions |
 | **XBlox** | Analyze → Find junk → Resize → hand to the next block |
 
 | Job | CLI | Chat tool | XBlox |
 |:----|:----|:----------|:------|
 | Junk / name | `find --junk` / `-p` | (CLI / block) | `imageAnalyze`, `imageFind` |
+| Tags | `tags read` / `tags write` | — | — |
+| Find by tags | `find --tags -p` | — | — |
+| Generate tags | `meta gen` | — | — |
 | Duplicates | `duplicates` | — | (CLI) |
 | Catalog | `meta` | `image_understand` to ask | — |
 | Ask / OCR | `understand` | `image_understand`, `ocr_text` | `imageUnderstand` |
 | File search | `search search` / `index` | file panel | — |
+| Tag index | `search` `--adapter image-tags` | — | — |
 | Resize | `resize` | `image_resize`, `image_crop` | `imageResize` |
 | Compress | `compress` | (internal) | — |
 | Generate | `create` | `image_create` | `imageCreate` |
@@ -210,6 +291,7 @@ the current folder. Same capture stack as `video image`.
 
 ## Related docs
 
+- [Tags](../cli/tags_examples.md) · [meta gen](../cli/meta_gen_examples.md) · [templates](../cli/image-meta.md) · [find](../cli/find_examples.md) · [search](../cli/search_examples.md)
 - [Files](./feature-files.md) — folder, selection, Chat context
 - [Tanit AI](./feature-ai.md) — providers, vision, agent tools
 - [Video](./feature-video.md) — still from screen / camera, generate motion

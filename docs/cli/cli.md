@@ -113,31 +113,31 @@ Hand-picked resize patterns. Default `--fit inside` keeps aspect and does not en
 **Longest edge** (both sides at most 2048; output size still follows the photo)
 
 ```sh
-tanit-cli resize "D:/pictures/test/*.{jpg,jpeg,png}" out/ --max-width 2048 --max-height 2048
+tanit-cli resize "*.{jpg,jpeg,png}" out/ --max-width 2048 --max-height 2048
 ```
 
 **Ratio from width** (`4:5` → 1080×1350). Same for `1:1`, `16:9`, or `9:16`.
 
 ```sh
-tanit-cli resize "D:/pictures/test/*.{jpg,jpeg,png}" out/ --max-width 1080 --aspect 4:5
+tanit-cli resize "*.{jpg,jpeg,png}" out/ --max-width 1080 --aspect 4:5
 ```
 
 **Social folder, nothing cropped** (same canvas, centered, white bars). `--allow-enlargement` scales small files up to the box.
 
 ```sh
-tanit-cli resize "D:/pictures/test/*.{jpg,jpeg,png}" out/ --max-width 1080 --aspect 4:5 --fit contain --background "#ffffff" --allow-enlargement --auto-rotate --format jpg -q 85
+tanit-cli resize "*.{jpg,jpeg,png}" out/ --max-width 1080 --aspect 4:5 --fit contain --background "#ffffff" --allow-enlargement --auto-rotate --format jpg -q 85
 ```
 
 **Full-bleed crop** (center crop; `attention` follows the subject)
 
 ```sh
-tanit-cli resize "D:/pictures/test/*.{jpg,jpeg,png}" out/ --max-width 1080 --aspect 4:5 --fit cover --auto-rotate --format jpg -q 85
+tanit-cli resize "*.{jpg,jpeg,png}" out/ --max-width 1080 --aspect 4:5 --fit cover --auto-rotate --format jpg -q 85
 ```
 
 **Stories / reels** (`9:16` → 1080×1920)
 
 ```sh
-tanit-cli resize "D:/pictures/test/*.{jpg,jpeg,png}" out/ --max-width 1080 --aspect 9:16 --fit cover --auto-rotate --format jpg
+tanit-cli resize "*.{jpg,jpeg,png}" out/ --max-width 1080 --aspect 9:16 --fit cover --auto-rotate --format jpg
 ```
 
 **Several files from Explorer** (`--dst` is a directory)
@@ -354,19 +354,25 @@ tanit-cli tags read path 'foo' --family 'foo' --sidecar
 **Print what the file already has**
 
 ```sh
-tanit-cli tags read "D:/pictures/test/press.jpg" --json
+tanit-cli tags read "press.jpg" --json
+```
+
+**Write the same caption onto every JPEG** (the pattern is expanded by Tanit; PowerShell does not expand `*.jpg`)
+
+```sh
+tanit-cli tags write "*.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=bicycles" --add "Xmp.dc.subject=sheet press"
 ```
 
 **Write a caption and two subjects** (description in EXIF, the words people read in IPTC and XMP)
 
 ```sh
-tanit-cli tags write "D:/pictures/test/press.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=recycling" --add "Xmp.dc.subject=sheet press"
+tanit-cli tags write "press.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=bicycles" --add "Xmp.dc.subject=sheet press"
 ```
 
 **Find the files that carry a subject** (`--tags` matches EXIF, IPTC, and XMP, including `<stem>.xmp`; the file name is left alone)
 
 ```sh
-tanit-cli find "D:/pictures/test" --tags -p recycling --json
+tanit-cli find . --tags -p bicycles --json
 ```
 
 #### tags read
@@ -375,7 +381,7 @@ Print tags from an image or its .xmp sidecar
 
 Options:
 
-- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Image path
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Image path, glob, or brace group (e.g. *.jpg or *.{jpg,cr3})
 - `--family` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - exif, iptc, or xmp
 - `--sidecar` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Read <stem>.xmp instead of the image
 
@@ -398,19 +404,19 @@ tanit-cli tags read path 'foo' --family 'foo' --sidecar
 **Whole file**
 
 ```sh
-tanit-cli tags read "D:/pictures/test/press.jpg"
+tanit-cli tags read "press.jpg"
 ```
 
 **One family** (captions and subjects live in XMP)
 
 ```sh
-tanit-cli tags read "D:/pictures/test/press.jpg" --family xmp --json
+tanit-cli tags read "press.jpg" --family xmp --json
 ```
 
 **Sidecar** (the image file stays the pixel source; the words are in `press.xmp`)
 
 ```sh
-tanit-cli tags read "D:/pictures/test/press.jpg" --sidecar
+tanit-cli tags read "press.jpg" --sidecar
 ```
 
 ---
@@ -421,7 +427,7 @@ Set, add, or remove tags
 
 Options:
 
-- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Image path
+- `path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Image path, glob, or brace group (e.g. *.jpg or *.{jpg,cr3})
 - `--set` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Replace Key=Value (repeat the flag)
 - `--add` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Append Key=Value (repeat the flag)
 - `--unset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Remove a key (repeat the flag)
@@ -448,25 +454,31 @@ tanit-cli tags write path 'foo' --set '{}' --add '{}' --unset '{}' --xmlns '{}' 
 **Caption and subjects** (technical line in EXIF, readable text in IPTC and XMP)
 
 ```sh
-tanit-cli tags write "D:/pictures/test/press.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=recycling" --add "Xmp.dc.subject=sheet press"
+tanit-cli tags write "press.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=bicycles" --add "Xmp.dc.subject=sheet press"
 ```
 
 **Check the edit before it lands**
 
 ```sh
-tanit-cli tags write "D:/pictures/test/press.jpg" --dry-run --set "Exif.Image.Artist=Tanit"
+tanit-cli tags write "press.jpg" --dry-run --set "Exif.Image.Artist=Tanit"
 ```
 
 **Remove one field** (the description stays)
 
 ```sh
-tanit-cli tags write "D:/pictures/test/press.jpg" --unset Exif.Image.Artist
+tanit-cli tags write "press.jpg" --unset Exif.Image.Artist
+```
+
+**Every JPEG in the folder** (quote the pattern so the shell does not eat it; `*.{jpg,jpeg,png,cr3}` is the same brace form)
+
+```sh
+tanit-cli tags write "*.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=bicycles" --add "Xmp.dc.subject=sheet press"
 ```
 
 **Leave the JPEG bytes unchanged** (custom namespace on the sidecar)
 
 ```sh
-tanit-cli tags write "D:/pictures/test/press.jpg" --sidecar --xmlns "tanit=http://ns.tanit.local/meta/1.0/" --set "Xmp.tanit.productType=Sheet press" --set "Xmp.dc.title=Press"
+tanit-cli tags write "press.jpg" --sidecar --xmlns "tanit=http://ns.tanit.local/meta/1.0/" --set "Xmp.tanit.productType=Sheet press" --set "Xmp.dc.title=Press"
 ```
 
 ### Image
@@ -896,49 +908,61 @@ tanit-cli find input '{}' -p 'foo' --junk --junk-kinds 'foo' --min-score '0.7' -
 
 ##### Examples
 
-Hand-picked search patterns. Name and `--junk` are offline. `--llm` needs a recognition provider (not in Tanit Viewer).
+Hand-picked search patterns. Name, `--tags`, and `--junk` are offline. `--tags` reads EXIF, IPTC, and XMP on the image and on `<stem>.xmp`; it does not use the search index. `--llm` needs a recognition provider (not in Tanit Viewer). `--tags` and `--junk` cannot be combined.
+
+**By a tag value** (embedded metadata first, then `<stem>.xmp`; the file name is not required to match)
+
+```sh
+tanit-cli find . --tags -p bicycles --json
+```
+
+**Sidecar field** (a custom XMP value written with `tags write --sidecar`)
+
+```sh
+tanit-cli find "**/*.{jpg,jpeg,png,cr3}" --tags -p "flexo plate" --json
+```
 
 **By filename / folder** (default; prompt is a substring)
 
 ```sh
-tanit-cli find "D:/pictures/test" -p DSC032
+tanit-cli find . -p DSC032
 ```
 
 **Junk / accident shots** (dark, blown, blur, flat, tiny). No prompt.
 
 ```sh
-tanit-cli find "D:/pictures/test" --junk --json
+tanit-cli find . --junk --json
 ```
 
 **Lower the junk bar** (see everything the decoder scored)
 
 ```sh
-tanit-cli find "D:/pictures/test" --junk --min-score 0 --json
+tanit-cli find . --junk --min-score 0 --json
 ```
 
 **Miss-focus photos** (mean edge energy ~12–14 on mushy 24MP thumbs). Sharp subjects on a white wall are **not** blur — they keep a high `edgeEnergyP90`.
 
 ```sh
-tanit-cli find "D:/pictures/test" --junk --junk-kinds blur --min-score 0.2 --edge-energy-blur 24
+tanit-cli find . --junk --junk-kinds blur --min-score 0.2 --edge-energy-blur 24
 ```
 
 **Quoted glob, no recurse**
 
 ```sh
-tanit-cli find "D:/pictures/test/*.{jpg,jpeg,png}" --junk --no-recursive
+tanit-cli find "*.{jpg,jpeg,png}" --junk --no-recursive
 ```
 
 **Recycle Bin after a dry-run** (Windows)
 
 ```sh
-tanit-cli find "D:/pictures/test" --junk --action recyclebin --dry-run
-tanit-cli find "D:/pictures/test" --junk --action recyclebin
+tanit-cli find . --junk --action recyclebin --dry-run
+tanit-cli find . --junk --action recyclebin
 ```
 
 **Local sidecar / EXIF text** (no judge model)
 
 ```sh
-tanit-cli find "D:/pictures/test" --llm --local-text -p "product shot"
+tanit-cli find . --llm --local-text -p "product shot"
 ```
 
 [Read more](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/find_more)
@@ -1244,6 +1268,28 @@ tanit-cli search index docs/ --content office --index-policy specific-dir --inde
 tanit-cli search detail --path notes.odt --json
 ```
 
+**Image tags** (`--content image` selects the `image-tags` adapter. The index is a fingerprint store, not an embedding model. `find --tags` reads the files directly and does not use this index)
+
+```sh
+tanit-cli search index . --content image --index ".tanit-index"
+tanit-cli search search . --adapter image-tags --index ".tanit-index" --query bicycles --json
+```
+
+**Write tags, then index them** (`meta gen --write` writes the template fields. `writeMode: embedded` puts XMP in the JPEG and mirrors IPTC plus rating and comment EXIF. `sidecar` writes `<stem>.xmp` and leaves the JPEG bytes. Re-index after a later write, or the query still sees the old tags)
+
+```sh
+tanit-cli meta gen "press.jpg" --template product --write
+tanit-cli search index . --content image --index ".tanit-index"
+tanit-cli search search . --adapter image-tags --index ".tanit-index" --query "bicycle" --json
+```
+
+**Ask the model only while indexing** (`--adapter llm-meta` stores the vision answer in `image-meta.vstore`. The JPEG and any sidecar stay unchanged. The query is semantic)
+
+```sh
+tanit-cli search index . --adapter llm-meta --index ".tanit-index"
+tanit-cli search search . --adapter llm-meta --mode semantic --index ".tanit-index" --query "bicycle" --json
+```
+
 #### search search
 
 Search files with the unified search facade (exact first; semantic later).
@@ -1342,6 +1388,18 @@ tanit-cli search search docs/ --content office --mode grep --backend exact --que
 tanit-cli search search budget.ods --content office --mode grep --backend exact --query HarvestYield
 ```
 
+**Indexed image tags** (same `--index` directory as `search index`; the query matches title, description, subjects, and `<stem>.xmp`. Index again after `meta gen --write`)
+
+```sh
+tanit-cli search search . --adapter image-tags --index ".tanit-index" --query bicycles --json
+```
+
+**Indexed vision text** (`llm-meta` store. `--mode semantic` reads `image-meta.vstore`. This is not the EXIF or `.xmp` written by `meta gen`)
+
+```sh
+tanit-cli search search . --adapter llm-meta --mode semantic --index ".tanit-index" --query "bicycle" --json
+```
+
 **Force the OpenDocument adapter**
 
 ```sh
@@ -1407,6 +1465,18 @@ tanit-cli search index docs/ --content office --index-policy specific-dir --inde
 tanit-cli search index docs/ --content any
 ```
 
+**Image tags** (EXIF, IPTC, and XMP, including `<stem>.xmp`. No embedding model. Run this after `meta gen --write` or `tags write`. `ocr-local` and `llm-meta` stay opt-in)
+
+```sh
+tanit-cli search index "**/*.{jpg,jpeg,png,cr3}" --adapter image-tags --index ".tanit-index"
+```
+
+**Vision text, no file write** (`llm-meta` calls the vision model and stores the answer in `image-meta.vstore`. EXIF and `<stem>.xmp` are not changed)
+
+```sh
+tanit-cli search index . --adapter llm-meta --index ".tanit-index"
+```
+
 **Rebuild**
 
 ```sh
@@ -1458,6 +1528,12 @@ tanit-cli search detail --path notes.odt --json
 
 ```sh
 tanit-cli search detail --path budget.ods --md --markdown plain
+```
+
+**Image tags** (embedded EXIF, IPTC, and XMP, plus the sibling `.xmp`)
+
+```sh
+tanit-cli search detail --adapter image-tags --path "press.jpg" --include-detail metadata --json
 ```
 
 **Excel row** (officecli)
@@ -1580,25 +1656,25 @@ Hand-picked offline duplicate patterns. Default `--by fingerprint` uses one libv
 **Near-duplicates in a folder** (default Hamming ≤ 8)
 
 ```sh
-tanit-cli duplicates "D:/pictures/test"
+tanit-cli duplicates .
 ```
 
 **Exact dHash only** (same pixel structure after the 128px thumb)
 
 ```sh
-tanit-cli duplicates "D:/pictures/test" --max-hamming 0
+tanit-cli duplicates . --max-hamming 0
 ```
 
 **Same file size** (byte-size buckets; not a content hash)
 
 ```sh
-tanit-cli duplicates "D:/pictures/test" --by size
+tanit-cli duplicates . --by size
 ```
 
 **JSON groups on stdout** (exit 1 when no group)
 
 ```sh
-tanit-cli duplicates "D:/pictures/test" --json
+tanit-cli duplicates . --json
 ```
 
 **Quoted glob**
@@ -1616,21 +1692,21 @@ tanit-cli duplicates "D:/pictures/100MSDCF" --no-phash --fingerprint-same-size-o
 **Sidecar + EXIF hash** (offline; same `.md` / `.json` corpus)
 
 ```sh
-tanit-cli duplicates "D:/pictures/test" --by meta
+tanit-cli duplicates . --by meta
 ```
 
 **Save a session, reopen later** (no second scan)
 
 ```sh
-tanit-cli duplicates "D:/pictures/test" --save-session dups.json --report-md dups.md
+tanit-cli duplicates . --save-session dups.json --report-md dups.md
 tanit-cli duplicates --load-session dups.json --json
 ```
 
 **Remove extras** (keeps the first path in each group)
 
 ```sh
-tanit-cli duplicates "D:/pictures/test" --action recyclebin --dry-run
-tanit-cli duplicates "D:/pictures/test" --action recyclebin
+tanit-cli duplicates . --action recyclebin --dry-run
+tanit-cli duplicates . --action recyclebin
 tanit-cli duplicates --load-session dups.json --action delete
 ```
 
@@ -9760,337 +9836,6 @@ tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo
 
 ---
 
-#### mcp client Tanit deepl-get-source-languages
-
-Get list of available source languages for translation
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-source-languages
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-source-languages --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-get-target-languages
-
-Get list of available target languages for translation
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-target-languages
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-target-languages --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-translate-text
-
-Translate text to a target language using DeepL API. Review all available optional parameters and use those applicable to your scenario for best results. When the translation inclu
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--context` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Recommended: describe what this text is about (e.g., 'Technical documentation for a software API'). Improves translation accuracy but is not itself translated.
-- `--customInstructions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Array of custom instructions to guide translation style (max 10 instructions, 300 chars each)
-- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls formality: 'less' for informal, 'more' for formal/polite, 'prefer_less'/'prefer_more' to prefer but fall back to default
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Glossary ID to ensure consistent terminology translation
-- `--preserveFormatting` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to preserve original formatting - recommended for markdown, code blocks, HTML, or any structured text
-- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
-- `--splitSentences` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sentence splitting: '0' disables, '1' (default) splits on punctuation and newlines, 'nonewlines' preserves line breaks
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
-- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to translate, as a single string or an array of strings handled independently
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-translate-text --targetLangCode <value> --text <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-translate-text --args '{}' --timeout-ms 0 --context 'foo' --customInstructions '{}' --formality 'foo' --glossaryId 'foo' --preserveFormatting --sourceLangCode 'foo' --splitSentences 'foo' --styleId 'foo' --targetLangCode 'foo' --text 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-get-writing-styles
-
-Get list of writing styles the DeepL API can use while rephrasing text
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-writing-styles
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-writing-styles --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-get-writing-tones
-
-Get list of writing tones the DeepL API can use while rephrasing text
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-writing-tones
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-writing-tones --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-rephrase-text
-
-Rephrase text in the same language, or into a different language, using DeepL API
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--style` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing style for rephrasing
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr') to rephrase into a different language, or leave empty to keep the original language
-- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to rephrase, as a single string or an array of strings handled independently
-- `--tone` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing tone for rephrasing
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-rephrase-text --text <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-rephrase-text --args '{}' --timeout-ms 0 --style 'foo' --targetLangCode 'foo' --text 'foo' --tone 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-translate-document
-
-Translate a document file using DeepL API
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls whether translations should lean toward informal or formal language
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ID of glossary to use for translation
-- `--inputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to the input document file to translate
-- `--outputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path where the translated document will be saved (if not provided, will be auto-generated)
-- `--outputFormat` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Desired output file format (e.g. 'pdf'), or leave empty to keep the input format. Only some conversions are supported.
-- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-translate-document --inputFile <value> --targetLangCode <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-translate-document --args '{}' --timeout-ms 0 --formality 'foo' --glossaryId 'foo' --inputFile 'foo' --outputFile 'foo' --outputFormat 'foo' --sourceLangCode 'foo' --styleId 'foo' --targetLangCode 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-list-glossaries
-
-Get a list of all glossaries with metadata for each - name, dictionaries available, and creation time. This does not fetch any glossary entries. Use the get-glossary-dictionary-ent
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-list-glossaries
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-list-glossaries --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-get-glossary-info
-
-Given an id, get metadata about the glossary with that id - its name, available dictionaries, and creation time. This does not fetch any glossary entries. Use the get-glossary-dict
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-glossary-info --glossaryId <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-glossary-info --args '{}' --timeout-ms 0 --glossaryId 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-get-glossary-dictionary-entries
-
-Retrieve all the entries from a given glossary dictionary. (A glossary consists one of one or more dictionaries, each of which contains entries for a specific language pair, in one
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
-- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - source language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --glossaryId <value> --sourceLangCode <value> --targetLangCode <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --args '{}' --timeout-ms 0 --glossaryId 'foo' --sourceLangCode 'foo' --targetLangCode 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-list-style-rules
-
-Get a list of all style rules with metadata for each - id, name, language, and timestamps. Style rules can be applied when translating text or documents. Use the get-style-rule too
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--detailed` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to include the configured rules and custom instructions of each rule
-- `--page` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page number, 0-based
-- `--pageSize` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of style rules per page (max 10)
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-list-style-rules
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-list-style-rules --args '{}' --timeout-ms 0 --detailed --page 'foo' --pageSize 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-get-style-rule
-
-Given an id, get a single style rule with its full detail - configured rules and custom instructions.
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-style-rule --styleId <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-style-rule --args '{}' --timeout-ms 0 --styleId 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-get-custom-instruction
-
-Get a single custom instruction belonging to a style rule. Use the get-style-rule tool to find out which custom instructions a style rule contains.
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--instructionId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the custom instruction
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-custom-instruction --instructionId <value> --styleId <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms 0 --instructionId 'foo' --styleId 'foo'
-```
-
----
-
 #### mcp client Tanit tavily-tavily_search
 
 Search the web for current information on any topic. Use for news, facts, or data beyond your knowledge cutoff. Returns snippets and source URLs.
@@ -10740,6 +10485,337 @@ tanit-cli mcp client Tanit skillhub-generate_skill --description <value>
 tanit-cli mcp client Tanit skillhub-generate_skill --args '{}' --timeout-ms 0 --category 'foo' --description 'foo' --language 'foo'
 ```
 
+---
+
+#### mcp client Tanit deepl-get-source-languages
+
+Get list of available source languages for translation
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-source-languages
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-source-languages --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-get-target-languages
+
+Get list of available target languages for translation
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-target-languages
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-target-languages --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-translate-text
+
+Translate text to a target language using DeepL API. Review all available optional parameters and use those applicable to your scenario for best results. When the translation inclu
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--context` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Recommended: describe what this text is about (e.g., 'Technical documentation for a software API'). Improves translation accuracy but is not itself translated.
+- `--customInstructions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Array of custom instructions to guide translation style (max 10 instructions, 300 chars each)
+- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls formality: 'less' for informal, 'more' for formal/polite, 'prefer_less'/'prefer_more' to prefer but fall back to default
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Glossary ID to ensure consistent terminology translation
+- `--preserveFormatting` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to preserve original formatting - recommended for markdown, code blocks, HTML, or any structured text
+- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
+- `--splitSentences` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sentence splitting: '0' disables, '1' (default) splits on punctuation and newlines, 'nonewlines' preserves line breaks
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
+- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to translate, as a single string or an array of strings handled independently
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-text --targetLangCode <value> --text <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-text --args '{}' --timeout-ms 0 --context 'foo' --customInstructions '{}' --formality 'foo' --glossaryId 'foo' --preserveFormatting --sourceLangCode 'foo' --splitSentences 'foo' --styleId 'foo' --targetLangCode 'foo' --text 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-writing-styles
+
+Get list of writing styles the DeepL API can use while rephrasing text
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-styles
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-styles --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-get-writing-tones
+
+Get list of writing tones the DeepL API can use while rephrasing text
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-tones
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-tones --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-rephrase-text
+
+Rephrase text in the same language, or into a different language, using DeepL API
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--style` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing style for rephrasing
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr') to rephrase into a different language, or leave empty to keep the original language
+- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to rephrase, as a single string or an array of strings handled independently
+- `--tone` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing tone for rephrasing
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-rephrase-text --text <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-rephrase-text --args '{}' --timeout-ms 0 --style 'foo' --targetLangCode 'foo' --text 'foo' --tone 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-translate-document
+
+Translate a document file using DeepL API
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls whether translations should lean toward informal or formal language
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ID of glossary to use for translation
+- `--inputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to the input document file to translate
+- `--outputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path where the translated document will be saved (if not provided, will be auto-generated)
+- `--outputFormat` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Desired output file format (e.g. 'pdf'), or leave empty to keep the input format. Only some conversions are supported.
+- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-document --inputFile <value> --targetLangCode <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-document --args '{}' --timeout-ms 0 --formality 'foo' --glossaryId 'foo' --inputFile 'foo' --outputFile 'foo' --outputFormat 'foo' --sourceLangCode 'foo' --styleId 'foo' --targetLangCode 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-list-glossaries
+
+Get a list of all glossaries with metadata for each - name, dictionaries available, and creation time. This does not fetch any glossary entries. Use the get-glossary-dictionary-ent
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-glossaries
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-glossaries --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-get-glossary-info
+
+Given an id, get metadata about the glossary with that id - its name, available dictionaries, and creation time. This does not fetch any glossary entries. Use the get-glossary-dict
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-info --glossaryId <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-info --args '{}' --timeout-ms 0 --glossaryId 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-glossary-dictionary-entries
+
+Retrieve all the entries from a given glossary dictionary. (A glossary consists one of one or more dictionaries, each of which contains entries for a specific language pair, in one
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
+- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - source language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --glossaryId <value> --sourceLangCode <value> --targetLangCode <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --args '{}' --timeout-ms 0 --glossaryId 'foo' --sourceLangCode 'foo' --targetLangCode 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-list-style-rules
+
+Get a list of all style rules with metadata for each - id, name, language, and timestamps. Style rules can be applied when translating text or documents. Use the get-style-rule too
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--detailed` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to include the configured rules and custom instructions of each rule
+- `--page` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page number, 0-based
+- `--pageSize` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of style rules per page (max 10)
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-style-rules
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-style-rules --args '{}' --timeout-ms 0 --detailed --page 'foo' --pageSize 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-style-rule
+
+Given an id, get a single style rule with its full detail - configured rules and custom instructions.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-style-rule --styleId <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-style-rule --args '{}' --timeout-ms 0 --styleId 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-custom-instruction
+
+Get a single custom instruction belonging to a style rule. Use the get-style-rule tool to find out which custom instructions a style rule contains.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--instructionId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the custom instruction
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-custom-instruction --instructionId <value> --styleId <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms 0 --instructionId 'foo' --styleId 'foo'
+```
+
 ## Custom Commands
 
 | Exact ID | Label | Group | Action | Description | Files | Pre-configured Args |
@@ -10760,6 +10836,7 @@ tanit-cli mcp client Tanit skillhub-generate_skill --args '{}' --timeout-ms 0 --
 | `custom.command-mulbk22p-b16a6` | Wizard | Home | `app:settings` | Open setup wizard | selection | `wizard` |
 | `custom.command-mpx9r1ur-8c6df` | Assistant | Home | `cli:llm` | Activates real-time voice assistant in background | selection | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | Home | `app:togglelauncher` | Open launcher menu | selection |  |
+| `custom.command-mv6al70m-6256c` | Actions | Home | `app:toggleactionpane` | Toggle Action Pane | selection |  |
 | `custom.command-712fbd00-f9ac4` | Product | Images | `cli:transform` | Render current selection as a product photo using white studio background | selection; explorer:image; jpg->jpg | `--prompt`<br>`render this as product shooting, white background, studio`<br>`--json`<br>`${CURRENT_SELECTION}` |
 | `custom.command-mpch9gdx-44982` | Illustration | Images | `cli:transform` | description | files | `--src`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`as technical illustration`<br>`--model`<br>`image-generation-deep` |
 | `custom.image-understand-speak` | Speak | Images | `cli:xblox` | Speaks the content of an selected image over the speaker | files | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
@@ -10787,6 +10864,7 @@ tanit-cli mcp client Tanit skillhub-generate_skill --args '{}' --timeout-ms 0 --
 | `custom.command-mpy7z14t-bcef8` | Queue | View | `app:togglequeue` |  | selection |  |
 | `custom.command-mqkneqp7-3fcb0` | Console | View | `app:toggleconsole` |  | selection |  |
 | `custom.command-mr5ebav3-ec35c` | Search | View | `app:togglesearchnative` |  | selection |  |
+| `custom.command-mv6amrha-eade6` | Actions | View | `app:toggleactionpane` | Toggle Action Pane | selection |  |
 | `custom.command-mt8msflf-fe3b7` | Tabbed | View | `app:viewtabbed` | Enable Tabs | selection |  |
 | `custom.command-msqfoqej-85fb5` | Performance | View | `app:toggleperf` |  | selection | `800x600` |
 | `custom.command-mtwl51se-b7440` | 1269x846 | View | `app:setframesize` |  | selection | `1269x846` |

@@ -10,6 +10,12 @@ tanit-cli search detail --path notes.odt --json
 tanit-cli search detail --path budget.ods --md --markdown plain
 ```
 
+**Image tags** (embedded EXIF, IPTC, and XMP, plus the sibling `.xmp`)
+
+```sh
+tanit-cli search detail --adapter image-tags --path "press.jpg" --include-detail metadata --json
+```
+
 **Excel row** (officecli)
 
 ```sh

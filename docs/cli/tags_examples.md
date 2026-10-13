@@ -5,17 +5,23 @@
 **Print what the file already has**
 
 ```sh
-tanit-cli tags read "D:/pictures/test/press.jpg" --json
+tanit-cli tags read "press.jpg" --json
+```
+
+**Write the same caption onto every JPEG** (the pattern is expanded by Tanit; PowerShell does not expand `*.jpg`)
+
+```sh
+tanit-cli tags write "*.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=bicycles" --add "Xmp.dc.subject=sheet press"
 ```
 
 **Write a caption and two subjects** (description in EXIF, the words people read in IPTC and XMP)
 
 ```sh
-tanit-cli tags write "D:/pictures/test/press.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=recycling" --add "Xmp.dc.subject=sheet press"
+tanit-cli tags write "press.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=bicycles" --add "Xmp.dc.subject=sheet press"
 ```
 
 **Find the files that carry a subject** (`--tags` matches EXIF, IPTC, and XMP, including `<stem>.xmp`; the file name is left alone)
 
 ```sh
-tanit-cli find "D:/pictures/test" --tags -p recycling --json
+tanit-cli find . --tags -p bicycles --json
 ```

@@ -68,7 +68,7 @@ tanit-cli duplicates "D:/pictures/100MSDCF" `
 `--report-json` / `--save-session` / `--report-md` turn on full diagnostics (per-file hashes, pairwise Hamming, `duplicate_map`).
 
 ```sh
-tanit-cli duplicates "D:/pictures/test" `
+tanit-cli duplicates . `
   --save-session dups.json `
   --report-md dups.md `
   --json
@@ -81,7 +81,7 @@ tanit-cli duplicates "D:/pictures/test" `
 ## Meta hash (offline)
 
 ```sh
-tanit-cli duplicates "D:/pictures/test" --by meta --no-exif
+tanit-cli duplicates . --by meta --no-exif
 ```
 
 `--meta-prompt` is prepended to the corpus before normalize + SHA-256 (same prompt → same bucket). `--no-md` / `--no-json` / `--no-exif` drop those sources.
@@ -91,13 +91,13 @@ tanit-cli duplicates "D:/pictures/test" --by meta --no-exif
 Compiled out when `FEATURE_COMMAND_LLM=OFF`. Uses the same `--preset` / `--provider` / `--model` / `--api-key` resolution as `create` / `transform` (chat router, not the image generator).
 
 ```sh
-tanit-cli duplicates "D:/pictures/test" --by meta --meta-compare-json-llm --preset work
+tanit-cli duplicates . --by meta --meta-compare-json-llm --preset work
 ```
 
 Generate missing `<stem>.json` first:
 
 ```sh
-tanit-cli duplicates "D:/pictures/test" `
+tanit-cli duplicates . `
   --by meta `
   --meta-compare-json-llm `
   --meta-json-implicit-generate `

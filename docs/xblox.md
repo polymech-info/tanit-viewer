@@ -7510,6 +7510,7 @@ Default block:
 | `custom.command-mulbk22p-b16a6` | Wizard | `app:settings` | Open setup wizard | selection | `wizard` |
 | `custom.command-mpx9r1ur-8c6df` | Assistant | `cli:llm` | Activates real-time voice assistant in background | selection | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | `app:togglelauncher` | Open launcher menu | selection |  |
+| `custom.command-mv6al70m-6256c` | Actions | `app:toggleactionpane` | Toggle Action Pane | selection |  |
 | `custom.command-712fbd00-f9ac4` | Product | `cli:transform` | Render current selection as a product photo using white studio background | selection; explorer:image; jpg->jpg | `--prompt`<br>`render this as product shooting, white background, studio`<br>`--json`<br>`${CURRENT_SELECTION}` |
 | `custom.command-mpch9gdx-44982` | Illustration | `cli:transform` | description | files | `--src`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`as technical illustration`<br>`--model`<br>`image-generation-deep` |
 | `custom.image-understand-speak` | Speak | `cli:xblox` | Speaks the content of an selected image over the speaker | files | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
@@ -7537,6 +7538,7 @@ Default block:
 | `custom.command-mpy7z14t-bcef8` | Queue | `app:togglequeue` |  | selection |  |
 | `custom.command-mqkneqp7-3fcb0` | Console | `app:toggleconsole` |  | selection |  |
 | `custom.command-mr5ebav3-ec35c` | Search | `app:togglesearchnative` |  | selection |  |
+| `custom.command-mv6amrha-eade6` | Actions | `app:toggleactionpane` | Toggle Action Pane | selection |  |
 | `custom.command-mt8msflf-fe3b7` | Tabbed | `app:viewtabbed` | Enable Tabs | selection |  |
 | `custom.command-msqfoqej-85fb5` | Performance | `app:toggleperf` |  | selection | `800x600` |
 | `custom.command-mtwl51se-b7440` | 1269x846 | `app:setframesize` |  | selection | `1269x846` |

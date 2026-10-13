@@ -5,23 +5,29 @@
 **Caption and subjects** (technical line in EXIF, readable text in IPTC and XMP)
 
 ```sh
-tanit-cli tags write "D:/pictures/test/press.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=recycling" --add "Xmp.dc.subject=sheet press"
+tanit-cli tags write "press.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=bicycles" --add "Xmp.dc.subject=sheet press"
 ```
 
 **Check the edit before it lands**
 
 ```sh
-tanit-cli tags write "D:/pictures/test/press.jpg" --dry-run --set "Exif.Image.Artist=Tanit"
+tanit-cli tags write "press.jpg" --dry-run --set "Exif.Image.Artist=Tanit"
 ```
 
 **Remove one field** (the description stays)
 
 ```sh
-tanit-cli tags write "D:/pictures/test/press.jpg" --unset Exif.Image.Artist
+tanit-cli tags write "press.jpg" --unset Exif.Image.Artist
+```
+
+**Every JPEG in the folder** (quote the pattern so the shell does not eat it; `*.{jpg,jpeg,png,cr3}` is the same brace form)
+
+```sh
+tanit-cli tags write "*.jpg" --set "Exif.Image.ImageDescription=Industrial plastic sheet press" --set "Iptc.Application2.Caption=Front view" --add "Xmp.dc.subject=bicycles" --add "Xmp.dc.subject=sheet press"
 ```
 
 **Leave the JPEG bytes unchanged** (custom namespace on the sidecar)
 
 ```sh
-tanit-cli tags write "D:/pictures/test/press.jpg" --sidecar --xmlns "tanit=http://ns.tanit.local/meta/1.0/" --set "Xmp.tanit.productType=Sheet press" --set "Xmp.dc.title=Press"
+tanit-cli tags write "press.jpg" --sidecar --xmlns "tanit=http://ns.tanit.local/meta/1.0/" --set "Xmp.tanit.productType=Sheet press" --set "Xmp.dc.title=Press"
 ```

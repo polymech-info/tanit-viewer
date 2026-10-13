@@ -312,6 +312,12 @@ Worth knowing when learning the wiring and tree UIs:
 
 These come from the `commands.json` that was loaded when this page was generated (same file as Settings → Commands).
 
+### Home
+
+| Command | Shortcut | Scope |
+|:---|:---|:---|
+| Actions | `Shift+F10` | Window |
+
 ### Screenshots
 
 | Command | Shortcut | Scope |
@@ -322,6 +328,7 @@ These come from the `commands.json` that was loaded when this page was generated
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
+| Actions | `Shift+F10` | Window |
 | Fullscreen | `Alt+F` | Window |
 
 ### Audio

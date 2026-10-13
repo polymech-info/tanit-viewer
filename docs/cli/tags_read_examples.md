@@ -5,17 +5,17 @@
 **Whole file**
 
 ```sh
-tanit-cli tags read "D:/pictures/test/press.jpg"
+tanit-cli tags read "press.jpg"
 ```
 
 **One family** (captions and subjects live in XMP)
 
 ```sh
-tanit-cli tags read "D:/pictures/test/press.jpg" --family xmp --json
+tanit-cli tags read "press.jpg" --family xmp --json
 ```
 
 **Sidecar** (the image file stays the pixel source; the words are in `press.xmp`)
 
 ```sh
-tanit-cli tags read "D:/pictures/test/press.jpg" --sidecar
+tanit-cli tags read "press.jpg" --sidecar
 ```
