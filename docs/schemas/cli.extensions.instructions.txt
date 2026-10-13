@@ -16,10 +16,11 @@ Role word:
 - `out` — `accepts` is null
 - `dir` — all three of accepts, generates, transport are null
 - `weight` — `generates` is null. `accepts` is the weight extension named in the option sentence (`gguf`, `onnx`, `task`)
+- `map` — a ribbon button. Both sides may be set. When the destination keeps `${SRC_EXT}`, both sides are the same family. A button on the Text tab is `text`, not `any`
 
-Each side is `image`, `video`, `audio`, `office`, `any`, a bare-extension array, or null.
+Each side is `image`, `video`, `audio`, `office`, `text`, `any`, a bare-extension array, or null.
 
-`office` is only docx, xlsx, pptx. Use `["pdf"]` only when the option sentence says a PDF file. A mix of families is an array, not a group token. `file/dir` is still that file family, not `dir`.
+`office` is only docx, xlsx, pptx. `text` is markdown, code, and other plain-text files (md, txt, json, py, …). `text` does not include pdf, docx, xlsx, pptx, or 3D. Use `["pdf"]` only when the option sentence says a PDF file. A mix of families is an array, not a group token. `file/dir` is still that file family, not `dir`.
 
 `transport` is `local` or `http`. An http(s) URL written as a fallback next to a filesystem path stays `local`. `http` is only a VFS or CMS remote path.
 
