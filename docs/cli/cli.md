@@ -8604,7 +8604,7 @@ tanit-cli assistant spy --interval-ms 500 --no-value --no-selection --no-text --
 
 #### info
 
-Generate reference docs for Tanit: CLI commands, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
+Generate reference docs for Tanit: CLI commands, CLI schemas, XBlox blocks, UI launch flags, app verbs, keyboard shortcuts, and agent tools. Default: plain markdown (end-user docs). --skill: agent-skill with YAML frontmatter. --json: structured JSON for scripting.
 
 **Example**
 
@@ -8639,6 +8639,31 @@ tanit-cli info commands
 
 ```sh
 tanit-cli info commands --dst 'releases/web-docs/cli/cli.md' --stdout --skill --author 'foo'
+```
+
+---
+
+#### info schemas
+
+Generate the CLI ambient schema bundle. Always JSON: schemas.json in cwd, or --dst. Also writes <stem>.extensions.todo.json beside --dst (path options whose accepts/generates/transport are still unset). --stdout prints the bundle only.
+
+Options:
+
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output path. Plain md: <name>.md in cwd (default). --skill: <profile>/skills/<name>/SKILL.md (default). --json: <name>.json in cwd (default).
+- `--stdout` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print to stdout instead of writing --dst.
+- `--skill` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Wrap output with YAML frontmatter and a generated-by marker for use as an agent skill file. Default (without --skill): plain markdown for end-user docs.
+- `--author` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS user UUID for absolute *_more.md page links (default: built-in public PolyMech user id).
+
+**Example**
+
+```sh
+tanit-cli info schemas
+```
+
+**Full example**
+
+```sh
+tanit-cli info schemas --dst 'releases/web-docs/cli/cli.md' --stdout --skill --author 'foo'
 ```
 
 ---

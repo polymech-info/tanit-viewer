@@ -1,0 +1,34 @@
+# CLI option file extensions
+
+One option. The command name is not a file type. `pdf` does not mean pdf. `markdown` does not mean md. Read the role word, the purpose line, and the option sentence.
+
+Return ONLY:
+
+```json
+{"accepts": null, "generates": null, "transport": null, "confidence": 3}
+```
+
+`accepts` reads. `generates` writes.
+
+Role word:
+
+- `in` — `generates` is null
+- `out` — `accepts` is null
+- `dir` — all three of accepts, generates, transport are null
+- `weight` — `generates` is null. `accepts` is the weight extension named in the option sentence (`gguf`, `onnx`, `task`)
+
+Each side is `image`, `video`, `audio`, `office`, `any`, a bare-extension array, or null.
+
+`office` is only docx, xlsx, pptx. Use `["pdf"]` only when the option sentence says a PDF file. A mix of families is an array, not a group token. `file/dir` is still that file family, not `dir`.
+
+`transport` is `local` or `http`. An http(s) URL written as a fallback next to a filesystem path stays `local`. `http` is only a VFS or CMS remote path.
+
+`confidence` is an integer 1 through 5:
+
+- 5 — the option sentence names the extension or the group
+- 4 — the purpose line names the family and the role word names the side
+- 3 — the family is clear and the exact extensions are not
+- 2 — the sentence mixes file and directory, or text and path
+- 1 — the type is not stated. Both sides null. Do not guess from the command name.
+
+No globs. No explanation.
