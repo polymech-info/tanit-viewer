@@ -1,7 +1,10 @@
-## Viewer
+# Tanit Viewer
 
 [See full documentation and tool description over here](https://tanit.polymech.info/user/cgo/pages/tanit-viewer-next)
 
+[Documentation Overview](https://tanit.polymech.info/user/cgo/pages/documentation) | [CLI Documentation](https://tanit.polymech.info/user/cgo/pages/tanit-cli) | [Commands](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/tanit-commands)
+
+**[Tanit Chat - Download from App Store](https://apps.microsoft.com/detail/9n5f39064npd)**
 
 Tanit is a multi-media talent, built to be used every day — no friction, no subscription pain. Major content types are supported natively, drawing on thirty years of working with all sorts of formats across development, science, gaming, and manufacturing.
 

@@ -50,6 +50,7 @@ export function buildHtml(product, icons, lang, {
 	assetUrl = '',
 	themes = [],
 	skin = 'plex',
+	slug = 'explore',
 } = {}) {
 	const features = flattenFeatures(product)
 	const payload = JSON.stringify({ product, features }).replace(/</g, '\\u003c')
@@ -64,6 +65,7 @@ export function buildHtml(product, icons, lang, {
 	const skinIds = themes.map((t) => t.id)
 	const map = {
 		LANG: htmlLang,
+		PRODUCT: String(slug || 'explore').replace(/[^\w.-]/g, '') || 'explore',
 		SKIN: skin,
 		TITLE: title,
 		FONTS: fontLinks(themes),

@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 /**
- * Tanit Chat — feature explorer generator
+ * Feature explorer generator. Shared by product folders (tanit-chat, tanit-viewer, …).
  *
- *   node explore.mjs                 # all langs → features.html + features.<lang>.html
- *   node explore.mjs --inline        # all langs → features.inline.html (+ .inline.<lang>)
- *   node explore.mjs --lang de       # one lang only
- *   node explore.mjs --serve --lang en
- *   node explore.mjs --skin shell    # default pack (still bundles every explore_*.css)
- *   node explore.mjs --theme plex    # same as --skin plex (not light/dark)
- *   node explore.mjs --publish tanit-chat-next --lang en
+ *   node explore.mjs --product tanit-chat
+ *   node explore.mjs --product tanit-viewer --inline --lang en
+ *   node explore.mjs --product tanit-chat --serve --lang en
+ *   node explore.mjs --product tanit-chat --skin shell
+ *   node explore.mjs --product tanit-chat --publish tanit-chat-next --lang en
  *       fetch the raw page, put the inline fragment in its html-widget, pages update
+ *
+ * --product is a folder next to this file, or any path that contains product.json.
+ * Omit it when the current directory already has product.json.
  *
  * Layout (runtime, also ?layout=classic|scroll):
  *   scroll  — expand every feature for continuous scrolling (default)
@@ -44,16 +45,15 @@ import { bundledCss, discoverThemes, resolveSkin } from './explore/themes.mjs'
 import { serve, SERVE_REBUILD_MS } from './explore/serve.mjs'
 
 const DEFAULT_OWNER = '3bb4cfbf-318b-44d3-a9d3-35680e738421'
-const DEFAULT_ASSET_URL = `https://tanit.polymech.info/api/vfs/get/${DEFAULT_OWNER}/tanit-chat/`
 
-const __dir = dirname(fileURLToPath(import.meta.url))
-const ICONS_DIR = join(__dir, 'icons')
-const CSS_PATH = join(__dir, 'explore.css')
-const JS_PATH = join(__dir, 'explore.js')
+const engineDir = dirname(fileURLToPath(import.meta.url))
+const CSS_PATH = join(engineDir, 'explore.css')
+const JS_PATH = join(engineDir, 'explore.js')
 
 function parseArgs(argv) {
 	const out = {
 		product: null,
+		productDir: null,
 		out: null,
 		serve: false,
 		port: 5177,
@@ -76,6 +76,7 @@ function parseArgs(argv) {
 		else if (a === '--publish') out.publish = String(argv[++i] || '').trim() || null
 		else if (a === '--owner') out.owner = String(argv[++i] || '').trim() || null
 		else if (a === '--skin' || a === '--theme') out.skin = String(argv[++i] || '').trim().toLowerCase() || null
+		else if (a === '--product' || a === '-p') out.productDir = String(argv[++i] || '').trim() || null
 		else if (a === '--help' || a === '-h') out.help = true
 		else if (!a.startsWith('-') && !out.product) out.product = a
 	}
@@ -92,11 +93,16 @@ function requireAsset(path, label) {
 
 const args = parseArgs(process.argv.slice(2))
 if (args.help) {
-	console.log(`Usage: node explore.mjs [product.json] [options]
+	console.log(`Usage: node explore.mjs --product <folder> [options]
 
 With no --lang, builds the base catalog plus every product_<lang>.json found.
+Engine files (explore.css, explore.js, explore_*.css) live next to this script.
+Each product folder holds product.json, intro.md, icons/, and the written HTML.
 
 Options:
+  --product, -p <folder>
+                      Product directory (name under products/, or a path).
+                      Default: the current directory when it contains product.json.
   --lang, -l <code>   Build only this lang (merge product_<code>.json if present)
   --skin, --theme <name>
                       Default pack (explore_<name>.css). --theme is an alias.
@@ -107,7 +113,7 @@ Options:
                       screenshots/ is stripped: uploads land at <url>chrome.jpg
   --publish <slug>    Fetch the raw page, replace its html-widget with the inline
                       fragment, then tanit-cli service pages update. Implies --inline.
-                      Default asset URL is the public tanit-chat folder.
+                      Default asset URL is the public folder named after the product.
   --owner <id>        Page owner for --publish (default: the PolyMech user id)
   --out <file>        Single output path (requires --lang, or base-only if no overlays)
   --serve             Serve the product dir after build; rebuild from product.json every 5s
@@ -121,11 +127,41 @@ Intro copy is Markdown, rendered at build time with marked (intro.md, or intro_<
 	process.exit(0)
 }
 
-const productPath = resolve(__dir, args.product || 'product.json')
+function hasProductJson(dir) {
+	return existsSync(join(dir, 'product.json'))
+}
+
+/** --product name or path, a positional product.json, or cwd when it is a product folder. */
+function resolveProductDir() {
+	const spec = args.productDir || args.product || ''
+	const candidates = []
+	if (spec) {
+		const abs = resolve(spec)
+		candidates.push(abs, resolve(engineDir, spec), resolve(process.cwd(), spec))
+	} else {
+		candidates.push(process.cwd())
+	}
+	for (const cand of candidates) {
+		if (hasProductJson(cand)) return cand
+		if (basename(cand) === 'product.json' && existsSync(cand)) return dirname(cand)
+	}
+	return null
+}
+
+const productDir = resolveProductDir()
+if (!productDir) {
+	console.error('pass --product <folder> (a directory with product.json)')
+	process.exit(1)
+}
+const productSlug = basename(productDir)
+const productPath = join(productDir, 'product.json')
+const ICONS_DIR = join(productDir, 'icons')
 if (args.publish) {
 	args.inline = true
 	if (!args.lang) args.lang = 'en'
-	if (!args.assetUrl) args.assetUrl = DEFAULT_ASSET_URL
+	if (!args.assetUrl) {
+		args.assetUrl = `https://tanit.polymech.info/api/vfs/get/${args.owner || DEFAULT_OWNER}/${productSlug}/`
+	}
 }
 const assetUrl = normalizeAssetUrl(args.assetUrl)
 
@@ -137,7 +173,7 @@ function runBuild(quiet) {
 		console.error('explore.css / explore.js look empty')
 		return null
 	}
-	const themes = discoverThemes(__dir)
+	const themes = discoverThemes(engineDir)
 	if (!themes.length) {
 		console.error('no explore_<name>.css themes found')
 		return null
@@ -167,19 +203,27 @@ function runBuild(quiet) {
 	let lastOut = null
 	for (const job of jobs) {
 		const lang = job.lang
-		const outPath = resolve(__dir, args.out || outNameFor({ inline: args.inline, lang: lang || 'en' }))
+		const outPath = resolve(productDir, args.out || outNameFor({ inline: args.inline, lang: lang || 'en' }))
 		const product = loadProduct(productPath, lang)
 		const features = flattenFeatures(product)
 		const htmlLang = lang || product.lang || 'en'
 		writeFileSync(
 			outPath,
-			buildHtml(product, icons, htmlLang, { inline: args.inline, css, js, assetUrl, themes, skin }),
+			buildHtml(product, icons, htmlLang, {
+				inline: args.inline,
+				css,
+				js,
+				assetUrl,
+				themes,
+				skin,
+				slug: productSlug,
+			}),
 			'utf8',
 		)
 		lastOut = outPath
 		if (!quiet) {
 			console.log(
-				`wrote ${outPath}  (${features.length} features, ${Object.keys(icons).length} icons` +
+				`wrote ${outPath}  (${productSlug}, ${features.length} features, ${Object.keys(icons).length} icons` +
 					`, lang=${htmlLang}, skin=${skin}, themes=${themes.map((t) => t.id).join('+')}` +
 					(args.inline ? ', inline' : '') +
 					(assetUrl ? `, asset-url=${assetUrl}` : '') +
@@ -244,7 +288,7 @@ function publishPage(slug, html) {
 	}
 	widget.props.content = html
 	page.content.lastUpdated = Date.now()
-	const pagePath = join(__dir, `${slug}.page`)
+	const pagePath = join(productDir, `${slug}.page`)
 	writeFileSync(pagePath, JSON.stringify(page) + '\n')
 	console.log(`wrote ${pagePath}  (html-widget ${widget.id || ''})`)
 	const upd = spawnSync('tanit-cli', ['service', 'pages', 'update', pagePath, '--slug', slug], {
@@ -260,7 +304,7 @@ if (!lastOut) process.exit(1)
 if (args.publish) publishPage(args.publish, readFileSync(lastOut, 'utf8'))
 
 if (args.serve) {
-	serve(__dir, basename(lastOut), args.port)
+	serve(productDir, basename(lastOut), args.port, [engineDir])
 	setInterval(() => {
 		try {
 			runBuild(true)

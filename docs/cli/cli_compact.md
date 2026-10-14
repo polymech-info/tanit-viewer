@@ -124,6 +124,7 @@ custom.command-muv7sxie-292fd - Report an issue
 custom.command-mv2mcqdb-2a8a3 - Create new Zip file from selection
 custom.command-mv6al70m-6256c - Toggle Action Pane
 custom.command-mv6amrha-eade6 - Toggle Action Pane
+custom.command-mv70iwqt-f240a - Delete
 custom.command-video-social-hq (run,--src,${TANIT_SCRIPTS}/video-encode-social-hq.xblox,--CURRENT_FILE,...) - Create a high-quality 1080p60 H.264 social-media master from the selected screen capture using...
 custom.dropdown-msaj5qk5-78a6b - Help
 custom.dropdown-msx1rszr-19148 - New

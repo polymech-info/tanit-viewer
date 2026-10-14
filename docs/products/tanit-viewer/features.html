@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="light" data-skin="plex">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -7,26 +7,38 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="explore.css"/>
-<script>
-(function(){var k='tv-explore-theme';var sp=null;try{sp=new URLSearchParams(location.search)}catch(e){}var q=sp&&sp.get('theme');var t=(q==='light'||q==='dark')?q:(localStorage.getItem(k)||'light');document.documentElement.setAttribute('data-theme',t);if((sp&&sp.get('embed')==='1')||(window.parent!==window))document.documentElement.setAttribute('data-pm-embed','1')})();
-</script>
+<link rel="stylesheet" href="explore_plex.css"/>
+<link rel="stylesheet" href="explore_shell.css"/>
+<script>window.TV_EXPLORE_SKINS=["plex","shell"];window.TV_EXPLORE_SKIN="plex";</script>
+<script>(function(){var skins=window.TV_EXPLORE_SKINS||['plex'];var def=window.TV_EXPLORE_SKIN||skins[0]||'plex';var k='tv-explore-theme';var ks='tv-explore-skin';var sp=null;try{sp=new URLSearchParams(location.search)}catch(e){}var q=sp&&sp.get('theme');var t=(q==='light'||q==='dark')?q:(localStorage.getItem(k)||'light');document.documentElement.setAttribute('data-theme',t);var qs=sp&&sp.get('skin');var skin=(qs&&skins.indexOf(qs)>=0)?qs:(localStorage.getItem(ks)||def);if(skins.indexOf(skin)<0)skin=def;document.documentElement.setAttribute('data-skin',skin);var lq=sp&&(sp.get('layout')||sp.get('mode'))||(function(){try{return localStorage.getItem('tv-explore-layout-v2')}catch(e){return null}})();if(lq!=='classic'&&lq!=='stage')document.documentElement.classList.add('tv-stack');if((sp&&sp.get('embed')==='1')||(window.parent!==window))document.documentElement.setAttribute('data-pm-embed','1')})();</script>
 </head>
 <body>
 <div class="shell">
   <aside class="sidebar">
-    <div class="side-brand">
+    <button type="button" class="menu-btn" id="menuBtn" aria-label="Features" aria-expanded="false" aria-controls="sideNav">
+      <svg class="ico-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="ico-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <button type="button" class="side-brand" id="brandBtn">
       <div class="side-logo" id="brandLogo"></div>
       <strong id="brandTitle"></strong>
-    </div>
+    </button>
+    <div class="top-tour" id="topTour"></div>
     <nav class="side-nav" id="sideNav" aria-label="Features"></nav>
     <div class="side-foot">
+      <button type="button" class="layout-btn" id="layoutBtn" aria-label="Continuous scroll" title="Scroll" aria-pressed="false">
+        <svg class="ico-scroll" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 5h14M5 10h14M5 15h14M5 20h10"/></svg>
+        <svg class="ico-classic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4" width="7" height="16" rx="1.5"/><rect x="13" y="4" width="8" height="16" rx="1.5"/></svg>
+      </button>
       <button type="button" class="theme-btn" id="themeBtn" aria-label="Toggle theme" title="Theme">
         <span class="moon" aria-hidden="true">◐</span>
         <span class="sun" aria-hidden="true">☀</span>
       </button>
     </div>
   </aside>
+  <div class="nav-backdrop" id="navBackdrop" hidden></div>
   <div class="main">
     <section class="stage" id="stage" aria-live="polite"></section>
   </div>

@@ -4,10 +4,14 @@
   var product = DATA.product;
   var features = DATA.features;
   var selected = 0;
+  /** Sidebar intro (intro.md) is showing instead of the selected feature. */
+  var showingIntro = false;
   /** Per-feature slide index (stack mode keeps each card independent). */
   var slideByFeat = {};
   var IMAGE_MS = 4000;
   var IDLE_MS = 2000;
+  var SLIDE_MS = 560;
+  var enterFxReady = false;
   var TOUR_KEY = 'tv-explore-tour';
   /**
    * Zoom by CSS pixel width on the <img> (not CSS scale, not % ladders).
@@ -97,17 +101,17 @@
     xform.style.transform =
       'translate3d(' + Math.round(pan.x) + 'px,' + Math.round(pan.y) + 'px,0)';
   }
-  /** Hard stop only is persisted; soft pause does not survive reload. */
+  /** Autoplay is off until Play. Stop and Play are remembered; pause is session-only. */
   function readTourMode() {
     try {
-      if (localStorage.getItem(TOUR_KEY) === 'stopped') return 'stopped';
+      var s = localStorage.getItem(TOUR_KEY);
+      if (s === 'playing' || s === 'stopped') return s;
     } catch (_) {}
-    return 'playing';
+    return 'stopped';
   }
   function persistTourMode(mode) {
     try {
-      if (mode === 'stopped') localStorage.setItem(TOUR_KEY, 'stopped');
-      else if (mode === 'playing') localStorage.removeItem(TOUR_KEY);
+      if (mode === 'playing' || mode === 'stopped') localStorage.setItem(TOUR_KEY, mode);
     } catch (_) {}
   }
   var tourMode = readTourMode(); // playing | paused | stopped
@@ -115,14 +119,16 @@
   var tourTimer = null;
   var idleTimer = null;
   var suppressIdle = false;
+  var spyLockUntil = 0;
 
   var elBrandLogo = document.getElementById('brandLogo');
   var elBrandTitle = document.getElementById('brandTitle');
   var elNav = document.getElementById('sideNav');
   var elStage = document.getElementById('stage');
   var themeBtn = document.getElementById('themeBtn');
-  elBrandTitle.textContent = product.title || 'Tanit Viewer';
+  elBrandTitle.textContent = product.title || 'Tanit Chat';
   elBrandLogo.innerHTML = ICONS.avatar || '';
+  var layoutBtn = document.getElementById('layoutBtn');
 
   function setTourHints(text) {
     document.querySelectorAll('.tour-hint').forEach(function (el) { el.textContent = text; });
@@ -132,9 +138,13 @@
   function assetUrl(path) {
     if (!path) return path;
     if (/^(https?:|data:|blob:|\/\/)/i.test(path)) return path;
-    var base = typeof TV_ASSET_URL === 'string' ? TV_ASSET_URL : '';
+    var base = '';
+    if (typeof window !== 'undefined' && typeof window.TV_ASSET_URL === 'string') base = window.TV_ASSET_URL;
+    else if (typeof TV_ASSET_URL === 'string') base = TV_ASSET_URL;
     if (!base) return path;
-    return base.replace(/\/?$/, '/') + String(path).replace(/^\.\//, '').replace(/^\//, '');
+    // screenshots/*.jpg is uploaded flat into the asset root (…/tanit-chat/chrome.jpg).
+    var rel = String(path).replace(/^\.\//, '').replace(/^\//, '').replace(/^screenshots\//, '');
+    return base.replace(/\/?$/, '/') + rel;
   }
 
   var clickSfxPool = [];
@@ -157,7 +167,7 @@
     } catch (_) {}
   }
 
-  function tourControlsHtml(extraClass) {
+  function tourControlsHtml(extraClass, compact) {
     return '<div class="tour-controls' + (extraClass ? ' ' + extraClass : '') + '" data-mode="' + tourMode + '">' +
       '<div class="tour-btns">' +
         '<button type="button" class="tour-btn" data-act="play" aria-label="Play tour" title="Play" aria-pressed="' + (tourMode === 'playing' ? 'true' : 'false') + '">' +
@@ -167,8 +177,21 @@
         '<button type="button" class="tour-btn" data-act="stop" aria-label="Stop tour" title="Stop" aria-pressed="' + (tourMode === 'stopped' ? 'true' : 'false') + '">' +
           '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h12v12H6z"/></svg></button>' +
       '</div>' +
-      '<div class="tour-meta"><b class="tour-label">Auto</b><span class="tour-hint">Images 4s · videos to end</span></div>' +
+      (compact ? '' :
+        '<div class="tour-meta"><b class="tour-label">Auto</b><span class="tour-hint">Images 4s · videos to end</span></div>' +
+        '<button type="button" class="theme-btn" data-act="theme" aria-label="Toggle theme" title="Theme">' +
+          '<span class="moon" aria-hidden="true">◐</span>' +
+          '<span class="sun" aria-hidden="true">☀</span>' +
+        '</button>') +
     '</div>';
+  }
+  function onTourAct(act) {
+    if (act === 'theme') { toggleTheme(); return; }
+    suppressIdle = true;
+    if (act === 'play') setTourMode('playing');
+    else if (act === 'pause') setTourMode('paused');
+    else if (act === 'stop') setTourMode('stopped');
+    suppressIdle = false;
   }
 
   function esc(s) {
@@ -205,9 +228,50 @@
   function visibleFeatures() {
     return features.filter(isEnabled);
   }
-  /** Mobile / narrow: all features stacked for page scroll; slides stay in-card. */
-  function isStackMode() {
+  var LAYOUT_KEY = 'tv-explore-layout-v2';
+  function queryLayout() {
+    try {
+      var sp = new URLSearchParams(location.search);
+      var q = sp.get('layout') || sp.get('mode');
+      if (q === 'scroll' || q === 'stack') return 'scroll';
+      if (q === 'classic' || q === 'stage') return 'classic';
+    } catch (e) {}
+    return null;
+  }
+  function storedLayout() {
+    try {
+      var s = localStorage.getItem(LAYOUT_KEY);
+      if (s === 'scroll' || s === 'stack') return 'scroll';
+      if (s === 'classic') return 'classic';
+    } catch (e) {}
+    return null;
+  }
+  /** classic = sidebar+stage. scroll = expand all (default). */
+  var layoutOverride = null;
+  function layoutPref() {
+    return layoutOverride || queryLayout() || storedLayout() || null;
+  }
+  function isNarrow() {
     try { return window.matchMedia('(max-width:900px)').matches; } catch (e) { return false; }
+  }
+  /** Scroll is the default. Classic only when asked (?layout=classic or the layout button). */
+  function isStackMode() {
+    return layoutPref() !== 'classic';
+  }
+  function syncLayoutUi() {
+    if (!layoutBtn) return;
+    var stack = isStackMode();
+    layoutBtn.setAttribute('aria-pressed', stack ? 'true' : 'false');
+    layoutBtn.setAttribute('aria-label', stack ? 'Classic stage' : 'Continuous scroll');
+    layoutBtn.title = stack ? 'Classic' : 'Scroll';
+  }
+  function setLayout(next, persist) {
+    var n = next === 'scroll' ? 'scroll' : 'classic';
+    layoutOverride = n;
+    if (persist !== false) {
+      try { localStorage.setItem(LAYOUT_KEY, n); } catch (e) {}
+    }
+    paint();
   }
 
   function slideMediaKind(s) {
@@ -234,10 +298,15 @@
     else if (tourMode === 'paused') hint = idleTimer ? 'Resumes in 2s if idle' : 'Paused · press play';
     else hint = 'Tour off · press play';
 
+    document.documentElement.classList.toggle('tv-playing', tourMode === 'playing');
+    var explore = document.querySelector('.tv-explore');
+    if (explore) explore.classList.toggle('tv-playing', tourMode === 'playing');
+    fitPlayViewport();
     document.querySelectorAll('.tour-controls').forEach(function (elTour) {
       elTour.setAttribute('data-mode', tourMode);
       elTour.querySelectorAll('[data-act]').forEach(function (btn) {
         var act = btn.getAttribute('data-act');
+        if (act === 'theme') return;
         var on = (act === 'play' && tourMode === 'playing') ||
           (act === 'pause' && tourMode === 'paused') ||
           (act === 'stop' && tourMode === 'stopped');
@@ -248,10 +317,81 @@
       if (elTourLabel) elTourLabel.textContent = modeLabel;
       if (elTourHint) elTourHint.textContent = hint;
     });
+    syncNavSelection();
+  }
+
+  function introHtml() {
+    var intro = product.intro;
+    return intro && intro.html ? intro.html : '';
+  }
+  function introBodyHtml() {
+    var html = introHtml();
+    return html ? '<div class="intro-body">' + html + '</div>' : '';
+  }
+  function slideThumbSrc(s) {
+    var m = s && s.media;
+    if (!m) return '';
+    if (typeof m === 'string') return m;
+    return m.src || '';
+  }
+  /** Peel nested /api/images/render?url= wrappers back to the file URL. */
+  function unwrapRenderUrl(url) {
+    var cur = String(url || '');
+    for (var n = 0; n < 8; n++) {
+      var q = cur.indexOf('/api/images/render?');
+      if (q < 0) break;
+      var inner = '';
+      try { inner = new URL(cur, 'https://local.invalid').searchParams.get('url') || ''; } catch (e) { break; }
+      if (!inner) break;
+      cur = inner;
+    }
+    return cur;
+  }
+  /**
+   * Intro jump thumbs. Published pages set TV_ASSET_URL, so src is absolute —
+   * send those through /api/images/render. Local relative paths stay as files.
+   */
+  function thumbResizeUrl(src) {
+    var url = assetUrl(src);
+    if (!url || !/^https?:/i.test(url)) return url;
+    var source = unwrapRenderUrl(url);
+    var origin = '';
+    try { origin = new URL(source).origin; } catch (e) { origin = ''; }
+    if (!origin) return url;
+    return origin + '/api/images/render?url=' + encodeURIComponent(source) + '&width=640&format=avif';
+  }
+  function introJumpsHtml() {
+    var html = '';
+    features.forEach(function (f, fi) {
+      if (!isEnabled(f)) return;
+      var list = slidesOf(fi);
+      if (product.introJumps === 'parent') list = list.slice(0, 1);
+      list.forEach(function (s, si) {
+        var src = slideThumbSrc(s);
+        var label = list.length > 1
+          ? ((f.label || '') + (s.title ? ' · ' + s.title : ''))
+          : (f.label || s.title || '');
+        var media = '';
+        if (src && isVideoSrc(src)) {
+          media = '<video muted playsinline preload="metadata" src="' + esc(assetUrl(src)) + '"></video>';
+        } else if (src) {
+          media = '<img src="' + esc(thumbResizeUrl(src)) + '" alt="" draggable="false"/>';
+        } else {
+          media = '<span class="intro-jump-fallback">' + icon(f.icon) + '</span>';
+        }
+        html += '<button type="button" class="intro-jump" data-jump-feat="' + fi + '" data-jump-slide="' + si + '">' +
+          media +
+          '<span class="intro-jump-label">' + esc(label) + '</span></button>';
+      });
+    });
+    return html ? '<div class="intro-jumps">' + html + '</div>' : '';
+  }
+  function introPageHtml() {
+    return '<div class="intro-page">' + introBodyHtml() + introJumpsHtml() + '</div>';
   }
 
   function navItemHtml(f, i, mediaKind) {
-    var on = i === selected;
+    var on = !showingIntro && i === selected;
     var tourAttr = on && tourMode !== 'stopped'
       ? ' data-tour="' + tourMode + '" data-media="' + mediaKind + '" style="--tour-ms:' + IMAGE_MS + 'ms"'
       : '';
@@ -259,6 +399,37 @@
       '<span class="si">' + icon(f.icon) + '</span><span class="sl">' + esc(f.label) + '</span>' +
       '<span class="tour-mark" aria-hidden="true"></span>' +
       '<span class="tour-bar" aria-hidden="true"><i></i></span></button>';
+  }
+
+  /** Highlight the current feature in the sidebar without rebuilding it. */
+  function syncNavSelection() {
+    if (!elNav) return;
+    var mediaKind = slideMediaKind(slide());
+    var current = null;
+    var brandBtn = document.getElementById('brandBtn');
+    if (brandBtn) brandBtn.setAttribute('aria-current', showingIntro ? 'true' : 'false');
+    elNav.querySelectorAll('.side-item[data-i]').forEach(function (btn) {
+      var i = Number(btn.getAttribute('data-i'));
+      var on = !showingIntro && i === selected;
+      btn.setAttribute('aria-current', on ? 'true' : 'false');
+      if (on && tourMode !== 'stopped') {
+        btn.setAttribute('data-tour', tourMode);
+        btn.setAttribute('data-media', mediaKind);
+        btn.style.setProperty('--tour-ms', IMAGE_MS + 'ms');
+        current = btn;
+      } else {
+        btn.removeAttribute('data-tour');
+        btn.removeAttribute('data-media');
+        btn.style.removeProperty('--tour-ms');
+      }
+    });
+    syncUrl();
+    if (current) {
+      var navRect = elNav.getBoundingClientRect();
+      var btnRect = current.getBoundingClientRect();
+      if (btnRect.top < navRect.top) elNav.scrollTop -= navRect.top - btnRect.top;
+      else if (btnRect.bottom > navRect.bottom) elNav.scrollTop += btnRect.bottom - navRect.bottom;
+    }
   }
 
   function renderNav() {
@@ -290,15 +461,42 @@
   function themeName() {
     return themeRoot().getAttribute('data-theme') === 'light' ? 'light' : 'dark';
   }
+  function knownSkins() {
+    var list = window.TV_EXPLORE_SKINS;
+    return Array.isArray(list) && list.length ? list : ['plex'];
+  }
+  function defaultSkin() {
+    return window.TV_EXPLORE_SKIN || knownSkins()[0] || 'plex';
+  }
+  function skinName() {
+    var s = themeRoot().getAttribute('data-skin');
+    return knownSkins().indexOf(s) >= 0 ? s : defaultSkin();
+  }
+  function applySkin(next, persist) {
+    var ids = knownSkins();
+    var n = ids.indexOf(next) >= 0 ? next : defaultSkin();
+    var root = themeRoot();
+    root.setAttribute('data-skin', n);
+    if (lb && lb.el) lb.el.setAttribute('data-skin', n);
+    if (persist !== false) {
+      try { localStorage.setItem('tv-explore-skin', n); } catch (e) { /* ignore */ }
+    }
+  }
   function applyTheme(next, persist) {
     var n = next === 'light' ? 'light' : 'dark';
     var root = themeRoot();
     root.setAttribute('data-theme', n);
-    if (lb && lb.el) lb.el.setAttribute('data-theme', n);
+    if (lb && lb.el) {
+      lb.el.setAttribute('data-theme', n);
+      lb.el.setAttribute('data-skin', skinName());
+    }
     if (persist !== false) localStorage.setItem('tv-explore-theme', n);
     // Rebuild media so _light / _dark assets swap with the theme
     if (typeof paint === 'function') paint();
     if (lb && lb.open && typeof renderLightboxContent === 'function') renderLightboxContent();
+  }
+  function toggleTheme() {
+    applyTheme(themeName() === 'dark' ? 'light' : 'dark', true);
   }
   /** True when hosted in pm iframe-widget (?embed=1 or nested). */
   function isEmbed() {
@@ -308,39 +506,23 @@
     } catch (e) { return window.parent !== window; }
   }
   function enableEmbedLayout() {
-    if (!isEmbed()) return;
-    document.documentElement.setAttribute('data-pm-embed', '1');
     var explore = document.querySelector('.tv-explore');
     if (explore) explore.setAttribute('data-pm-embed', '1');
+    try {
+      if (window.parent !== window) document.documentElement.setAttribute('data-pm-embed', '1');
+      else if (!explore && new URLSearchParams(location.search).get('embed') === '1') {
+        document.documentElement.setAttribute('data-pm-embed', '1');
+      }
+    } catch (e) { /* ignore */ }
   }
   /**
-   * Measure CONTENT height, not the clipped iframe viewport.
-   * getBoundingClientRect is wrong when parent height < content (classic mobile clip).
+   * Host slot height. Do not report content scrollHeight — that grows the
+   * iframe to the phone viewport and unsticks the tour chrome.
    */
   function measureHeight() {
     enableEmbedLayout();
-    var doc = document.documentElement;
-    var body = document.body;
-    var root = document.querySelector('.tv-explore') || body;
-    var shell = document.querySelector('.shell');
-    var h = Math.max(
-      root.scrollHeight || 0,
-      root.offsetHeight || 0,
-      shell ? shell.scrollHeight : 0,
-      shell ? shell.offsetHeight : 0,
-      body ? body.scrollHeight : 0,
-      body ? body.offsetHeight : 0,
-      doc ? doc.scrollHeight : 0,
-      doc ? doc.offsetHeight : 0
-    );
-    // Sum in-flow children if shell collapsed under a previous clip
-    if (shell && h < 200) {
-      var sum = 0;
-      for (var i = 0; i < shell.children.length; i++) {
-        sum += shell.children[i].getBoundingClientRect().height;
-      }
-      h = Math.max(h, Math.ceil(sum + 24));
-    }
+    var frame = playFrame();
+    var h = frame && frame.clientHeight > 40 ? frame.clientHeight : 400;
     return Math.ceil(h);
   }
   var _heightReportTimer = null;
@@ -557,6 +739,7 @@
     root.addEventListener('dragstart', function (e) { e.preventDefault(); });
 
     root.addEventListener('pointerdown', function (e) {
+      if (isNarrow()) return;
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       if (isChrome(e.target)) return;
       pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -636,8 +819,8 @@
         }
       }
       apply();
-      // Click image (not zoomed) → lightbox
-      if (wasClick && root.querySelector('img.media-el')) {
+      // Click image (not zoomed) → lightbox. Phones use the browser zoom instead.
+      if (wasClick && !isNarrow() && root.querySelector('img.media-el')) {
         var card = root.closest('.feature-card');
         var fi = card ? Number(card.getAttribute('data-feat')) : selected;
         openLightbox(fi);
@@ -647,6 +830,7 @@
     root.addEventListener('pointercancel', endPointer);
 
     root.addEventListener('dblclick', function (e) {
+      if (isNarrow()) return;
       if (isChrome(e.target)) return;
       if (zoomW > 0) {
         e.preventDefault();
@@ -672,6 +856,7 @@
     el.setAttribute('role', 'dialog');
     el.setAttribute('aria-modal', 'true');
     el.setAttribute('data-theme', themeName());
+    el.setAttribute('data-skin', skinName());
     el.innerHTML =
       '<button type="button" class="tv-lb-close" aria-label="Close">×</button>' +
       '<div class="tv-lb-stage">' +
@@ -713,6 +898,10 @@
       e.stopPropagation();
       playClick();
       var act = btn.getAttribute('data-act');
+      if (act === 'theme') {
+        toggleTheme();
+        return;
+      }
       suppressIdle = true;
       if (act === 'play') setTourMode('playing');
       else if (act === 'pause') setTourMode('paused');
@@ -1017,11 +1206,13 @@
   }
 
   function openLightbox(fi) {
+    if (isNarrow()) return;
     if (fi == null || isNaN(fi)) fi = selected;
     lb.fi = fi;
     selected = fi;
     ensureLightbox();
     lb.el.setAttribute('data-theme', themeName());
+    lb.el.setAttribute('data-skin', skinName());
     lb.open = true;
     lb.el.hidden = false;
     document.documentElement.classList.add('tv-lb-open');
@@ -1126,11 +1317,14 @@
         (stack ? '' : tourControlsHtml()) +
         nav +
       '</div>';
+    var mediaBlock = (s.media && s.media.src)
+      ? '<div class="stage-media">' + mediaHtml(s.media) + '</div>'
+      : '';
     return (
       '<div class="stage-body">' +
         '<div class="stage-main">' +
           mediaHeading +
-          '<div class="stage-media">' + mediaHtml(s.media) + '</div>' +
+          mediaBlock +
           (btns ? '<div class="media-ctas"><div class="actions">' + btns + '</div></div>' : '') +
           below +
           metricsHtml +
@@ -1140,18 +1334,27 @@
     );
   }
 
-  function renderStage() {
+  function renderStage(dir) {
+    if (showingIntro) {
+      elStage.classList.remove('is-stack');
+      if (stackIo) { stackIo.disconnect(); stackIo = null; }
+      elStage.innerHTML = '<div class="stage-body">' + introPageHtml() + '</div>';
+      syncTourUi();
+      return;
+    }
     var f = feat();
     if (!f) {
       elStage.innerHTML = '<div class="stage-below"><p class="lead">Select a feature</p></div>';
       return;
     }
     elStage.classList.remove('is-stack');
+    if (stackIo) { stackIo.disconnect(); stackIo = null; }
     elStage.innerHTML = featureBodyHtml(f, selected, { stack: false });
     syncTourUi();
     bindMediaFallback(elStage);
     bindLazyMedia(elStage);
     bindMediaZoom(elStage);
+    markSlideEnter(elStage, dir == null ? 1 : dir);
     if (tourMode === 'playing') scheduleAdvance();
     else syncMediaPlayback();
   }
@@ -1164,6 +1367,7 @@
       elStage.innerHTML = '<div class="stack-empty"><p class="lead">No matches</p></div>';
       return;
     }
+    var introCard = '<article class="feature-card intro-card" data-feat="-1" id="feature-intro">' + introPageHtml() + '</article>';
     var cards = visible.map(function (f) {
       var fi = features.indexOf(f);
       var cat = f.categoryLabel ? '<div class="feature-cat">' + esc(f.categoryLabel) + '</div>' : '';
@@ -1176,7 +1380,7 @@
     }).join('');
     elStage.innerHTML =
       '<div class="stack-tour">' + tourControlsHtml() + '</div>' +
-      '<div class="feature-stack">' + cards + '</div>';
+      '<div class="feature-stack">' + introCard + cards + '</div>';
     syncTourUi();
     elStage.querySelectorAll('.feature-card').forEach(function (card) {
       bindMediaFallback(card);
@@ -1186,31 +1390,224 @@
     syncStackSelection();
     syncMediaPlayback();
     if (tourMode === 'playing') scheduleAdvance();
-    scrollSelectedCard(false);
+    // Stay on the intro. Scrolling here jumps the host page to the first feature.
+    if (!showingIntro || tourMode === 'playing') scrollSelectedCard(false);
+    bindStackObserver();
   }
 
   function syncStackSelection() {
     if (!isStackMode()) return;
     elStage.querySelectorAll('.feature-card').forEach(function (card) {
       var fi = Number(card.getAttribute('data-feat'));
-      card.setAttribute('aria-current', fi === selected ? 'true' : 'false');
+      var on = fi === -1 ? showingIntro : (!showingIntro && fi === selected);
+      card.setAttribute('aria-current', on ? 'true' : 'false');
     });
+    syncNavSelection();
+  }
+
+  function motionOk() {
+    try { return !window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+    catch (e) { return true; }
+  }
+  function markSlideEnter(el, dir) {
+    if (!el) return;
+    el.classList.remove('is-slide-next', 'is-slide-prev');
+    if (!enterFxReady || !motionOk()) return;
+    void el.offsetWidth;
+    el.classList.add(dir < 0 ? 'is-slide-prev' : 'is-slide-next');
+  }
+  var _scrollRaf = 0;
+  function animateScrollY(target, to, ms) {
+    var isWin = target === window;
+    var from = isWin ? (window.scrollY || window.pageYOffset || 0) : target.scrollTop;
+    if (_scrollRaf) cancelAnimationFrame(_scrollRaf);
+    if (!ms || !motionOk() || Math.abs(to - from) < 2) {
+      if (isWin) window.scrollTo(0, to);
+      else target.scrollTop = to;
+      _scrollRaf = 0;
+      return;
+    }
+    var start = performance.now();
+    function frame(now) {
+      var t = Math.min(1, (now - start) / ms);
+      var e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      var y = from + (to - from) * e;
+      if (isWin) window.scrollTo(0, y);
+      else target.scrollTop = y;
+      if (t < 1) _scrollRaf = requestAnimationFrame(frame);
+      else _scrollRaf = 0;
+    }
+    _scrollRaf = requestAnimationFrame(frame);
+  }
+
+  function isScrollBox(el) {
+    if (!el || el === window) return false;
+    var oy = getComputedStyle(el).overflowY;
+    if (oy !== 'auto' && oy !== 'scroll' && oy !== 'overlay') return false;
+    return el.scrollHeight > el.clientHeight + 2;
+  }
+  function scrollingAncestor(start) {
+    var n = start;
+    while (n && n !== document.documentElement && n !== document.body) {
+      if (isScrollBox(n)) return n;
+      n = n.parentElement;
+    }
+    var root = document.scrollingElement || document.documentElement;
+    if (isScrollBox(root)) return root;
+    return window;
+  }
+  function playScrollRoot() {
+    var explore = document.querySelector('.tv-explore');
+    // Inline embed: scroll the widget only when it is the scrollport.
+    // A host page that grows with the article scrolls outside the widget.
+    if (explore && explore.getAttribute('data-pm-embed')) {
+      if (isScrollBox(explore)) return explore;
+      return scrollingAncestor(explore.parentElement);
+    }
+    var shell = document.querySelector('.shell');
+    if (document.documentElement.getAttribute('data-pm-embed') && shell) return shell;
+    if (isNarrow() && shell) return shell;
+    // Desktop stack scrolls on html (overflow:auto), not window.
+    if (isStackMode()) return document.scrollingElement || document.documentElement;
+    return window;
+  }
+  function playFrame() {
+    var root = playScrollRoot();
+    if (root && root !== window) return root;
+    return document.querySelector('.tv-explore') || document.querySelector('.shell') || document.documentElement;
+  }
+
+  /** Size the playing card to the host frame, not the phone viewport. */
+  function fitPlayViewport() {
+    var root = document.documentElement;
+    var tokenRoot = document.querySelector('.tv-explore') || root;
+    var tour = (elStage && elStage.querySelector('.stack-tour')) || document.querySelector('.stack-tour');
+    var tourH = 56;
+    if (tour) {
+      var tr = tour.getBoundingClientRect();
+      tourH = Math.max(40, Math.ceil(tr.height));
+    }
+    tokenRoot.style.setProperty('--tour-h', tourH + 'px');
+    if (tokenRoot !== root) root.style.setProperty('--tour-h', tourH + 'px');
+    if (tourMode !== 'playing' || !isStackMode()) {
+      tokenRoot.style.removeProperty('--play-fit');
+      if (tokenRoot !== root) root.style.removeProperty('--play-fit');
+      return;
+    }
+    var frame = playFrame();
+    var fh = (frame && frame.clientHeight > 40) ? frame.clientHeight : 400;
+    var padB = 8;
+    var shell = document.querySelector('.shell');
+    if (shell) {
+      var cs = getComputedStyle(shell);
+      padB = parseFloat(cs.paddingBottom) || 8;
+    }
+    var h = Math.floor(fh - tourH - padB - 8);
+    var fit = Math.max(120, h) + 'px';
+    tokenRoot.style.setProperty('--play-fit', fit);
+    if (tokenRoot !== root) root.style.setProperty('--play-fit', fit);
+  }
+
+  /** Viewport Y where a card top should land, under the sticky bar or tour. */
+  function cardScrollAnchor() {
+    if (isNarrow()) {
+      var bar = document.querySelector('.sidebar');
+      if (!bar) return 0;
+      var shell = document.querySelector('.shell');
+      var gap = shell ? (parseFloat(getComputedStyle(shell).rowGap || getComputedStyle(shell).gap) || 0) : 0;
+      return bar.getBoundingClientRect().bottom + gap;
+    }
+    var tour = elStage && elStage.querySelector('.stack-tour');
+    if (!tour || getComputedStyle(tour).display === 'none') return 0;
+    var top = parseFloat(getComputedStyle(tour).top);
+    if (!isFinite(top)) top = 0;
+    return top + tour.getBoundingClientRect().height;
   }
 
   function scrollSelectedCard(smooth) {
     if (!isStackMode()) return;
     syncStackSelection();
-    var card = elStage.querySelector('.feature-card[data-feat="' + selected + '"]');
+    var card = (showingIntro && tourMode !== 'playing')
+      ? elStage.querySelector('.intro-card')
+      : elStage.querySelector('.feature-card[data-feat="' + selected + '"]');
     if (!card) return;
-    try {
-      card.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'nearest' });
-    } catch (e) {
-      card.scrollIntoView(true);
+    var ms = smooth === false ? 0 : SLIDE_MS;
+    spyLockUntil = Date.now() + ms + 280;
+    var anchor = cardScrollAnchor();
+    var delta = card.getBoundingClientRect().top - anchor;
+    var scroller = playScrollRoot();
+    var isRoot = !scroller || scroller === window
+      || scroller === document.scrollingElement
+      || scroller === document.documentElement
+      || scroller === document.body;
+    if (isRoot) {
+      var y = (window.scrollY || window.pageYOffset || 0) + delta;
+      animateScrollY(window, Math.max(0, y), ms);
+    } else {
+      animateScrollY(scroller, Math.max(0, scroller.scrollTop + delta), ms);
+    }
+    if (tourMode === 'playing') {
+      fitPlayViewport();
+      requestAnimationFrame(function () { fitPlayViewport(); });
     }
   }
 
+  var stackIo = null;
+
+  /** Visible share of the scrollport. Slide-height ratio never hits 50% when the card is taller than the view. */
+  function bindStackObserver() {
+    if (stackIo) { stackIo.disconnect(); stackIo = null; }
+    if (!isStackMode() || !elStage || typeof IntersectionObserver === 'undefined') return;
+    var ofView = {};
+    var steps = [];
+    for (var i = 0; i <= 20; i++) steps.push(i / 20);
+    var root = playScrollRoot();
+    if (!root || root === window || root === document.documentElement || root === document.body) root = null;
+    stackIo = new IntersectionObserver(function (entries) {
+      if (!isStackMode() || Date.now() < spyLockUntil) return;
+      entries.forEach(function (en) {
+        var fi = Number(en.target.getAttribute('data-feat'));
+        var rh = en.rootBounds && en.rootBounds.height ? en.rootBounds.height : 0;
+        if (!(rh > 0)) rh = (root && root.clientHeight) || window.innerHeight;
+        ofView[fi] = rh > 0 ? (en.intersectionRect.height / rh) : 0;
+      });
+      var best = null;
+      var bestR = 0.5;
+      for (var k in ofView) {
+        if (ofView[k] >= bestR) {
+          bestR = ofView[k];
+          best = Number(k);
+        }
+      }
+      if (best == null) return;
+      var scrollerTop = 0;
+      var scrollEl = playScrollRoot();
+      if (!scrollEl || scrollEl === window) scrollerTop = window.scrollY || window.pageYOffset || 0;
+      else scrollerTop = scrollEl.scrollTop || 0;
+      if (ofView[-1] > 0 && scrollerTop < 24) best = -1;
+      if (best === -1) {
+        if (tourMode === 'playing' || showingIntro) return;
+        showingIntro = true;
+        syncStackSelection();
+        syncNavSelection();
+        return;
+      }
+      if (!isEnabled(features[best])) return;
+      if (best === selected && !showingIntro) return;
+      showingIntro = false;
+      selected = best;
+      syncStackSelection();
+      syncTourUi();
+      syncMediaPlayback();
+      if (tourMode === 'playing') scheduleAdvance();
+    }, { root: root, threshold: steps });
+    elStage.querySelectorAll('.feature-card').forEach(function (card) {
+      stackIo.observe(card);
+    });
+  }
+
   /** Patch one stack card after a slide change (keeps scroll position). */
-  function refreshFeatureCard(fi) {
+  function refreshFeatureCard(fi, dir) {
     var card = elStage.querySelector('.feature-card[data-feat="' + fi + '"]');
     var f = features[fi];
     if (!card || !f) return;
@@ -1219,7 +1616,11 @@
     bindMediaFallback(card);
     bindLazyMedia(card);
     bindMediaZoom(card);
-    if (fi === selected) syncMediaPlayback();
+    markSlideEnter(card, dir == null ? 1 : dir);
+    if (fi === selected) {
+      syncMediaPlayback();
+      if (tourMode === 'playing') fitPlayViewport();
+    }
     reportHeightSoon();
   }
 
@@ -1248,9 +1649,8 @@
     var si = slideIndex(selected);
     if (si < list.length - 1) {
       setSlideIndex(selected, si + 1);
-      if (isStackMode()) refreshFeatureCard(selected);
-      else if (!lb.open) paint();
-      else { renderNav(); renderStage(); }
+      if (isStackMode()) refreshFeatureCard(selected, 1);
+      else { renderNav(); renderStage(1); }
       syncLightboxFromState();
       if (tourMode === 'playing') scheduleAdvance();
       return;
@@ -1263,16 +1663,19 @@
     selected = features.indexOf(nextF);
     setSlideIndex(selected, 0);
     if (isStackMode()) {
-      refreshFeatureCard(selected);
+      refreshFeatureCard(selected, 1);
       scrollSelectedCard(true);
       syncTourUi();
       syncLightboxFromState();
       if (tourMode === 'playing') scheduleAdvance();
     } else if (!lb.open) {
-      paint();
+      renderNav();
+      renderStage(1);
+      syncLightboxFromState();
+      if (tourMode === 'playing') scheduleAdvance();
     } else {
       renderNav();
-      renderStage();
+      renderStage(1);
       syncTourUi();
       syncLightboxFromState();
       if (tourMode === 'playing') scheduleAdvance();
@@ -1330,11 +1733,16 @@
     clearIdleTimer();
     clearTourTimer();
     tourGen += 1;
+    var resumeFeature = mode === 'playing' && showingIntro;
+    if (resumeFeature) showingIntro = false;
     tourMode = mode;
-    // Remember hard stop across reloads; play clears it. Pause is session-only.
+    // Play and stop survive reload. Pause does not. Missing key means stopped.
     if (mode === 'stopped' || mode === 'playing') persistTourMode(mode);
     syncTourUi();
-    if (!isStackMode()) renderNav();
+    if (!isStackMode()) {
+      renderNav();
+      if (resumeFeature) renderStage();
+    } else scrollSelectedCard(false);
     syncMediaPlayback();
     syncLightboxPlayback();
     if (mode === 'playing') scheduleAdvance();
@@ -1356,9 +1764,97 @@
     setTourMode('paused', { idleResume: true });
   }
 
+  /** Standalone page only. The inline widget must not rewrite the host URL. */
+  function pathRoutes() {
+    return !document.querySelector('.tv-explore');
+  }
+  function slugify(s) {
+    return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+  function featureSlug(f) {
+    return slugify(f && (f.label || f.id));
+  }
+  function pathForState() {
+    if (showingIntro || !feat()) return '/';
+    var slug = featureSlug(feat());
+    return slug ? '/' + slug : '/';
+  }
+  function routeToken() {
+    var parts = (location.pathname || '/').split('/').filter(Boolean);
+    var base = parts.length ? parts[parts.length - 1] : '';
+    if (!base || /\.html?$/i.test(base)) return '';
+    return base.toLowerCase();
+  }
+  function featureIndexBySlug(slug) {
+    for (var i = 0; i < features.length; i++) {
+      var f = features[i];
+      if (!isEnabled(f)) continue;
+      if (featureSlug(f) === slug || String(f.id || '').toLowerCase() === slug) return i;
+    }
+    return -1;
+  }
+  function applyRoute() {
+    if (!pathRoutes()) return;
+    var slug = routeToken();
+    if (!slug) {
+      showingIntro = true;
+      return;
+    }
+    var idx = featureIndexBySlug(slug);
+    if (idx >= 0) {
+      showingIntro = false;
+      selected = idx;
+      setSlideIndex(idx, 0);
+      return;
+    }
+    if (introHtml()) showingIntro = true;
+  }
+  var urlPush = false;
+  function syncUrl() {
+    if (!pathRoutes()) return;
+    var next = pathForState();
+    var raw = (location.pathname || '/').replace(/\/+$/, '') || '/';
+    var cur = /\.html?$/i.test(raw) ? '/' : raw;
+    if (cur === next && raw === cur) { urlPush = false; return; }
+    var url = next + location.search + location.hash;
+    try {
+      if (urlPush) history.pushState({ tv: 1 }, '', url);
+      else history.replaceState({ tv: 1 }, '', url);
+    } catch (e) { /* file:// or sandboxed */ }
+    urlPush = false;
+  }
+
+  function scrollToTop(smooth) {
+    var ms = smooth === false ? 0 : SLIDE_MS;
+    spyLockUntil = Date.now() + (ms || 0) + 280;
+    var scroller = playScrollRoot();
+    if (!scroller || scroller === window) animateScrollY(window, 0, ms);
+    else animateScrollY(scroller, 0, ms);
+    if (elStage && elStage.scrollTop) elStage.scrollTop = 0;
+    var page = elStage && elStage.querySelector('.intro-page');
+    if (page) page.scrollTop = 0;
+  }
+
+  function showIntro() {
+    urlPush = true;
+    showingIntro = true;
+    noteInteraction();
+    if (isStackMode()) {
+      syncStackSelection();
+      scrollToTop(true);
+      syncTourUi();
+    } else {
+      paint();
+      scrollToTop(false);
+    }
+  }
+
   function selectFeature(i, fromTour) {
     if (i < 0 || i >= features.length) return;
     if (!isEnabled(features[i])) return;
+    if (!fromTour) urlPush = true;
+    showingIntro = false;
     selected = i;
     setSlideIndex(i, 0);
     if (!fromTour) noteInteraction();
@@ -1370,6 +1866,9 @@
       if (tourMode === 'playing') scheduleAdvance();
     } else {
       paint();
+      if (elStage) elStage.scrollTop = 0;
+      var stageMain = elStage && elStage.querySelector('.stage-main');
+      if (stageMain) stageMain.scrollTop = 0;
     }
     syncLightboxFromState();
   }
@@ -1378,18 +1877,20 @@
     if (fi == null) fi = selected;
     var n = slidesOf(fi).length;
     if (i < 0 || i >= n) return;
+    var prev = slideIndex(fi);
     setSlideIndex(fi, i);
+    var dir = i >= prev ? 1 : -1;
     if (!fromTour) {
       selected = fi;
       noteInteraction();
     }
     if (isStackMode()) {
-      refreshFeatureCard(fi);
+      refreshFeatureCard(fi, dir);
       syncTourUi();
       if (tourMode === 'playing' && fi === selected) scheduleAdvance();
     } else {
       renderNav();
-      renderStage();
+      renderStage(dir);
     }
     syncLightboxFromState();
   }
@@ -1399,24 +1900,27 @@
     var explore = document.querySelector('.tv-explore');
     if (explore) explore.classList.toggle('tv-stack', isStackMode());
     if (isStackMode()) {
-      if (elNav) elNav.innerHTML = '';
+      renderNav();
       renderStack();
     } else {
       renderNav();
       renderStage();
     }
+    syncLayoutUi();
     reportHeightSoon();
+    enterFxReady = true;
   }
 
   elNav.addEventListener('click', function (e) {
     var btn = e.target.closest('[data-i]');
     if (!btn) return;
     playClick();
+    setNavOpen(false);
     selectFeature(Number(btn.getAttribute('data-i')));
   });
 
-  /** Step slides; in stack mode stay inside the feature. Desktop wraps to next/prev feature. */
-  function stepSlide(dir, fi) {
+  /** Step slides. wrap=true (PageDown / wheel / classic) crosses features. */
+  function stepSlide(dir, fi, wrap) {
     if (fi == null) fi = selected;
     var list = slidesOf(fi);
     if (!list.length) return;
@@ -1425,7 +1929,8 @@
       setSlide(next, false, fi);
       return;
     }
-    if (isStackMode()) return; // clamp — scroll the page for other features
+    var allowWrap = wrap || !isStackMode();
+    if (!allowWrap) return;
     var visible = visibleFeatures();
     if (!visible.length) return;
     var vi = visible.indexOf(features[fi] || feat());
@@ -1436,7 +1941,18 @@
     setSlideIndex(nfi, dir < 0 ? Math.max(0, nSlides - 1) : 0);
     selected = nfi;
     noteInteraction();
-    paint();
+    if (isStackMode()) {
+      if (dir < 0) refreshFeatureCard(nfi, dir);
+      var arrive = elStage.querySelector('.feature-card[data-feat="' + nfi + '"]');
+      markSlideEnter(arrive, dir);
+      syncStackSelection();
+      scrollSelectedCard(true);
+      syncTourUi();
+      syncMediaPlayback();
+    } else {
+      renderNav();
+      renderStage(dir);
+    }
     syncLightboxFromState();
   }
 
@@ -1501,15 +2017,23 @@
   bindStageSwipe();
 
   elStage.addEventListener('click', function (e) {
+    var jump = e.target.closest('[data-jump-feat]');
+    if (jump) {
+      playClick();
+      var jfi = Number(jump.getAttribute('data-jump-feat'));
+      var jsi = Number(jump.getAttribute('data-jump-slide') || 0);
+      selectFeature(jfi);
+      if (jsi > 0) setSlide(jsi, false, jfi);
+      if (isStackMode()) {
+        scrollSelectedCard(false);
+        requestAnimationFrame(function () { scrollSelectedCard(false); });
+      }
+      return;
+    }
     var tourBtn = e.target.closest('.tour-controls [data-act]');
     if (tourBtn) {
       playClick();
-      var act = tourBtn.getAttribute('data-act');
-      suppressIdle = true;
-      if (act === 'play') setTourMode('playing');
-      else if (act === 'pause') setTourMode('paused');
-      else if (act === 'stop') setTourMode('stopped');
-      suppressIdle = false;
+      onTourAct(tourBtn.getAttribute('data-act'));
       return;
     }
     var stepBtn = e.target.closest('[data-feat-step]');
@@ -1528,15 +2052,84 @@
     if (e.target.closest('.stage-media')) noteInteraction();
   });
 
-  elStage.addEventListener('wheel', function (e) {
-    if (e.target.closest('.stage-media')) noteInteraction();
-  }, { passive: true });
+  var wheelLockUntil = 0;
+  var wheelAcc = 0;
+  function onExploreWheel(e) {
+    if (lb.open) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.target.closest('input, textarea, select, video')) return;
+    if (e.target.closest('.stage-media[data-zoomed]')) return;
+    if (isStackMode()) return;
+    if (!e.target.closest('.stage')) return;
+    e.preventDefault();
+    var dy = e.deltaY;
+    if (e.deltaMode === 1) dy *= 16;
+    else if (e.deltaMode === 2) dy *= 480;
+    wheelAcc += dy;
+    var now = Date.now();
+    if (now < wheelLockUntil) return;
+    if (Math.abs(wheelAcc) < 48) return;
+    var dir = wheelAcc > 0 ? 1 : -1;
+    wheelAcc = 0;
+    wheelLockUntil = now + SLIDE_MS;
+    playClick();
+    stepSlide(dir, selected, true);
+  }
+  var exploreRoot = document.querySelector('.tv-explore') || document.querySelector('.shell') || document;
+  exploreRoot.addEventListener('wheel', onExploreWheel, { passive: false });
 
+  if (layoutBtn) {
+    layoutBtn.addEventListener('click', function () {
+      playClick();
+      setLayout(isStackMode() ? 'classic' : 'scroll', true);
+    });
+  }
   if (themeBtn) {
     themeBtn.addEventListener('click', function () {
       playClick();
-      applyTheme(themeName() === 'dark' ? 'light' : 'dark', true);
+      toggleTheme();
     });
+  }
+
+  var menuBtn = document.getElementById('menuBtn');
+  var brandBtn = document.getElementById('brandBtn');
+  var topTour = document.getElementById('topTour');
+  var navBackdrop = document.getElementById('navBackdrop');
+  if (topTour) topTour.innerHTML = tourControlsHtml('top-tour-controls', true);
+  function setNavOpen(open) {
+    var shell = document.querySelector('.shell');
+    var on = !!open && isNarrow();
+    if (shell) shell.classList.toggle('nav-open', on);
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
+    if (navBackdrop) {
+      if (on) navBackdrop.removeAttribute('hidden');
+      else navBackdrop.setAttribute('hidden', '');
+    }
+  }
+  if (menuBtn) {
+    menuBtn.addEventListener('click', function () {
+      playClick();
+      var shell = document.querySelector('.shell');
+      setNavOpen(!(shell && shell.classList.contains('nav-open')));
+    });
+  }
+  if (brandBtn) {
+    brandBtn.addEventListener('click', function () {
+      playClick();
+      setNavOpen(false);
+      showIntro();
+    });
+  }
+  if (topTour) {
+    topTour.addEventListener('click', function (e) {
+      var tourBtn = e.target.closest('[data-act]');
+      if (!tourBtn) return;
+      playClick();
+      onTourAct(tourBtn.getAttribute('data-act'));
+    });
+  }
+  if (navBackdrop) {
+    navBackdrop.addEventListener('click', function () { setNavOpen(false); });
   }
 
   // Host iframe (pm-pics iframe-widget): embed layout + theme + height pump
@@ -1557,6 +2150,8 @@
       var hostT = hostDocumentTheme();
       if (hostT) applyTheme(hostT, false);
     }
+    var qSkin = new URLSearchParams(location.search).get('skin');
+    if (qSkin) applySkin(qSkin, false);
   } catch (e) { /* ignore */ }
   window.addEventListener('message', function (ev) {
     var d = ev && ev.data;
@@ -1581,17 +2176,21 @@
     hostThemeMo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
   }
   if (typeof ResizeObserver !== 'undefined') {
-    var roRoot = document.querySelector('.shell') || document.querySelector('.tv-explore') || document.body;
+    var roRoot = playFrame();
     if (roRoot) {
-      var ro = new ResizeObserver(function () { reportHeightSoon(); });
+      var ro = new ResizeObserver(function () { reportHeightSoon(); fitPlayViewport(); });
       ro.observe(roRoot);
     }
   }
   window.addEventListener('load', reportHeightSoon);
-  window.addEventListener('orientationchange', reportHeightSoon);
+  window.addEventListener('orientationchange', function () { reportHeightSoon(); fitPlayViewport(); });
+  window.addEventListener('resize', fitPlayViewport);
   try {
     var mqStack = window.matchMedia('(max-width:900px)');
-    var onStackMq = function () { paint(); };
+    var onStackMq = function () {
+      if (!isNarrow()) setNavOpen(false);
+      paint();
+    };
     if (mqStack.addEventListener) mqStack.addEventListener('change', onStackMq);
     else if (mqStack.addListener) mqStack.addListener(onStackMq);
   } catch (e) { /* ignore */ }
@@ -1603,9 +2202,16 @@
 
   document.addEventListener('keydown', function (e) {
     if (e.target.matches('input,textarea,select')) return;
+    if (e.key === 'Escape' && document.querySelector('.shell.nav-open')) {
+      e.preventDefault();
+      setNavOpen(false);
+      return;
+    }
     if (lb.open) {
       if (e.key === 'Escape') { e.preventDefault(); closeLightbox(); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); noteInteraction(); lightboxNav(-1); }
+      else if (e.key === 'PageDown') { e.preventDefault(); noteInteraction(); lightboxNav(1); }
+      else if (e.key === 'PageUp') { e.preventDefault(); noteInteraction(); lightboxNav(-1); }
       else if (e.key === 'ArrowRight') { e.preventDefault(); noteInteraction(); lightboxNav(1); }
       else if (e.key === ' ') {
         e.preventDefault();
@@ -1644,6 +2250,8 @@
     }
     else if (e.key === 'ArrowRight') { e.preventDefault(); playClick(); stepSlide(1); }
     else if (e.key === 'ArrowLeft') { e.preventDefault(); playClick(); stepSlide(-1); }
+    else if (e.key === 'PageDown') { e.preventDefault(); playClick(); stepSlide(1, selected, true); }
+    else if (e.key === 'PageUp') { e.preventDefault(); playClick(); stepSlide(-1, selected, true); }
     else if (e.key === ' ') {
       e.preventDefault();
       playClick();
@@ -1655,5 +2263,13 @@
   // default: first enabled feature in product.json order
   var prefer = features.findIndex(isEnabled);
   selected = prefer >= 0 ? prefer : 0;
+  if (introHtml()) showingIntro = true;
+  applyRoute();
   paint();
+  window.addEventListener('popstate', function () {
+    if (!pathRoutes()) return;
+    urlPush = false;
+    applyRoute();
+    paint();
+  });
 })();

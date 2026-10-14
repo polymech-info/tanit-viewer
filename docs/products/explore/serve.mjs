@@ -37,17 +37,21 @@ function sendFile(res, file) {
 	res.end(readFileSync(file))
 }
 
-export function serve(dir, htmlName, port) {
+export function serve(dir, htmlName, port, extraRoots = []) {
 	const root = resolve(dir)
+	const roots = [root, ...extraRoots.map((d) => resolve(d))]
 	const shell = resolve(root, htmlName)
 	const server = createServer((req, res) => {
 		const url = new URL(req.url || '/', `http://localhost:${port}`)
 		let path = decodeURIComponent(url.pathname)
 		if (path === '/') path = `/${htmlName}`
-		const file = resolve(root, '.' + path)
-		if (file.startsWith(root) && isFile(file)) {
-			sendFile(res, file)
-			return
+		const rel = '.' + path
+		for (const base of roots) {
+			const file = resolve(base, rel)
+			if (file.startsWith(base) && isFile(file)) {
+				sendFile(res, file)
+				return
+			}
 		}
 		// /files, /browser-use — same document; the client reads the path.
 		if (!extname(path) && isFile(shell)) {

@@ -14,11 +14,11 @@ Role word:
 
 - `in` — `generates` is null
 - `out` — `accepts` is null
-- `dir` — all three of accepts, generates, transport are null
+- `dir` — the path is a folder. `accepts` is `directory` when the command reads it. `generates` is `directory` when the command writes the folder. The other side is `none`. `none` means that side is intentionally empty, not unset. `search index` reads folders and returns no file: the input accepts `directory`, or `["directory", "any"]` when the sentence also names files, and generates `none`
 - `weight` — `generates` is null. `accepts` is the weight extension named in the option sentence (`gguf`, `onnx`, `task`)
 - `map` — a ribbon button. Both sides may be set. When the destination keeps `${SRC_EXT}`, both sides are the same family. A button on the Text tab is `text`, not `any`
 
-Each side is `image`, `video`, `audio`, `office`, `text`, `any`, a bare-extension array, or null.
+Each side is `image`, `video`, `audio`, `office`, `text`, `any`, `directory`, `none`, a bare-extension array, or null.
 
 `office` is only docx, xlsx, pptx. `text` is markdown, code, and other plain-text files (md, txt, json, py, …). `text` does not include pdf, docx, xlsx, pptx, or 3D. Use `["pdf"]` only when the option sentence says a PDF file. A mix of families is an array, not a group token. `file/dir` is still that file family, not `dir`.
 
