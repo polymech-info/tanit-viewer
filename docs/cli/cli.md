@@ -10018,6 +10018,337 @@ tanit-cli mcp client Tanit tavily-tavily_research --args '{}' --timeout-ms 0 --i
 
 ---
 
+#### mcp client Tanit deepl-get-source-languages
+
+Get list of available source languages for translation
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-source-languages
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-source-languages --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-get-target-languages
+
+Get list of available target languages for translation
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-target-languages
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-target-languages --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-translate-text
+
+Translate text to a target language using DeepL API. Review all available optional parameters and use those applicable to your scenario for best results. When the translation inclu
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--context` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Recommended: describe what this text is about (e.g., 'Technical documentation for a software API'). Improves translation accuracy but is not itself translated.
+- `--customInstructions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Array of custom instructions to guide translation style (max 10 instructions, 300 chars each)
+- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls formality: 'less' for informal, 'more' for formal/polite, 'prefer_less'/'prefer_more' to prefer but fall back to default
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Glossary ID to ensure consistent terminology translation
+- `--preserveFormatting` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to preserve original formatting - recommended for markdown, code blocks, HTML, or any structured text
+- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
+- `--splitSentences` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sentence splitting: '0' disables, '1' (default) splits on punctuation and newlines, 'nonewlines' preserves line breaks
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
+- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to translate, as a single string or an array of strings handled independently
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-text --targetLangCode <value> --text <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-text --args '{}' --timeout-ms 0 --context 'foo' --customInstructions '{}' --formality 'foo' --glossaryId 'foo' --preserveFormatting --sourceLangCode 'foo' --splitSentences 'foo' --styleId 'foo' --targetLangCode 'foo' --text 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-writing-styles
+
+Get list of writing styles the DeepL API can use while rephrasing text
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-styles
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-styles --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-get-writing-tones
+
+Get list of writing tones the DeepL API can use while rephrasing text
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-tones
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-writing-tones --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-rephrase-text
+
+Rephrase text in the same language, or into a different language, using DeepL API
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--style` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing style for rephrasing
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr') to rephrase into a different language, or leave empty to keep the original language
+- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to rephrase, as a single string or an array of strings handled independently
+- `--tone` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing tone for rephrasing
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-rephrase-text --text <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-rephrase-text --args '{}' --timeout-ms 0 --style 'foo' --targetLangCode 'foo' --text 'foo' --tone 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-translate-document
+
+Translate a document file using DeepL API
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls whether translations should lean toward informal or formal language
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ID of glossary to use for translation
+- `--inputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to the input document file to translate
+- `--outputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path where the translated document will be saved (if not provided, will be auto-generated)
+- `--outputFormat` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Desired output file format (e.g. 'pdf'), or leave empty to keep the input format. Only some conversions are supported.
+- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-document --inputFile <value> --targetLangCode <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-translate-document --args '{}' --timeout-ms 0 --formality 'foo' --glossaryId 'foo' --inputFile 'foo' --outputFile 'foo' --outputFormat 'foo' --sourceLangCode 'foo' --styleId 'foo' --targetLangCode 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-list-glossaries
+
+Get a list of all glossaries with metadata for each - name, dictionaries available, and creation time. This does not fetch any glossary entries. Use the get-glossary-dictionary-ent
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-glossaries
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-glossaries --args '{}' --timeout-ms 0
+```
+
+---
+
+#### mcp client Tanit deepl-get-glossary-info
+
+Given an id, get metadata about the glossary with that id - its name, available dictionaries, and creation time. This does not fetch any glossary entries. Use the get-glossary-dict
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-info --glossaryId <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-info --args '{}' --timeout-ms 0 --glossaryId 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-glossary-dictionary-entries
+
+Retrieve all the entries from a given glossary dictionary. (A glossary consists one of one or more dictionaries, each of which contains entries for a specific language pair, in one
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
+- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - source language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
+- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --glossaryId <value> --sourceLangCode <value> --targetLangCode <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --args '{}' --timeout-ms 0 --glossaryId 'foo' --sourceLangCode 'foo' --targetLangCode 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-list-style-rules
+
+Get a list of all style rules with metadata for each - id, name, language, and timestamps. Style rules can be applied when translating text or documents. Use the get-style-rule too
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--detailed` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to include the configured rules and custom instructions of each rule
+- `--page` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page number, 0-based
+- `--pageSize` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of style rules per page (max 10)
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-style-rules
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-list-style-rules --args '{}' --timeout-ms 0 --detailed --page 'foo' --pageSize 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-style-rule
+
+Given an id, get a single style rule with its full detail - configured rules and custom instructions.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-style-rule --styleId <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-style-rule --args '{}' --timeout-ms 0 --styleId 'foo'
+```
+
+---
+
+#### mcp client Tanit deepl-get-custom-instruction
+
+Get a single custom instruction belonging to a style rule. Use the get-style-rule tool to find out which custom instructions a style rule contains.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--instructionId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the custom instruction
+- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-custom-instruction --instructionId <value> --styleId <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms 0 --instructionId 'foo' --styleId 'foo'
+```
+
+---
+
 #### mcp client Tanit skillhub-search_skills
 
 Search for Claude Code Skills using natural language. Returns relevant skills based on semantic matching.
@@ -10508,337 +10839,6 @@ tanit-cli mcp client Tanit skillhub-generate_skill --description <value>
 
 ```sh
 tanit-cli mcp client Tanit skillhub-generate_skill --args '{}' --timeout-ms 0 --category 'foo' --description 'foo' --language 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-get-source-languages
-
-Get list of available source languages for translation
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-source-languages
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-source-languages --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-get-target-languages
-
-Get list of available target languages for translation
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-target-languages
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-target-languages --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-translate-text
-
-Translate text to a target language using DeepL API. Review all available optional parameters and use those applicable to your scenario for best results. When the translation inclu
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--context` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Recommended: describe what this text is about (e.g., 'Technical documentation for a software API'). Improves translation accuracy but is not itself translated.
-- `--customInstructions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Array of custom instructions to guide translation style (max 10 instructions, 300 chars each)
-- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls formality: 'less' for informal, 'more' for formal/polite, 'prefer_less'/'prefer_more' to prefer but fall back to default
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Glossary ID to ensure consistent terminology translation
-- `--preserveFormatting` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to preserve original formatting - recommended for markdown, code blocks, HTML, or any structured text
-- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
-- `--splitSentences` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sentence splitting: '0' disables, '1' (default) splits on punctuation and newlines, 'nonewlines' preserves line breaks
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
-- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to translate, as a single string or an array of strings handled independently
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-translate-text --targetLangCode <value> --text <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-translate-text --args '{}' --timeout-ms 0 --context 'foo' --customInstructions '{}' --formality 'foo' --glossaryId 'foo' --preserveFormatting --sourceLangCode 'foo' --splitSentences 'foo' --styleId 'foo' --targetLangCode 'foo' --text 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-get-writing-styles
-
-Get list of writing styles the DeepL API can use while rephrasing text
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-writing-styles
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-writing-styles --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-get-writing-tones
-
-Get list of writing tones the DeepL API can use while rephrasing text
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-writing-tones
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-writing-tones --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-rephrase-text
-
-Rephrase text in the same language, or into a different language, using DeepL API
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--style` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing style for rephrasing
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr') to rephrase into a different language, or leave empty to keep the original language
-- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Text to rephrase, as a single string or an array of strings handled independently
-- `--tone` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Writing tone for rephrasing
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-rephrase-text --text <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-rephrase-text --args '{}' --timeout-ms 0 --style 'foo' --targetLangCode 'foo' --text 'foo' --tone 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-translate-document
-
-Translate a document file using DeepL API
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--formality` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Controls whether translations should lean toward informal or formal language
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ID of glossary to use for translation
-- `--inputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Path to the input document file to translate
-- `--outputFile` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Path where the translated document will be saved (if not provided, will be auto-generated)
-- `--outputFormat` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Desired output file format (e.g. 'pdf'), or leave empty to keep the input format. Only some conversions are supported.
-- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - source language code, in standard ISO-639-1 format (e.g. 'en', 'de', 'fr'), or leave empty for auto-detection
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Style rule ID to apply. Use the list-style-rules tool to discover available style rules.
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format (e.g. 'en-US', 'de', 'fr')
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-translate-document --inputFile <value> --targetLangCode <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-translate-document --args '{}' --timeout-ms 0 --formality 'foo' --glossaryId 'foo' --inputFile 'foo' --outputFile 'foo' --outputFormat 'foo' --sourceLangCode 'foo' --styleId 'foo' --targetLangCode 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-list-glossaries
-
-Get a list of all glossaries with metadata for each - name, dictionaries available, and creation time. This does not fetch any glossary entries. Use the get-glossary-dictionary-ent
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-list-glossaries
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-list-glossaries --args '{}' --timeout-ms 0
-```
-
----
-
-#### mcp client Tanit deepl-get-glossary-info
-
-Given an id, get metadata about the glossary with that id - its name, available dictionaries, and creation time. This does not fetch any glossary entries. Use the get-glossary-dict
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-glossary-info --glossaryId <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-glossary-info --args '{}' --timeout-ms 0 --glossaryId 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-get-glossary-dictionary-entries
-
-Retrieve all the entries from a given glossary dictionary. (A glossary consists one of one or more dictionaries, each of which contains entries for a specific language pair, in one
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--glossaryId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the glossary
-- `--sourceLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - source language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
-- `--targetLangCode` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - target language code, in standard ISO-639-1 format without a regional variant (e.g. 'en', 'de', 'fr')
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --glossaryId <value> --sourceLangCode <value> --targetLangCode <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-glossary-dictionary-entries --args '{}' --timeout-ms 0 --glossaryId 'foo' --sourceLangCode 'foo' --targetLangCode 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-list-style-rules
-
-Get a list of all style rules with metadata for each - id, name, language, and timestamps. Style rules can be applied when translating text or documents. Use the get-style-rule too
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--detailed` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Set to true to include the configured rules and custom instructions of each rule
-- `--page` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Page number, 0-based
-- `--pageSize` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of style rules per page (max 10)
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-list-style-rules
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-list-style-rules --args '{}' --timeout-ms 0 --detailed --page 'foo' --pageSize 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-get-style-rule
-
-Given an id, get a single style rule with its full detail - configured rules and custom instructions.
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-style-rule --styleId <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-style-rule --args '{}' --timeout-ms 0 --styleId 'foo'
-```
-
----
-
-#### mcp client Tanit deepl-get-custom-instruction
-
-Get a single custom instruction belonging to a style rule. Use the get-style-rule tool to find out which custom instructions a style rule contains.
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--instructionId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the custom instruction
-- `--styleId` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - The unique identifier of the style rule
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-custom-instruction --instructionId <value> --styleId <value>
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms 0 --instructionId 'foo' --styleId 'foo'
 ```
 
 ## Custom Commands

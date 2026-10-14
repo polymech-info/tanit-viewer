@@ -281,6 +281,7 @@ scheduler run-now (now,namespace,count,schedule) - Emit one occurrence for --sch
 scheduler serve (now,namespace,count,schedule,...) - Foreground scheduler host: claim/lock, tick while leader, stay as follower otherwise. Ctrl+C...
 scheduler status (now,namespace,count,schedule) - Print persisted scheduler runtime state.
 scheduler tick (now,namespace,count,schedule) - Emit due occurrences and persist scheduler state under config_dir.
+schema gen (binary,dst) - Write one *-schema.json from a binary's --help. Runs the agent in-process. The prompt is...
 search action (input,log-level,mode,content,...) - Run a search-scoped action such as replace (implementation pending).
 search detail (log-level,adapter,path,selector,...) - Expand a search hit through the owning source adapter.
 search index (input,log-level,mode,content,...) - Index files for semantic search (cron-friendly).

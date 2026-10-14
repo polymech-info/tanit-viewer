@@ -4,6 +4,13 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
+## 1.0.77 - 14-10
+
+- Action pane fixes and adjustments
+- Bookmarks now managable via settings (searchable)
+- Tanit-CLI ambient schemas
+- Schema generator CLI
+
 ## 1.0.76 - 13-10
 
 - The centre file viewer can show a command and Open with column beside the preview. The column takes its width from the preview, and it follows the file selected in the file panel ![](./screenshots/actions.png)
