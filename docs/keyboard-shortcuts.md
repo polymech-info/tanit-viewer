@@ -312,41 +312,41 @@ Worth knowing when learning the wiring and tree UIs:
 
 These come from the `commands.json` that was loaded when this page was generated (same file as Settings → Commands).
 
-### Screenshots
+### Schnappschüsse
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Fullscreen Screenshot | `F14` | Global |
+| Vollbildaufnahme | `F14` | Global |
 
-### View
+### Ansicht
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
 | Actions | `Shift+F10` | Window |
-| Fullscreen | `Alt+F` | Window |
+| Vollbild | `Alt+F` | Window |
 
-### Audio
+### Ton
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Speech to Text | `Shift+F7` | Global |
+| Sprache zu Text | `Shift+F7` | Global |
 
-### Screen-Recorder
+### Bildschirmaufnahme
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
 | 1:1 | `Shift+F8` | Global |
 
-### Scheduler
+### Planer
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| test-screen | `Ctrl+Alt+F8` | Window |
+| Test | `Ctrl+Alt+F8` | Window |
 
-### Files
+### Dateien
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Copy | `F5` | Window |
-| Move | `F6` | Window |
-| Online Help | `F1` | Window |
+| Kop. | `F5` | Window |
+| Verschieb | `F6` | Window |
+| Hilfe | `F1` | Window |

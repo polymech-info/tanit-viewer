@@ -4,6 +4,15 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
+## 1.0.78 - 15-10
+
+- OpenAI direct support for image generation, vision, speech-to-text, text-to-speech
+- Spending widget now displays total credits remaining
+- Error handling for encrypted profile archives
+- Settings dialog order fix
+- Tanit text to speech, voice id settings fix
+- SerpAPI MCP payload handover fixed
+
 ## 1.0.77 - 14-10
 
 - Action pane fixes and adjustments
