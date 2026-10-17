@@ -7507,6 +7507,11 @@ Default block:
 | `custom.command-mtczu1xa-c605f` | File Tab | `app:newfiletab` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
 | `custom.command-mudse19e-edcc5` | Browser | `app:openurl` |  | selection | `google.com` |
 | `custom.command-mtfpcfxj-e1333` | Screen Recording | `cli:xblox` |  | selection; ->mp4,m4v,webm,mov,mkv,avi,wmv,ogv,mpg,mpeg,ts,m2ts,mts,3gp,3g2 | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
+| `custom.workbench-switcher` | Workbench | `metadata` |  | selection |  |
+| `custom.command-mvc40x44-004e9` | Chat Workbench | `app:switchworkbench` | Switch to chat workbench | selection | `chat` |
+| `custom.command-mvc46qzq-39a35` | Main Workbench | `app:switchworkbench` | Switch to main workbench | selection | `main` |
+| `custom.command-mvc476y9-f6789` | Viewer Workbench | `app:switchworkbench` | Switch to viewer workbench | selection | `viewer` |
+| `custom.command-mvc6k9ua-832dc` | File Manager | `app:switchworkbench` | Switch to file manager | selection | `filemanager` |
 | `custom.command-mulbk22p-b16a6` | Wizard | `app:settings` | Open setup wizard | selection | `wizard` |
 | `custom.command-mpx9r1ur-8c6df` | Assistant | `cli:llm` | Activates real-time voice assistant in background | selection | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | `app:togglelauncher` | Open launcher menu | selection |  |
@@ -7544,7 +7549,7 @@ Default block:
 | `custom.command-mtwl51se-b7440` | 1269x846 | `app:setframesize` |  | selection | `1269x846` |
 | `custom.view-maximize` | Fullscreen | `app:togglefullscreen` |  | selection | `immersive`<br>`ribbon,statusbar,toolbar` |
 | `custom.command-mtoxzgrv-1f644` | Maximize | `app:setframesize` |  | selection | `max` |
-| `custom.command-mtv9cd7k-7a458` | Reset | `app:resetlayout` |  | selection |  |
+| `custom.command-mtv9cd7k-7a458` | Reset | `app:switchworkbench` |  | selection |  |
 | `custom.command-70eabea6-957e6` | Spanish | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem; text->text | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`Translate to Spanish`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_es.${SRC_EXT}`<br>`--hud` |
 | `custom.command-msyzmkcu-9b027` | English | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem; text->text | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_en.${SRC_EXT}`<br>`--prompt`<br>`Translate to English`<br>`--no-tools`<br>`--preset`<br>`Tanit-Fast`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-msyznegr-9190e` | German | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem; text->text | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_de.${SRC_EXT}`<br>`--hud`<br>`--hud-mode`<br>`both`<br>`--prompt`<br>`Translate to German. Return raw response, no fences!` |

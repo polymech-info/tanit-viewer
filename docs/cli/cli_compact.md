@@ -125,6 +125,10 @@ custom.command-mv2mcqdb-2a8a3 - Create new Zip file from selection
 custom.command-mv6al70m-6256c - Toggle Action Pane
 custom.command-mv6amrha-eade6 - Toggle Action Pane
 custom.command-mv70iwqt-f240a - Delete
+custom.command-mvc40x44-004e9 (chat) - Switch to chat workbench
+custom.command-mvc46qzq-39a35 (main) - Switch to main workbench
+custom.command-mvc476y9-f6789 (viewer) - Switch to viewer workbench
+custom.command-mvc6k9ua-832dc (filemanager) - Switch to file manager
 custom.command-video-social-hq (run,--src,${TANIT_SCRIPTS}/video-encode-social-hq.xblox,--CURRENT_FILE,...) - Create a high-quality 1080p60 H.264 social-media master from the selected screen capture using...
 custom.dropdown-msaj5qk5-78a6b - Help
 custom.dropdown-msx1rszr-19148 - New
@@ -144,6 +148,7 @@ custom.view-snap-left (800x600) - Snap Left
 custom.view-snap-right (800x600) - Snap Right
 custom.view-snap-up - Snap Up
 custom.voice-cloner (voice-change,--remove-background-noise,${CURRENT_FILE},--dst,...) - Run voice cloner on selected wav file, uses ElevenLabs
+custom.workbench-switcher - Workbench
 daemon (config) - Global shortcut daemon: hotkeys, UI presets, app commands, STT, and voice session.
 daemon path - Print the effective daemon.json path and exit.
 daemon register - Windows: register the daemon for logon by writing HKLM Run (requires elevation). Seeds config if...

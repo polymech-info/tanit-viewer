@@ -120,6 +120,12 @@ Commands that take args list them under the verb. Pass JSON with `tanit-cli.exe 
 - `togglechat` - Toggle chat
 - `showchat` - Show chat
 - `hidechat` - Hide chat
+- `togglesearch` - Toggle search
+- `showsearch` - Show search
+- `hidesearch` - Hide search
+- `togglesearchoverlay` - Toggle search overlay
+- `showsearchoverlay` - Show search overlay
+- `hidesearchoverlay` - Hide search overlay
 - `togglesearchnative` - Toggle native search
   - `query` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Search text applied to a running UI instance. Empty just shows the overlay.
 - `showsearchnative` - Show native search
@@ -128,6 +134,10 @@ Commands that take args list them under the verb. Pass JSON with `tanit-cli.exe 
 - `toggleperf` - Toggle perf overlay
 - `showperf` - Show perf overlay
 - `hideperf` - Hide perf overlay
+- `searchoptions` - Set search options
+  - `options` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Search UI option overrides.
+- `searchindex` - Start search indexing
+  - `options` (<span data-cli="meta"><span data-cli="type">json_value</span>, <span data-cli="tag" data-variant="optional">optional</span></span>) - Index options; may start indexing.
 - `togglecenterview` - Toggle centre view
 - `toggleactionpane` - Toggle action pane
 - `showcentrechat` - Show centre chat
@@ -139,7 +149,7 @@ Commands that take args list them under the verb. Pass JSON with `tanit-cli.exe 
 ### Workbench
 
 - `switchworkbench` - Switch workbench
-  - `slot` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">main</span> <span data-cli="choice">chat</span> <span data-cli="choice">viewer</span></span></span>) - Workbench slot to activate.
+  - `slot` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="tag" data-variant="optional">optional</span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">main</span> <span data-cli="choice">chat</span> <span data-cli="choice">viewer</span> <span data-cli="choice">filemanager</span></span></span>) - Workbench slot to activate.
 
 ### Window
 

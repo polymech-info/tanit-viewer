@@ -21,7 +21,7 @@ UI launch (main window). Launch `tanit.exe` with **no subcommand** (full referen
 
 - `--src` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Seed the UI with file(s) or URL(s). Local paths open in the workbench. Direct https video URLs (`.mp4`, HLS `.m3u8`, …) open in the centre viewer. Other `http(s)://…`, `//host/…`, and CMS-relative `/…` open in the centre browser. Uses saved default workbench unless --ui-preset is set. Repeat or separate with `;`.
 - `--view-locate` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Viewer locate fragment without '#': L12, page=3, t=90 / t=1:30 / t=90,120. Also accepted as a `#t=` suffix on --src.
-- `--ui-preset` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">main</span> <span data-cli="choice">chat</span> <span data-cli="choice">viewer</span></span></span>) - Open the UI: `main`, `chat`, or `viewer` (one-shot; overrides saved default `ui.workbench`). Ignored when a subcommand is present. The Store `tanit` alias prepends `--ui-preset=chat`.
+- `--ui-preset` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">main</span> <span data-cli="choice">chat</span> <span data-cli="choice">viewer</span> <span data-cli="choice">filemanager</span></span></span>) - Open the UI: `main`, `chat`, `viewer`, or `filemanager` (one-shot; overrides saved default `ui.workbench`). Ignored when a subcommand is present. The Store `tanit` alias prepends `--ui-preset=chat`.
 - `--ui-open` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Open a lightweight UI surface without constructing MainFrame. Usage: --ui-open settings [section] | --ui-open command-settings [--ui-command-id ID | ID] | --ui-open assistant. Reserved surfaces: fileviewer, webapp.
 - `--ui-command-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Stable commands.json id for --ui-open command-settings.
 - `--ui-web-app` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Web application id for --ui-open webapp.
@@ -10377,7 +10377,7 @@ Options:
 - `--search_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The depth of the search. 'basic' for generic results, 'advanced' for more thorough search, 'fast' for optimized low latency with high relevance, 'ultra-fast' for prioritizing latency above all else
 - `--start_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results after the specified start date. Required to be written in the format YYYY-MM-DD.
 - `--time_range` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The time range back from the current date to include in the search results
-- `--topic` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The category of the search. This will determine which of our agents will be used for the search
+- `--topic` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Search category. Use 'general' for almost all searches, including current events and requests that combine news with other information. Use 'news' only when the user explicitly asks for news, headlines, or news coverage.
 
 **Example**
 
@@ -10858,6 +10858,11 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms
 | `custom.command-mtczu1xa-c605f` | File Tab | New | `app:newfiletab` |  | selection | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/intern/new_file.xblox`<br>`--ext`<br>`txt`<br>`--variable-public`<br>`{"ext":true}` |
 | `custom.command-mudse19e-edcc5` | Browser | New | `app:openurl` |  | selection | `google.com` |
 | `custom.command-mtfpcfxj-e1333` | Screen Recording | New | `cli:xblox` |  | selection; ->mp4,m4v,webm,mov,mkv,avi,wmv,ogv,mpg,mpeg,ts,m2ts,mts,3gp,3g2 | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/video-recorder-16-9.xblox` |
+| `custom.workbench-switcher` | Workbench | New | `metadata` |  | selection |  |
+| `custom.command-mvc40x44-004e9` | Chat Workbench | New | `app:switchworkbench` | Switch to chat workbench | selection | `chat` |
+| `custom.command-mvc46qzq-39a35` | Main Workbench | New | `app:switchworkbench` | Switch to main workbench | selection | `main` |
+| `custom.command-mvc476y9-f6789` | Viewer Workbench | New | `app:switchworkbench` | Switch to viewer workbench | selection | `viewer` |
+| `custom.command-mvc6k9ua-832dc` | File Manager | New | `app:switchworkbench` | Switch to file manager | selection | `filemanager` |
 | `custom.command-mulbk22p-b16a6` | Wizard | Home | `app:settings` | Open setup wizard | selection | `wizard` |
 | `custom.command-mpx9r1ur-8c6df` | Assistant | Home | `cli:llm` | Activates real-time voice assistant in background | selection | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | Home | `app:togglelauncher` | Open launcher menu | selection |  |
@@ -10895,7 +10900,7 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms
 | `custom.command-mtwl51se-b7440` | 1269x846 | View | `app:setframesize` |  | selection | `1269x846` |
 | `custom.view-maximize` | Fullscreen | View | `app:togglefullscreen` |  | selection | `immersive`<br>`ribbon,statusbar,toolbar` |
 | `custom.command-mtoxzgrv-1f644` | Maximize | View | `app:setframesize` |  | selection | `max` |
-| `custom.command-mtv9cd7k-7a458` | Reset | View | `app:resetlayout` |  | selection |  |
+| `custom.command-mtv9cd7k-7a458` | Reset | View | `app:switchworkbench` |  | selection |  |
 | `custom.command-70eabea6-957e6` | Spanish | Translate | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem; text->text | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`Translate to Spanish`<br>`--no-mcp`<br>`--preset`<br>`quick`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_es.${SRC_EXT}`<br>`--hud` |
 | `custom.command-msyzmkcu-9b027` | English | Translate | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem; text->text | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_en.${SRC_EXT}`<br>`--prompt`<br>`Translate to English`<br>`--no-tools`<br>`--preset`<br>`Tanit-Fast`<br>`--hud`<br>`--hud-mode`<br>`both` |
 | `custom.command-msyznegr-9190e` | German | Translate | `cli:llm` | Translate the currently selected file to Spanish via the LLM agent | selection; perItem; text->text | `agent`<br>`--embed`<br>`${CURRENT_FILE}`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_de.${SRC_EXT}`<br>`--hud`<br>`--hud-mode`<br>`both`<br>`--prompt`<br>`Translate to German. Return raw response, no fences!` |

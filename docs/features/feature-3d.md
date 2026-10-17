@@ -1,8 +1,8 @@
 ---
 title: Tanit 3D
 slug: tanit-3d
-description: Preview meshes, CAD, FreeCAD documents, and OpenSCAD in the centre viewer — rotate, shade, and check the file without a specialist app.
-tags: [tanit, 3d, cad, step, stl, freecad, openscad, mesh]
+description: Preview meshes, CAD, SolidWorks, FreeCAD documents, and OpenSCAD in the centre viewer — rotate, shade, and check the file without a specialist app.
+tags: [tanit, 3d, cad, step, stl, solidworks, freecad, openscad, mesh]
 category-id: [knowlede-base]
 private: false
 hidden: false
@@ -12,11 +12,11 @@ hidden: false
 
 # 3D: open the model, turn it, check it
 
-Select a mesh, a STEP file, or a FreeCAD document in the file panel. The
-centre viewer loads it in place — shaded surfaces, optional edges, wireframe,
-or hidden lines. Turn it with the middle mouse button; fit, front, top, and
-isometric from the toolbar. Sky on the toolbar puts a backdrop behind the
-model; it starts off.
+Select a mesh, a STEP file, a SolidWorks part or assembly, or a FreeCAD
+document in the file panel. The centre viewer loads it in place — shaded
+surfaces, optional edges, wireframe, or hidden lines. Turn it with the
+middle mouse button; fit, front, top, and isometric from the toolbar. Sky
+on the toolbar puts a backdrop behind the model; it starts off.
 
 No separate CAD package has to start. Chat still sees the file next to the
 preview.
@@ -33,6 +33,8 @@ preview.
   want to spin the part in the same window as the drawings.
 - FreeCAD users who want a fast look at an `.FCStd` (bodies, colours, and
   construction geometry) before opening the full document.
+- SolidWorks users who want the saved display mesh, the assembly tree, and
+  a configuration or sheet switch without starting SolidWorks.
 - OpenSCAD users who want a compiled preview of a `.scad` file from the
   folder they already have open.
 
@@ -68,7 +70,7 @@ in the viewer — the file on disk is unchanged.
 | Hidden lines | Visible edges, hidden ones dashed |
 | Perspective | Toggle perspective and orthographic |
 | Sky | Backdrop behind the model. Off until you turn it on |
-| Object tree | Show or hide the parts in the file |
+| Object tree | Show or hide the parts in the file. Find filters names as you type; Enter and Shift+Enter move through the matches. SolidWorks adds a configuration or sheet list above the tree |
 | Walk | Move on the ground: W A S D, right-drag to look, Shift to go faster, double-click a surface to go there, Esc to orbit again |
 | Fly | Same keys, plus Space up and Ctrl down |
 
@@ -107,6 +109,28 @@ parts. Meshes without a colour use a neutral grey.
 | `.iges` / `.igs` | Neutral CAD exchange |
 | `.brep` / `.brp` | Open CASCADE shape |
 | `.fcstd` | FreeCAD document |
+| `.sldprt` | SolidWorks part |
+| `.sldasm` | SolidWorks assembly |
+| `.slddrw` | SolidWorks drawing |
+
+SolidWorks 2015 and later. The native viewer reads the display mesh SolidWorks
+stored at save time and places each component with its assembly transform.
+Round surfaces stay smooth: normals blend across a gentle edge and stay
+sharp on a real corner. The list above the object tree switches
+configuration, loading that configuration when you select it. On a drawing
+it switches sheet, and each view loads the referenced part when that file
+sits next to the drawing. Repeated components keep the names they have in
+the assembly.
+
+A part with no display mesh uses the saved preview image, faced to the
+camera and sized from the stored volume. If that image is missing too, the
+part is a box of the same volume at the centre of gravity. Suppressed
+components stay in the tree and start hidden. Hidden components keep their
+shape and start unchecked.
+
+Older OLE files and 3DEXPERIENCE packages do not open as a 3D scene. With
+the native viewer off, the same SolidWorks file opens as its embedded
+preview image.
 
 ### Universal Scene Description and scientific meshes
 
@@ -152,8 +176,9 @@ viewer as usual.
 
 A 50 MB STEP file is on screen in a second or two. Very large tessellations
 take longer. A mesh above 512 MB is refused; AMF and 3DS stop at 64 MB. A
-FreeCAD document can be much bigger than a single STL because it carries
-the full part history.
+SolidWorks file is limited by the display mesh saved in it, not by a fresh
+tessellation of the body. A FreeCAD document can be much bigger than a
+single STL because it carries the full part history.
 
 The preview is a view of the file, not an editor. Saving still happens in
 the tool that created the model.
@@ -175,4 +200,5 @@ the tool that created the model.
 ## References
 
 - [Khronos - GlTF Samples](https://github.khronos.org/glTF-Sample-Viewer-Release/?model=https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/./Models/AnimatedCube/glTF/AnimatedCube.gltf)
-
+- [Solidworks - Openswx](https://github.com/schwitters/openswx?utm_source=chatgpt.com)
+- [Solidworks Model Viewer](https://github.com/Wintaru/model_viewer?utm_source=chatgpt.com)

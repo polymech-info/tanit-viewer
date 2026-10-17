@@ -19,6 +19,12 @@ Change built-in assignments in Settings → Keyboard shortcuts. Commands with no
 | Stop session video | `Ctrl+Alt+H` |
 | Toggle session video pause | `Ctrl+Alt+P` |
 
+### Panels
+
+| Command | Shortcut |
+|:---|:---|
+| Toggle search overlay | `Ctrl+Space` |
+
 ### Window
 
 | Command | Shortcut |
@@ -312,41 +318,41 @@ Worth knowing when learning the wiring and tree UIs:
 
 These come from the `commands.json` that was loaded when this page was generated (same file as Settings → Commands).
 
-### Schnappschüsse
+### Screenshots
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Vollbildaufnahme | `F14` | Global |
+| Fullscreen Screenshot | `F14` | Global |
 
-### Ansicht
+### View
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
 | Actions | `Shift+F10` | Window |
-| Vollbild | `Alt+F` | Window |
+| Fullscreen | `Alt+F` | Window |
 
-### Ton
+### Audio
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Sprache zu Text | `Shift+F7` | Global |
+| Speech to Text | `Shift+F7` | Global |
 
-### Bildschirmaufnahme
+### Screen-Recorder
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
 | 1:1 | `Shift+F8` | Global |
 
-### Planer
+### Scheduler
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Test | `Ctrl+Alt+F8` | Window |
+| test-screen | `Ctrl+Alt+F8` | Window |
 
-### Dateien
+### Files
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Kop. | `F5` | Window |
-| Verschieb | `F6` | Window |
-| Hilfe | `F1` | Window |
+| Copy | `F5` | Window |
+| Move | `F6` | Window |
+| Online Help | `F1` | Window |

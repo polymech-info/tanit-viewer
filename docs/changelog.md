@@ -4,6 +4,13 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
+## 1.0.79 - 17-10
+
+- 3D Native viewer : support for Solidworks, assemblies and parts
+- Workbenches : new filemanager preset added ( dual file panel ole :)
+- Chat preset default fixed
+- Index and search app command and ui re-added
+
 ## 1.0.78 - 15-10
 
 - OpenAI direct support for image generation, vision, speech-to-text, text-to-speech
