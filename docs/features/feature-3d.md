@@ -112,6 +112,8 @@ parts. Meshes without a colour use a neutral grey.
 | `.sldprt` | SolidWorks part |
 | `.sldasm` | SolidWorks assembly |
 | `.slddrw` | SolidWorks drawing |
+| `.x_t` / `.xt` | Parasolid text transmit |
+| `.x_b` / `.xb` | Parasolid binary transmit |
 
 SolidWorks 2015 and later. The native viewer reads the display mesh SolidWorks
 stored at save time and places each component with its assembly transform.
@@ -127,6 +129,12 @@ camera and sized from the stored volume. If that image is missing too, the
 part is a box of the same volume at the centre of gravity. Suppressed
 components stay in the tree and start hidden. Hidden components keep their
 shape and start unchecked.
+
+Parasolid `.x_t` and `.x_b` files open in the same viewer. Each body is a
+row in the object tree. Flat faces keep their outline, and walls, cones,
+and fillets are stitched from the trim curves. A body with no drawable
+face is a box of its vertex bounds. The file is drawn in the units it was
+saved in.
 
 Older OLE files and 3DEXPERIENCE packages do not open as a 3D scene. With
 the native viewer off, the same SolidWorks file opens as its embedded

@@ -95,7 +95,7 @@ win-x64\tanit-cli.exe installer chrome --verify
 
 Or double-click `extension\tanit-chrome\register-native-host.bat`.
 
-Then **Load unpacked** once per Chrome profile (section C below).
+Then **Load unpacked** once per Chrome profile (section D below), or install the published item (see [Publish to the Chrome Web Store](#publish-to-the-chrome-web-store)). The native host step is still required either way.
 
 ### C. Developer script (repo / manual QA)
 
@@ -128,6 +128,127 @@ Chrome cannot permanently pin an unpacked extension without enterprise policy. E
 2. Use `npm run install:tanit-chrome:launch` (dev) which passes `--load-extension` for that session.
 
 Confirm the extension ID matches `bhpeejlpjkdlbibojmbdhdcondflmban`.
+
+A Chrome Web Store install replaces this step. It does not register the native host.
+
+## Publish to the Chrome Web Store
+
+Dashboard: [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole).
+
+The store item is the MV3 extension only. `tanit-chrome-host.exe` stays in the Tanit install and is registered with `tanit-cli installer` (or `installer chrome`). A store install still needs that registration on each Windows user account.
+
+### 1. Developer account
+
+1. Sign in to the dashboard with the PolyMech publisher account.
+2. Pay the one-time developer registration fee and accept the developer agreement.
+3. Verify the contact email.
+4. Complete the trader declaration (name, address, phone). That identity is shown on the listing.
+5. Set the account privacy policy to `https://tanit.polymech.info/privacy`. Confirm that page covers Chrome page content read by this extension, the local native host, and any model provider the user has configured in Tanit.
+
+### 2. Build a store zip
+
+`npm run build:tanit-chrome` writes `dist/extension/tanit-chrome` and sets `manifest.json` `version` from the root `package.json` version (numeric parts only, currently `1.0.78`). Each upload must use a higher version than the item already in the dashboard. Bump the root `package.json` version, then rebuild, before an update.
+
+Stage a copy and drop files the store package must not contain:
+
+| Leave out | Why |
+|-----------|-----|
+| `tanit-chrome-host.exe` | Native binary. The store package is the extension. The host ships with Tanit. |
+| `com.polymech.tanit.chrome.json` | Machine-specific host path. Written at install time. |
+| `register-native-host.bat`, `CHROME-SETUP.txt` | Local install helpers. |
+| `harness.html`, `harness.js` | Dev communication test. |
+| `*.map` | Source maps. Not needed in the listing package. |
+| `"key"` in `manifest.json` | Public key for unpacked loads. The dashboard rejects it on upload. |
+
+`manifest.json` must sit at the root of the zip, not inside a folder. No comments in that JSON.
+
+```powershell
+$src = "dist\extension\tanit-chrome"
+$stage = "dist\extension\tanit-chrome-store"
+Remove-Item $stage -Recurse -Force -ErrorAction SilentlyContinue
+New-Item $stage -ItemType Directory | Out-Null
+Copy-Item "$src\*" $stage -Recurse
+Remove-Item "$stage\tanit-chrome-host.exe", "$stage\com.polymech.tanit.chrome.json", "$stage\register-native-host.bat", "$stage\CHROME-SETUP.txt", "$stage\harness.html", "$stage\harness.js" -ErrorAction SilentlyContinue
+Get-ChildItem $stage -Recurse -Filter *.map | Remove-Item -Force
+$manifest = Get-Content "$stage\manifest.json" -Raw | ConvertFrom-Json
+$manifest.PSObject.Properties.Remove("key")
+[System.IO.File]::WriteAllText("$stage\manifest.json", ($manifest | ConvertTo-Json -Depth 10) + "`n")
+Compress-Archive -Path "$stage\*" -DestinationPath "dist\tanit-chrome-store.zip" -Force
+```
+
+Open the zip and confirm `manifest.json` is at the top level and has no `key` field. Load unpacked from `dist/extension/tanit-chrome`, which still has `key`. The staged copy without `key` gets a different ID.
+
+### 3. Keep the extension ID
+
+The native host allows only `chrome-extension://bhpeejlpjkdlbibojmbdhdcondflmban/`. That ID comes from the public `key` in `apps/tanit-chrome/manifest.json`. The store ignores that field and assigns the item ID from a private key on the **first** upload. Later uploads cannot change it.
+
+The matching private key is not in the repo. It is a `key.pem` held by the publisher, not the committed public key.
+
+On the first upload only, copy that `key.pem` into the staged folder (same level as `manifest.json`) before `Compress-Archive`. Do not commit it, and delete it from the stage folder after the upload.
+
+After the zip is accepted, open the item and compare **Item ID** to `bhpeejlpjkdlbibojmbdhdcondflmban`.
+
+- Match: continue. Later zips omit `key.pem`.
+- Mismatch: do not submit for public review. Native messaging will fail. Upload a new item with the private key that matches the committed public key. If that key is lost, the store ID is permanent for that item; point `k_extension_id` in `src/win/register_chrome.cpp` and `k_extension_origin` in `src/win/chrome_inspect/chrome_tool_server.cpp` at the new ID, put the dashboard public key into `manifest.json` `key`, and ship a Tanit build that registers the new origin.
+
+### 4. Store listing
+
+In the new item:
+
+1. **Store listing.** Detailed description of Tanit Chat: side-panel chat plus inspection of the page the user is working on, requiring the Tanit app on the same PC. Category: Productivity. Language: English. Official URL: `https://tanit.polymech.info/`.
+2. **Screenshots.** At least one, preferably up to five, 1280×800 (640×400 is accepted). JPEG or PNG without alpha, full bleed, no extra border. Show the side panel on a normal web page.
+3. **Small promo tile.** 440×280, required. This image is uploaded in the listing; it is not the extension icon. Marquee 1400×560 is optional.
+4. The 128×128 icon is taken from `icons/icon-128.png` inside the zip.
+
+The manifest `name` (`Tanit Chat`, ≤75 characters) and `description` (≤132 characters) are what Chrome shows after install. Fix them in `apps/tanit-chrome/manifest.json` and upload a new zip; the dashboard cannot edit them.
+
+### 5. Privacy practices
+
+Single purpose:
+
+> Tanit Chat opens a local chat side panel in Chrome and inspects the page the user is working on. It talks only to the Tanit app installed on the same Windows PC.
+
+Remote code: **No, I am not using remote code.**
+
+Permission justifications:
+
+| Permission | Justification |
+|------------|----------------|
+| `nativeMessaging` | Connects to `tanit-chrome-host.exe`, installed by Tanit, so chat and page inspection stay on the local PC. |
+| `scripting` | Injects the DOM helper into the tab the user is working with. There is no always-on content script. |
+| `host_permissions` `<all_urls>` | The user can ask about any normal web page. Injection runs for that tab, not as a site-wide content script. |
+| `tabs` | Reads the active tab URL and title, and opens, switches, reloads, or closes tabs when the user asks. |
+| `webNavigation` | Follows frame loads so inspection includes iframes on the chosen tab. |
+| `sidePanel` | Hosts the Tanit chat UI. |
+| `storage` | Stores extension settings on the device. |
+| `activeTab` | Acts on the tab the user invoked. |
+| `declarativeNetRequestWithHostAccess` | Redirects `pm-files-*.local` image requests from the side panel to the local Tanit file server and attaches the local session header. |
+
+Data use, matching the privacy policy:
+
+- Website content: the DOM of the tab the user asks Tanit to read.
+- User activity: the current tab URL, title, and the tab list for that window, sent to local Tanit for the turn.
+- Authentication information: not collected. Password fields are not read.
+- The extension does not sell data. Page content reaches a cloud model only when the user has configured one in Tanit.
+
+Certify the limited-use statements in the form. Set the item privacy policy to `https://tanit.polymech.info/privacy`.
+
+### 6. Submit
+
+1. **Distribution.** Start with **Private** (trusted testers) or **Unlisted**. Confirm the item ID, install from the store, run `tanit-cli installer chrome`, and check `tanit-cli assistant chrome-inspect status --json` reports `"nativeHost": "connected"`.
+2. **Reviewer notes.** Windows desktop Tanit must be installed. Steps: install Tanit, run `tanit-cli installer`, install this extension, open the side panel, ask it to read an `https` page. `nativeMessaging` and `<all_urls>` are for that user-initiated local bridge.
+3. Attach a short screen recording of that flow. Broad host-permission reviews often ask for one.
+4. **Submit for review.** `nativeMessaging` plus `<all_urls>` takes longer than a typical extension.
+5. After approval, publish publicly (or leave it unlisted for enterprise).
+
+### 7. Updates
+
+1. Bump the root `package.json` version.
+2. `npm run build:tanit-chrome`, then rebuild the zip **without** `key.pem`.
+3. On the same item, upload the new package and submit for review.
+4. The dashboard can roll the approved version out by percentage.
+
+Publishing a new version does not update `tanit-chrome-host.exe`. Ship host changes with a Tanit release, then reload the extension or restart Chrome.
 
 ## Verify
 
@@ -594,7 +715,7 @@ Tests:
 
 - Ship `extension/tanit-chrome/` beside `win-x64/` in your zip/MSI layout.
 - Run `tanit-cli installer --no-explorer --no-startmenu` (or your chosen flags) during setup so Chrome registration runs without extra scripts.
-- For forced extension install, use Chrome enterprise policy (ExtensionInstallForcelist) with a packed CRX or update URL; the native host registry step is still required unless you automate it via GPO/scripts mirroring `register_chrome.cpp`.
+- For forced install, use Chrome enterprise policy `ExtensionInstallForcelist` with the published item ID `bhpeejlpjkdlbibojmbdhdcondflmban` and the Chrome Web Store update URL. The native host registry step is still required unless you automate it via GPO/scripts mirroring `register_chrome.cpp`. See [Publish to the Chrome Web Store](#publish-to-the-chrome-web-store).
 
 ## Related docs
 

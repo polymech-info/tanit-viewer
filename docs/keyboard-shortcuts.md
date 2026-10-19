@@ -353,6 +353,4 @@ These come from the `commands.json` that was loaded when this page was generated
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
-| Copy | `F5` | Window |
-| Move | `F6` | Window |
 | Online Help | `F1` | Window |

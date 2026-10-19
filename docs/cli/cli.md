@@ -9770,96 +9770,14 @@ MCP server from the tools cache.
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit serpapi-search_dashboard
+tanit-cli mcp client Tanit skillhub-search_skills --query <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit serpapi-search_dashboard --args '{}' --timeout-ms 0 --params 'foo'
+tanit-cli mcp client Tanit skillhub-search_skills --args '{}' --timeout-ms 0 --category 'foo' --limit 'foo' --min_score 'foo' --query 'foo'
 ```
-
-#### mcp client Tanit serpapi-search_dashboard
-
-Interactive dashboard variant of `search`: returns summary metrics, a source breakdown chart, and a results table with a click-to-expand detail panel, all rendered in the conversat
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_dashboard
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_dashboard --args '{}' --timeout-ms 0 --params 'foo'
-```
-
----
-
-#### mcp client Tanit serpapi-search_table
-
-Interactive UI variant of `search`: returns organic results as a sortable, searchable table rendered in the conversation. Same params as `search`. Use when the host supports MCP Ap
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_table
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_table --args '{}' --timeout-ms 0 --params 'foo'
-```
-
----
-
-#### mcp client Tanit serpapi-search
-
-Universal search tool supporting all SerpApi engines and result types.
-
-    When to use:
-        - Any query needing live, structured SERP data: web results, news, product listings
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Response mode (default: "complete")
-- "complete": Returns the full response
-- "compact": Removes metadata fields from JSON responses; Markdown is unchanged
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Dictionary of SerpApi engine-specific parameters. Common parameters include:
-- q: Search query (required for most engines)
-- engine: Search engine to use (default: "google_light")
-- location: Geographic location filter
-- output: Response format; omit for JSON or set to "md" for Markdown
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo' --params 'foo'
-```
-
----
 
 #### mcp client Tanit skillhub-search_skills
 
@@ -9867,8 +9785,8 @@ Search for Claude Code Skills using natural language. Returns relevant skills ba
 
 Options:
 
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
 - `--category` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Filter by category (optional)
 - `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of results (1-20, default: 5)
 - `--min_score` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Minimum quality score 0-100 (optional)
@@ -10841,6 +10759,88 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --instructionId <value> 
 tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms 0 --instructionId 'foo' --styleId 'foo'
 ```
 
+---
+
+#### mcp client Tanit serpapi-search_dashboard
+
+Interactive dashboard variant of `search`: returns summary metrics, a source breakdown chart, and a results table with a click-to-expand detail panel, all rendered in the conversat
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_dashboard
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_dashboard --args '{}' --timeout-ms 0 --params 'foo'
+```
+
+---
+
+#### mcp client Tanit serpapi-search_table
+
+Interactive UI variant of `search`: returns organic results as a sortable, searchable table rendered in the conversation. Same params as `search`. Use when the host supports MCP Ap
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_table
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_table --args '{}' --timeout-ms 0 --params 'foo'
+```
+
+---
+
+#### mcp client Tanit serpapi-search
+
+Universal search tool supporting all SerpApi engines and result types.
+
+    When to use:
+        - Any query needing live, structured SERP data: web results, news, product listings
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Response mode (default: "complete")
+- "complete": Returns the full response
+- "compact": Removes metadata fields from JSON responses; Markdown is unchanged
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Dictionary of SerpApi engine-specific parameters. Common parameters include:
+- q: Search query (required for most engines)
+- engine: Search engine to use (default: "google_light")
+- location: Geographic location filter
+- output: Response format; omit for JSON or set to "md" for Markdown
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo' --params 'foo'
+```
+
 ## Custom Commands
 
 | Exact ID | Label | Group | Action | Description | Files | Pre-configured Args |
@@ -10865,6 +10865,7 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms
 | `custom.command-mvc6k9ua-832dc` | File Manager | New | `app:switchworkbench` | Switch to file manager | selection | `filemanager` |
 | `custom.command-mulbk22p-b16a6` | Wizard | Home | `app:settings` | Open setup wizard | selection | `wizard` |
 | `custom.command-mpx9r1ur-8c6df` | Assistant | Home | `cli:llm` | Activates real-time voice assistant in background | selection | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
+| `custom.command-mvesx1a4-d9aa7` | Settings | Home | `app:settings` | Open settings | selection | `general` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | Home | `app:togglelauncher` | Open launcher menu | selection |  |
 | `custom.command-mv6al70m-6256c` | Actions | Home | `app:toggleactionpane` | Toggle Action Pane | selection |  |
 | `custom.command-712fbd00-f9ac4` | Product | Images | `cli:transform` | Render current selection as a product photo using white studio background | selection; explorer:image; jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw->jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw | `--prompt`<br>`render this as product shooting, white background, studio`<br>`--json`<br>`${CURRENT_SELECTION}` |

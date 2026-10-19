@@ -4,6 +4,17 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
+## 1.0.81 - 19-10
+
+- Filebrowser : places now as listing | DND indicator | performance | selection
+- Settings : integrity
+
+## 1.0.80 - 18-10
+
+- 3D Native viewer : partial support for Parasolid
+- Filebrowser : support file views in archives | inline search support folders
+- App : launch speedup
+
 ## 1.0.79 - 17-10
 
 - 3D Native viewer : support for Solidworks, assemblies and parts

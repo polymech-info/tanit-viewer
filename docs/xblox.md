@@ -7514,6 +7514,7 @@ Default block:
 | `custom.command-mvc6k9ua-832dc` | File Manager | `app:switchworkbench` | Switch to file manager | selection | `filemanager` |
 | `custom.command-mulbk22p-b16a6` | Wizard | `app:settings` | Open setup wizard | selection | `wizard` |
 | `custom.command-mpx9r1ur-8c6df` | Assistant | `cli:llm` | Activates real-time voice assistant in background | selection | `agent`<br>`--consent-ui`<br>`win32`<br>`--realtime`<br>`--hud`<br>`--hud-mode`<br>`both` |
+| `custom.command-mvesx1a4-d9aa7` | Settings | `app:settings` | Open settings | selection | `general` |
 | `custom.command-mpxytlpz-bcde4` | Launcher | `app:togglelauncher` | Open launcher menu | selection |  |
 | `custom.command-mv6al70m-6256c` | Actions | `app:toggleactionpane` | Toggle Action Pane | selection |  |
 | `custom.command-712fbd00-f9ac4` | Product | `cli:transform` | Render current selection as a product photo using white studio background | selection; explorer:image; jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw->jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw | `--prompt`<br>`render this as product shooting, white background, studio`<br>`--json`<br>`${CURRENT_SELECTION}` |
