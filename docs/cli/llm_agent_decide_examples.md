@@ -4,6 +4,8 @@
 
 Path roles: `--source` / `--dst` are whole JSON **files**; `--questions` is a JSON object of choice / noul / score questions; `--selector` (or `--pairs`, or `--left` with `--right`) picks the values to judge. `--target` is the key that receives the answer object (default `decisions`). Omit the picker to judge the whole document as one state.
 
+Same options over HTTP: `POST /v1/llm/decide` on `llm agent --serve` (inline `document` + `questions`, or file paths; see [llm_server.md](../api/llm_server.md)).
+
 One request is one state plus many questions. That is the batch this endpoint accepts. `--chunk` (default 32) caps expanded questions per request. `--max-tokens` (default 24000) caps the estimated body so a large set stays under Jev's 32k context. One value is never split. A value that does not fit alone is rejected.
 
 Instructions name `` `item` `` / `` `item.field` `` for `--selector`, and `` `pair.left` `` / `` `pair.right` `` / `` `pair` `` for pairs. The model is `~typesafe/jev-latest` when `--model` is omitted. OpenRouter credentials come from app settings when `--api-key` is omitted.

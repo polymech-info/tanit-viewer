@@ -4,6 +4,11 @@ End-user release notes for Tanit / Tanit Viewer.
 Generated from git diffs via `npm run build:post:changelog`.
 Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
 
+## 1.0.82 - 20-10
+
+- Queue enhanced fo batch commands
+- LLM server API & docs
+
 ## 1.0.81 - 19-10
 
 - Filebrowser : places now as listing | DND indicator | performance | selection

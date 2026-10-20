@@ -4,6 +4,8 @@
 
 Path roles: `--source` / `--dst` are whole JSON **files**; `--selector` is a **jq** leaf picker (JSONPath-ish `$.a[*].b` → `.a[].b`); `--target` is an optional **sibling key** (omit = in-place overwrite). Provider flags (`--router`, `--model`, `--api-key`, `--preset`, …) work on `each` or on the parent: `llm agent --router openai each …`.
 
+Same options over HTTP: `POST /v1/llm/each` on `llm agent --serve` (inline `document` or `source` path; see [llm_server.md](../api/llm_server.md)).
+
 ###### Primary case: `dist/data/commands.json`
 
 Ribbon UI copy lives under `.ribbon.groups[]` — item `label` / `description` / `tooltip`, nested submenu items (`.items[].items[]?`), group titles, and a few `extension_maps[].description` strings. Typical shape after a multi-language pass:

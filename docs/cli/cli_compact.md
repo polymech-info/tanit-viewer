@@ -54,7 +54,7 @@ custom.command-712fbd00-f9ac4 (--prompt,"render this as product shooting, white 
 custom.command-7201753fce13ac9f1c6b945856a73c94 (tts-scripted,--srt,${CURRENT_FILE},--dst,...) - Generate timed speech from the selected SRT, VTT, or JSON cues file and save a sibling 48 kHz...
 custom.command-7883566e75cb852699295a0cc2a574c5 (-y,-i,${CURRENT_FILE},-frames:v,...) - Extract the first video frame as a PNG beside the selected video using FFMPEG
 custom.command-e6032eb78cd02485b3bdb4674ef68d5e (--max-width,1024,--aspect,1:1,...) - Resize selected images to 1024 × 1024 squares
-custom.command-mpch9gdx-44982 (--src,${CURRENT_FILE},--prompt,"as technical illustration",...) - description
+custom.command-mpch9gdx-44982 (--src,${CURRENT_FILE},--prompt,"as technical illustration",...) - Create technical illustration for current selected images
 custom.command-mpohnfaf-26b0c - TTS
 custom.command-mpokt0hv-41237 - Funny
 custom.command-mpokxo4w-0910a - Serious
@@ -66,7 +66,7 @@ custom.command-mpxzouxv-ab189 - App
 custom.command-mpy7w3px-8a1e0 - Log
 custom.command-mpy7z14t-bcef8 - Queue
 custom.command-mq6okpfh-b145b - Home
-custom.command-mqj3feqz-72a1a (run,--CURRENT_FILE,${CURRENT_FILE},--max-width,...) - Resize selection to 1920
+custom.command-mqj3feqz-72a1a (--src,${CURRENT_SELECTION},--format,jpg,...) - Resize selection to 1920
 custom.command-mqkneqp7-3fcb0 - Console
 custom.command-mqkxsx6y-56346 - Center
 custom.command-mr50fk3n-1a7d7 (pm://config/prompts/realtime-prompt.md) - Edit real-time prompt for Tanit agent
@@ -107,7 +107,7 @@ custom.command-mtun9312-7d0e1 (posts,create,${CURRENT_SELECTION},--visibility,..
 custom.command-mtv9cd7k-7a458 - Reset
 custom.command-mtva51l4-2e559 - Login into Tanit
 custom.command-mtvdak7f-00d65 - Login into Tanit
-custom.command-mtwl51se-b7440 (1269x846) - 1269x846
+custom.command-mtwl51se-b7440 (1024x1024) - 1024x1024
 custom.command-mu114s8q-17bff (files,upload,--public,${CURRENT_FILE}) - Share current file to your Tanit CMS (5 MB maximum)
 custom.command-mu1wam8u-bfd55 (run,--src,${TANIT_SCRIPTS}/webcam.xblox,--audioSource,...) - WebCam Beautifier
 custom.command-mu1wob56-d1f45 (pages,create,--category-id,uncategorized,...) - Share selected Markdown file as article
@@ -139,7 +139,7 @@ custom.handbrake-hq (run,--src,${TANIT_SCRIPTS}/video-encode-medium.xblox,--CURR
 custom.help-cli (${TANIT_SHARED}/help/en/cli.md) - Open CLI documentation locally
 custom.help-xblox (${TANIT_SHARED}/help/en/xblox.md) - Open XBlox documentation locally
 custom.image-understand-speak (run,--src,${TANIT_SCRIPTS}/vision-pipe-speak.xblox,--CURRENT_FILE,...) - Speaks the content of an selected image over the speaker
-custom.pdf-to-md (md,${CURRENT_FILE},--output-dir,${SRC_DIR}/${SRC_NAME}_md,...) - Extract PDF text and figures to a Markdown bundle (page_N.md + figures/)
+custom.pdf-to-md (md,--output-dir,${SRC_DIR}/${SRC_NAME}_md,--output,...) - Extract PDF text and figures to a Markdown bundle (page_N.md + figures/)
 custom.text-speak (run,--src,${TANIT_SCRIPTS}/inspect-text-speak.xblox) - Pick an element and send it over the speaker using text to speech.
 custom.video-start (run,--src,${TANIT_SCRIPTS}/webcam.xblox) - WebCam
 custom.view-explorer - Explorer
@@ -197,7 +197,7 @@ llm info skills - List discovered agent skills from roaming and workspace roots 
 llm info tools - List all built-in path-mode agent tools (name + description). These are the tools available to...
 llm tools-call (name,args,image-file) - Invoke a tool by name with a JSON arguments envelope
 llm tools-list - Print the JSON-Schema tool catalog (one entry per tanit op)
-login (decode-jwt,issuer,server-url,client-id,...) - Sign in via OIDC PKCE or RFC 8628 device code, or use --probe / --decode-jwt.
+login (username,password,decode-jwt,issuer,...) - Sign in via OIDC PKCE, password grant (--username/--password), or RFC 8628 device code; or use...
 logout - Sign out and remove stored tokens from the app profile.
 markdown (input,output,src,dst,...) - Convert Word, PowerPoint, Excel, OpenDocument, RTF, EPUB, CSV, or PDF to Markdown.
 mcp (preset,bind,port,disable-tools) - MCP utilities: run a foreground agent-tool server, or inspect, add, remove, and call external...

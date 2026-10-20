@@ -2368,6 +2368,8 @@ tanit-cli llm agent decide -i 'foo' --questions 'foo' --selector 'foo' --pairs '
 
 Path roles: `--source` / `--dst` are whole JSON **files**; `--questions` is a JSON object of choice / noul / score questions; `--selector` (or `--pairs`, or `--left` with `--right`) picks the values to judge. `--target` is the key that receives the answer object (default `decisions`). Omit the picker to judge the whole document as one state.
 
+Same options over HTTP: `POST /v1/llm/decide` on `llm agent --serve` (inline `document` + `questions`, or file paths; see [llm_server.md](../api/llm_server.md)).
+
 One request is one state plus many questions. That is the batch this endpoint accepts. `--chunk` (default 32) caps expanded questions per request. `--max-tokens` (default 24000) caps the estimated body so a large set stays under Jev's 32k context. One value is never split. A value that does not fit alone is rejected.
 
 Instructions name `` `item` `` / `` `item.field` `` for `--selector`, and `` `pair.left` `` / `` `pair.right` `` / `` `pair` `` for pairs. The model is `~typesafe/jev-latest` when `--model` is omitted. OpenRouter credentials come from app settings when `--api-key` is omitted.
@@ -2523,6 +2525,8 @@ tanit-cli llm agent each -i 'foo' --selector 'foo' --target 'foo' --merge-json -
 
 
 Path roles: `--source` / `--dst` are whole JSON **files**; `--selector` is a **jq** leaf picker (JSONPath-ish `$.a[*].b` → `.a[].b`); `--target` is an optional **sibling key** (omit = in-place overwrite). Provider flags (`--router`, `--model`, `--api-key`, `--preset`, …) work on `each` or on the parent: `llm agent --router openai each …`.
+
+Same options over HTTP: `POST /v1/llm/each` on `llm agent --serve` (inline `document` or `source` path; see [llm_server.md](../api/llm_server.md)).
 
 ###### Primary case: `dist/data/commands.json`
 
@@ -5311,13 +5315,15 @@ tanit-cli batch resume session-id 'foo'
 
 #### login
 
-Sign in via OIDC PKCE or RFC 8628 device code, or use --probe / --decode-jwt.
+Sign in via OIDC PKCE, password grant (--username/--password), or RFC 8628 device code; or use --probe / --decode-jwt.
 
 Options:
 
 - `--probe` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Fetch OIDC discovery + JWKS only; verbose stderr logs; no browser.
 - `--no-browser` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not launch a browser; print the PKCE URL or device verification instructions.
 - `--device-code` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Use RFC 8628 Device Authorization Grant (no loopback callback port).
+- `--username` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Browserless login: ZITADEL login name or email (requires --password; no browser).
+- `--password` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Browserless login: password (requires --username; no browser).
 - `--decode-jwt` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Decode a JWT access token and explain `sub` vs app user id (optional value; if omitted, uses ZITADEL_TEST_ACCESS_TOKEN from the environment).
 - `--issuer` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Override ZITADEL_ISSUER / VITE_ZITADEL_AUTHORITY.
 - `--server-url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - CMS host to sign in against and pin for later service calls. Omit to pin whichever host login resolves (stored pin, then env, then the compiled default). service --server-url overrides the pin for that invocation only.
@@ -5333,7 +5339,7 @@ tanit-cli login
 **Full example**
 
 ```sh
-tanit-cli login --probe --no-browser --device-code --decode-jwt 'foo' --issuer 'foo' --server-url 'foo' --client-id 'foo' --oauth-port 0
+tanit-cli login --probe --no-browser --device-code --username 'foo' --password 'foo' --decode-jwt 'foo' --issuer 'foo' --server-url 'foo' --client-id 'foo' --oauth-port 0
 ```
 
 ### Media & Capture
@@ -9770,14 +9776,96 @@ MCP server from the tools cache.
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit skillhub-search_skills --query <value>
+tanit-cli mcp client Tanit serpapi-search_dashboard
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit skillhub-search_skills --args '{}' --timeout-ms 0 --category 'foo' --limit 'foo' --min_score 'foo' --query 'foo'
+tanit-cli mcp client Tanit serpapi-search_dashboard --args '{}' --timeout-ms 0 --params 'foo'
 ```
+
+#### mcp client Tanit serpapi-search_dashboard
+
+Interactive dashboard variant of `search`: returns summary metrics, a source breakdown chart, and a results table with a click-to-expand detail panel, all rendered in the conversat
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_dashboard
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_dashboard --args '{}' --timeout-ms 0 --params 'foo'
+```
+
+---
+
+#### mcp client Tanit serpapi-search_table
+
+Interactive UI variant of `search`: returns organic results as a sortable, searchable table rendered in the conversation. Same params as `search`. Use when the host supports MCP Ap
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_table
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_table --args '{}' --timeout-ms 0 --params 'foo'
+```
+
+---
+
+#### mcp client Tanit serpapi-search
+
+Universal search tool supporting all SerpApi engines and result types.
+
+    When to use:
+        - Any query needing live, structured SERP data: web results, news, product listings
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Response mode (default: "complete")
+- "complete": Returns the full response
+- "compact": Removes metadata fields from JSON responses; Markdown is unchanged
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Dictionary of SerpApi engine-specific parameters. Common parameters include:
+- q: Search query (required for most engines)
+- engine: Search engine to use (default: "google_light")
+- location: Geographic location filter
+- output: Response format; omit for JSON or set to "md" for Markdown
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo' --params 'foo'
+```
+
+---
 
 #### mcp client Tanit skillhub-search_skills
 
@@ -9785,8 +9873,8 @@ Search for Claude Code Skills using natural language. Returns relevant skills ba
 
 Options:
 
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
 - `--category` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Filter by category (optional)
 - `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Number of results (1-20, default: 5)
 - `--min_score` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Minimum quality score 0-100 (optional)
@@ -10759,88 +10847,6 @@ tanit-cli mcp client Tanit deepl-get-custom-instruction --instructionId <value> 
 tanit-cli mcp client Tanit deepl-get-custom-instruction --args '{}' --timeout-ms 0 --instructionId 'foo' --styleId 'foo'
 ```
 
----
-
-#### mcp client Tanit serpapi-search_dashboard
-
-Interactive dashboard variant of `search`: returns summary metrics, a source breakdown chart, and a results table with a click-to-expand detail panel, all rendered in the conversat
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_dashboard
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_dashboard --args '{}' --timeout-ms 0 --params 'foo'
-```
-
----
-
-#### mcp client Tanit serpapi-search_table
-
-Interactive UI variant of `search`: returns organic results as a sortable, searchable table rendered in the conversation. Same params as `search`. Use when the host supports MCP Ap
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_table
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_table --args '{}' --timeout-ms 0 --params 'foo'
-```
-
----
-
-#### mcp client Tanit serpapi-search
-
-Universal search tool supporting all SerpApi engines and result types.
-
-    When to use:
-        - Any query needing live, structured SERP data: web results, news, product listings
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Response mode (default: "complete")
-- "complete": Returns the full response
-- "compact": Removes metadata fields from JSON responses; Markdown is unchanged
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Dictionary of SerpApi engine-specific parameters. Common parameters include:
-- q: Search query (required for most engines)
-- engine: Search engine to use (default: "google_light")
-- location: Geographic location filter
-- output: Response format; omit for JSON or set to "md" for Markdown
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo' --params 'foo'
-```
-
 ## Custom Commands
 
 | Exact ID | Label | Group | Action | Description | Files | Pre-configured Args |
@@ -10869,10 +10875,10 @@ tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo
 | `custom.command-mpxytlpz-bcde4` | Launcher | Home | `app:togglelauncher` | Open launcher menu | selection |  |
 | `custom.command-mv6al70m-6256c` | Actions | Home | `app:toggleactionpane` | Toggle Action Pane | selection |  |
 | `custom.command-712fbd00-f9ac4` | Product | Images | `cli:transform` | Render current selection as a product photo using white studio background | selection; explorer:image; jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw->jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw | `--prompt`<br>`render this as product shooting, white background, studio`<br>`--json`<br>`${CURRENT_SELECTION}` |
-| `custom.command-mpch9gdx-44982` | Illustration | Images | `cli:transform` | description | files; jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw->jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw | `--src`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`as technical illustration`<br>`--model`<br>`image-generation-deep` |
+| `custom.command-mpch9gdx-44982` | Illustration | Images | `cli:transform` | Create technical illustration for current selected images | files; jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw->jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw | `--src`<br>`${CURRENT_FILE}`<br>`--prompt`<br>`as technical illustration`<br>`--model`<br>`image-generation-deep` |
 | `custom.image-understand-speak` | Speak | Images | `cli:xblox` | Speaks the content of an selected image over the speaker | files; jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw-> | `run`<br>`--src`<br>`${TANIT_SCRIPTS}/vision-pipe-speak.xblox`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}` |
-| `custom.command-mqj3feqz-72a1a` | Resize-HD | Images | `cli:resize` | Resize selection to 1920 | files; perItem; jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw->jpg | `run`<br>`--CURRENT_FILE`<br>`${CURRENT_FILE}`<br>`--max-width`<br>`800`<br>`--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--cache-dir`<br>`${ENV:PIXLWIZ}/cache/images`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui` |
-| `custom.command-e6032eb78cd02485b3bdb4674ef68d5e` | Resize to Square | Images | `cli:resize` | Resize selected images to 1024 × 1024 squares | selection; perItem; explorer:image; jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw->jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw | `--max-width`<br>`1024`<br>`--aspect`<br>`1:1`<br>`--position`<br>`centre`<br>`--dst`<br>`${CURRENT_PATH}/out`<br>`--allow-enlargement`<br>`--src`<br>`${CURRENT_FILE}`<br>`--fit`<br>`contain` |
+| `custom.command-mqj3feqz-72a1a` | Resize-HD | Images | `cli:resize` | Resize selection to 1920 | files; perItem; jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw->jpg | `--src`<br>`${CURRENT_SELECTION}`<br>`--format`<br>`jpg`<br>`--dst`<br>`${SRC_DIR}/${SRC_NAME}_hd.jpg`<br>`--job-ui`<br>`--cache-dir`<br>`${SRC_DIR}/cache/images`<br>`--max-width`<br>`1980`<br>`--no-cache`<br>``<br>``<br>`${CURRENT_FILE}` |
+| `custom.command-e6032eb78cd02485b3bdb4674ef68d5e` | Resize to Square | Images | `cli:resize` | Resize selected images to 1024 × 1024 squares | selection; perItem; explorer:image; jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw->jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw | `--max-width`<br>`1024`<br>`--aspect`<br>`1:1`<br>`--position`<br>`centre`<br>`--dst`<br>`${CURRENT_PATH}/out`<br>`--allow-enlargement`<br>`--src`<br>`${CURRENT_FILE}`<br>`--fit`<br>`contain`<br>`--no-cache` |
 | `custom.command-mszwq2g6-780cb` | To Markdown | Images | `cli:llm` | Convert current selected image file to Markdown document, using selected image vision provider & model | selection; perItem; explorer:image; jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw->text | `agent`<br>`--no-mcp`<br>`--no-planner`<br>`--no-parallel-tools`<br>`--include`<br>`${CURRENT_FILE}`<br>`--enable-tools`<br>`image_understand,write_file`<br>`--no-skills`<br>`--hud`<br>`--hud-mode`<br>`both`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand, dont comment, write next to source image file with md extension` |
 | `custom.command-muib2fcm-b25cf` | OCR Local | Images | `cli:understand` | Convert current selected image file to Markdown document, using selected OCR local model | selection; perItem; explorer:image; jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw->text | `--dst`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--prompt`<br>`Create Markdown Document using the provided path to an image, and image_understand tool - dont comment, just print the result of image_understand.`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16`<br>`${CURRENT_FILE}` |
 | `custom.command-mtun9312-7d0e1` | Share Post | Images | `cli:service` | Share selected image file as article | selection; jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw-> | `posts`<br>`create`<br>`${CURRENT_SELECTION}`<br>`--visibility`<br>`private` |
@@ -10898,7 +10904,7 @@ tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo
 | `custom.command-mv6amrha-eade6` | Actions | View | `app:toggleactionpane` | Toggle Action Pane | selection |  |
 | `custom.command-mt8msflf-fe3b7` | Tabbed | View | `app:viewtabbed` | Enable Tabs | selection |  |
 | `custom.command-msqfoqej-85fb5` | Performance | View | `app:toggleperf` |  | selection | `800x600` |
-| `custom.command-mtwl51se-b7440` | 1269x846 | View | `app:setframesize` |  | selection | `1269x846` |
+| `custom.command-mtwl51se-b7440` | 1024x1024 | View | `app:setframesize` |  | selection | `1024x1024` |
 | `custom.view-maximize` | Fullscreen | View | `app:togglefullscreen` |  | selection | `immersive`<br>`ribbon,statusbar,toolbar` |
 | `custom.command-mtoxzgrv-1f644` | Maximize | View | `app:setframesize` |  | selection | `max` |
 | `custom.command-mtv9cd7k-7a458` | Reset | View | `app:switchworkbench` |  | selection |  |
@@ -10940,7 +10946,7 @@ tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo
 | `custom.command-mt4msl99-55414` | Start | Scheduler | `app:schedulerstart` |  | selection |  |
 | `custom.command-mt4munur-873bb` | Stop | Scheduler | `app:schedulerstop` |  | selection |  |
 | `custom.command-mt7672eh-b7786` | To Images | PDF | `cli:pdf` | Convert PDF into image slides | files; perItem; pdf->jpg,jpeg,png,gif,bmp,webp,tiff,tif,jpe,jfif,avif,arw | `render`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_images`<br>`--quality`<br>`100`<br>`--format`<br>`png`<br>`--pages`<br>`all`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}_images/${SRC_NAME}.png` |
-| `custom.pdf-to-md` | To Markdown | PDF | `cli:pdf` | Extract PDF text and figures to a Markdown bundle (page_N.md + figures/) | files; perItem; pdf->text | `md`<br>`${CURRENT_FILE}`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--per-page`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16` |
+| `custom.pdf-to-md` | To Markdown | PDF | `cli:pdf` | Extract PDF text and figures to a Markdown bundle (page_N.md + figures/) | files; perItem; pdf->text,md | `md`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--per-page`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16`<br>`${CURRENT_SELECTION}` |
 | `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | PDF | `external` | Convert each selected Office document to PDF beside the source file using LibreOffice. | selection; perItem; explorer:text | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
 | `custom.fs-copy` | Copy | Files | `app:fscopy` |  | selection |  |
 | `custom.fs-move` | Move | Files | `app:fsmove` |  | selection |  |
