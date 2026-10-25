@@ -36,7 +36,8 @@ Harness: `npm run test:llm-server` (loopback), `test:llm-server:each:live`,
 | GET | `/v1/credit` | yes | PixlWiz budget |
 | GET | `/v1/sysprobe` | yes | Host CPU/mem sample |
 | POST | `/v1/chat/completions` | yes | Agent turn (stream or JSON) |
-| POST | `/v1/chat/consent` | yes | Unblock `--consent-ui stream` |
+| POST | `/v1/chat/consent` | yes | Unblock `--consent-ui stream` security consent |
+| POST | `/v1/chat/ask` | yes | Unblock `--consent-ui stream` `ask_user` |
 | GET | `/v1/chat/events` | yes | SSE chat event hub |
 | GET/POST | `/v1/chat/commands` (+ `/run`) | yes | Launcher catalog |
 | GET | `/v1/chat/skills` | yes | Skills for a cwd |
@@ -303,9 +304,13 @@ event: tanit.consent
 data: {"object":"tanit.event","type":"consent","reqId":"…","title":"…","risk":"low","tool":"…","action":"…","resource":"…","choices":["allow","deny"]}
 
 event: tanit.consent.dismiss
+
+event: tanit.ask
+data: {"object":"tanit.event","type":"ask","reqId":"ask-…","kind":"choice","question":"…","options":["…"],"placeholder":"","multiline":false}
 ```
 
-The turn blocks until `POST /v1/chat/consent`.
+Security consent blocks until `POST /v1/chat/consent`. `ask_user` blocks until
+`POST /v1/chat/ask` with the same `reqId` (and `stoppedBy` / answer fields).
 
 Stream ends with a stop chunk (`finish_reason`, usually `"stop"`, plus
 `tanit.queue_wait_ms` / `exec_ms` / `session_id` / stream stats / `usage`), then:
@@ -339,7 +344,7 @@ Failed turn → SSE `data:` error object, then `[DONE]`.
 
 ## `POST /v1/chat/consent`
 
-Unblocks a `--consent-ui stream` ask. HTTP 200 `{ "ok": true }`.
+Unblocks a `--consent-ui stream` security consent card. HTTP 200 `{ "ok": true }`.
 
 Send the card body (`decision` `allow` / `deny` / `settings`, plus `lifetime`,
 `scope` / `scopes`, `aiDelegated`, `sandboxBackend`). `settings` is stored as
@@ -349,8 +354,27 @@ deny.
 { "cancel": true }
 ```
 
-Denies every ask still waiting. Invalid JSON → HTTP 200
+Denies every consent still waiting. Invalid JSON → HTTP 200
 `{ "ok": false, "error": "invalid JSON body" }`.
+
+## `POST /v1/chat/ask`
+
+Unblocks a `--consent-ui stream` `ask_user` tool call. HTTP 200 `{ "ok": true }`.
+
+Body matches the chat-panel `askUserReply` IPC shape:
+
+```json
+{
+  "reqId": "ask-…",
+  "stoppedBy": "submitted",
+  "kind": "choice",
+  "index": 0
+}
+```
+
+`stoppedBy`: `submitted` | `default` | `cancelled` | `timeout` | `error`.
+Answer fields by kind: `text` (string), `index` (choice), `indices` (multi_choice),
+`bool` (confirm). `{ "cancel": true }` cancels every pending ask.
 
 ---
 
