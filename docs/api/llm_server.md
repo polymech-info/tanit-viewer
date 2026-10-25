@@ -94,7 +94,7 @@ Missing or wrong key → HTTP **401**:
 
 | Header | Also in body | Effect |
 |--------|--------------|--------|
-| `X-Tanit-Cwd` | `cwd`, `tanit.cwd` | Working directory for path tools. Else process `--cwd`. |
+| `X-Tanit-Cwd` | `cwd`, `tanit.cwd` | Working directory for path tools. Else process `--cwd`. With `--fs-jail`, FS / search / pictures / service hard-deny paths outside this cwd (`run` / MCP not jailed). |
 | `X-Tanit-Session` | `session_id`, `tanit.session_id` | Agent memory id. Empty creates one. Echoed on the response. Not a Chrome broker token. |
 | `X-Tanit-Provider-Key` | `apiKey` / `tanit.apiKey` | **Provider** credential (Zitadel JWT for LiteLLM spend). Not the serve API key. Highest priority wins: header → `tanit.*` → top-level → daemon defaults → `tanit-cli login` store. |
 | `X-Tanit-Provider-Base-Url` | `baseUrl` / `tanit.baseUrl` | Provider base URL override (same priority). |
@@ -750,4 +750,5 @@ Recommended host pattern:
 3. Forward per-user **provider** credentials in each JSON body (`apiKey` /
    router fields) — never as the serve bearer.
 4. Set `X-Tanit-Cwd` / `tanit.session_id` per user/workspace.
-5. Prefer `--consent-ui auto-deny` (or stream + host UI) in automated hosts.
+5. Prefer `--fs-jail` so path tools cannot leave that cwd (pm-pics daemon default).
+6. Prefer `--consent-ui auto-deny` (or stream + host UI) in automated hosts.

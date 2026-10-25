@@ -1,8 +1,10 @@
 # Changelog
 
 End-user release notes for Tanit / Tanit Viewer.
-Generated from git diffs via `npm run build:post:changelog`.
-Each change is dated **DD-MM** from the commit day. One recent version — duplicates are merged.
+
+## 1.0.83 - 25-10
+
+- Filebrowser : Places local drives show free / total space
 
 ## 1.0.82 - 20-10
 
