@@ -2,6 +2,12 @@
 
 End-user release notes for Tanit / Tanit Viewer.
 
+## 1.0.84 - 26-10
+
+- Filebrowser : typeahead find matches mid-name tokens (`part` → `The.part.mp4`); idle multi-hit fan-out with Up/Down; Escape clears
+- Filebrowser : Space preview chrome — rounded frame and border on Windows 11, hairline + shadow on Windows 10
+- Filebrowser : DPI / multi-monitor scaling and 4K paint performance (persistent backbuffer, clipped redraw)
+
 ## 1.0.83 - 25-10
 
 - Filebrowser : Places local drives show free / total space

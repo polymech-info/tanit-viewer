@@ -9777,96 +9777,14 @@ MCP server from the tools cache.
 **Example**
 
 ```sh
-tanit-cli mcp client Tanit serpapi-search_dashboard
+tanit-cli mcp client Tanit tavily-tavily_search --query <value>
 ```
 
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit serpapi-search_dashboard --args '{}' --timeout-ms 0 --params 'foo'
+tanit-cli mcp client Tanit tavily-tavily_search --args '{}' --timeout-ms 0 --country 'foo' --end_date 'foo' --exact_match 'foo' --exclude_domains '{}' --include_domains '{}' --include_favicon --include_image_descriptions --include_images --include_raw_content --max_results 'foo' --query 'foo' --search_depth 'foo' --start_date 'foo' --time_range 'foo' --topic 'foo'
 ```
-
-#### mcp client Tanit serpapi-search_dashboard
-
-Interactive dashboard variant of `search`: returns summary metrics, a source breakdown chart, and a results table with a click-to-expand detail panel, all rendered in the conversat
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_dashboard
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_dashboard --args '{}' --timeout-ms 0 --params 'foo'
-```
-
----
-
-#### mcp client Tanit serpapi-search_table
-
-Interactive UI variant of `search`: returns organic results as a sortable, searchable table rendered in the conversation. Same params as `search`. Use when the host supports MCP Ap
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_table
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search_table --args '{}' --timeout-ms 0 --params 'foo'
-```
-
----
-
-#### mcp client Tanit serpapi-search
-
-Universal search tool supporting all SerpApi engines and result types.
-
-    When to use:
-        - Any query needing live, structured SERP data: web results, news, product listings
-
-Options:
-
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Response mode (default: "complete")
-- "complete": Returns the full response
-- "compact": Removes metadata fields from JSON responses; Markdown is unchanged
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Dictionary of SerpApi engine-specific parameters. Common parameters include:
-- q: Search query (required for most engines)
-- engine: Search engine to use (default: "google_light")
-- location: Geographic location filter
-- output: Response format; omit for JSON or set to "md" for Markdown
-
-**Example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search
-```
-
-**Full example**
-
-```sh
-tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo' --params 'foo'
-```
-
----
 
 #### mcp client Tanit tavily-tavily_search
 
@@ -9874,13 +9792,13 @@ Search the web for current information on any topic. Use for news, facts, or dat
 
 Options:
 
-- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
-- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
 - `--country` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Boost search results from a specific country. Must be a full country name (e.g., 'United States', 'Japan', 'Germany'). ISO country codes (e.g., 'us', 'jp') are not supported. Available only if topic is general. See https://docs.tavily.com/documentation/api-reference/search for the full list of supported countries.
 - `--end_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results before the specified end date. Required to be written in the format YYYY-MM-DD
 - `--exact_match` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Only return results containing the exact phrase(s) in quotes in your query
-- `--exclude_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List of domains to specifically exclude, if the user asks to exclude a domain set this to the domain of the site
-- `--include_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - A list of domains to specifically include in the search results, if the user asks to search on specific sites set this to the domain of the site
+- `--exclude_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - List of domains to specifically exclude, if the user asks to exclude a domain set this to the domain of the site
+- `--include_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - A list of domains to specifically include in the search results, if the user asks to search on specific sites set this to the domain of the site
 - `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to include the favicon URL for each result
 - `--include_image_descriptions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include a list of query-related images and their descriptions in the response
 - `--include_images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include a list of query-related images in the response
@@ -10021,6 +9939,88 @@ tanit-cli mcp client Tanit tavily-tavily_research --input <value>
 
 ```sh
 tanit-cli mcp client Tanit tavily-tavily_research --args '{}' --timeout-ms 0 --input 'foo' --model 'foo'
+```
+
+---
+
+#### mcp client Tanit serpapi-search_dashboard
+
+Interactive dashboard variant of `search`: returns summary metrics, a source breakdown chart, and a results table with a click-to-expand detail panel, all rendered in the conversat
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_dashboard
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_dashboard --args '{}' --timeout-ms 0 --params 'foo'
+```
+
+---
+
+#### mcp client Tanit serpapi-search_table
+
+Interactive UI variant of `search`: returns organic results as a sortable, searchable table rendered in the conversation. Same params as `search`. Use when the host supports MCP Ap
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_table
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search_table --args '{}' --timeout-ms 0 --params 'foo'
+```
+
+---
+
+#### mcp client Tanit serpapi-search
+
+Universal search tool supporting all SerpApi engines and result types.
+
+    When to use:
+        - Any query needing live, structured SERP data: web results, news, product listings
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Response mode (default: "complete")
+- "complete": Returns the full response
+- "compact": Removes metadata fields from JSON responses; Markdown is unchanged
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Dictionary of SerpApi engine-specific parameters. Common parameters include:
+- q: Search query (required for most engines)
+- engine: Search engine to use (default: "google_light")
+- location: Geographic location filter
+- output: Response format; omit for JSON or set to "md" for Markdown
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo' --params 'foo'
 ```
 
 ## Custom Commands
