@@ -987,6 +987,7 @@ Options:
 - `--exclude` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Drop paths matching these globs. One glob per flag; repeat it: --exclude *.log --exclude *.tmp
 - `--mask` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Per-directory mask: gitignore (default) or ignore (.ignore).
 - `--no-gitignore` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not apply .gitignore / .ignore rules.
+- `--include-vcs` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also copy .git / .svn / .hg trees (skipped by default).
 - `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Expand sources and dest; do not copy.
 
 **Example**
@@ -998,7 +999,7 @@ tanit-cli cp
 **Full example**
 
 ```sh
-tanit-cli cp paths '{}' -s '{}' -d 'foo' --conflict 'foo' --overwrite --skip --rename --if-newer --include '{}' --exclude '{}' --mask 'foo' --no-gitignore --dry-run
+tanit-cli cp paths '{}' -s '{}' -d 'foo' --conflict 'foo' --overwrite --skip --rename --if-newer --include '{}' --exclude '{}' --mask 'foo' --no-gitignore --include-vcs --dry-run
 ```
 
 ##### Examples
@@ -1076,6 +1077,7 @@ Options:
 - `--exclude` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Drop paths matching these globs. One glob per flag; repeat it: --exclude *.log --exclude *.tmp
 - `--mask` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Per-directory mask: gitignore (default) or ignore (.ignore).
 - `--no-gitignore` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not apply .gitignore / .ignore rules.
+- `--include-vcs` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also copy .git / .svn / .hg trees (skipped by default).
 - `--dry-run` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Expand sources and dest; do not move.
 
 **Example**
@@ -1087,7 +1089,7 @@ tanit-cli mv
 **Full example**
 
 ```sh
-tanit-cli mv paths '{}' -s '{}' -d 'foo' --conflict 'foo' --overwrite --skip --rename --if-newer --include '{}' --exclude '{}' --mask 'foo' --no-gitignore --dry-run
+tanit-cli mv paths '{}' -s '{}' -d 'foo' --conflict 'foo' --overwrite --skip --rename --if-newer --include '{}' --exclude '{}' --mask 'foo' --no-gitignore --include-vcs --dry-run
 ```
 
 ##### Examples
