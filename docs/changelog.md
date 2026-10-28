@@ -2,6 +2,16 @@
 
 End-user release notes for Tanit / Tanit Viewer.
 
+## 1.0.85 - 28-10
+
+- Android App & LLM client & server implementation
+- LLM server pairing
+
+## 1.0.85 - 27-10
+
+- VFS defaults for VCS
+- Settings UI
+
 ## 1.0.84 - 26-10
 
 - Filebrowser : typeahead find matches mid-name tokens (`part` → `The.part.mp4`); idle multi-hit fan-out with Up/Down; Escape clears

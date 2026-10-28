@@ -2283,6 +2283,13 @@ Options:
 - `--http-workers` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - httplib worker threads for --serve (default: max(32, concurrency*2); raise for stress with many waiting clients).
 - `--serve-api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Require Authorization: Bearer <key> on /v1/* when set. Empty = open (dev). Overrides TANIT_SERVE_API_KEY when passed.
 - `--fs-jail` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Hard-deny FS / search / pictures / service path tools outside the request workspace cwd (X-Tanit-Cwd / --cwd). Does not jail `run` or MCP. Also TANIT_SERVE_FS_JAIL=1.
+- `--lan` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Advertise this daemon as _tanit._tcp and accept paired phones on a TLS port (HTTP stays on --host). No credentials in the discovery record. Also TANIT_SERVE_LAN=1. Requires --serve.
+- `--lan-port` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - TLS port for --lan (default: --port + 1). Phones connect here, not to cleartext HTTP.
+- `--lan-name` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Display name in mDNS and the pairing QR. Default: this computer's name.
+- `--pair` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - With --serve, open a one-time pairing window and show a QR (implies --lan). The URI contains a short-lived secret.
+- `--pair-scopes` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma list granted by --pair: chat, files, tools. Default: all three.
+- `--lan-devices` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List paired phones (id, name, scopes). Does not require --serve.
+- `--lan-revoke` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Revoke one paired phone by id. Does not require --serve. A running --lan daemon picks the change up from the device file.
 - `--host-tool-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Register an HTTP IAgentToolProvider as id=http://127.0.0.1:port/path (repeatable). Loopback HTTP only. Also TANIT_HOST_TOOL_PROVIDER.
 
 **Voice**
@@ -2312,7 +2319,7 @@ tanit-cli llm agent
 **Full example**
 
 ```sh
-tanit-cli llm agent -p 'foo' --logging-dir 'foo' --system-prompt 'foo' --planner-prompt 'foo' --include '{}' --embed '{}' --preset 'foo' --runner 'foo' --save-preset 'foo' --router 'foo' --model 'foo' --ai-consent-review --ai-consent-router 'foo' --ai-consent-model 'foo' --consent-ui 'foo' --consent-owner 'foo' --ocr-provider 'foo' --ocr-model 'foo' --recognition-provider 'foo' --recognition-model 'foo' --image-provider 'foo' --image-model 'foo' --video-provider 'foo' --video-model 'foo' --api-key 'foo' --base-url 'foo' --timeout-ms 0 --max-iter 0 --no-tools --no-mcp --no-skills --skills --no-planner --planner --planner-budget 8 --no-parallel-tools --parallel-tools --multi-turn --single-turn --session-id 'foo' --load-snapshot 'foo' --save-snapshot 'foo' --memory-features 'foo' --no-replay --scheduler --scheduler-timeout 0 --scheduler-exit-when-idle --disable-tools 'foo' --enable-tools 'foo' --hud --hud-mode 'off' --dry-run --log 'agent.json' --dst 'foo' --type 'responses' --realtime --realtime-stop --realtime-status --serve --host '127.0.0.1' --port 8090 --concurrency 2 --http-workers 0 --serve-api-key 'foo' --fs-jail --host-tool-provider '{}' --realtime-idle-ms 120000 --streaming 'on' --markdown 'auto' --color 'auto' --mic --stt-api-key 'foo' --voice-id 'foo' --no-tts --tts-model-id 'foo' --input 'foo' --input-source 'mic' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --silence-ms 1500 --stt-provider 'elevenlabs' --stt-model 'foo' --tts-provider 'elevenlabs' --tts-model 'foo' --tts-voice-id 'foo'
+tanit-cli llm agent -p 'foo' --logging-dir 'foo' --system-prompt 'foo' --planner-prompt 'foo' --include '{}' --embed '{}' --preset 'foo' --runner 'foo' --save-preset 'foo' --router 'foo' --model 'foo' --ai-consent-review --ai-consent-router 'foo' --ai-consent-model 'foo' --consent-ui 'foo' --consent-owner 'foo' --ocr-provider 'foo' --ocr-model 'foo' --recognition-provider 'foo' --recognition-model 'foo' --image-provider 'foo' --image-model 'foo' --video-provider 'foo' --video-model 'foo' --api-key 'foo' --base-url 'foo' --timeout-ms 0 --max-iter 0 --no-tools --no-mcp --no-skills --skills --no-planner --planner --planner-budget 8 --no-parallel-tools --parallel-tools --multi-turn --single-turn --session-id 'foo' --load-snapshot 'foo' --save-snapshot 'foo' --memory-features 'foo' --no-replay --scheduler --scheduler-timeout 0 --scheduler-exit-when-idle --disable-tools 'foo' --enable-tools 'foo' --hud --hud-mode 'off' --dry-run --log 'agent.json' --dst 'foo' --type 'responses' --realtime --realtime-stop --realtime-status --serve --host '127.0.0.1' --port 8090 --concurrency 2 --http-workers 0 --serve-api-key 'foo' --fs-jail --lan --lan-port 0 --lan-name 'foo' --pair --pair-scopes 'foo' --lan-devices --lan-revoke 'foo' --host-tool-provider '{}' --realtime-idle-ms 120000 --streaming 'on' --markdown 'auto' --color 'auto' --mic --stt-api-key 'foo' --voice-id 'foo' --no-tts --tts-model-id 'foo' --input 'foo' --input-source 'mic' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --silence-ms 1500 --stt-provider 'elevenlabs' --stt-model 'foo' --tts-provider 'elevenlabs' --tts-model 'foo' --tts-voice-id 'foo'
 ```
 
 ##### Examples
@@ -9785,31 +9792,33 @@ tanit-cli mcp client Tanit tavily-tavily_search --query <value>
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_search --args '{}' --timeout-ms 0 --country 'foo' --end_date 'foo' --exact_match 'foo' --exclude_domains '{}' --include_domains '{}' --include_favicon --include_image_descriptions --include_images --include_raw_content --max_results 'foo' --query 'foo' --search_depth 'foo' --start_date 'foo' --time_range 'foo' --topic 'foo'
+tanit-cli mcp client Tanit tavily-tavily_search --args '{}' --timeout-ms 0 --country 'foo' --end_date 'foo' --exact_match 'foo' --exclude_domains 'foo' --filter_by_published_date 'foo' --include_domains 'foo' --include_favicon 'foo' --include_image_descriptions 'foo' --include_images 'foo' --include_published_date 'foo' --include_raw_content 'foo' --max_results 'foo' --query 'foo' --search_depth 'foo' --start_date 'foo' --time_range 'foo' --topic 'foo'
 ```
 
 #### mcp client Tanit tavily-tavily_search
 
-Search the web for current information on any topic. Use for news, facts, or data beyond your knowledge cutoff. Returns snippets and source URLs.
+Search the web for current information on any topic. Use for news, facts, or data beyond your knowledge cutoff, and before answering any question about specific facts, figures or r
 
 Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
 - `--country` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Boost search results from a specific country. Must be a full country name (e.g., 'United States', 'Japan', 'Germany'). ISO country codes (e.g., 'us', 'jp') are not supported. Available only if topic is general. See https://docs.tavily.com/documentation/api-reference/search for the full list of supported countries.
-- `--end_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results before the specified end date. Required to be written in the format YYYY-MM-DD
+- `--end_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results before the specified end date. Required to be written in the format YYYY-MM-DD. Filters by publish date, not by when events happened; leave it empty when looking for facts about past events.
 - `--exact_match` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Only return results containing the exact phrase(s) in quotes in your query
-- `--exclude_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - List of domains to specifically exclude, if the user asks to exclude a domain set this to the domain of the site
-- `--include_domains` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - A list of domains to specifically include in the search results, if the user asks to search on specific sites set this to the domain of the site
-- `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to include the favicon URL for each result
-- `--include_image_descriptions` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include a list of query-related images and their descriptions in the response
-- `--include_images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include a list of query-related images in the response
-- `--include_raw_content` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include the cleaned and parsed HTML content of each search result
-- `--max_results` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The maximum number of search results to return
-- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Search query
-- `--search_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The depth of the search. 'basic' for generic results, 'advanced' for more thorough search, 'fast' for optimized low latency with high relevance, 'ultra-fast' for prioritizing latency above all else
-- `--start_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results after the specified start date. Required to be written in the format YYYY-MM-DD.
-- `--time_range` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The time range back from the current date to include in the search results
+- `--exclude_domains` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - List of domains to specifically exclude, if the user asks to exclude a domain set this to the domain of the site
+- `--filter_by_published_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Filter results to the requested date window and exclude results with no detected publication date
+- `--include_domains` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - A list of domains to specifically include in the search results, if the user asks to search on specific sites set this to the domain of the site. Use full domains such as 'en.wikipedia.org' or 'sec.gov', not suffixes such as 'edu'. This is a hard filter: if results come back empty or thin, search again without it.
+- `--include_favicon` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Whether to include the favicon URL for each result
+- `--include_image_descriptions` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Include a list of query-related images and their descriptions in the response
+- `--include_images` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Include a list of query-related images in the response
+- `--include_published_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Include detected publication dates (beta)
+- `--include_raw_content` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Include the cleaned and parsed HTML content of each search result. Whole pages can make the response too large to read; to read one page, use tavily_extract with a query instead.
+- `--max_results` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The maximum number of search results to return. Ask for 10 when looking for a specific fact, page or entity.
+- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Search query. Keep it short and specific, in the words the page itself would use; one idea per query.
+- `--search_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The depth of the search. 'basic' for generic results, 'advanced' for more thorough search, 'fast' for optimized low latency with high relevance, 'ultra-fast' for prioritizing latency above all else. Use 'advanced' when looking for a specific fact, page or entity, or when 'basic' did not find it.
+- `--start_date` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Will return all results after the specified start date. Required to be written in the format YYYY-MM-DD. Filters by publish date, not by when events happened; leave it empty when looking for facts about past events.
+- `--time_range` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The time range back from the current date to include in the search results. Filters by when a page was published, not by when the events it describes happened.
 - `--topic` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Search category. Use 'general' for almost all searches, including current events and requests that combine news with other information. Use 'news' only when the user explicitly asks for news, headlines, or news coverage.
 
 **Example**
@@ -9821,14 +9830,14 @@ tanit-cli mcp client Tanit tavily-tavily_search --query <value>
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_search --args '{}' --timeout-ms 0 --country 'foo' --end_date 'foo' --exact_match 'foo' --exclude_domains '{}' --include_domains '{}' --include_favicon --include_image_descriptions --include_images --include_raw_content --max_results 'foo' --query 'foo' --search_depth 'foo' --start_date 'foo' --time_range 'foo' --topic 'foo'
+tanit-cli mcp client Tanit tavily-tavily_search --args '{}' --timeout-ms 0 --country 'foo' --end_date 'foo' --exact_match 'foo' --exclude_domains 'foo' --filter_by_published_date 'foo' --include_domains 'foo' --include_favicon 'foo' --include_image_descriptions 'foo' --include_images 'foo' --include_published_date 'foo' --include_raw_content 'foo' --max_results 'foo' --query 'foo' --search_depth 'foo' --start_date 'foo' --time_range 'foo' --topic 'foo'
 ```
 
 ---
 
 #### mcp client Tanit tavily-tavily_extract
 
-Extract content from URLs. Returns raw page content in markdown or text format.
+Extract content from URLs. Returns raw page content in markdown or text format. Use it to read a page in full or to confirm a fact found in search results. Pages that could not be 
 
 Options:
 
@@ -9838,8 +9847,9 @@ Options:
 - `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Output format
 - `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include favicon URLs
 - `--include_images` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include images from pages
-- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Query to rerank content chunks by relevance
-- `--urls` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List of URLs to extract content from
+- `--include_usage` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Include credit usage
+- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Query to rerank content chunks by relevance. Set it to get only the relevant passages of a long article or PDF. Leave it empty for tables, lists, data files and API responses, which it can cut short; read those whole, or request a narrower URL.
+- `--urls` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List of URLs to extract content from. Prefer URLs from search results; guessed page URLs often fail.
 
 **Example**
 
@@ -9850,7 +9860,7 @@ tanit-cli mcp client Tanit tavily-tavily_extract
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_extract --args '{}' --timeout-ms 0 --extract_depth 'foo' --format 'foo' --include_favicon --include_images --query 'foo' --urls '{}'
+tanit-cli mcp client Tanit tavily-tavily_extract --args '{}' --timeout-ms 0 --extract_depth 'foo' --format 'foo' --include_favicon --include_images --include_usage 'foo' --query 'foo' --urls '{}'
 ```
 
 ---
@@ -9864,9 +9874,11 @@ Options:
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
 - `--allow_external` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to return external links in the final response
+- `--chunks_per_source` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chunks per source; requires instructions
 - `--extract_depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Advanced extraction retrieves more data, including tables and embedded content, with higher success but may increase latency
 - `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.
 - `--include_favicon` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to include the favicon URL for each result
+- `--include_usage` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Include credit usage
 - `--instructions` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Natural language instructions for the crawler. Instructions specify which types of pages the crawler should return.
 - `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Total number of links the crawler will process before stopping
 - `--max_breadth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max number of links to follow per level of the tree (i.e., per page)
@@ -9884,7 +9896,7 @@ tanit-cli mcp client Tanit tavily-tavily_crawl --url <value>
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_crawl --args '{}' --timeout-ms 0 --allow_external --extract_depth 'foo' --format 'foo' --include_favicon --instructions 'foo' --limit 'foo' --max_breadth 'foo' --max_depth 'foo' --select_domains '{}' --select_paths '{}' --url 'foo'
+tanit-cli mcp client Tanit tavily-tavily_crawl --args '{}' --timeout-ms 0 --allow_external --chunks_per_source 'foo' --extract_depth 'foo' --format 'foo' --include_favicon --include_usage 'foo' --instructions 'foo' --limit 'foo' --max_breadth 'foo' --max_depth 'foo' --select_domains '{}' --select_paths '{}' --url 'foo'
 ```
 
 ---
@@ -9898,6 +9910,7 @@ Options:
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
 - `--allow_external` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Whether to return external links in the final response
+- `--include_usage` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Include credit usage
 - `--instructions` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Natural language instructions for the crawler
 - `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Total number of links the crawler will process before stopping
 - `--max_breadth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Max number of links to follow per level of the tree (i.e., per page)
@@ -9915,7 +9928,7 @@ tanit-cli mcp client Tanit tavily-tavily_map --url <value>
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_map --args '{}' --timeout-ms 0 --allow_external --instructions 'foo' --limit 'foo' --max_breadth 'foo' --max_depth 'foo' --select_domains '{}' --select_paths '{}' --url 'foo'
+tanit-cli mcp client Tanit tavily-tavily_map --args '{}' --timeout-ms 0 --allow_external --include_usage 'foo' --instructions 'foo' --limit 'foo' --max_breadth 'foo' --max_depth 'foo' --select_domains '{}' --select_paths '{}' --url 'foo'
 ```
 
 ---
@@ -9928,6 +9941,7 @@ Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--files` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Base64 .txt/.md/.json attachments; up to 80000 words combined
 - `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - A comprehensive description of the research task
 - `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Defines the degree of depth of the research. 'mini' is good for narrow tasks with few subtopics. 'pro' is good for broad tasks with many subtopics
 
@@ -9940,7 +9954,7 @@ tanit-cli mcp client Tanit tavily-tavily_research --input <value>
 **Full example**
 
 ```sh
-tanit-cli mcp client Tanit tavily-tavily_research --args '{}' --timeout-ms 0 --input 'foo' --model 'foo'
+tanit-cli mcp client Tanit tavily-tavily_research --args '{}' --timeout-ms 0 --files 'foo' --input 'foo' --model 'foo'
 ```
 
 ---
