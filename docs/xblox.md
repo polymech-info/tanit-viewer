@@ -7533,7 +7533,7 @@ Default block:
 | `custom.command-mpohnfaf-26b0c` | TTS | `app:setVariable` |  | selection |  |
 | `custom.command-mpokt0hv-41237` | Funny | `app:setVariable` |  | selection |  |
 | `custom.command-mpokxo4w-0910a` | Serious | `app:setVariable` |  | selection |  |
-| `custom.command-mtloapd5-06baa` | MCP | `cli:mcp` |  | selection; json->json | `--json` |
+| `custom.command-mtloapd5-06baa` | MCP | `cli:mcp` |  | selection; json->json | `--json`<br>`--bind`<br>`0.0.0.0` |
 | `custom.command-mu1wob56-d1f45` | Share as Article (copy) | `cli:service` | Share selected Markdown file as article | selection; text-> | `pages`<br>`create`<br>`--category-id`<br>`uncategorized`<br>`--private`<br>`${CURRENT_SELECTION}` |
 | `custom.command-mtva51l4-2e559` | Login | `app:login` | Login into Tanit | selection |  |
 | `custom.command-mtvdak7f-00d65` | Logout | `app:logout` | Login into Tanit | selection |  |

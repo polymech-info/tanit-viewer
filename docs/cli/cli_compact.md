@@ -100,7 +100,7 @@ custom.command-mtk0rcb2-f401a (run,--src,${TANIT_SCRIPTS}/stt-paste-whisper.xblo
 custom.command-mtld2y23-123a4 - Chat
 custom.command-mtlh4sop-a7c1b - New
 custom.command-mtlnivuv-4aae3 - Explorer
-custom.command-mtloapd5-06baa (--json) - MCP
+custom.command-mtloapd5-06baa (--json,--bind,0.0.0.0) - MCP
 custom.command-mtn0t1b3-722de (trigger,gtcrn,false,false,...) - Start voice command mode - requires Whisper model and GPU
 custom.command-mtoxzgrv-1f644 (max) - Maximize
 custom.command-mtun9312-7d0e1 (posts,create,${CURRENT_SELECTION},--visibility,...) - Share selected image file as article
