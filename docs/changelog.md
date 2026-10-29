@@ -1,6 +1,12 @@
 # Changelog
 
-End-user release notes for Tanit / Tanit Viewer.
+End-user release notes for Tanit
+
+## 1.0.86 - 29-10
+
+- Android: CMS tools | Voice Agent | UI | Markdown viewer | Scheduler | System/Planner/Real-time/User-Pref prompt picker and editor | MCP Server UI / Tanit LAN discover
+- LLM Tools: I/O (MQTT,Modbus,SSH)
+- MCP Server: discovery via mdns
 
 ## 1.0.85 - 28-10
 

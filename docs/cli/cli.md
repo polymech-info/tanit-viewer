@@ -2241,8 +2241,8 @@ Options:
 - `--planner-budget` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Maximum tool schemas the planner may pre-expand before falling back to the full catalog.
 - `--no-parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable concurrent tool dispatch and fall back to serial execution. Parallel dispatch (P6) is on by default; use this flag to opt out.
 - `--parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dispatch all tool calls in a single LLM response concurrently (std::async). On by default — this flag is accepted for compatibility but is a no-op unless --no-parallel-tools was previously applied.
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
-- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
 
 **Session**
 - `--multi-turn` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable session memory across turns (default: on).
@@ -7361,13 +7361,13 @@ Developer probes: low-level core and UI tests.
 **Example**
 
 ```sh
-tanit-cli test core string
+tanit-cli test core audio
 ```
 
 **Full example**
 
 ```sh
-tanit-cli test core string --profile 'common' --input 'foo' --input-file 'foo'
+tanit-cli test core audio --suite 'all'
 ```
 
 #### test core
@@ -7377,14 +7377,36 @@ Low-level JSON probes for sanitizer, filesystem guard, and compression tests.
 **Example**
 
 ```sh
-tanit-cli test core string
+tanit-cli test core audio
 ```
 
 **Full example**
 
 ```sh
-tanit-cli test core string --profile 'common' --input 'foo' --input-file 'foo'
+tanit-cli test core audio --suite 'all'
 ```
+
+#### test core audio
+
+Audio session contracts: lease preemption, device routing, event envelope, PCM graph.
+
+Options:
+
+- `--suite` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">all</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">all</span> <span data-cli="choice">lease</span> <span data-cli="choice">route</span> <span data-cli="choice">event</span> <span data-cli="choice">graph</span></span></span>) - all, lease, route, event, graph
+
+**Example**
+
+```sh
+tanit-cli test core audio
+```
+
+**Full example**
+
+```sh
+tanit-cli test core audio --suite 'all'
+```
+
+---
 
 #### test core string
 
@@ -9526,7 +9548,7 @@ Options:
 - `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
 - `--bind` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Interface/address for MCP HTTP. Default: 127.0.0.1 (loopback only).
 - `--port` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 65535]</span>, <span data-cli="default">default <span data-cli="value">4444</span></span></span>) - First TCP port to try for MCP HTTP (default 4444; next free port if busy)
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 
 **Example**
 

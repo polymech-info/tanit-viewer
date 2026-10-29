@@ -319,6 +319,58 @@ Params:
 
 ---
 
+### Scheduler
+
+#### schedule_at
+
+Schedule a one-shot agent task to run at an exact UTC time.
+
+Params:
+- `folder_hint` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional folder context for the scheduled turn.
+- `initial_state` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  Optional initial memory_state JSON.
+- `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  The full prompt to run at fire time.
+- `run_at` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  ISO 8601 UTC datetime, e.g.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Short human-readable name for the task.
+
+#### schedule_in
+
+Schedule a one-shot agent task to run after a delay.
+
+Params:
+- `delay_seconds` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Seconds from now until the task fires.
+- `folder_hint` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `initial_state` (<span data-cli="meta"><span data-cli="type">object</span></span>)
+- `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+
+#### schedule_every
+
+Schedule a recurring agent task on a fixed interval.
+
+Params:
+- `folder_hint` (<span data-cli="meta"><span data-cli="type">string</span></span>)
+- `initial_state` (<span data-cli="meta"><span data-cli="type">object</span></span>)
+- `interval_seconds` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Seconds between ticks.
+- `max_runs` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Optional cap on total runs; omit for unlimited.
+- `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+- `start_at` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional ISO 8601 UTC start time.
+- `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+
+#### schedule_cancel
+
+Disable a saved scheduled task by its id.
+
+Params:
+- `task_id` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  The task id returned by schedule_at / schedule_in / schedule_every.
+
+#### schedule_list
+
+List saved scheduled tasks (id, title, schedule, enabled, next_run_at, run_count).
+
+Params:
+
+---
+
 ### Memory
 
 #### memory_read
@@ -742,6 +794,62 @@ Params:
 - `sizes` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Responsive image widths, e.g.
 - `type` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">all</span> <span data-cli="choice">pages</span> <span data-cli="choice">posts</span> <span data-cli="choice">pictures</span> <span data-cli="choice">files</span> <span data-cli="choice">places</span></span>, <span data-cli="default">default <span data-cli="value">&quot;all&quot;</span></span></span>)
 - `visibility_filter` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">invisible</span> <span data-cli="choice">private</span></span></span>)  -  Authenticated-only filter for invisible or private content.
+
+---
+
+### Network
+
+#### ssh_exec
+
+Run one command on a remote host over SSH (key auth) and return exit_status, stdout, stderr.
+
+Params:
+- `accept_unknown_host` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Add an unknown host key to known_hosts.
+- `command` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  One non-interactive remote command, e.g.
+- `host` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  SSH config alias or hostname, exactly as the user gave it.
+- `port` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Optional.
+- `private_key` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional absolute path to a private key.
+- `timeout_ms` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Connect and command timeout.
+- `username` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional.
+
+#### mqtt
+
+One MQTT exchange with a broker.
+
+Params:
+- `action` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">publish</span> <span data-cli="choice">subscribe</span> <span data-cli="choice">roundtrip</span></span>, <span data-cli="tag" data-variant="required">required</span></span>)
+- `client_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional client id.
+- `host` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Broker host.
+- `payload` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Message body for publish and roundtrip.
+- `port` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Broker port.
+- `qos` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  QoS 0-2.
+- `timeout_ms` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Default 5000.
+- `topic` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  MQTT topic.
+
+#### modbus_read
+
+Read Modbus registers or bits from a device (Modbus TCP).
+
+Params:
+- `address` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Zero-based address.
+- `area` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">holdingRegisters</span> <span data-cli="choice">inputRegisters</span> <span data-cli="choice">coils</span> <span data-cli="choice">discreteInputs</span></span></span>)  -  Default holdingRegisters.
+- `count` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Number of registers (max 125) or bits (max 2000).
+- `slave` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Unit id.
+- `timeout_ms` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Default 5000.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Device endpoint: tcp:<host>:<port>[:<unit>], e.g.
+
+#### modbus_write
+
+Write Modbus holding registers or coils on a device (Modbus TCP).
+
+Params:
+- `address` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Zero-based address.
+- `area` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">holdingRegisters</span> <span data-cli="choice">coils</span></span></span>)  -  Default holdingRegisters.
+- `slave` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Unit id.
+- `timeout_ms` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Default 5000.
+- `url` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Device endpoint: tcp:<host>:<port>[:<unit>], e.g.
+- `value` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  One register value (0-65535), or a coil state 0/1.
+- `values` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Several consecutive values starting at address.
 
 ---
 

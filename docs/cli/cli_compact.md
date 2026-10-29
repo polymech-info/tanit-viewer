@@ -326,6 +326,7 @@ status (log-days) - Show Tanit credits and license status.
 tags read (path,family) - Print tags from an image or its .xmp sidecar
 tags write (path,set,add,unset,...) - Set, add, or remove tags
 terminal - Open PowerShell (Tanit Terminal). Uses pwsh if present, otherwise Windows PowerShell.
+test core audio (suite) - Audio session contracts: lease preemption, device routing, event envelope, PCM graph.
 test core commands - Command schema / registry probe: shared parameter dump, exact options_path, seeded app-command...
 test core context (scenario) - Windows OS context-store acceptance scenarios (synthetic Explorer/Desktop/drag).
 test core file-handlers (scenario) - Windows file-association resolver (SHAssocEnumHandlers + Installed Apps identity).
