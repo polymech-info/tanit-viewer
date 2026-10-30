@@ -2,6 +2,36 @@
 
 End-user release notes for Tanit
 
+## 1.0.89 - 30-10
+
+### Commons
+
+- Victoria log sinks and forwarders: CLI, Android and UI app
+- Feature 'Video Streaming' on by default
+
+### LLM Server
+
+- remote video endpoint, screen, window, or webcam, one live source. The source list includes every camera on the machine
+- Remote video stays idle until start. The last viewer releases the camera or screen after a short grace; a reconnect or a second viewer keeps it. A failed source switch leaves the current capture running
+- Paired phones need the `video` scope. Default pairing stays chat, files, and tools
+
+see also
+
+https://github.com/livekit/livekit
+
+https://github.com/livekit/client-sdk-android
+
+https://github.com/GetStream/webrtc-android
+
+### Android
+
+- LLM tools: play audio file, VFS (upload/download), picture taking, scheduler
+- SFX notifications
+- LAN LLM server fixes
+- Voice agent fixes
+- Consent UI streaming
+- UI code cleanup
+
 ## 1.0.86 - 29-10
 
 - Android: CMS tools | Voice Agent | UI | Markdown viewer | Scheduler | System/Planner/Real-time/User-Pref prompt picker and editor | MCP Server UI / Tanit LAN discover

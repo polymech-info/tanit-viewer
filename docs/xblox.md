@@ -7367,6 +7367,64 @@ Default block:
 
 ---
 
+#### Remote Stream
+
+Start, stop, or inspect a named remote video stream server for the mobile web remote. The current backend launches the same video stream server used by the CLI.
+
+Params:
+
+**server_lifecycle**
+- `action` (<span data-cli="meta"><span data-cli="type">enum</span>, <span data-cli="default">default <span data-cli="value">&quot;Start&quot;</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">Start</span> <span data-cli="choice">Stop</span> <span data-cli="choice">Status</span></span></span>) - Start a named remote video stream server, Stop it, or report Status.
+- `instance` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;default&quot;</span></span></span>) - Named stream instance. Use the same name for Stop/Status.
+- `open` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">false</span></span></span>) - Ask the stream server to open the local browser after starting.
+
+**input**
+- `input` (<span data-cli="meta"><span data-cli="type">screen_input</span>, <span data-cli="default">default <span data-cli="value">&quot;screen:0&quot;</span></span></span>) - Camera or screen/window source for Start. Examples: screen:current, screen:0, screen:0:hwnd=..., screen:0:wintitle=...:rrect=x,y,w,h.
+
+**network**
+- `bind` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;127.0.0.1&quot;</span></span></span>) - Network interface to listen on. 127.0.0.1 is local only.
+- `port` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-65535</span>, <span data-cli="default">default <span data-cli="value">8787</span></span></span>) - TCP port for the stream server. Use a fixed port so Status can report a stable URL.
+
+**quality**
+- `fps` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-240</span>, <span data-cli="default">default <span data-cli="value">30</span></span></span>) - Target capture frame rate.
+- `bitrateKbps` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-100000</span>, <span data-cli="default">default <span data-cli="value">8000</span></span></span>) - Future WebRTC/video encoder bitrate hint.
+- `mjpegQuality` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="type">1-100</span>, <span data-cli="default">default <span data-cli="value">85</span></span></span>) - JPEG quality for the MJPEG fallback preview.
+- `encoder` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;auto&quot;</span></span></span>) - Future encoder selector.
+
+**capture_options**
+- `includeCursor` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>) - Include the cursor in screen capture when supported.
+
+**access**
+- `token` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;&quot;</span></span></span>) - Remote access token. Empty generates one for Start.
+
+**output**
+- `storeAs` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;stream&quot;</span></span></span>) - Variable to also store the result in (always sets PREVIOUS).
+
+Features: cancellable
+
+Default block:
+
+```json
+{
+  "action": "Start",
+  "bind": "127.0.0.1",
+  "bitrateKbps": 8000,
+  "encoder": "auto",
+  "fps": 30,
+  "includeCursor": true,
+  "input": "screen:0",
+  "instance": "default",
+  "kind": "videoStream",
+  "mjpegQuality": 85,
+  "open": false,
+  "port": 8787,
+  "storeAs": "stream",
+  "token": ""
+}
+```
+
+---
+
 #### Video Writer
 
 Append a frame (handle or image path) to an .mp4. Stateful across loop iterations  -  drive it from a for/while loop or --loop run to build a video. Finalized when the run ends. Stores the output path in PREVIOUS / storeAs.

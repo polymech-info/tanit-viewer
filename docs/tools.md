@@ -158,14 +158,14 @@ Params:
 
 #### image_from_camera
 
-Capture a still image from a connected webcam / camera and save it to disk.
+Capture a still image from a camera and save it as a JPEG.
 
-Workflow:
-  1.
+On a phone the default is the back camera.
 
 Params:
 - `action` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">capture</span> <span data-cli="choice">list</span></span>, <span data-cli="default">default <span data-cli="value">&quot;capture&quot;</span></span></span>)  -  "list" - return all capture devices and their available resolutions.
-- `device` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Case-insensitive substring of the camera's friendly name (e.g.
+- `device` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Desktop: case-insensitive substring of the webcam's friendly name (e.g.
+- `facing` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">back</span> <span data-cli="choice">front</span></span></span>)  -  Phone only.
 - `height` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Preferred capture height in pixels.
 - `output_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Destination file path (.jpg, .png, or .bmp).
 - `width` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Preferred capture width in pixels.
@@ -233,6 +233,13 @@ Params:
 - `play` (<span data-cli="meta"><span data-cli="type">boolean</span>, <span data-cli="default">default <span data-cli="value">true</span></span></span>)  -  Play the audio through the default speaker (default: true).
 - `text` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  The text to synthesise and play aloud.
 - `text_out` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional path to write the spoken text as a UTF-8 file (transcript/caption).
+
+#### play_file
+
+Play an existing audio file on the default speaker.
+
+Params:
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Audio file to play.
 
 #### audio_transcribe
 
@@ -760,26 +767,50 @@ Params:
 Read a file from Tanit VFS.
 
 Params:
-- `local_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Download to this local path instead of inline content.
+- `local_dir` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Download the file or folder tree into this local directory (keeps subfolders).
+- `local_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Download one file to this local path instead of inline content.
 - `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span></span>)  -  VFS mount name.
-- `overwrite` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Re-download when local_path exists.
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Remote VFS file path (required).
+- `overwrite` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Re-download when the local file exists.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Remote VFS file or folder path (required).
+- `pattern` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  With local_dir: glob filter, e.g.
 - `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
 
 #### service_files_upload
 
-Upload a local file to Tanit VFS.
+Upload to Tanit VFS: a local file, a local folder (up to 200 files, subfolders kept), or inline text (content + remote_path).
 
 Params:
 - `conflict` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">if-newer</span> <span data-cli="choice">skip</span> <span data-cli="choice">overwrite</span></span></span>)  -  Conflict policy.
+- `content` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Inline text to store instead of a local file.
 - `if_newer` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Overwrite remote only when local is newer (default).
 - `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span></span>)  -  VFS mount name.
 - `overwrite` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Always replace the remote file.
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Local file path (required).
+- `path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Local file or folder path.
+- `public` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Put it under the shared public/ folder (anyone with the link can view).
 - `remote_dir` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Remote directory when remote_path omitted.
-- `remote_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Exact remote path; default: filename under remote_dir.
+- `remote_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Exact remote path; default: filename (or folder name) under remote_dir.
 - `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
 - `skip` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Skip when the remote file already exists.
+
+#### service_files_delete
+
+Delete files or folders from Tanit VFS (remote cloud storage).
+
+Params:
+- `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span></span>)  -  VFS mount name.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Remote VFS file or folder path.
+- `paths` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Several remote paths (max 50).
+- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
+
+#### service_files_link
+
+Get a share link for a Tanit VFS file or folder: the Tanit file browser URL, plus a direct download URL for a file that works without sign-in for 15 minutes.
+
+Params:
+- `download` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Direct URL downloads instead of opening inline.
+- `mount` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="default">default <span data-cli="value">&quot;home&quot;</span></span></span>)  -  VFS mount name.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Remote VFS file or folder path (required).
+- `server_url` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional Tanit CMS base URL override.
 
 #### service_search
 

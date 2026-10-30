@@ -360,6 +360,7 @@ video info (input) - List capture sources usable by `video image` / `video recor
 video record (dst,input,mode,width,...) - Record video from a webcam OR a screen/window. Windows .mp4 uses H.264 + optional AAC audio...
 video record status - Show the active `video record` session (device, mode, codec, elapsed time, frames, dst).
 video record stop - Signal a running `video record` session in another terminal to stop cooperatively.
+video stream (input,bind,port,fps,...) - Prototype window/screen streaming host for a mobile WebRTC remote. This slice starts the...
 voice listen (route,wake-phrase,filter,filter-model,...) - Listen for a wake-prefixed command.
 voice replay (route,wake-phrase,filter,filter-model,...) - Run a WAV or injected transcript through wake/intent routing.
 voice status - Show active voice listeners.

@@ -16,7 +16,7 @@ Each diagram is a standalone interactive HTML file with pan, zoom, search, guide
 
 | Part | Diagram | Source doc |
 |------|---------|------------|
-| **Overview: phone, desktop, and what they reach** | [overview.html](overview.html) | All of the below, plus [tools.md](../tools.md) |
+| **Overview: phone, Chrome, desktop, and what they reach** | [overview.html](overview.html) | All of the below, plus [tools.md](../tools.md) |
 | Android chat client | [android.html](android.html) | `docs/android/overview-android.md` |
 | CMS authoring and serving | [cms.html](cms.html) | [cms.md](../cms.md), [cms-dev.md](../cms-dev.md) |
 | LLM agent server (`llm agent --serve`) | [llm-server.html](llm-server.html) | `docs/llm/llm-server.md` |
@@ -25,10 +25,12 @@ Each diagram is a standalone interactive HTML file with pan, zoom, search, guide
 
 ## Overview
 
-Two front doors, one desktop hub. The phone reaches the desktop in two ways:
+Three front doors (phone, Chrome, desktop), one desktop hub. The phone reaches the desktop in two ways:
 
 - **Paired LAN chat.** Discover LAN finds `_tanit._tcp`, pins the desktop key, and uses a device token. The chat runs on the desktop agent, so every desktop tool is available.
 - **Desktop MCP server.** Discover MCP finds `_tanit-mcp._tcp` and saves one `mcp.json` row. The phone's own agent calls desktop tools over `/mcp`.
+
+**Chrome ↔ local Tanit.** The Tanit Chat extension (side panel plus `tanit-chrome-host` over native messaging) starts or reuses a loopback `llm agent --serve` and registers itself as the `chrome` tool provider. The same agent then reads and drives the open tab (`browser_*` through `domUse`). From that side panel it also reaches everything the desktop agent can: MCP servers, webcam, mic, files, devices, and models. Details: [chrome-extension.md](../chrome/chrome-extension.md).
 
 The phone also runs its own agent against the Tanit cloud. The desktop agent reaches local models (llama.cpp, VLM, embeddings), webcam, mic and screen capture, and desktop files (images, video, Office and PDF to Markdown). It also drives apps and Chrome, talks to network devices (SSH, MQTT, Modbus), and calls external MCP servers. Both agents share the Tanit cloud for LiteLLM models (text, image, video), CMS pages, VFS files, and Zitadel sign-in.
 
