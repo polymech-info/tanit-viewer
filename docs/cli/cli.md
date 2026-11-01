@@ -1239,7 +1239,7 @@ tanit-cli search search
 **Full example**
 
 ```sh
-tanit-cli search search input '{}' --log-level 'info' --mode '{}' --content '{}' --backend '{}' --sort 'auto' -q 'foo' --type 'foo' --indexer 'own' --grep --names-only --regex --case-sensitive --whole-word --no-recursive --include-hidden --follow-symlinks --no-skip-binary -C 0 -B 0 -A 0 --multiline --output-mode 'content' --head-limit 0 --offset 0 --max 0 --max-per-file 0 --max-file-size 0 --include '{}' --exclude '{}' --exclude-dir '{}' --dry-run --stream --md --markdown 'auto' --markdown-color 'auto' --index-policy 'same-dir' --index '{}' --model 'foo' --threads 4 --gpu-layers -1 --reindex --no-index-create --extract 'auto' --adapter 'foo' --fingerprint 'off' --chunk-size 500 --chunk-overlap 100 --meta-prompt 'foo' --resize-width 768 --no-resize --include-detail 'auto' --detail-max 0
+tanit-cli search search input '{}' --log-level 'info' --mode '{}' --content '{}' --backend '{}' --sort 'auto' -q 'foo' --type 'foo' --indexer 'own' --grep --names-only --fuzzy --no-fuzzy --fuzzy-limit 20 --regex --case-sensitive --whole-word --no-recursive --include-hidden --no-gitignore --follow-symlinks --no-skip-binary -C 0 -B 0 -A 0 --multiline --output-mode 'content' --head-limit 0 --offset 0 --max 0 --max-per-file 0 --max-file-size 0 --include '{}' --exclude '{}' --exclude-dir '{}' --dry-run --stream --md --markdown 'auto' --markdown-color 'auto' --index-policy 'same-dir' --index '{}' --model 'foo' --threads 4 --gpu-layers -1 --reindex --no-index-create --extract 'auto' --adapter 'foo' --fingerprint 'off' --chunk-size 500 --chunk-overlap 100 --meta-prompt 'foo' --resize-width 768 --no-resize --include-detail 'auto' --detail-max 0
 ```
 
 ##### Examples
@@ -1250,6 +1250,12 @@ tanit-cli search search input '{}' --log-level 'info' --mode '{}' --content '{}'
 
 ```sh
 tanit-cli search search docs/ -q report
+```
+
+**Misspelled filename** (name mode scores edit distance after a literal miss; `--no-fuzzy` keeps the literal pass only)
+
+```sh
+tanit-cli search search --mode name --query "casandra registoirs" .
 ```
 
 **Grep inside Office files** (`.docx` / `.xlsx` / `.pptx` via officecli, `.odt` / `.ods` via anydoc)
@@ -1309,11 +1315,15 @@ Options:
 - `--indexer` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">own</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">own</span> <span data-cli="choice">os</span> <span data-cli="choice">rg</span></span></span>) - own (default) | os | rg - exact-search indexer
 - `--grep` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Alias for --mode grep
 - `--names-only` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - With grep: report only the filepath, not individual match lines
+- `--fuzzy` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Name mode: when a literal query misses, score filenames by edit distance. On by default. Does not run for --regex or a query that contains * or ?. Not used by grep.
+- `--no-fuzzy` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable filename edit-distance scoring
+- `--fuzzy-limit` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - How many fuzzy filename hits to keep
 - `--regex` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Treat --query as ECMAScript regex
 - `--case-sensitive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Case-sensitive match
 - `--whole-word` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Require word-boundary match
 - `--no-recursive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not recurse into directory inputs
 - `--include-hidden` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include dot-files and dot-directories
+- `--no-gitignore` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Search paths that .gitignore would hide
 - `--follow-symlinks` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Follow symbolic links
 - `--no-skip-binary` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Scan binary files
 - `-C,--context` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Symmetric context lines
@@ -1361,7 +1371,7 @@ tanit-cli search search
 **Full example**
 
 ```sh
-tanit-cli search search input '{}' --log-level 'info' --mode '{}' --content '{}' --backend '{}' --sort 'auto' -q 'foo' --type 'foo' --indexer 'own' --grep --names-only --regex --case-sensitive --whole-word --no-recursive --include-hidden --follow-symlinks --no-skip-binary -C 0 -B 0 -A 0 --multiline --output-mode 'content' --head-limit 0 --offset 0 --max 0 --max-per-file 0 --max-file-size 0 --include '{}' --exclude '{}' --exclude-dir '{}' --dry-run --stream --md --markdown 'auto' --markdown-color 'auto' --index-policy 'same-dir' --index '{}' --model 'foo' --threads 4 --gpu-layers -1 --reindex --no-index-create --extract 'auto' --adapter 'foo' --fingerprint 'off' --chunk-size 500 --chunk-overlap 100 --meta-prompt 'foo' --resize-width 768 --no-resize --include-detail 'auto' --detail-max 0
+tanit-cli search search input '{}' --log-level 'info' --mode '{}' --content '{}' --backend '{}' --sort 'auto' -q 'foo' --type 'foo' --indexer 'own' --grep --names-only --fuzzy --no-fuzzy --fuzzy-limit 20 --regex --case-sensitive --whole-word --no-recursive --include-hidden --no-gitignore --follow-symlinks --no-skip-binary -C 0 -B 0 -A 0 --multiline --output-mode 'content' --head-limit 0 --offset 0 --max 0 --max-per-file 0 --max-file-size 0 --include '{}' --exclude '{}' --exclude-dir '{}' --dry-run --stream --md --markdown 'auto' --markdown-color 'auto' --index-policy 'same-dir' --index '{}' --model 'foo' --threads 4 --gpu-layers -1 --reindex --no-index-create --extract 'auto' --adapter 'foo' --fingerprint 'off' --chunk-size 500 --chunk-overlap 100 --meta-prompt 'foo' --resize-width 768 --no-resize --include-detail 'auto' --detail-max 0
 ```
 
 ##### Examples
@@ -1563,11 +1573,15 @@ Options:
 - `--indexer` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">own</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">own</span> <span data-cli="choice">os</span> <span data-cli="choice">rg</span></span></span>) - own (default) | os | rg - exact-search indexer
 - `--grep` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Alias for --mode grep
 - `--names-only` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - With grep: report only the filepath, not individual match lines
+- `--fuzzy` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Name mode: when a literal query misses, score filenames by edit distance. On by default. Does not run for --regex or a query that contains * or ?. Not used by grep.
+- `--no-fuzzy` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable filename edit-distance scoring
+- `--fuzzy-limit` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - How many fuzzy filename hits to keep
 - `--regex` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Treat --query as ECMAScript regex
 - `--case-sensitive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Case-sensitive match
 - `--whole-word` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Require word-boundary match
 - `--no-recursive` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not recurse into directory inputs
 - `--include-hidden` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Include dot-files and dot-directories
+- `--no-gitignore` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Search paths that .gitignore would hide
 - `--follow-symlinks` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Follow symbolic links
 - `--no-skip-binary` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Scan binary files
 - `-C,--context` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Symmetric context lines
@@ -1601,7 +1615,7 @@ tanit-cli search action
 **Full example**
 
 ```sh
-tanit-cli search action input '{}' --log-level 'info' --mode '{}' --content '{}' --backend '{}' --sort 'auto' -q 'foo' --type 'foo' --indexer 'own' --grep --names-only --regex --case-sensitive --whole-word --no-recursive --include-hidden --follow-symlinks --no-skip-binary -C 0 -B 0 -A 0 --multiline --output-mode 'content' --head-limit 0 --offset 0 --max 0 --max-per-file 0 --max-file-size 0 --include '{}' --exclude '{}' --exclude-dir '{}' --dry-run --stream --md --markdown 'auto' --markdown-color 'auto' --action 'replace' --replacement 'foo' --reference-image '{}'
+tanit-cli search action input '{}' --log-level 'info' --mode '{}' --content '{}' --backend '{}' --sort 'auto' -q 'foo' --type 'foo' --indexer 'own' --grep --names-only --fuzzy --no-fuzzy --fuzzy-limit 20 --regex --case-sensitive --whole-word --no-recursive --include-hidden --no-gitignore --follow-symlinks --no-skip-binary -C 0 -B 0 -A 0 --multiline --output-mode 'content' --head-limit 0 --offset 0 --max 0 --max-per-file 0 --max-file-size 0 --include '{}' --exclude '{}' --exclude-dir '{}' --dry-run --stream --md --markdown 'auto' --markdown-color 'auto' --action 'replace' --replacement 'foo' --reference-image '{}'
 ```
 
 #### [duplicates](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/duplicates_more)
@@ -2241,8 +2255,8 @@ Options:
 - `--planner-budget` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Maximum tool schemas the planner may pre-expand before falling back to the full catalog.
 - `--no-parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable concurrent tool dispatch and fall back to serial execution. Parallel dispatch (P6) is on by default; use this flag to opt out.
 - `--parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dispatch all tool calls in a single LLM response concurrently (std::async). On by default — this flag is accepted for compatibility but is a no-op unless --no-parallel-tools was previously applied.
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, play_file, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_files_delete, service_files_link, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
-- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, play_file, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_files_delete, service_files_link, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, play_file, suspend_voice, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_files_delete, service_files_link, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, play_file, suspend_voice, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_files_delete, service_files_link, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
 
 **Session**
 - `--multi-turn` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable session memory across turns (default: on).
@@ -6034,6 +6048,148 @@ Cooperatively stop active voice listeners.
 tanit-cli voice stop
 ```
 
+#### sound-trigger
+
+Inspect, train, match, and listen for local sound patterns.
+
+**Example**
+
+```sh
+tanit-cli sound-trigger inspect input <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli sound-trigger inspect input 'foo' --frames --out 'foo' --plot 'foo'
+```
+
+#### sound-trigger inspect
+
+Inspect signal and whistle features in a PCM16 WAV.
+
+Options:
+
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+- `--frames` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Emit one JSON object per hop instead of the summary.
+- `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write --frames JSONL to this path. Stdout when omitted.
+- `--plot` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Write an SVG of ridge frequency and prominence.
+
+**Example**
+
+```sh
+tanit-cli sound-trigger inspect input <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli sound-trigger inspect input 'foo' --frames --out 'foo' --plot 'foo'
+```
+
+---
+
+#### sound-trigger match
+
+Match a PCM16 WAV against a trained profile.
+
+Options:
+
+- `input` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+- `--profile` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span></span>)
+- `--builtin` (<span data-cli="meta"><span data-cli="type">TEXT:</span></span>) - Built-in detector. Defaults to double-whistle.
+- `--jsonl,--json` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Emit JSONL envelopes.
+
+**Example**
+
+```sh
+tanit-cli sound-trigger match input <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli sound-trigger match input 'foo' --profile 'foo' --builtin 'double-whistle' --jsonl
+```
+
+---
+
+#### sound-trigger train
+
+Train a bounded local DTW profile from PCM16 WAV takes.
+
+Options:
+
+- `--id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+- `--samples` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+- `--ambient` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+- `--out` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+
+**Example**
+
+```sh
+tanit-cli sound-trigger train --id <id> --samples {} --ambient {} --out <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli sound-trigger train --id 'foo' --samples '{}' --ambient '{}' --out 'foo'
+```
+
+---
+
+#### sound-trigger listen
+
+Listen on native audio capture and emit local detections.
+
+Options:
+
+- `--profile` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span></span>)
+- `--builtin` (<span data-cli="meta"><span data-cli="type">TEXT:</span></span>) - Built-in detector. Defaults to double-whistle.
+- `--source` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">mic</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - mic, desktop, or mix.
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Microphone device substring.
+- `--duration-ms` (<span data-cli="meta"><span data-cli="type">INT:NONNEGATIVE</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - Optional listen duration; 0 runs until stopped.
+- `--jsonl,--json` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Emit JSONL detections.
+
+**Example**
+
+```sh
+tanit-cli sound-trigger listen
+```
+
+**Full example**
+
+```sh
+tanit-cli sound-trigger listen --profile 'foo' --builtin 'double-whistle' --source 'mic' --input 'foo' --duration-ms 0 --jsonl
+```
+
+---
+
+#### sound-trigger test
+
+Listen until Ctrl+C and print each found feature. Uses the system default mic and the double-whistle profile.
+
+Options:
+
+- `--profile` (<span data-cli="meta"><span data-cli="type">TEXT:FILE</span></span>)
+- `--builtin` (<span data-cli="meta"><span data-cli="type">TEXT:</span></span>) - Built-in detector. Defaults to double-whistle.
+- `--source` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">mic</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">mic</span> <span data-cli="choice">desktop</span> <span data-cli="choice">mix</span></span></span>) - mic, desktop, or mix. Defaults to mic.
+- `--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Microphone device substring. Empty uses the system default.
+- `--jsonl,--json` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Also emit JSONL detections.
+
+**Example**
+
+```sh
+tanit-cli sound-trigger test
+```
+
+**Full example**
+
+```sh
+tanit-cli sound-trigger test --profile 'foo' --builtin 'double-whistle' --source 'mic' --input 'foo' --jsonl
+```
+
 #### video
 
 Video capture, AI generation, and recording.
@@ -9581,7 +9737,7 @@ Options:
 - `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
 - `--bind` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Interface/address for MCP HTTP. Default: 127.0.0.1 (loopback only).
 - `--port` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 65535]</span>, <span data-cli="default">default <span data-cli="value">4444</span></span></span>) - First TCP port to try for MCP HTTP (default 4444; next free port if busy)
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, play_file, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_files_delete, service_files_link, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, play_file, suspend_voice, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_files_delete, service_files_link, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 
 **Example**
 

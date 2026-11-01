@@ -8,6 +8,12 @@
 tanit-cli search search docs/ -q report
 ```
 
+**Misspelled filename** (name mode scores edit distance after a literal miss; `--no-fuzzy` keeps the literal pass only)
+
+```sh
+tanit-cli search search --mode name --query "casandra registoirs" .
+```
+
 **Grep inside Office files** (`.docx` / `.xlsx` / `.pptx` via officecli, `.odt` / `.ods` via anydoc)
 
 ```sh

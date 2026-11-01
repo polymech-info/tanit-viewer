@@ -322,6 +322,11 @@ skills list - List skills the agent can see (workspace hides a roaming skill of 
 skills recommend (context,limit) - Recommend SkillHub skills (recommend_skills).
 skills remove (name) - Delete one skill folder from the roaming skills root. Workspace copies stay.
 skills search (query,limit,category) - Semantic search on SkillHub (search_skills).
+sound-trigger inspect (input,out,plot) - Inspect signal and whistle features in a PCM16 WAV.
+sound-trigger listen (profile,builtin,source,input,...) - Listen on native audio capture and emit local detections.
+sound-trigger match (input,profile,builtin) - Match a PCM16 WAV against a trained profile.
+sound-trigger test (profile,builtin,source,input) - Listen until Ctrl+C and print each found feature. Uses the system default mic and the...
+sound-trigger train (id,samples,ambient,out) - Train a bounded local DTW profile from PCM16 WAV takes.
 status (log-days) - Show Tanit credits and license status.
 tags read (path,family) - Print tags from an image or its .xmp sidecar
 tags write (path,set,add,unset,...) - Set, add, or remove tags

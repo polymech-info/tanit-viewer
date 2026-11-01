@@ -2,6 +2,13 @@
 
 End-user release notes for Tanit
 
+## 1.0.90 - 31-10
+
+- LLM Server: VFS layer
+- Android: UI fixes, Voice agent fixes
+- Search: a misspelled filename matches after the literal pass misses (`casandra registoirs` finds `cassandra-registers.json`). Exact names such as `s35` stay literal. `--no-fuzzy` keeps the literal pass only
+- Search: `.gitignore` applies. A search from the parent skips an ignored folder; naming that folder, or the file, still searches it. `--no-gitignore` turns the mask off 
+
 ## 1.0.89 - 30-10
 
 ### Commons

@@ -40,11 +40,12 @@ Params:
 - `-B` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Context lines before each match (rg -B N).
 - `-C` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Symmetric context lines (rg -C N, overrides -B / -A).
 - `-i` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Case-insensitive (rg -i, default: true).
+- `fuzzy` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Name mode only.
 - `glob` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Filename glob filter (rg -g).
 - `head_limit` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Cap on returned hits.
 - `indexer` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">own</span> <span data-cli="choice">rg</span></span></span>)  -  rg = bundled ripgrep (recommended for large trees, code search, and any search you'd normally run with rg).
 - `inputs` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Files or directories to search (rg PATH …).
-- `mode` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">grep</span> <span data-cli="choice">name</span></span></span>)  -  grep = full-text search (default, rg PATTERN); name = filename match (rg --files -g *query*).
+- `mode` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">grep</span> <span data-cli="choice">name</span></span></span>)  -  grep = full-text search (default, rg PATTERN); name = filename match.
 - `multiline` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Multiline mode: .
 - `offset` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Skip first N hits (pagination).
 - `output_mode` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">content</span> <span data-cli="choice">files_with_matches</span></span></span>)  -  content = hits array with path/line/text (default); files_with_matches = deduplicated file paths (rg -l).
@@ -240,6 +241,12 @@ Play an existing audio file on the default speaker.
 
 Params:
 - `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Audio file to play.
+
+#### suspend_voice
+
+End the live voice session and return to standby.
+
+Params:
 
 #### audio_transcribe
 
