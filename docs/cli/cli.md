@@ -331,6 +331,70 @@ tanit-cli pdf md scan.pdf --pages 1 --pipe with-vlm --provider llama \
 
 ### Subcommands
 
+#### reader
+
+Pick a file or a web page and speak it. --all writes every page into one audio file.
+
+Options:
+
+**Input**
+- `--interpreter` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">text</span> <span data-cli="choice">anydoc</span> <span data-cli="choice">vision</span> <span data-cli="choice">image_understand</span> <span data-cli="choice">web</span></span></span>) - Override the file interpreter: text, anydoc, vision, image_understand, web. vision renders each PDF page and reads it as a picture. Word and PowerPoint have no page renderer yet.
+- `--pages` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - PDF pages for vision, 1-based. Example: 34-38. The default is every page.
+- `--text` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Source file, an http(s) URL, or a sentence when the path is not a file. The URL is the cache key. A page is read as DOM markdown.
+- `--src,--input` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Image file, a directory of images, or a glob. Repeat to add more. Repeated options stay in the order given. A glob or a directory is ordered by the number in the name, so _1 comes before _10.
+- `--language` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Spoken language recorded on the job.
+- `--page` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - 1-based page to select. 0 keeps the stored page.
+- `--next` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Advance one page. Stops at the last page, and after --stop.
+- `--stop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Stop advancing.
+- `--resume` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Allow --next again.
+
+**Prompt**
+- `--vision-prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Instruction sent with each page image. Empty infers it from --prompt.
+- `--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Rewrite the current page. The original page stays. Example: summarize, in german.
+- `--chat-preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat preset name or id for the rewrite. Uses that preset's router and model. Requires --prompt.
+- `--direction` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Same as --prompt.
+- `--optimize` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Optional review of the derived narration. Writes revisions/<preset>/ and rebuilds spoken.md. Harvested pages stay. Default preset is reader-accessible-child.
+- `--optimize-preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Optimize preset: reader-review, reader-accessible-child, reader-vision-verify, reader-narrative, reader-faithful. Empty uses reader-accessible-child. reader-vision-verify reads each page image once.
+- `--llm` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Require --prompt. One text turn, no tools, on the current page.
+
+**Output**
+- `--dst` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Reader root. Default is the config directory / reader. The job is <root>/<path hash>/.
+- `--refresh` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Convert again and replace the page files. Rewrites from the previous source stay on disk and are not spoken.
+- `--clean` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Erase this document's job directory and exit.
+
+**Speak**
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Voice proxy. Default is the chat voice provider, then tanit.
+- `--model-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Speech model. Default is the chat voice model, then tanit-speech-v4.
+- `--voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - ElevenLabs voice id. Empty uses the chat voice, then Sarah EXAVITQu4vr4xnSDxMaL.
+- `--no-chunk` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Send the page as one request. Long pages otherwise split on sentences and stitch with previous and next text.
+- `--chunk-target-chars` (<span data-cli="meta"><span data-cli="type">INT:INT in [100 - 800]</span>, <span data-cli="default">default <span data-cli="value">400</span></span></span>) - Merge sentences up to this many characters (100–800, default 400).
+- `--chunk-max-chars` (<span data-cli="meta"><span data-cli="type">INT:INT in [200 - 2000]</span>, <span data-cli="default">default <span data-cli="value">800</span></span></span>) - Split one sentence that is longer than this (200–2000, default 800).
+- `--all` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Speak every page as one file. Long text is chunked and joined. Default path is document.mp3, or document.wav when more than one chunk.
+- `--audio` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Audio file to write. Default is page-N.mp3, or document.mp3 with --all.
+- `--no-play` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write the audio file and do not play it.
+- `--no-tts` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write spoken.md and do not call the voice proxy. Vision still reads each page.
+- `--no-speak` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Cache the pages and do not call the voice proxy. With vision, render the pages and record the prompts, and do not call the vision model. Use --no-tts to read the pages and skip only the voice.
+
+**LLM**
+- `--print-preset` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print the fast preset clamp and exit.
+- `--print-interpreter` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print the interpreter for --text and exit.
+- `--print-estimate` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print the remaining-time line for --done, --total, and --elapsed-ms, then exit.
+- `--done` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Characters already finished. Used by --print-estimate.
+- `--total` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Characters in the whole speak. Used by --print-estimate.
+- `--elapsed-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Milliseconds already spent. Used by --print-estimate.
+
+**Example**
+
+```sh
+tanit-cli reader
+```
+
+**Full example**
+
+```sh
+tanit-cli reader --interpreter 'text' --pages 'foo' --vision-prompt 'foo' --text 'foo' --src '{}' --dst 'foo' --prompt 'foo' --chat-preset 'foo' --direction 'foo' --language 'foo' --page 0 --next --stop --resume --refresh --clean --provider 'foo' --model-id 'foo' --voice-id 'foo' --no-chunk --chunk-target-chars 400 --chunk-max-chars 800 --all --audio 'foo' --no-play --optimize --optimize-preset 'foo' --no-tts --no-speak --llm --print-preset --print-interpreter --print-estimate --done 0 --total 0 --elapsed-ms 0
+```
+
 #### tags
 
 Read and write EXIF, IPTC, and XMP. Does not call a model.
@@ -851,7 +915,7 @@ tanit-cli markdown table.csv -f csv --stdout
 
 ### Search
 
-#### [find](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/find_more)
+#### find
 
 Find images by name/folder, EXIF/IPTC/XMP tags, semantic LLM prompt, or junk (dark/blur/flat/blown/tiny).
 
@@ -964,8 +1028,6 @@ tanit-cli find . --junk --action recyclebin
 ```sh
 tanit-cli find . --llm --local-text -p "product shot"
 ```
-
-[Read more](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/find_more)
 
 ### Subcommands
 
@@ -1618,7 +1680,7 @@ tanit-cli search action
 tanit-cli search action input '{}' --log-level 'info' --mode '{}' --content '{}' --backend '{}' --sort 'auto' -q 'foo' --type 'foo' --indexer 'own' --grep --names-only --fuzzy --no-fuzzy --fuzzy-limit 20 --regex --case-sensitive --whole-word --no-recursive --include-hidden --no-gitignore --follow-symlinks --no-skip-binary -C 0 -B 0 -A 0 --multiline --output-mode 'content' --head-limit 0 --offset 0 --max 0 --max-per-file 0 --max-file-size 0 --include '{}' --exclude '{}' --exclude-dir '{}' --dry-run --stream --md --markdown 'auto' --markdown-color 'auto' --action 'replace' --replacement 'foo' --reference-image '{}'
 ```
 
-#### [duplicates](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/duplicates_more)
+#### duplicates
 
 Group duplicate / near-duplicate images offline (file size or perceptual fingerprint). Default is fingerprint: one libvips thumbnail, then dHash / pHash / edge hash. No LLM.
 
@@ -1725,8 +1787,6 @@ tanit-cli duplicates . --action recyclebin --dry-run
 tanit-cli duplicates . --action recyclebin
 tanit-cli duplicates --load-session dups.json --action delete
 ```
-
-[Read more](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/duplicates_more)
 
 ### Setup
 
@@ -2201,7 +2261,7 @@ tanit-cli llm tools-call --name 'foo' --args 'foo' --image-file 'foo'
 
 ---
 
-#### [llm agent](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/llm_agent_more)
+#### llm agent
 
 Run a single chat-agent turn: LLM picks tools (image_resize / compress / transform / meta / find), runs them on the supplied paths, and writes outputs to disk. Use --no-tools for a plain one-shot text reply (no path tools). Use --disable-tools=a,b to omit specific path tools from the catalog. Provider is router-aware (OpenAI-compatible client).
 
@@ -2220,7 +2280,6 @@ Options:
 **Provider**
 - `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. Loads saved router/model/max-iter/planner defaults; explicit CLI flags override it.
 - `--runner` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Agent backend: native (default) | claude-code | codex. Also reads PM_LLM_AGENT_RUNNER when unset.
-- `--save-preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Save the resolved chat/tool/MCP/skill settings as a preset name. With --preset, clones/updates from that base; without --prompt, saves and exits.
 - `--router` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - LLM router (llama|openrouter|openai|deepseek|gemini|ollama|fireworks|xai|huggingface). Default: from Chat Provider Settings in app.
 - `--model` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Model id (router-specific, e.g. openai/gpt-4o-mini). Default: from Chat Provider Settings in app.
 - `--ai-consent-review` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Run the SecurityAgent as an advisory reviewer before CLI consent prompts. The review is shown on stderr; human approval is still required.
@@ -2255,8 +2314,8 @@ Options:
 - `--planner-budget` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8</span></span></span>) - Maximum tool schemas the planner may pre-expand before falling back to the full catalog.
 - `--no-parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Disable concurrent tool dispatch and fall back to serial execution. Parallel dispatch (P6) is on by default; use this flag to opt out.
 - `--parallel-tools` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dispatch all tool calls in a single LLM response concurrently (std::async). On by default — this flag is accepted for compatibility but is a no-op unless --no-parallel-tools was previously applied.
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, play_file, suspend_voice, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_files_delete, service_files_link, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
-- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, play_file, suspend_voice, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_files_delete, service_files_link, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, office_create, office_view, office_get, office_query, office_add, office_set, office_remove, office_move, office_swap, office_batch, office_validate, file_compose, download_url, file_str_replace, file_delete, speak, play_file, suspend_voice, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_files_delete, service_files_link, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--enable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated tool names to allow (whitelist). Only these tools will be offered to the model; all others are hidden. Overrides --disable-tools. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, office_create, office_view, office_get, office_query, office_add, office_set, office_remove, office_move, office_swap, office_batch, office_validate, file_compose, download_url, file_str_replace, file_delete, speak, play_file, suspend_voice, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_files_delete, service_files_link, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. Ineffective with --no-tools.
 
 **Session**
 - `--multi-turn` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Enable session memory across turns (default: on).
@@ -2284,7 +2343,7 @@ Options:
 
 **API Mode**
 - `--type` (<span data-cli="meta"><span data-cli="default">default <span data-cli="value">responses</span></span>, <span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">completion</span> <span data-cli="choice">responses</span> <span data-cli="choice">realtime</span></span></span>) - LLM API type: completion (POST /chat/completions) or responses (POST /responses — OpenAI Responses API; supported by OpenAI, OpenRouter, and LiteLLM proxy), or realtime (experimental WebSocket /realtime PoC; text-only; best with router=openai). Default: responses.
-- `--realtime` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Start a live speech-to-speech voice session over the WebSocket /v1/realtime endpoint (mic + speaker; the full agent is exposed as the run_pm_agent tool). No --prompt is required; if given it seeds the conversation. Runs until Ctrl+C or `--realtime-stop`. Best with router=openai / a realtime model. (With --save-preset, falls back to the text PoC `--type realtime` path.)
+- `--realtime` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Start a live speech-to-speech voice session over the WebSocket /v1/realtime endpoint (mic + speaker; the full agent is exposed as the run_pm_agent tool). No --prompt is required; if given it seeds the conversation. Runs until Ctrl+C or `--realtime-stop`. Best with router=openai / a realtime model.
 - `--realtime-stop` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Signal a running `--realtime` live voice session (this or another process) to stop cooperatively, then exit. Uses the cross-process session file.
 - `--realtime-status` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print whether a live `--realtime` voice session is running (add --json for machine-readable output), then exit.
 - `--realtime-idle-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">120000</span></span></span>) - Self-stop a live `--realtime` session after this many ms of genuine idle time — no speech, no reply, and no delegated run_pm_agent in flight (a running agent task always keeps the session alive). Stops headless sessions from lingering. 0 = never auto-stop. Default: 120000 (2 min).
@@ -2333,7 +2392,7 @@ tanit-cli llm agent
 **Full example**
 
 ```sh
-tanit-cli llm agent -p 'foo' --logging-dir 'foo' --system-prompt 'foo' --planner-prompt 'foo' --include '{}' --embed '{}' --preset 'foo' --runner 'foo' --save-preset 'foo' --router 'foo' --model 'foo' --ai-consent-review --ai-consent-router 'foo' --ai-consent-model 'foo' --consent-ui 'foo' --consent-owner 'foo' --ocr-provider 'foo' --ocr-model 'foo' --recognition-provider 'foo' --recognition-model 'foo' --image-provider 'foo' --image-model 'foo' --video-provider 'foo' --video-model 'foo' --api-key 'foo' --base-url 'foo' --timeout-ms 0 --max-iter 0 --no-tools --no-mcp --no-skills --skills --no-planner --planner --planner-budget 8 --no-parallel-tools --parallel-tools --multi-turn --single-turn --session-id 'foo' --load-snapshot 'foo' --save-snapshot 'foo' --memory-features 'foo' --no-replay --scheduler --scheduler-timeout 0 --scheduler-exit-when-idle --disable-tools 'foo' --enable-tools 'foo' --hud --hud-mode 'off' --dry-run --log 'agent.json' --dst 'foo' --type 'responses' --realtime --realtime-stop --realtime-status --serve --host '127.0.0.1' --port 8090 --concurrency 2 --http-workers 0 --serve-api-key 'foo' --fs-jail --lan --lan-port 0 --lan-name 'foo' --pair --pair-scopes 'foo' --lan-devices --lan-revoke 'foo' --host-tool-provider '{}' --realtime-idle-ms 120000 --streaming 'on' --markdown 'auto' --color 'auto' --mic --stt-api-key 'foo' --voice-id 'foo' --no-tts --tts-model-id 'foo' --input 'foo' --input-source 'mic' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --silence-ms 1500 --stt-provider 'elevenlabs' --stt-model 'foo' --tts-provider 'elevenlabs' --tts-model 'foo' --tts-voice-id 'foo'
+tanit-cli llm agent -p 'foo' --logging-dir 'foo' --system-prompt 'foo' --planner-prompt 'foo' --include '{}' --embed '{}' --preset 'foo' --runner 'foo' --router 'foo' --model 'foo' --ai-consent-review --ai-consent-router 'foo' --ai-consent-model 'foo' --consent-ui 'foo' --consent-owner 'foo' --ocr-provider 'foo' --ocr-model 'foo' --recognition-provider 'foo' --recognition-model 'foo' --image-provider 'foo' --image-model 'foo' --video-provider 'foo' --video-model 'foo' --api-key 'foo' --base-url 'foo' --timeout-ms 0 --max-iter 0 --no-tools --no-mcp --no-skills --skills --no-planner --planner --planner-budget 8 --no-parallel-tools --parallel-tools --multi-turn --single-turn --session-id 'foo' --load-snapshot 'foo' --save-snapshot 'foo' --memory-features 'foo' --no-replay --scheduler --scheduler-timeout 0 --scheduler-exit-when-idle --disable-tools 'foo' --enable-tools 'foo' --hud --hud-mode 'off' --dry-run --log 'agent.json' --dst 'foo' --type 'responses' --realtime --realtime-stop --realtime-status --serve --host '127.0.0.1' --port 8090 --concurrency 2 --http-workers 0 --serve-api-key 'foo' --fs-jail --lan --lan-port 0 --lan-name 'foo' --pair --pair-scopes 'foo' --lan-devices --lan-revoke 'foo' --host-tool-provider '{}' --realtime-idle-ms 120000 --streaming 'on' --markdown 'auto' --color 'auto' --mic --stt-api-key 'foo' --voice-id 'foo' --no-tts --tts-model-id 'foo' --input 'foo' --input-source 'mic' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --silence-ms 1500 --stt-provider 'elevenlabs' --stt-model 'foo' --tts-provider 'elevenlabs' --tts-model 'foo' --tts-voice-id 'foo'
 ```
 
 ##### Examples
@@ -2342,8 +2401,6 @@ tanit-cli llm agent -p 'foo' --logging-dir 'foo' --system-prompt 'foo' --planner
 
 For bulk JSON leaf transforms (jq selector + optional sibling `--target`), see **`llm agent each`** and `llm_agent_each_examples.md`.
 
-
-[Read more](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/llm_agent_more)
 
 #### llm agent decide
 
@@ -5408,7 +5465,7 @@ tanit-cli audio info --models --playback --all
 
 ---
 
-#### [audio record](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/audio_record_more)
+#### audio record
 
 Record from mic, desktop loopback, or mix. Default capture: PCM s16le 48 kHz stereo. Output format follows --dst extension: .wav (PCM; after ~30 s in RAM, PCM spills to a temp file) or .m4a/.aac (AAC-LC, Windows only, encoded during capture). Optional --filter deepfilter enhances the file after capture (48 kHz mono WAV; not on the callback). Stops after --duration-ms, Ctrl+C, console close, or `audio record stop`. Plain recording: --dst. Transcript only: --text-out, or --provider/--model to print to stdout. Timed sidecars: --subtitle-format srt (same wrap as xblox audioTranscribe). Both is fine.
 
@@ -5556,8 +5613,6 @@ On completion, check **capture** (frame ratio), **levels** (peak/RMS dBFS, clip 
 tanit-cli audio record stop
 tanit-cli audio record status --json
 ```
-
-[Read more](https://tanit.polymech.info/user/3bb4cfbf-318b-44d3-a9d3-35680e738421/pages/audio_record_more)
 
 #### audio record stop
 
@@ -5725,7 +5780,7 @@ Options:
 - `--ref-audio` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Reference WAV for local voice cloning (vibevoice 1.5B or MOSS Nano).
 - `--api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - API key for the TTS provider. Falls back to ELEVENLABS_API_KEY env var.
 - `--voice-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">tLK6fPv15M0oKv4V3ACR</span></span></span>) - Voice ID. For elevenlabs: ElevenLabs voice UUID. For tanit: ElevenLabs voice UUID override (empty = proxy default). For openrouter: model voice (default eve on Grok Voice). Defaults to chat.tts_model from app settings when omitted.
-- `--model-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">eleven_v3</span></span></span>) - Model ID. For elevenlabs: eleven_v3, eleven_turbo_v2, etc. For tanit: proxy alias (tanit-speech, tanit-speech-turbo). For openrouter: speech model slug (default x-ai/grok-voice-tts-1.0). Defaults to chat.tts_model from app settings when omitted.
+- `--model-id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">eleven_v3</span></span></span>) - Model ID. For elevenlabs: eleven_v3, eleven_turbo_v2, etc. For tanit: proxy alias (tanit-speech-v4, tanit-speech-turbo, tanit-speech). For openrouter: speech model slug (default x-ai/grok-voice-tts-1.0). Defaults to chat.tts_model from app settings when omitted.
 
 **Voice Settings**
 - `--no-voice-settings` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Do not send explicit ElevenLabs voice_settings (use voice defaults).
@@ -5734,7 +5789,22 @@ Options:
 - `--chunk-max-chars` (<span data-cli="meta"><span data-cli="type">INT:INT in [200 - 2000]</span>, <span data-cli="default">default <span data-cli="value">800</span></span></span>) - Hard-split a single sentence beyond this length (default 800; range 200–2000).
 - `--stability` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0.9</span></span></span>) - ElevenLabs voice_settings.stability (0–1, default 0.9). Higher reduces drift on long inputs.
 - `--similarity-boost` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0.75</span></span></span>) - ElevenLabs voice_settings.similarity_boost (0–1, default 0.75).
-- `--style` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - ElevenLabs voice_settings.style (0–1, default 0). Non-zero style can cause inconsistent speed and added sounds.
+- `--style` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - ElevenLabs voice_settings.style (0–1, default 0). Omitted for eleven_v4 and eleven_v4_turbo.
+
+**Protocol**
+- `--language` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - language_code. ISO 639-1, or ast, yue, ceb, fil, kam, ckb. Empty lets the model detect the language from the text.
+- `--text-normalization` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - apply_text_normalization: auto, on, or off.
+- `--language-normalization` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - apply_language_text_normalization. Japanese only, and slow.
+- `--use-pvc-as-ivc` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Speak a professional voice with its instant-clone model.
+- `--clone-strength` (<span data-cli="meta"><span data-cli="type">FLOAT</span></span>) - voice_settings.clone_strength, 0–1. Sent only for eleven_v4.
+- `--pronunciation-dictionary` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Dictionary as id or id:version. Repeat up to 3 times.
+- `--effect-filter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - audio_effects.filter_preset_id.
+- `--effect-distance` (<span data-cli="meta"><span data-cli="type">FLOAT</span></span>) - audio_effects.distance, 0 (close) to 1 (far).
+- `--effect-environment` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - audio_effects.environment_id. Stereo. Rejected for pcm, ulaw, and alaw.
+- `--effect-noise` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - audio_effects.background_noise_id.
+- `--effect-send` (<span data-cli="meta"><span data-cli="type">FLOAT</span></span>) - audio_effects.send_level, 0 to 1.
+- `--effect-pan` (<span data-cli="meta"><span data-cli="type">FLOAT</span></span>) - audio_effects.pan, -1 (left) to 1 (right). Stereo.
+- `--print-request` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Print the convert body and the proxy fields, then exit.
 
 **Example**
 
@@ -5745,7 +5815,7 @@ tanit-cli audio tts --text <value>
 **Full example**
 
 ```sh
-tanit-cli audio tts --text 'foo' --dst 'foo' --hud --no-play --output 'foo' --connect 'foo' --connect-timeout-ms 30000 --connect-delay-ms 0 --no-stream --provider 'elevenlabs' --tokenizer 'foo' --codec 'foo' --ref-audio 'foo' --api-key 'foo' --voice-id 'tLK6fPv15M0oKv4V3ACR' --model-id 'eleven_v3' --format 'foo' --no-voice-settings --no-chunk --chunk-target-chars 400 --chunk-max-chars 800 --stability '0.9' --similarity-boost '0.75' --style '0'
+tanit-cli audio tts --text 'foo' --dst 'foo' --hud --no-play --output 'foo' --connect 'foo' --connect-timeout-ms 30000 --connect-delay-ms 0 --no-stream --provider 'elevenlabs' --tokenizer 'foo' --codec 'foo' --ref-audio 'foo' --api-key 'foo' --voice-id 'tLK6fPv15M0oKv4V3ACR' --model-id 'eleven_v3' --format 'foo' --no-voice-settings --no-chunk --chunk-target-chars 400 --chunk-max-chars 800 --stability '0.9' --similarity-boost '0.75' --style '0' --language 'foo' --text-normalization 'foo' --language-normalization --use-pvc-as-ivc --clone-strength '-1' --pronunciation-dictionary '{}' --effect-filter 'foo' --effect-distance '-1' --effect-environment 'foo' --effect-noise 'foo' --effect-send '-1' --effect-pan '2' --print-request
 ```
 
 ##### Examples
@@ -9737,7 +9807,7 @@ Options:
 - `--preset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Chat settings preset name or id. If omitted, uses preset `Default`, or the lone saved preset.
 - `--bind` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Interface/address for MCP HTTP. Default: 127.0.0.1 (loopback only).
 - `--port` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 65535]</span>, <span data-cli="default">default <span data-cli="value">4444</span></span></span>) - First TCP port to try for MCP HTTP (default 4444; next free port if busy)
-- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, file_compose, download_url, file_str_replace, file_delete, speak, play_file, suspend_voice, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_files_delete, service_files_link, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
+- `--disable-tools` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma- or semicolon-separated enabled tools to omit. Built-ins: list_images, file_glob, file_read, file_search, search_index, search_query, search_detail, image_resize, image_crop, image_transform, image_create, create_video, image_understand, image_from_camera, ocr_text, write_file, office_create, office_view, office_get, office_query, office_add, office_set, office_remove, office_move, office_swap, office_batch, office_validate, file_compose, download_url, file_str_replace, file_delete, speak, play_file, suspend_voice, audio_transcribe, ask_user, schedule_at, schedule_in, schedule_every, schedule_cancel, schedule_list, memory_read, memory_write, memory_append_event, memory_find, run, run_sequence, info_lookup, ssh_exec, mqtt, modbus_read, modbus_write, service_page_create, service_page_update, service_page_list, service_page_get, service_files_list, service_files_get, service_files_upload, service_files_delete, service_files_link, service_search, create_command, app_inspect_dump, app_inspect_find, app_screenshot, app_click, app_drag, app_open, app_type, app_hotkey, app_close, app_batch, browser_read, browser_find, browser_scope, browser_click, browser_type, browser_select, browser_batch, browser_navigate, app_command. MCP tools use mcp_<server>__<tool>; run `llm agent --help` for a live list. Ineffective with --no-tools
 
 **Example**
 
@@ -10178,7 +10248,7 @@ Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
 
 **Example**
 
@@ -10202,7 +10272,7 @@ Options:
 
 - `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
 - `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
-- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - object
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
 
 **Example**
 
@@ -10214,6 +10284,33 @@ tanit-cli mcp client Tanit serpapi-search_table
 
 ```sh
 tanit-cli mcp client Tanit serpapi-search_table --args '{}' --timeout-ms 0 --params 'foo'
+```
+
+---
+
+#### mcp client Tanit serpapi-extract
+
+Extract content from a public http(s) URL, discover site URLs, or crawl pages.
+
+API options go in params: url is required; params.mode is scrape (default), map, or crawl. See serpa
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--params` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+
+**Example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-extract
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client Tanit serpapi-extract --args '{}' --timeout-ms 0 --mode 'foo' --params 'foo'
 ```
 
 ---
@@ -10248,6 +10345,574 @@ tanit-cli mcp client Tanit serpapi-search
 
 ```sh
 tanit-cli mcp client Tanit serpapi-search --args '{}' --timeout-ms 0 --mode 'foo' --params 'foo'
+```
+
+---
+
+#### mcp client codebase-memory-mcp
+
+MCP server from the tools cache.
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp index_repository --repo_path <path>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp index_repository --args '{}' --timeout-ms 0 --async --doc_candidates --mode 'foo' --name 'foo' --persistence --repo_path 'foo' --status --target_projects '{}'
+```
+
+#### mcp client codebase-memory-mcp index_repository
+
+Index a repository. full/moderate add semantics; fast omits them; cross-repo-intelligence links services. Reports coverage gaps. Waits for the whole index by default; a large repo 
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - MCP request timeout in milliseconds.
+- `--async` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Start the index in the background and return immediately; it keeps running if this call is cancelled or times out. Not with status or cross-repo-intelligence. Refused for a one-shot cli call that is the only client of a temporary daemon (run daemon start).
+- `--doc_candidates` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Doc-code candidates; default: the doc_candidates setting, else on for full, off for moderate/fast.
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - full: all+semantic; moderate: filtered+semantic; fast: filtered only; cross-repo-intelligence: link services.
+- `--name` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Name override; Non-ASCII bytes are encoded; unsafe characters normalized.
+- `--persistence` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Write .codebase-memory/graph.db.zst.
+- `--repo_path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Repository path
+- `--status` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Report the running or last index job (queued/running/succeeded/failed/cancelled) instead of indexing. Pass the same repo_path (and name, if any) as the index call.
+- `--target_projects` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span>, <span data-cli="default">default <span data-cli="value">{}</span></span></span>) - Cross-repo targets; ["*"] means all.
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp index_repository --repo_path <path>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp index_repository --args '{}' --timeout-ms 0 --async --doc_candidates --mode 'foo' --name 'foo' --persistence --repo_path 'foo' --status --target_projects '{}'
+```
+
+---
+
+#### mcp client codebase-memory-mcp search_graph
+
+Find symbols via BM25 query, regex name/qn filters, or semantic_query. Rows keep qn/file/lines and in/out over CALLS/USAGE/CALL_REFERENCE/INHERITS/IMPLEMENTS.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--detail` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--exclude_entry_points` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - boolean
+- `--fields` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - array
+- `--file_pattern` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--include_connected` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - boolean
+- `--kind` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Resource kind, e.g. Deployment.
+- `--label` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--max_degree` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--max_output_tokens` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--min_degree` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--name_pattern` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--namespace` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Resource namespace.
+- `--offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--qn_pattern` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--relationship` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--semantic_limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--semantic_offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--semantic_query` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Not with query.
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp search_graph --project <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp search_graph --args '{}' --timeout-ms 0 --detail 'foo' --exclude_entry_points --fields '{}' --file_pattern 'foo' --format 'foo' --include_connected --kind 'foo' --label 'foo' --limit 'foo' --max_degree 'foo' --max_output_tokens 'foo' --min_degree 'foo' --name_pattern 'foo' --namespace 'foo' --offset 'foo' --project 'foo' --qn_pattern 'foo' --query 'foo' --relationship 'foo' --semantic_limit 'foo' --semantic_offset 'foo' --semantic_query '{}'
+```
+
+---
+
+#### mcp client codebase-memory-mcp query_graph
+
+Read-only Cypher for multi-hop, aggregation, complexity, or cross-service analysis. Default: 200 visible rows with exact/lower-bound totals and truncation; continue safely with nex
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--cursor` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Snapshot continuation; keep query/project/graph. Format, budget, and max_rows may change.
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - tree may use local @N+suffix prefix refs; json uses direct strings.
+- `--graph` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - code graph (default) or missed coverage-gap file tree.
+- `--max_output_tokens` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sizing hint; hard ceiling is 4 UTF-8 bytes/token. Rows stay whole.
+- `--max_rows` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Visible rows (default 200; max 99998); 0 uses the legacy maximum. Evaluation is unchanged.
+- `--offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Live compatibility paging; cannot be combined with cursor.
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--query` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Cypher query
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp query_graph --project <value> --query <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp query_graph --args '{}' --timeout-ms 0 --cursor 'foo' --format 'foo' --graph 'foo' --max_output_tokens 'foo' --max_rows 'foo' --offset 'foo' --project 'foo' --query 'foo'
+```
+
+---
+
+#### mcp client codebase-memory-mcp trace_path
+
+Trace callers/callees, data flow, or cross-service paths. Defaults exclude tests and resolver evidence. Rows keep qn/hop with explicit totals, relations, and continuations.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--cursor` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Pass next/next_cursor with traversal args unchanged; budget may increase.
+- `--depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--direction` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--edge_types` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - array
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - tree chooses smaller complete direct/grouped output; json uses stable grouped tables.
+- `--function_name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--include_evidence` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Add resolver class and confidence.
+- `--include_tests` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - boolean
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Rows/page; gte flags the 5000-node engine ceiling.
+- `--max_output_tokens` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sizing hint; hard ceiling is 4 UTF-8 bytes/token. Evidence/args yield before nearest graph rows.
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - calls; argument-aware data_flow; service edges; topology: infra objects, routes, controllers (from a Resource/Route); deploy: what CI jobs and scripts run and deploy; run: what a Service runs (image, Dockerfile, program, env).
+- `--parameter_name` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - data_flow parameter filter.
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--risk_labels` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Add hop-risk labels.
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp trace_path --function_name <value> --project <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp trace_path --args '{}' --timeout-ms 0 --cursor 'foo' --depth 'foo' --direction 'foo' --edge_types '{}' --format 'foo' --function_name 'foo' --include_evidence --include_tests --limit 'foo' --max_output_tokens 'foo' --mode 'foo' --parameter_name 'foo' --project 'foo' --risk_labels
+```
+
+---
+
+#### mcp client codebase-memory-mcp get_code_snippet
+
+Read a search_graph symbol. auto bounds source and outlines large containers; full restores up to 500 lines. Source/outline pages continue; coverage_note marks gaps.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--include_neighbors` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - boolean
+- `--max_lines` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--max_output_tokens` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - auto/outline sizing hint (default 2500), hard ceiling 4 UTF-8 bytes/token. Lines stay whole; explicit full is uncapped unless set.
+- `--member_limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--member_offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--qualified_name` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - search_graph qn, or short name.
+- `--source_mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - auto outlines 200+ line containers; full returns source; outline lists members.
+- `--start_line` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp get_code_snippet --project <value> --qualified_name <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp get_code_snippet --args '{}' --timeout-ms 0 --format 'foo' --include_neighbors --max_lines 'foo' --max_output_tokens 'foo' --member_limit 'foo' --member_offset 'foo' --project 'foo' --qualified_name 'foo' --source_mode 'foo' --start_line 'foo'
+```
+
+---
+
+#### mcp client codebase-memory-mcp get_file_outline
+
+Declaration outline of one exact repository-relative file: optional exact label filter, source order, exact total/offset/limit paging; file/folder/container nodes excluded.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--file_path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Exact repository-relative file path
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--labels` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Optional exact node-label filter
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp get_file_outline --file_path <path> --project <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp get_file_outline --args '{}' --timeout-ms 0 --file_path 'foo' --format 'foo' --labels '{}' --limit 'foo' --offset 'foo' --project 'foo'
+```
+
+---
+
+#### mcp client codebase-memory-mcp get_graph_schema
+
+Get node-label and edge-type counts. diagnostics=full also lists queryable properties.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--diagnostics` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp get_graph_schema --project <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp get_graph_schema --args '{}' --timeout-ms 0 --diagnostics 'foo' --format 'foo' --limit 'foo' --offset 'foo' --project 'foo'
+```
+
+---
+
+#### mcp client codebase-memory-mcp compare_graphs
+
+Compare two indexed snapshots: deterministic target-only additions and base-only removals of stable node/edge identities; each set capped by limit and a 512 KiB budget with exact t
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--base_project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--scan_limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--target_project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp compare_graphs --base_project <value> --target_project <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp compare_graphs --args '{}' --timeout-ms 0 --base_project 'foo' --limit 'foo' --scan_limit 'foo' --target_project 'foo'
+```
+
+---
+
+#### mcp client codebase-memory-mcp get_architecture
+
+Bounded static architecture; poll pending jobs. include_behavior_evidence=true adds indexed call arguments, parameter declarations and return types; not full dataflow or runtime tr
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--aspects` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Default: languages/packages/entry_points. overview omits file_tree. cycles/system_structure opt-in; system_structure alone, no path.
+- `--entry_node_id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Start symbol.
+- `--expected_generation` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Required generation.
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--include_behavior_evidence` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - system_structure only.
+- `--path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Directory prefix.
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--target_node_id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Requires entry_node_id.
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp get_architecture --project <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp get_architecture --args '{}' --timeout-ms 0 --aspects '{}' --entry_node_id 'foo' --expected_generation 'foo' --format 'foo' --include_behavior_evidence --path 'foo' --project 'foo' --target_node_id 'foo'
+```
+
+---
+
+#### mcp client codebase-memory-mcp search_code
+
+Graph-ranked text search: compact symbols, full bounded source, or file paths.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--context` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--debug` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Add scope_ms/scan_ms/enrich_ms phase timings.
+- `--directory_limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--directory_offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--file_pattern` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--match_limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--max_output_tokens` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--path_filter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--pattern` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--raw_content_offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Raw-line byte offset; omit for match-centered preview.
+- `--raw_limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--raw_offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--regex` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - boolean
+- `--result_limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--result_offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--source_max_lines` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp search_code --pattern <value> --project <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp search_code --args '{}' --timeout-ms 0 --context 'foo' --debug --directory_limit 'foo' --directory_offset 'foo' --file_pattern 'foo' --format 'foo' --limit 'foo' --match_limit 'foo' --max_output_tokens 'foo' --mode 'foo' --path_filter 'foo' --pattern 'foo' --project 'foo' --raw_content_offset 'foo' --raw_limit 'foo' --raw_offset 'foo' --regex --result_limit 'foo' --result_offset 'foo' --source_max_lines 'foo'
+```
+
+---
+
+#### mcp client codebase-memory-mcp list_projects
+
+List projects with stable paging. Identity is lean; stats adds graph sizes.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--detail` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - stats adds node/edge/database-size counts.
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--include_details` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Alias for detail=stats: include branch, node/edge counts and database size. Slower.
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--metadata_only` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Compatibility: omit counts, size, and branch.
+- `--offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp list_projects
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp list_projects --args '{}' --timeout-ms 0 --detail 'foo' --format 'foo' --include_details --limit 'foo' --metadata_only --offset 'foo'
+```
+
+---
+
+#### mcp client codebase-memory-mcp delete_project
+
+Delete a project from the index
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp delete_project --project <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp delete_project --args '{}' --timeout-ms 0 --project 'foo'
+```
+
+---
+
+#### mcp client codebase-memory-mcp index_status
+
+Project readiness, counts, root, watch state, coverage gaps, and doc_links (doc-comment references: MENTIONS edges, unresolved by reason). diagnostics adds coverage rows; verbose a
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--diagnostics` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Coverage rows: counts, five samples, or up to 500.
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--verbose` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Add worktree/shadow Git paths for index-location debugging.
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp index_status --project <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp index_status --args '{}' --timeout-ms 0 --diagnostics 'foo' --format 'foo' --project 'foo' --verbose
+```
+
+---
+
+#### mcp client codebase-memory-mcp check_index_coverage
+
+Best-effort exact-path/scope coverage and freshness, paged separately. full diagnostics adds raw detail. Clean is not proof of completeness.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--diagnostics` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--path_limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--path_offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--paths` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - array
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--scope_limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--scope_offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--scopes` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - array
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp check_index_coverage --project <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp check_index_coverage --args '{}' --timeout-ms 0 --diagnostics 'foo' --format 'foo' --path_limit 'foo' --path_offset 'foo' --paths '{}' --project 'foo' --scope_limit 'foo' --scope_offset 'foo' --scopes '{}'
+```
+
+---
+
+#### mcp client codebase-memory-mcp detect_changes
+
+Map a Git diff to files and impact. Page with snapshot cursors.
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--base_branch` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Default: origin/HEAD, else main, else master, else the upstream.
+- `--changed_cursor` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--changed_limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--changed_offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--config_path` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Project config override; absolute or project-relative.
+- `--depth` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--direction` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - inbound=callers; outbound=dependencies; both=union.
+- `--edge_types` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Inbound walk; default CALLS.
+- `--fixpoint` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Walk to closure; no depth.
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--impact_cursor` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--impact_offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--max_output_tokens` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Sizing hint; hard ceiling is 4 UTF-8 bytes/token.
+- `--module_cursor` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--module_limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--module_offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--scope` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--seed_cursor` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Continue seeds:list; excludes nonzero seed_offset.
+- `--seed_filter` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Product excludes indexed test metadata and configured test globs.
+- `--seed_limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--seed_offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--seeds` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - List changed-symbol seeds with independent pagination.
+- `--since` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--via` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Add via_qn, via_edge.
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp detect_changes --project <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp detect_changes --args '{}' --timeout-ms 0 --base_branch 'foo' --changed_cursor 'foo' --changed_limit 'foo' --changed_offset 'foo' --config_path 'foo' --depth 'foo' --direction 'foo' --edge_types '{}' --fixpoint --format 'foo' --impact_cursor 'foo' --impact_offset 'foo' --limit 'foo' --max_output_tokens 'foo' --module_cursor 'foo' --module_limit 'foo' --module_offset 'foo' --project 'foo' --scope 'foo' --seed_cursor 'foo' --seed_filter 'foo' --seed_limit 'foo' --seed_offset 'foo' --seeds 'foo' --since 'foo' --via
+```
+
+---
+
+#### mcp client codebase-memory-mcp manage_adr
+
+Outline an ADR by default; get reads it; update replaces it
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--content` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Whole document for update
+- `--format` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - string
+- `--mode` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - outline pages headings; get reads; update replaces the whole document; set_sections rewrites only the named sections and leaves every other byte untouched (an identical repeated write is byte-identical, so retrying is safe); sections is legacy.
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--section_limit` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--section_offset` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - integer
+- `--section_updates` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - set_sections: section name -> new body. Any heading name works; names match exactly, including case.
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp manage_adr --project <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp manage_adr --args '{}' --timeout-ms 0 --content 'foo' --format 'foo' --mode 'foo' --project 'foo' --section_limit 'foo' --section_offset 'foo' --section_updates 'foo'
+```
+
+---
+
+#### mcp client codebase-memory-mcp ingest_traces
+
+Record observed runtime calls so the graph can distinguish observed from merely possible paths. Each trace is a call path (qualified names, adjacent = caller→callee) or a bare ca
+
+Options:
+
+- `--args` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - JSON object for nested fields. Flags override these keys.
+- `--timeout-ms` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - MCP request timeout in milliseconds.
+- `--label` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Run identity, e.g. 'pytest 2026-08-27' (default 'unlabeled'); counts accumulate per label and whole runs age out together
+- `--project` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - string
+- `--traces` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - array
+
+**Example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp ingest_traces --project <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli mcp client codebase-memory-mcp ingest_traces --args '{}' --timeout-ms 0 --label 'foo' --project 'foo' --traces '{}'
 ```
 
 ## Custom Commands

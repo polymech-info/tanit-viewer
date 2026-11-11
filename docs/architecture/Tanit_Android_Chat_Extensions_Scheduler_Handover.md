@@ -376,7 +376,7 @@ Paths below come from the supplied scheduler notes; confirm them in the checkout
 | `src/llm/agent_memory.cpp` | Versioned schedule provenance; integrate separate run store |
 | `src/llm/tools/scheduler/SchedulerTools.cpp` | Host-injected provenance and schedule-change events |
 | `src/android/pm_android_agent.cpp` | Profile runtime/provider snapshot and event sink wiring |
-| `android/pm-image/app/src/main/cpp/jni_pm_chat.cpp` | Run queries, change subscription, scoped commands |
+| `android/tanit/app/src/main/cpp/jni_pm_chat.cpp` | Run queries, change subscription, scoped commands |
 | Supplied `ChatScreen` | Remove scheduler ownership and direct event-to-list mutations |
 | `ScheduledTasks` | Replace enabled-only presentation polling as a delivery source |
 | `PhoneHost` / camera tool bridge | Correlated device events and resource leases |

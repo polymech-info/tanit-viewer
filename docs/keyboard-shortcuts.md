@@ -328,6 +328,7 @@ These come from the `commands.json` that was loaded when this page was generated
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
+| Search | `Ctrl+F3` | Window |
 | Actions | `Shift+F10` | Window |
 | Fullscreen | `Alt+F` | Window |
 
@@ -353,4 +354,8 @@ These come from the `commands.json` that was loaded when this page was generated
 
 | Command | Shortcut | Scope |
 |:---|:---|:---|
+| Copy | `F5` | Window |
+| Move | `F6` | Window |
+| Delete | `F8` | Window |
+| Compress | `F13` | Window |
 | Online Help | `F1` | Window |

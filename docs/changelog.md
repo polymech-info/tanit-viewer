@@ -1,6 +1,13 @@
 # Changelog
 
-End-user release notes for Tanit
+## 1.0.91 - 11-11
+
+- LLM Server refinements
+- SDK
+- Audio: Reader
+- Office: ported Office-CLI to C++ | Office viewer and indexer
+- Android layer
+
 
 ## 1.0.90 - 31-10
 
