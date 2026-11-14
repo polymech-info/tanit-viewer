@@ -2360,7 +2360,7 @@ Options:
 - `--lan-port` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - TLS port for --lan (default: --port + 1). Phones connect here, not to cleartext HTTP.
 - `--lan-name` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Display name in mDNS and the pairing QR. Default: this computer's name.
 - `--pair` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - With --serve, open a one-time pairing window and show a QR (implies --lan). The URI contains a short-lived secret.
-- `--pair-scopes` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma list granted by --pair: chat, files, tools, video. Default: chat, files, tools. video is the remote desktop viewer.
+- `--pair-scopes` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma list granted by --pair: chat, files, tools, video, audio. Default: chat, files, tools. video is the remote desktop viewer. audio is microphone and loopback capture.
 - `--lan-devices` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List paired phones (id, name, scopes). Does not require --serve.
 - `--lan-revoke` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Revoke one paired phone by id. Does not require --serve. A running --lan daemon picks the change up from the device file.
 - `--host-tool-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Register an HTTP IAgentToolProvider as id=http://127.0.0.1:port/path (repeatable). Loopback HTTP only. Also TANIT_HOST_TOOL_PROVIDER.
@@ -8252,7 +8252,7 @@ tanit-cli daemon run --tray
 
 #### daemon tray
 
-Run the user-session tray daemon with global hotkeys and a notification-area menu.
+Run the hotkey daemon with its own notification icon. Prefer `tray` to toggle services from services.json.
 
 **Example**
 
@@ -8264,7 +8264,7 @@ tanit-cli daemon tray
 
 #### daemon register
 
-Windows: register the daemon for logon by writing HKLM Run (requires elevation). Seeds config if missing.
+Windows: register the session tray for logon by writing HKLM Run (requires elevation). Seeds daemon.json if missing. The tray reads services.json.
 
 **Example**
 
@@ -8276,7 +8276,7 @@ tanit-cli daemon register
 
 #### daemon unregister
 
-Windows: remove the daemon HKLM Run entry (requires elevation).
+Windows: remove the logon Run entry (requires elevation) and stop the session tray.
 
 **Example**
 
@@ -8307,6 +8307,99 @@ Print the effective daemon.json path and exit.
 ```sh
 tanit-cli daemon path
 ```
+
+### Servers
+
+#### tray
+
+Session tray driven by services.json (next to daemon.json). Builtin servers such as MCP run in this process. CLI services are child processes; stdout and stderr go to logs/services/<id>.log. Exit stops the services this tray started.
+
+**Example**
+
+```sh
+tanit-cli tray
+```
+
+#### tray run
+
+Run the session tray (default).
+
+**Example**
+
+```sh
+tanit-cli tray run
+```
+
+---
+
+#### tray status
+
+Print service state as JSON.
+
+**Example**
+
+```sh
+tanit-cli tray status
+```
+
+---
+
+#### tray path
+
+Print the services.json path.
+
+**Example**
+
+```sh
+tanit-cli tray path
+```
+
+---
+
+#### tray start
+
+Start one service by id.
+
+Options:
+
+- `id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Service id from services.json
+
+**Example**
+
+```sh
+tanit-cli tray start id <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli tray start id 'foo'
+```
+
+---
+
+#### tray stop
+
+Stop one service by id, or --host to exit the tray.
+
+Options:
+
+- `id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Service id from services.json
+- `--host` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Ask the running tray to exit. It stops services it started.
+
+**Example**
+
+```sh
+tanit-cli tray stop
+```
+
+**Full example**
+
+```sh
+tanit-cli tray stop id 'foo' --host
+```
+
+### Automation
 
 #### assistant
 
@@ -9117,7 +9210,7 @@ tanit-cli info compact --dst 'releases/web-docs/cli/cli.md' --stdout --skill --a
 
 #### llama
 
-GGUF embedding: embed texts, rank candidates by cosine similarity, or benchmark.
+GGUF models: embed, match, benchmark, vlm, or a speculative draft smoke run.
 
 **Example**
 
@@ -9234,6 +9327,40 @@ tanit-cli llama vlm -m <value> --mmproj <value> -i <value>
 
 ```sh
 tanit-cli llama vlm -m 'foo' --mmproj 'foo' -i 'foo' -p 'OCR:' -j 4 --ctx 8192 -n 2048 --ngl -1 --frame '{}'
+```
+
+---
+
+#### llama draft
+
+Speculative smoke run. Loads a target GGUF and a drafter GGUF, generates --n-predict tokens, and prints acceptance and decode speed as JSON. DFlash 2 uses --spec-type draft-dflash (the default) with --draft-n-max 7. Sampler defaults are temp 1, top-k 20, top-p 0.95.
+
+Options:
+
+- `-m,--model` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Target GGUF (the chat model).
+- `--draft` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Drafter GGUF. For DFlash 2 this is the z-lab drafter, not a second copy of the target.
+- `--spec-type` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">draft-dflash</span></span></span>) - Speculative decoder: draft-dflash (default), draft-dspark, draft-mtp, draft-simple, or auto.
+- `-p,--prompt` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Plain prompt to generate from.
+- `-n,--n-predict` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 4096]</span>, <span data-cli="default">default <span data-cli="value">64</span></span></span>) - Maximum new tokens (default 64).
+- `--draft-n-max` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 16]</span>, <span data-cli="default">default <span data-cli="value">7</span></span></span>) - Maximum draft tokens per step (default 7, the DFlash 2 block).
+- `-j,--threads` (<span data-cli="meta"><span data-cli="type">INT:INT in [1 - 256]</span>, <span data-cli="default">default <span data-cli="value">4</span></span></span>) - CPU threads (default 4).
+- `--ctx` (<span data-cli="meta"><span data-cli="type">INT:INT in [512 - 262144]</span>, <span data-cli="default">default <span data-cli="value">8192</span></span></span>) - Context length for the target (default 8192).
+- `--ngl,--gpu-layers` (<span data-cli="meta"><span data-cli="type">INT:INT in [-1 - 1000]</span>, <span data-cli="default">default <span data-cli="value">-1</span></span></span>) - Target GPU layers (-1 = all, 0 = CPU; default -1).
+- `--draft-ngl` (<span data-cli="meta"><span data-cli="type">INT:INT in [-1 - 1000]</span>, <span data-cli="default">default <span data-cli="value">-1</span></span></span>) - Drafter GPU layers (-1 = all, 0 = CPU; default -1).
+- `--temp` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 5]</span>, <span data-cli="default">default <span data-cli="value">1</span></span></span>) - Sampling temperature (default 1).
+- `--top-k` (<span data-cli="meta"><span data-cli="type">INT:INT in [0 - 100000]</span>, <span data-cli="default">default <span data-cli="value">20</span></span></span>) - Top-k (default 20).
+- `--top-p` (<span data-cli="meta"><span data-cli="type">FLOAT:FLOAT in [0 - 1]</span>, <span data-cli="default">default <span data-cli="value">0.95</span></span></span>) - Top-p (default 0.95).
+
+**Example**
+
+```sh
+tanit-cli llama draft -m <value> --draft <value> -p <value>
+```
+
+**Full example**
+
+```sh
+tanit-cli llama draft -m 'foo' --draft 'foo' --spec-type 'draft-dflash' -p 'foo' -n 64 --draft-n-max 7 -j 4 --ctx 8192 --ngl -1 --draft-ngl -1 --temp '1' --top-k 20 --top-p '0.95'
 ```
 
 #### hg
@@ -11026,6 +11153,8 @@ tanit-cli mcp client codebase-memory-mcp ingest_traces --args '{}' --timeout-ms 
 | `custom.help-xblox` | XBlox | Files | `app:open` | Open XBlox documentation locally | selection | `${TANIT_SHARED}/help/en/xblox.md` |
 | `custom.command-msakytc7-dd084` | Online Help | Files | `app:openurl` |  | selection | `https://tanit.polymech.info/user/cgo/pages/documentation` |
 | `custom.command-mujkxt3w-4af40` | Subtitles | Audio Converter | `cli:audio` | Create sub titles from Microphone - using local Whisper model | selection; mp3,wav,flac,m4a,aac,opus,wma,aiff,aif,oga,ogg,mid,midi->text | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt`<br>`--hud` |
+| `custom.tray` | Tray | Daemon | `cli:tray` |  | selection | `run`<br>`--json`<br>`--bind`<br>`0.0.0.0` |
+| `custom.command-mwgmwgqd-90902` | MCP | Daemon | `cli:mcp` |  | selection; json->json | `--json`<br>`--bind`<br>`0.0.0.0` |
 
 Call custom commands with the exact dotted ID shown above, e.g. `tanit-cli.exe custom.mic-start`.
 Pass `...` extra args after `--` to append them to the configured command without wrapper interception.

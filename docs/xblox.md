@@ -7659,3 +7659,5 @@ Default block:
 | `custom.help-xblox` | XBlox | `app:open` | Open XBlox documentation locally | selection | `${TANIT_SHARED}/help/en/xblox.md` |
 | `custom.command-msakytc7-dd084` | Online Help | `app:openurl` |  | selection | `https://tanit.polymech.info/user/cgo/pages/documentation` |
 | `custom.command-mujkxt3w-4af40` | Subtitles | `cli:audio` | Create sub titles from Microphone - using local Whisper model | selection; mp3,wav,flac,m4a,aac,opus,wma,aiff,aif,oga,ogg,mid,midi->text | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt`<br>`--hud` |
+| `custom.tray` | Tray | `cli:tray` |  | selection | `run`<br>`--json`<br>`--bind`<br>`0.0.0.0` |
+| `custom.command-mwgmwgqd-90902` | MCP | `cli:mcp` |  | selection; json->json | `--json`<br>`--bind`<br>`0.0.0.0` |

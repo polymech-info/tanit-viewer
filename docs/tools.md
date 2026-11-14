@@ -93,7 +93,7 @@ Params:
 - `options` (<span data-cli="meta"><span data-cli="type">object</span>, <span data-cli="tag" data-variant="required">required</span></span>)
 - `output_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional.
 - `output_paths` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Optional.
-- `paths` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Host file paths (absolute, or relative to the current Explorer folder in-app; else process cwd).
+- `paths` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Host file paths (absolute, or relative to the current folder).
 
 #### image_crop
 
@@ -103,7 +103,7 @@ Params:
 - `options` (<span data-cli="meta"><span data-cli="type">object</span>, <span data-cli="tag" data-variant="required">required</span></span>)
 - `output_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional.
 - `output_paths` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Optional.
-- `paths` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Host file paths (absolute, or relative to the current Explorer folder in-app; else process cwd).
+- `paths` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Host file paths (absolute, or relative to the current folder).
 
 #### image_transform
 
@@ -113,7 +113,7 @@ Params:
 - `options` (<span data-cli="meta"><span data-cli="type">object</span>, <span data-cli="tag" data-variant="required">required</span></span>)
 - `output_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional exact output file path for a single input.
 - `output_paths` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Optional exact output file paths for multiple inputs; length must match paths.
-- `paths` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Host file paths (absolute, or relative to the current Explorer folder in-app; else process cwd).
+- `paths` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Host file paths (absolute, or relative to the current folder).
 
 #### image_create
 
@@ -138,7 +138,7 @@ Params:
 - `last_frame` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional last-frame still (host path or data URL).
 - `negativePrompt` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Provider passthrough (`negativePrompt`).
 - `output` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional output path.
-- `paths` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Alias of src (Explorer selection / current folder stills).
+- `paths` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Alias of src.
 - `personGeneration` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Provider passthrough (`personGeneration`).
 - `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Motion / camera / lighting.
 - `reference` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Single-path alias of reference_images.
@@ -154,7 +154,7 @@ Ask the vision model a question about one or more images on disk.
 
 Params:
 - `options` (<span data-cli="meta"><span data-cli="type">object</span></span>)
-- `paths` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Host file paths (absolute, or relative to the current Explorer folder in-app; else process cwd).
+- `paths` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Host file paths (absolute, or relative to the current folder).
 - `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Required.
 
 #### image_from_camera
@@ -309,15 +309,17 @@ Params:
 Create a blank .docx, .xlsx, or .pptx.
 
 Params:
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .xlsx, or .pptx file.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .docm, .xlsx, .xlsm, .pptx, .pptm, .odt, .ods, or .odp file.
 
 #### office_view
 
 Read a document as markdown, plain text, an outline, or word/sheet/slide stats.
 
 Params:
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Max lines when offset is set.
 - `mode` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">text</span> <span data-cli="choice">markdown</span> <span data-cli="choice">outline</span> <span data-cli="choice">stats</span></span></span>)  -  markdown returns the document and, for xlsx or ods, cells.
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .xlsx, or .pptx file.
+- `offset` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  1-based line to start at.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .docm, .xlsx, .xlsm, .pptx, .pptm, .odt, .ods, or .odp file.
 
 #### office_get
 
@@ -325,15 +327,17 @@ Read one office node as JSON.
 
 Params:
 - `depth` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Child depth.
+- `limit` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Max lines when offset is set.
 - `node` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Office path.
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .xlsx, or .pptx file.
+- `offset` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  1-based line, used when node / returns the whole document.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .docm, .xlsx, .xlsm, .pptx, .pptm, .odt, .ods, or .odp file.
 
 #### office_query
 
 Query a document with an office selector.
 
 Params:
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .xlsx, or .pptx file.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .docm, .xlsx, .xlsm, .pptx, .pptm, .odt, .ods, or .odp file.
 - `selector` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Selector, for example paragraph[style=Heading1] or cell[value=Alice].
 
 #### office_add
@@ -345,8 +349,8 @@ Params:
 - `before` (<span data-cli="meta"><span data-cli="type">string</span></span>)
 - `index` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  0-based for docx.
 - `parent` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Parent office path.
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .xlsx, or .pptx file.
-- `props` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  String properties: text, value, bold, italic, style, color, size, font, fill, preset, animation, background, transition, src, rows, cols, name, ref, x, y, w, h,…
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .docm, .xlsx, .xlsm, .pptx, .pptm, .odt, .ods, or .odp file.
+- `props` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  Properties: text, value, bold, italic, style, color, size, font, fill, preset, animation, background, transition, src, rows, cols, name, ref, x, y, w, h, title,…
 - `type` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  paragraph, run, table, row, cell, sheet, slide, shape, or picture.
 
 #### office_set
@@ -356,8 +360,8 @@ Set properties on a node, including pptx animation, transition, and background, 
 Params:
 - `find` (<span data-cli="meta"><span data-cli="type">string</span></span>)
 - `node` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Office path.
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .xlsx, or .pptx file.
-- `props` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  String properties: text, value, bold, italic, style, color, size, font, fill, preset, animation, background, transition, src, rows, cols, name, ref, x, y, w, h,…
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .docm, .xlsx, .xlsm, .pptx, .pptm, .odt, .ods, or .odp file.
+- `props` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  Properties: text, value, bold, italic, style, color, size, font, fill, preset, animation, background, transition, src, rows, cols, name, ref, x, y, w, h, title,…
 - `replace` (<span data-cli="meta"><span data-cli="type">string</span></span>)
 
 #### office_remove
@@ -366,7 +370,7 @@ Remove a paragraph, run, table, row, cell, sheet cell, slide, or shape.
 
 Params:
 - `node` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Office path of the element to remove.
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .xlsx, or .pptx file.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .docm, .xlsx, .xlsm, .pptx, .pptm, .odt, .ods, or .odp file.
 
 #### office_move
 
@@ -377,7 +381,7 @@ Params:
 - `before` (<span data-cli="meta"><span data-cli="type">string</span></span>)
 - `index` (<span data-cli="meta"><span data-cli="type">integer</span></span>)
 - `node` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .xlsx, or .pptx file.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .docm, .xlsx, .xlsm, .pptx, .pptm, .odt, .ods, or .odp file.
 
 #### office_swap
 
@@ -386,23 +390,23 @@ Swap two docx paragraphs or two docx tables.
 Params:
 - `node` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
 - `node2` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .xlsx, or .pptx file.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .docm, .xlsx, .xlsm, .pptx, .pptm, .odt, .ods, or .odp file.
 
 #### office_batch
 
 Run several add, set, remove, view, get, or query operations, then save once.
 
 Params:
-- `commands` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Objects with command or op, plus path, parent, type, props, find, replace, index, mode.
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .xlsx, or .pptx file.
-- `stop_on_error` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)
+- `commands` (<span data-cli="meta"><span data-cli="type">array</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  At most 100 objects, together at most 256 KiB.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .docm, .xlsx, .xlsm, .pptx, .pptm, .odt, .ods, or .odp file.
+- `stop_on_error` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Stop after the first failed command.
 
 #### office_validate
 
 Open the package and parse its main part.
 
 Params:
-- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .xlsx, or .pptx file.
+- `path` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Filesystem path of a .docx, .docm, .xlsx, .xlsm, .pptx, .pptm, .odt, .ods, or .odp file.
 
 #### create_command
 

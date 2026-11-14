@@ -130,6 +130,7 @@ custom.command-mvc46qzq-39a35 (main) - Switch to main workbench
 custom.command-mvc476y9-f6789 (viewer) - Switch to viewer workbench
 custom.command-mvc6k9ua-832dc (filemanager) - Switch to file manager
 custom.command-mvesx1a4-d9aa7 (general) - Open settings
+custom.command-mwgmwgqd-90902 (--json,--bind,0.0.0.0) - MCP
 custom.command-video-social-hq (run,--src,${TANIT_SCRIPTS}/video-encode-social-hq.xblox,--CURRENT_FILE,...) - Create a high-quality 1080p60 H.264 social-media master from the selected screen capture using...
 custom.dropdown-msaj5qk5-78a6b - Help
 custom.dropdown-msx1rszr-19148 - New
@@ -141,6 +142,7 @@ custom.help-xblox (${TANIT_SHARED}/help/en/xblox.md) - Open XBlox documentation 
 custom.image-understand-speak (run,--src,${TANIT_SCRIPTS}/vision-pipe-speak.xblox,--CURRENT_FILE,...) - Speaks the content of an selected image over the speaker
 custom.pdf-to-md (md,--output-dir,${SRC_DIR}/${SRC_NAME}_md,--output,...) - Extract PDF text and figures to a Markdown bundle (page_N.md + figures/)
 custom.text-speak (run,--src,${TANIT_SCRIPTS}/inspect-text-speak.xblox) - Pick an element and send it over the speaker using text to speech.
+custom.tray (run,--json,--bind,0.0.0.0) - Tray
 custom.video-start (run,--src,${TANIT_SCRIPTS}/webcam.xblox) - WebCam
 custom.view-explorer - Explorer
 custom.view-maximize (immersive,"ribbon,statusbar,toolbar") - Fullscreen
@@ -152,11 +154,11 @@ custom.voice-cloner (voice-change,--remove-background-noise,${CURRENT_FILE},--ds
 custom.workbench-switcher - Workbench
 daemon (config) - Global shortcut daemon: hotkeys, UI presets, app commands, STT, and voice session.
 daemon path - Print the effective daemon.json path and exit.
-daemon register - Windows: register the daemon for logon by writing HKLM Run (requires elevation). Seeds config if...
+daemon register - Windows: register the session tray for logon by writing HKLM Run (requires elevation). Seeds...
 daemon run - Run the foreground hotkey daemon (default action).
 daemon stop - Windows: stop the running daemon for this user session.
-daemon tray - Run the user-session tray daemon with global hotkeys and a notification-area menu.
-daemon unregister - Windows: remove the daemon HKLM Run entry (requires elevation).
+daemon tray - Run the hotkey daemon with its own notification icon. Prefer `tray` to toggle services from...
+daemon unregister - Windows: remove the logon Run entry (requires elevation) and stop the session tray.
 duplicates (input,by,min-group,max-hamming,...) - Group duplicate / near-duplicate images offline (file size or perceptual fingerprint). Default...
 file.next - navigates to next file
 file.prev - navigates to previous file
@@ -180,6 +182,7 @@ info xblox (dst,author) - Generate an XBlox block-flow reference. Plain md: xblo
 installer (root,bundle,verbs,journal-dir,...) - Zip/unpacked install helper: seed profile data, register Explorer integration, Start Menu...
 installer chrome - Register Tanit Chrome native messaging host only (no npm). Run once per user. Load unpacked from...
 llama benchmark (m,j,ctx) - Run built-in string-utils parity cases and report pass/fail.
+llama draft (m,draft,spec-type,p,...) - Speculative smoke run. Loads a target GGUF and a drafter GGUF, generates --n-predict tokens, and...
 llama embed (m,j,ctx,t) - Embed one or more texts and print JSON with dim, ok, and optionally the full vector.
 llama match (m,j,ctx,q,...) - Rank candidates by cosine similarity to a query, output JSON.
 llama vlm (m,mmproj,i,p,...) - Multimodal VLM inference: encode an image and generate text (OCR, captions, ...).
@@ -375,6 +378,12 @@ test core url-schemes variables (input) - Expand ${VAR} templates using the URI-
 test screenshot (o,wait-ms) - Start the main window, wait, capture it to a PNG, then exit.
 touch (paths,s,d,conflict) - Create empty files through the VFS queue. Existing files conflict unless --skip / --overwrite.
 transform (input,src,output,p,...) - AI image editing (Gemini / Google)
+tray - Session tray driven by services.json (next to daemon.json). Builtin servers such as MCP run in...
+tray path - Print the services.json path.
+tray run - Run the session tray (default).
+tray start (id) - Start one service by id.
+tray status - Print service state as JSON.
+tray stop (id) - Stop one service by id, or --host to exit the tray.
 understand (input,p,dst,provider,...) - OCR / markdown extraction for one image (local llama VLM, Paddle ONNX, or a cloud vision...
 video create (output,p,provider,model,...) - AI text-to-video / image-to-video (Tanit LiteLLM /v1/videos, or Replicate).
 video detect (m,i,width,height,...) - Real-time YOLO-format object detection from a webcam. Outputs NDJSON frames to stdout; prints a...
