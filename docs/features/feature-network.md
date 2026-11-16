@@ -226,3 +226,7 @@ computer's camera and screen are watched or recorded on the computer.
 
 Pairing does not move the phone's files, screen, or microphone onto the
 computer. It lets the phone use what the computer already has.
+
+The wider phone product — apps, office documents, search on the desk,
+computer use, and the voice agent — is in
+[Tanit on Android](./feature-android.md).

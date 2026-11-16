@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.94 - 16-11
+
+- Android/Desktop: Translator | LLM server security
+- Video controls
+
 ## 1.0.93 - 14-11
 
 - Android & Desktop pairing - suppport for Tailscale setups

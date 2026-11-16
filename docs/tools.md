@@ -168,7 +168,7 @@ Params:
 - `device` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Desktop: case-insensitive substring of the webcam's friendly name (e.g.
 - `facing` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">back</span> <span data-cli="choice">front</span></span></span>)  -  Phone only.
 - `height` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Preferred capture height in pixels.
-- `output_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Destination file path (.jpg, .png, or .bmp).
+- `output_path` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Working file path (.jpg, .png, or .bmp).
 - `width` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Preferred capture width in pixels.
 
 ---
@@ -441,38 +441,55 @@ Params:
 
 #### schedule_at
 
-Schedule a one-shot agent task to run at an exact UTC time.
+Schedule a one-shot task at an exact UTC time.
 
 Params:
+- `arguments` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  Arguments for execution=tool.
+- `execution` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">agent</span> <span data-cli="choice">notification</span> <span data-cli="choice">tool</span></span></span>)  -  agent runs the prompt as a model turn.
 - `folder_hint` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional folder context for the scheduled turn.
 - `initial_state` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  Optional initial memory_state JSON.
+- `precision` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">best_effort</span> <span data-cli="choice">time_sensitive</span></span></span>)  -  time_sensitive is only valid for notification.
 - `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  The full prompt to run at fire time.
 - `run_at` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  ISO 8601 UTC datetime, e.g.
+- `sound` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Play a sound for a notification reminder.
 - `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Short human-readable name for the task.
+- `tool` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Tool name for execution=tool.
 
 #### schedule_in
 
-Schedule a one-shot agent task to run after a delay.
+Schedule a one-shot task to run after a delay.
 
 Params:
+- `arguments` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  Arguments for execution=tool.
 - `delay_seconds` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Seconds from now until the task fires.
+- `execution` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">agent</span> <span data-cli="choice">notification</span> <span data-cli="choice">tool</span></span></span>)  -  agent runs the prompt as a model turn.
 - `folder_hint` (<span data-cli="meta"><span data-cli="type">string</span></span>)
 - `initial_state` (<span data-cli="meta"><span data-cli="type">object</span></span>)
-- `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+- `precision` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">best_effort</span> <span data-cli="choice">time_sensitive</span></span></span>)  -  time_sensitive is only valid for notification.
+- `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Prompt for an agent turn, or the reminder text for a notification.
+- `sound` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Play a sound for a notification reminder.
 - `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+- `tool` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Tool name for execution=tool.
 
 #### schedule_every
 
-Schedule a recurring agent task on a fixed interval.
+Schedule a recurring task on a fixed interval.
 
 Params:
+- `arguments` (<span data-cli="meta"><span data-cli="type">object</span></span>)  -  Arguments for execution=tool.
+- `execution` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">agent</span> <span data-cli="choice">notification</span> <span data-cli="choice">tool</span></span></span>)  -  agent runs the prompt as a model turn.
 - `folder_hint` (<span data-cli="meta"><span data-cli="type">string</span></span>)
 - `initial_state` (<span data-cli="meta"><span data-cli="type">object</span></span>)
 - `interval_seconds` (<span data-cli="meta"><span data-cli="type">integer</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Seconds between ticks.
 - `max_runs` (<span data-cli="meta"><span data-cli="type">integer</span></span>)  -  Optional cap on total runs; omit for unlimited.
+- `precision` (<span data-cli="meta"><span data-cli="tag" data-variant="enum">one of</span> <span data-cli="choices" data-variant="enum"><span data-cli="choice">best_effort</span> <span data-cli="choice">time_sensitive</span></span></span>)  -  time_sensitive is only valid for notification.
 - `prompt` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+- `sound` (<span data-cli="meta"><span data-cli="type">boolean</span></span>)  -  Play a sound for a notification reminder.
 - `start_at` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional ISO 8601 UTC start time.
+- `time` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Daily local clock HH:MM.
+- `timezone` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  IANA zone for time, for example Europe/Madrid.
 - `title` (<span data-cli="meta"><span data-cli="type">string</span>, <span data-cli="tag" data-variant="required">required</span></span>)
+- `tool` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Tool name for execution=tool.
 
 #### schedule_cancel
 
@@ -483,7 +500,7 @@ Params:
 
 #### schedule_list
 
-List saved scheduled tasks (id, title, schedule, enabled, next_run_at, run_count).
+List saved scheduled tasks (id, title, schedule, execution, enabled, next_run_at, run_count).
 
 Params:
 
