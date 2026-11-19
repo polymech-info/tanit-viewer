@@ -355,6 +355,7 @@ These come from the `commands.json` that was loaded when this page was generated
 | Command | Shortcut | Scope |
 |:---|:---|:---|
 | Copy | `F5` | Window |
+| Edit | `F4` | Window |
 | Move | `F6` | Window |
 | Delete | `F8` | Window |
 | Compress | `F13` | Window |

@@ -2148,12 +2148,12 @@ tanit-cli llm info providers --all
 
 #### llm info models
 
-List models for a given provider. local / llama: text/planner GGUF models. vlm: local VLM models (multimodal / vision / OCR) with mmproj paths. whisper: local whisper.cpp ggml models. pixlwiz / openrouter / replicate: fetches live catalog (disk-cached; replicate 3 d, others 24 h). Other names: shows configured default_model from app settings.
+List models for a given provider. local / llama: text/planner GGUF models. vlm: local VLM models (multimodal / vision / OCR) with mmproj paths. whisper: local whisper.cpp ggml models. tanit / pixlwiz / openrouter / replicate: fetches live catalog (disk-cached; replicate 3 d, others 24 h). Other names: shows configured default_model from app settings.
 
 Options:
 
-- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Provider to query: local | llama | vlm | whisper | pixlwiz | openrouter | replicate | <name from `llm info providers`>
-- `--no-cache` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Bypass the disk cache and force a live HTTP fetch (pixlwiz / openrouter).
+- `--provider` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Provider to query: local | llama | vlm | whisper | tanit | pixlwiz | openai | openrouter | replicate | <name from `llm info providers`>
+- `--no-cache` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Bypass the disk cache and force a live HTTP fetch (tanit / pixlwiz / openai / openrouter).
 
 **Example**
 
@@ -2352,7 +2352,7 @@ Options:
 - `--serve` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Run an OpenAI-compatible HTTP daemon (GET /health, GET /v1/models, POST /v1/chat/completions). Turns inherit the same preset/tools/MCP/skills pipeline as a normal `llm agent` run. Default consent is auto-deny. See docs/llm/llm-server.md.
 - `--host` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Bind host for --serve (default 127.0.0.1).
 - `--port` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8090</span></span></span>) - Bind port for --serve (default 8090).
-- `--concurrency` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">2</span></span></span>) - Max concurrent agent turns for --serve (default 2).
+- `--concurrency` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">32</span></span></span>) - Max concurrent agent turns for --serve (default 32).
 - `--http-workers` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - httplib worker threads for --serve (default: max(32, concurrency*2); raise for stress with many waiting clients).
 - `--serve-api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Require Authorization: Bearer <key> on /v1/* when set. Empty = open (dev). Overrides TANIT_SERVE_API_KEY when passed.
 - `--fs-jail` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Hard-deny FS / search / pictures / service path tools outside the request workspace cwd (X-Tanit-Cwd / --cwd). Does not jail `run` or MCP. Also TANIT_SERVE_FS_JAIL=1.
@@ -2360,7 +2360,7 @@ Options:
 - `--lan-port` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - TLS port for --lan (default: --port + 1). Phones connect here, not to cleartext HTTP.
 - `--lan-name` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Display name in mDNS and the pairing QR. Default: this computer's name.
 - `--pair` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - With --serve, open a one-time pairing window and show a QR (implies --lan). The URI contains a short-lived secret.
-- `--pair-scopes` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma list granted by --pair: chat, files, tools, video, audio. Default: chat, files, tools. video is the remote desktop viewer. audio is microphone and loopback capture.
+- `--pair-scopes` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Comma list granted by --pair. Required. Each name is one capability: chat, files, tools, video, audio. video is the remote desktop viewer. audio is microphone and loopback capture. files is this computer's shared folders.
 - `--lan-devices` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - List paired phones (id, name, scopes). Does not require --serve.
 - `--lan-revoke` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Revoke one paired phone by id. Does not require --serve. A running --lan daemon picks the change up from the device file.
 - `--host-tool-provider` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Register an HTTP IAgentToolProvider as id=http://127.0.0.1:port/path (repeatable). Loopback HTTP only. Also TANIT_HOST_TOOL_PROVIDER.
@@ -2392,7 +2392,7 @@ tanit-cli llm agent
 **Full example**
 
 ```sh
-tanit-cli llm agent -p 'foo' --logging-dir 'foo' --system-prompt 'foo' --planner-prompt 'foo' --include '{}' --embed '{}' --preset 'foo' --runner 'foo' --router 'foo' --model 'foo' --ai-consent-review --ai-consent-router 'foo' --ai-consent-model 'foo' --consent-ui 'foo' --consent-owner 'foo' --ocr-provider 'foo' --ocr-model 'foo' --recognition-provider 'foo' --recognition-model 'foo' --image-provider 'foo' --image-model 'foo' --video-provider 'foo' --video-model 'foo' --api-key 'foo' --base-url 'foo' --timeout-ms 0 --max-iter 0 --no-tools --no-mcp --no-skills --skills --no-planner --planner --planner-budget 8 --no-parallel-tools --parallel-tools --multi-turn --single-turn --session-id 'foo' --load-snapshot 'foo' --save-snapshot 'foo' --memory-features 'foo' --no-replay --scheduler --scheduler-timeout 0 --scheduler-exit-when-idle --disable-tools 'foo' --enable-tools 'foo' --hud --hud-mode 'off' --dry-run --log 'agent.json' --dst 'foo' --type 'responses' --realtime --realtime-stop --realtime-status --serve --host '127.0.0.1' --port 8090 --concurrency 2 --http-workers 0 --serve-api-key 'foo' --fs-jail --lan --lan-port 0 --lan-name 'foo' --pair --pair-scopes 'foo' --lan-devices --lan-revoke 'foo' --host-tool-provider '{}' --realtime-idle-ms 120000 --streaming 'on' --markdown 'auto' --color 'auto' --mic --stt-api-key 'foo' --voice-id 'foo' --no-tts --tts-model-id 'foo' --input 'foo' --input-source 'mic' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --silence-ms 1500 --stt-provider 'elevenlabs' --stt-model 'foo' --tts-provider 'elevenlabs' --tts-model 'foo' --tts-voice-id 'foo'
+tanit-cli llm agent -p 'foo' --logging-dir 'foo' --system-prompt 'foo' --planner-prompt 'foo' --include '{}' --embed '{}' --preset 'foo' --runner 'foo' --router 'foo' --model 'foo' --ai-consent-review --ai-consent-router 'foo' --ai-consent-model 'foo' --consent-ui 'foo' --consent-owner 'foo' --ocr-provider 'foo' --ocr-model 'foo' --recognition-provider 'foo' --recognition-model 'foo' --image-provider 'foo' --image-model 'foo' --video-provider 'foo' --video-model 'foo' --api-key 'foo' --base-url 'foo' --timeout-ms 0 --max-iter 0 --no-tools --no-mcp --no-skills --skills --no-planner --planner --planner-budget 8 --no-parallel-tools --parallel-tools --multi-turn --single-turn --session-id 'foo' --load-snapshot 'foo' --save-snapshot 'foo' --memory-features 'foo' --no-replay --scheduler --scheduler-timeout 0 --scheduler-exit-when-idle --disable-tools 'foo' --enable-tools 'foo' --hud --hud-mode 'off' --dry-run --log 'agent.json' --dst 'foo' --type 'responses' --realtime --realtime-stop --realtime-status --serve --host '127.0.0.1' --port 8090 --concurrency 32 --http-workers 0 --serve-api-key 'foo' --fs-jail --lan --lan-port 0 --lan-name 'foo' --pair --pair-scopes 'foo' --lan-devices --lan-revoke 'foo' --host-tool-provider '{}' --realtime-idle-ms 120000 --streaming 'on' --markdown 'auto' --color 'auto' --mic --stt-api-key 'foo' --voice-id 'foo' --no-tts --tts-model-id 'foo' --input 'foo' --input-source 'mic' --desktop 'foo' --mic-gain '1' --desktop-gain '1' --silence-ms 1500 --stt-provider 'elevenlabs' --stt-model 'foo' --tts-provider 'elevenlabs' --tts-model 'foo' --tts-voice-id 'foo'
 ```
 
 ##### Examples
@@ -2811,6 +2811,85 @@ tanit-cli llm claude
 
 ```sh
 tanit-cli llm claude -p 'foo' --include '{}' --embed '{}' --cwd '.' -m 'foo' --resume 'foo' --timeout-ms 0 --executable 'foo' --ephemeral
+```
+
+### Node
+
+#### node
+
+Desktop node: paired phones and shared folders
+
+**Example**
+
+```sh
+tanit-cli node serve
+```
+
+**Full example**
+
+```sh
+tanit-cli node serve --host '127.0.0.1' --port 8090 --serve-api-key 'foo' --lan --lan-port 0 --lan-name 'foo' --pair --pair-scopes 'files'
+```
+
+#### node serve
+
+Listen for paired phones. Mounts lan and vfs. Does not mount the agent.
+
+Options:
+
+- `--host` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">127.0.0.1</span></span></span>) - Bind host (default 127.0.0.1).
+- `--port` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">8090</span></span></span>) - HTTP port (default 8090).
+- `--serve-api-key` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Bearer required on /v1. Overrides TANIT_SERVE_API_KEY when set.
+- `--lan` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Publish the TLS proxy. Also TANIT_SERVE_LAN=1.
+- `--lan-port` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">0</span></span></span>) - TLS port. Default is the HTTP port plus one.
+- `--lan-name` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Name advertised on the LAN.
+- `--pair` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Open a pairing ticket when the listener starts.
+- `--pair-scopes` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">files</span></span></span>) - Scopes on the startup ticket. A node offers files.
+
+**Example**
+
+```sh
+tanit-cli node serve
+```
+
+**Full example**
+
+```sh
+tanit-cli node serve --host '127.0.0.1' --port 8090 --serve-api-key 'foo' --lan --lan-port 0 --lan-name 'foo' --pair --pair-scopes 'files'
+```
+
+---
+
+#### node devices
+
+List paired phones.
+
+**Example**
+
+```sh
+tanit-cli node devices
+```
+
+---
+
+#### node revoke
+
+Revoke one paired phone.
+
+Options:
+
+- `id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Paired device id
+
+**Example**
+
+```sh
+tanit-cli node revoke id <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli node revoke id 'foo'
 ```
 
 ### Setup
@@ -8227,6 +8306,212 @@ tanit-cli test core src --input 'foo' --argv 'foo'
 
 ---
 
+#### test core phone-vfs
+
+Round trip against a paired phone: desktop health, vfs ls, get, and cp.
+
+**Example**
+
+```sh
+tanit-cli test core phone-vfs
+```
+
+---
+
+#### test core lan-grant
+
+Pair file rules in process: pairing grants nothing, networks, revisions, revoke, rotation.
+
+**Example**
+
+```sh
+tanit-cli test core lan-grant
+```
+
+---
+
+#### test core lan-peer
+
+Local edit of a pair file, as the owning device's own screen makes it.
+
+Options:
+
+- `--file` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Pair file (devices.json)
+- `--op` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">show</span></span></span>) - show, ensure, token, grant, revoke, repair, or dial
+- `--id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Peer id
+- `--name` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Peer name
+- `--vfs` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">off</span></span></span>) - off, read, or write
+- `--network` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - IPv4 network such as 127.0.0.0/8 (repeatable)
+- `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - https:// address for dial
+- `--pin` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - SHA-256 of the peer certificate
+- `--token-stdin` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Read the peer token from stdin
+
+**Example**
+
+```sh
+tanit-cli test core lan-peer
+```
+
+**Full example**
+
+```sh
+tanit-cli test core lan-peer --file 'foo' --op 'show' --id 'foo' --name 'foo' --vfs 'off' --network '{}' --url '{}' --pin 'foo' --token-stdin
+```
+
+---
+
+#### test core phone-listener
+
+Run the paired-peer listener on 127.0.0.1 until stdin closes.
+
+Options:
+
+- `--file` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Pair file (devices.json)
+- `--share` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Folder published as the mount `pictures`
+- `--authority` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">phone-test</span></span></span>) - vfs name of this listener
+- `--port` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Loopback port
+
+**Example**
+
+```sh
+tanit-cli test core phone-listener
+```
+
+**Full example**
+
+```sh
+tanit-cli test core phone-listener --file 'foo' --share 'foo' --authority 'phone-test' --port 0
+```
+
+---
+
+#### test core phone-peer
+
+Store or forget a phone in this computer's dial book, as an announce does.
+
+Options:
+
+- `--authority` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">phone-test</span></span></span>) - vfs name of the phone
+- `--name` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Phone name
+- `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Announced address (repeatable)
+- `--pin` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - SHA-256 of the phone certificate
+- `--token-stdin` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Read the phone's token from stdin
+- `--forget` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Remove the phone
+
+**Example**
+
+```sh
+tanit-cli test core phone-peer
+```
+
+**Full example**
+
+```sh
+tanit-cli test core phone-peer --authority 'phone-test' --name 'foo' --url '{}' --pin 'foo' --token-stdin --forget
+```
+
+---
+
+#### test core peer-pair
+
+Pair with another desktop and store its pin and token on the pair row.
+
+Options:
+
+- `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - https://host:port of the listener
+- `--pin` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - SHA-256 of the listener certificate
+- `--self-id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - This device's label
+- `--self-name` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - This device's name
+- `--self-pin` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - SHA-256 of this device's certificate
+- `--secret-stdin` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Read the pairing secret from stdin
+
+**Example**
+
+```sh
+tanit-cli test core peer-pair
+```
+
+**Full example**
+
+```sh
+tanit-cli test core peer-pair --url '{}' --pin 'foo' --self-id 'foo' --self-name 'foo' --self-pin 'foo' --secret-stdin
+```
+
+---
+
+#### test core peer-read
+
+Read a path on a paired desktop. The stored pin is checked first.
+
+Options:
+
+- `--id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Listener device id
+- `--path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">/v1/vfs/mounts</span></span></span>) - Request path
+- `--pin` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Use this pin instead of the stored one
+
+**Example**
+
+```sh
+tanit-cli test core peer-read --id <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli test core peer-read --id 'foo' --path '/v1/vfs/mounts' --pin 'foo'
+```
+
+---
+
+#### test core phone-dial
+
+Read a path on another phone with the phone TLS stack and the pair row.
+
+Options:
+
+- `--file` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Dialer's pair file
+- `--id` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="tag" data-variant="required">required</span></span>) - Peer id
+- `--path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">/v1/vfs/mounts</span></span></span>) - Request path
+- `--pin` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Use this pin instead of the stored one
+
+**Example**
+
+```sh
+tanit-cli test core phone-dial --file <file> --id <id>
+```
+
+**Full example**
+
+```sh
+tanit-cli test core phone-dial --file 'foo' --id 'foo' --path '/v1/vfs/mounts' --pin 'foo'
+```
+
+---
+
+#### test core phone-post
+
+POST JSON to a phone listener. Stdin is {bearer, body}. The pin is checked first.
+
+Options:
+
+- `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - https://ipv4:port of the listener
+- `--pin` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - SHA-256 of the listener certificate
+- `--path` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">/v1/lan/phone-vfs</span></span></span>) - Request path
+
+**Example**
+
+```sh
+tanit-cli test core phone-post
+```
+
+**Full example**
+
+```sh
+tanit-cli test core phone-post --url '{}' --pin 'foo' --path '/v1/lan/phone-vfs'
+```
+
+---
+
 #### test core loopback
 
 agent_factory loopback router: script rounds, cancel, and reset_script.
@@ -11287,6 +11572,7 @@ tanit-cli mcp client codebase-memory-mcp ingest_traces --args '{}' --timeout-ms 
 | `custom.pdf-to-md` | To Markdown | PDF | `cli:pdf` | Extract PDF text and figures to a Markdown bundle (page_N.md + figures/) | files; perItem; pdf->text,md | `md`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--per-page`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16`<br>`${CURRENT_SELECTION}` |
 | `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | PDF | `external` | Convert each selected Office document to PDF beside the source file using LibreOffice. | selection; perItem; explorer:text | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
 | `custom.fs-copy` | Copy | Files | `app:fscopy` |  | selection |  |
+| `custom.command-edit` | Edit | Files | `app:edit` |  | selection | `${CURRENT_FILE}` |
 | `custom.fs-move` | Move | Files | `app:fsmove` |  | selection |  |
 | `custom.command-mv70iwqt-f240a` | Delete | Files | `app:fsdelete` |  | selection |  |
 | `custom.command-mu114s8q-17bff` | Share | Files | `cli:service` | Share current file to your Tanit CMS (5 MB maximum) | selection; perItem; any->any | `files`<br>`upload`<br>`--public`<br>`${CURRENT_FILE}` |
@@ -11298,6 +11584,7 @@ tanit-cli mcp client codebase-memory-mcp ingest_traces --args '{}' --timeout-ms 
 | `custom.command-mujkxt3w-4af40` | Subtitles | Audio Converter | `cli:audio` | Create sub titles from Microphone - using local Whisper model | selection; mp3,wav,flac,m4a,aac,opus,wma,aiff,aif,oga,ogg,mid,midi->text | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt`<br>`--hud` |
 | `custom.tray` | Tray | Daemon | `cli:tray` |  | selection | `run`<br>`--json`<br>`--bind`<br>`0.0.0.0` |
 | `custom.command-mwgmwgqd-90902` | MCP | Daemon | `cli:mcp` |  | selection; json->json | `--json`<br>`--bind`<br>`0.0.0.0` |
+| `custom.command-pair` | Pair Phone | Daemon | `app:pair` |  | selection | `--json`<br>`--bind`<br>`0.0.0.0` |
 
 Call custom commands with the exact dotted ID shown above, e.g. `tanit-cli.exe custom.mic-start`.
 Pass `...` extra args after `--` to append them to the configured command without wrapper interception.

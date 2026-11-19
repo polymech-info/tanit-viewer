@@ -55,6 +55,7 @@ custom.command-712fbd00-f9ac4 (--prompt,"render this as product shooting, white 
 custom.command-7201753fce13ac9f1c6b945856a73c94 (tts-scripted,--srt,${CURRENT_FILE},--dst,...) - Generate timed speech from the selected SRT, VTT, or JSON cues file and save a sibling 48 kHz...
 custom.command-7883566e75cb852699295a0cc2a574c5 (-y,-i,${CURRENT_FILE},-frames:v,...) - Extract the first video frame as a PNG beside the selected video using FFMPEG
 custom.command-e6032eb78cd02485b3bdb4674ef68d5e (--max-width,1024,--aspect,1:1,...) - Resize selected images to 1024 × 1024 squares
+custom.command-edit (${CURRENT_FILE}) - Edit
 custom.command-mpch9gdx-44982 (--src,${CURRENT_FILE},--prompt,"as technical illustration",...) - Create technical illustration for current selected images
 custom.command-mpohnfaf-26b0c - TTS
 custom.command-mpokt0hv-41237 - Funny
@@ -132,6 +133,7 @@ custom.command-mvc476y9-f6789 (viewer) - Switch to viewer workbench
 custom.command-mvc6k9ua-832dc (filemanager) - Switch to file manager
 custom.command-mvesx1a4-d9aa7 (general) - Open settings
 custom.command-mwgmwgqd-90902 (--json,--bind,0.0.0.0) - MCP
+custom.command-pair (--json,--bind,0.0.0.0) - Pair Phone
 custom.command-video-social-hq (run,--src,${TANIT_SCRIPTS}/video-encode-social-hq.xblox,--CURRENT_FILE,...) - Create a high-quality 1080p60 H.264 social-media master from the selected screen capture using...
 custom.dropdown-msaj5qk5-78a6b - Help
 custom.dropdown-msx1rszr-19148 - New
@@ -245,6 +247,9 @@ meta (input,out-dir,provider,model,...) - Generate description / JSON / EXIF for
 meta gen (input,template,p,values,...) - Generate metadata from a template. Dry-run prints the tag plan. --write commits XMP, and IPTC...
 mkdir (paths,s,d) - Create folders through the VFS queue (local, ssh://, ftp://, vfs://). Existing folders succeed.
 mv (paths,s,d,conflict,...) - Move files or folders through the VFS queue (copy then delete source).
+node devices - List paired phones.
+node revoke (id) - Revoke one paired phone.
+node serve (host,port,serve-api-key,lan-port,...) - Listen for paired phones. Mounts lan and vfs. Does not mount the agent.
 pdf info (path,password) - Print page count and page sizes.
 pdf md (path,pages,o,output-dir,...) - Extract document text to Markdown. Default decoder is anydoc; pdfium runs the modular pipeline.
 pdf render (path,pages,dpi,rotation,...) - Rasterize pages to image files (all, ranges, or specific pages).
@@ -362,8 +367,17 @@ test core fs-guard (mode,path) - Run LLM filesystem guard policy against --path.
 test core id (kind,input) - Run UUID/id/group/permission cleanup helpers against --input.
 test core iterator (input,input-file,path,target-path,...) - Async JSON field iterator: jq path selection + pluggable transformer (upper/prefix/identity; llm...
 test core kompress (onnx,vocab,input,input-file,...) - Run the Kompress ONNX text scorer over --input/--input-file: keep important words. Uses --onnx +...
+test core lan-grant - Pair file rules in process: pairing grants nothing, networks, revisions, revoke, rotation.
+test core lan-peer (file,op,id,name,...) - Local edit of a pair file, as the owning device's own screen makes it.
 test core loopback (script) - agent_factory loopback router: script rounds, cancel, and reset_script.
 test core path (input) - Run string path cleanup helpers against --input.
+test core peer-pair (url,pin,self-id,self-name,...) - Pair with another desktop and store its pin and token on the pair row.
+test core peer-read (id,path,pin) - Read a path on a paired desktop. The stored pin is checked first.
+test core phone-dial (file,id,path,pin) - Read a path on another phone with the phone TLS stack and the pair row.
+test core phone-listener (file,share,authority,port) - Run the paired-peer listener on 127.0.0.1 until stdin closes.
+test core phone-peer (authority,name,url,pin) - Store or forget a phone in this computer's dial book, as an announce does.
+test core phone-post (url,pin,path) - POST JSON to a phone listener. Stdin is {bearer, body}. The pin is checked first.
+test core phone-vfs - Round trip against a paired phone: desktop health, vfs ls, get, and cp.
 test core process-runner (scenario) - Captured process stdio: invalid UTF-8, a code point split across the read buffer, malformed...
 test core settings (path) - Settings path handles: config dir, settings.json, and stored-expression UTF-8.
 test core settings-mutate (op,key,value,guid) - Optimistic local + IPC mutate: --op set|merge|append-history.

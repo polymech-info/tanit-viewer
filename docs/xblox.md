@@ -7650,6 +7650,7 @@ Default block:
 | `custom.pdf-to-md` | To Markdown | `cli:pdf` | Extract PDF text and figures to a Markdown bundle (page_N.md + figures/) | files; perItem; pdf->text,md | `md`<br>`--output-dir`<br>`${SRC_DIR}/${SRC_NAME}_md`<br>`--output`<br>`${SRC_DIR}/${SRC_NAME}.md`<br>`--per-page`<br>`--provider`<br>`llama`<br>`--model`<br>`unlimited-ocr-bf16`<br>`${CURRENT_SELECTION}` |
 | `custom.command-224bc88db575c7763fbcb9eb96399fcf` | Office document to PDF | `external` | Convert each selected Office document to PDF beside the source file using LibreOffice. | selection; perItem; explorer:text | `--headless`<br>`--convert-to`<br>`pdf`<br>`--outdir`<br>`${SRC_DIR}`<br>`${CURRENT_FILE}` |
 | `custom.fs-copy` | Copy | `app:fscopy` |  | selection |  |
+| `custom.command-edit` | Edit | `app:edit` |  | selection | `${CURRENT_FILE}` |
 | `custom.fs-move` | Move | `app:fsmove` |  | selection |  |
 | `custom.command-mv70iwqt-f240a` | Delete | `app:fsdelete` |  | selection |  |
 | `custom.command-mu114s8q-17bff` | Share | `cli:service` | Share current file to your Tanit CMS (5 MB maximum) | selection; perItem; any->any | `files`<br>`upload`<br>`--public`<br>`${CURRENT_FILE}` |
@@ -7661,3 +7662,4 @@ Default block:
 | `custom.command-mujkxt3w-4af40` | Subtitles | `cli:audio` | Create sub titles from Microphone - using local Whisper model | selection; mp3,wav,flac,m4a,aac,opus,wma,aiff,aif,oga,ogg,mid,midi->text | `record`<br>`--from-wav`<br>`${CURRENT_FILE}`<br>`--stt`<br>`--provider`<br>`whisper`<br>`--model`<br>`ggml-large-v3-turbo.bin`<br>`--subtitle-max-chars`<br>`42`<br>`--language`<br>`en`<br>`--subtitle-path`<br>`${SRC_DIR}/${SRC_NAME}.srt`<br>`--subtitle-format`<br>`srt`<br>`--hud` |
 | `custom.tray` | Tray | `cli:tray` |  | selection | `run`<br>`--json`<br>`--bind`<br>`0.0.0.0` |
 | `custom.command-mwgmwgqd-90902` | MCP | `cli:mcp` |  | selection; json->json | `--json`<br>`--bind`<br>`0.0.0.0` |
+| `custom.command-pair` | Pair Phone | `app:pair` |  | selection | `--json`<br>`--bind`<br>`0.0.0.0` |

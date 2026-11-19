@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.95 - 19-11
+
+- Android/Desktop: Tanit Node Mesh (File, AV share)
+- Tanit Viewer/Chat: Node Pair | Service Launch/Settings
+- Android: Audio Flow - Recorder/Translator/Reader consolidated, support for audio over desktop
+- SDK: Server.cpp / Encryption.cpp added
+
 ## 1.0.94 - 16-11
 
 - Android/Desktop: Translator | LLM server security
