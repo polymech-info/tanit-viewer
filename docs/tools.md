@@ -510,18 +510,20 @@ Params:
 
 #### memory_read
 
-Read persistent long-term memory and per-item metadata.
+Read facts for the current session.
 
 Params:
-- `task_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional: read a scheduled task's memory instead.
+- `scope` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Omit for the current session.
+- `task_id` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Optional session or scheduled-task id.
 
 #### memory_write
 
-Merge a JSON object into long-term memory.
+Merge a JSON object into the current session.
 
 Params:
+- `scope` (<span data-cli="meta"><span data-cli="type">string</span></span>)  -  Omit for the current session.
 - `state` (<span data-cli="meta"><span data-cli="type">object</span>, <span data-cli="tag" data-variant="required">required</span></span>)  -  Partial object to merge.
-- `tags` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Optional tags applied to every key in this write.
+- `tags` (<span data-cli="meta"><span data-cli="type">array</span></span>)  -  Optional tags applied to every key in a global write.
 
 #### memory_append_event
 

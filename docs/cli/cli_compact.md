@@ -377,7 +377,7 @@ test core phone-dial (file,id,path,pin) - Read a path on another phone with the 
 test core phone-listener (file,share,authority,port) - Run the paired-peer listener on 127.0.0.1 until stdin closes.
 test core phone-peer (authority,name,url,pin) - Store or forget a phone in this computer's dial book, as an announce does.
 test core phone-post (url,pin,path) - POST JSON to a phone listener. Stdin is {bearer, body}. The pin is checked first.
-test core phone-vfs - Round trip against a paired phone: desktop health, vfs ls, get, and cp.
+test core phone-vfs - Round trip against a paired phone: ls, get, cp; with write: mkdir, touch, rename, mv, rm.
 test core process-runner (scenario) - Captured process stdio: invalid UTF-8, a code point split across the read buffer, malformed...
 test core settings (path) - Settings path handles: config dir, settings.json, and stored-expression UTF-8.
 test core settings-mutate (op,key,value,guid) - Optimistic local + IPC mutate: --op set|merge|append-history.

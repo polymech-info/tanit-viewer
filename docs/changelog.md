@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.96 - 26-11
+
+- Tanit Viewer/Chat: Tray / Services | Node Pair / Tanit Mesh
+- Android: CMS ( Posts & Pages ) | Tanit Mesh | Office Viewer & LLM Edit | UX
+- Poolypress / Tanit Viewer: Audio Player
+- LLM Server: multi-user
+
 ## 1.0.95 - 19-11
 
 - Android/Desktop: Tanit Node Mesh (File, AV share)

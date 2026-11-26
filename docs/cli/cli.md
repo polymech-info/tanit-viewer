@@ -2828,7 +2828,7 @@ tanit-cli node serve
 **Full example**
 
 ```sh
-tanit-cli node serve --host '127.0.0.1' --port 8090 --serve-api-key 'foo' --lan --lan-port 0 --lan-name 'foo' --pair --pair-scopes 'files'
+tanit-cli node serve --host '127.0.0.1' --port 8090 --serve-api-key 'foo' --lan --lan-port 0 --lan-name 'foo' --pair --pair-scopes 'files' --audio-rate 48000 --audio-bits 16
 ```
 
 #### node serve
@@ -2845,6 +2845,8 @@ Options:
 - `--lan-name` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Name advertised on the LAN.
 - `--pair` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Open a pairing ticket when the listener starts.
 - `--pair-scopes` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">files</span></span></span>) - Scopes on the startup ticket. A node offers files.
+- `--audio-rate` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">48000</span></span></span>) - Default capture rate when a start omits sampleRate. 16000, 24000, or 48000.
+- `--audio-bits` (<span data-cli="meta"><span data-cli="type">INT</span>, <span data-cli="default">default <span data-cli="value">16</span></span></span>) - Default capture depth when a start omits bits. 16.
 
 **Example**
 
@@ -2855,7 +2857,7 @@ tanit-cli node serve
 **Full example**
 
 ```sh
-tanit-cli node serve --host '127.0.0.1' --port 8090 --serve-api-key 'foo' --lan --lan-port 0 --lan-name 'foo' --pair --pair-scopes 'files'
+tanit-cli node serve --host '127.0.0.1' --port 8090 --serve-api-key 'foo' --lan --lan-port 0 --lan-name 'foo' --pair --pair-scopes 'files' --audio-rate 48000 --audio-bits 16
 ```
 
 ---
@@ -8308,7 +8310,7 @@ tanit-cli test core src --input 'foo' --argv 'foo'
 
 #### test core phone-vfs
 
-Round trip against a paired phone: desktop health, vfs ls, get, and cp.
+Round trip against a paired phone: ls, get, cp; with write: mkdir, touch, rename, mv, rm.
 
 **Example**
 
@@ -8337,12 +8339,14 @@ Local edit of a pair file, as the owning device's own screen makes it.
 Options:
 
 - `--file` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Pair file (devices.json)
-- `--op` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">show</span></span></span>) - show, ensure, token, grant, revoke, repair, or dial
+- `--op` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">show</span></span></span>) - show, ensure, token, grant, caps, announce, revoke, repair, or dial
 - `--id` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Peer id
 - `--name` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - Peer name
 - `--vfs` (<span data-cli="meta"><span data-cli="type">TEXT</span>, <span data-cli="default">default <span data-cli="value">off</span></span></span>) - off, read, or write
 - `--network` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - IPv4 network such as 127.0.0.0/8 (repeatable)
 - `--url` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - https:// address for dial
+- `--authority` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - vfs name of this listener
+- `--port` (<span data-cli="meta"><span data-cli="type">INT</span></span>) - Listener port for announce
 - `--pin` (<span data-cli="meta"><span data-cli="type">TEXT</span></span>) - SHA-256 of the peer certificate
 - `--token-stdin` (<span data-cli="meta"><span data-cli="tag" data-variant="flag">flag</span></span>) - Read the peer token from stdin
 
@@ -8355,7 +8359,7 @@ tanit-cli test core lan-peer
 **Full example**
 
 ```sh
-tanit-cli test core lan-peer --file 'foo' --op 'show' --id 'foo' --name 'foo' --vfs 'off' --network '{}' --url '{}' --pin 'foo' --token-stdin
+tanit-cli test core lan-peer --file 'foo' --op 'show' --id 'foo' --name 'foo' --vfs 'off' --network '{}' --url '{}' --authority 'phone-test' --port 0 --pin 'foo' --token-stdin
 ```
 
 ---
